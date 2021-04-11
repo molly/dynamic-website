@@ -13,6 +13,7 @@ const preprocess = (data, { defaultArticle, tagText }) => {
         updatedArticle.formattedDate = m.format('MMMM YYYY');
       }
     }
+    updatedArticle.moment = m;
     updatedArticle.tags.sort();
     processed.push(updatedArticle);
     allRawTags = new Set([...allRawTags, ...updatedArticle.tags]);

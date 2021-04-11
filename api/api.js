@@ -7,6 +7,7 @@ const PRESS_DEFAULTS = require('../data/pressDefaults');
 
 const paginate = require('./utils/paginate');
 const preprocess = require('./utils/preprocess');
+const filter = require('./utils/filter');
 
 const router = express.Router();
 
@@ -18,9 +19,9 @@ const getLocalJson = async (relativePath) => {
 const getPaginatedAndFiltered = async (relativePath, defaults, req) => {
   const data = await getLocalJson(relativePath);
   let resp = preprocess(data, defaults);
-  // resp = { ...resp, ...filter(resp, req) };
+  resp = { ...resp, ...filter(resp, req) };
   resp = { ...resp, ...paginate(resp, req) };
-  return resp;
+  return { ...resp, totalUnfilteredResults: data.length };
 };
 
 router.get('/press', async (req, res) => {
@@ -32,8 +33,7 @@ router.get('/press', async (req, res) => {
     );
     res.json(results);
   } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
+    res.status(500).send(err);
   }
 });
 
@@ -46,8 +46,7 @@ router.get('/dib', async (req, res) => {
     );
     res.json(results);
   } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
+    res.status(500).send(err);
   }
 });
 
