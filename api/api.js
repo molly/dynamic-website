@@ -1,21 +1,25 @@
 const express = require('express');
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
+
+const paginated = require('./pagination/middleware');
+const paginate = require('./pagination/paginator');
 
 const router = express.Router();
 
-router.get('/press', (req, res) => {
-  fs.readFile(
-    path.join(__dirname, '../data/press.json'),
-    'utf8',
-    (err, data) => {
-      if (err) {
-        throw err;
-      }
-      const press = JSON.parse(data);
-      res.json(press);
-    }
-  );
+const getLocalJson = async (relativePath) => {
+  const data = await fs.readFile(path.join(__dirname, relativePath), 'utf8');
+  return JSON.parse(data);
+};
+
+router.get('/press', paginated, async (req, res) => {
+  try {
+    const press = await getLocalJson('../data/press.json');
+    const paginatedPress = paginate(press, req);
+    res.json(paginatedPress);
+  } catch (err) {
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router;
