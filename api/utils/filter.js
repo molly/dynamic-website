@@ -18,14 +18,16 @@ const filter = ({ results }, req) => {
   if (req.query.startDate) {
     const startMoment = moment(req.query.startDate);
     filteredResults = filteredResults.filter((article) => {
-      article.moment.isSameOrAfter(startMoment);
+      const m = moment(article.date);
+      m.isSameOrAfter(startMoment);
     });
   }
 
   if (req.query.endDate) {
     const endMoment = moment(req.query.endDate);
     filteredResults = filteredResults.filter((article) => {
-      article.moment.isSameOrBefore(endMoment);
+      const m = moment(article.date);
+      m.isSameOrBefore(endMoment);
     });
   }
 
