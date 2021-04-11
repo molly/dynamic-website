@@ -2,8 +2,11 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 
-const paginated = require('./pagination/middleware');
-const paginate = require('./pagination/paginator');
+const PRESS_DEFAULTS = require('../data/pressDefaults');
+// const DIB = require('../data/dib');
+
+const paginate = require('./utils/paginate');
+const preprocess = require('./utils/preprocess');
 
 const router = express.Router();
 
@@ -12,12 +15,38 @@ const getLocalJson = async (relativePath) => {
   return JSON.parse(data);
 };
 
-router.get('/press', paginated, async (req, res) => {
+const getPaginatedAndFiltered = async (relativePath, defaults, req) => {
+  const data = await getLocalJson(relativePath);
+  let resp = preprocess(data, defaults);
+  // resp = { ...resp, ...filter(resp, req) };
+  resp = { ...resp, ...paginate(resp, req) };
+  return resp;
+};
+
+router.get('/press', async (req, res) => {
   try {
-    const press = await getLocalJson('../data/press.json');
-    const paginatedPress = paginate(press, req);
-    res.json(paginatedPress);
+    const results = await getPaginatedAndFiltered(
+      '../data/press.json',
+      PRESS_DEFAULTS,
+      req
+    );
+    res.json(results);
   } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+router.get('/dib', async (req, res) => {
+  try {
+    const results = await getPaginatedAndFiltered(
+      '../data/dib.json',
+      null,
+      req
+    );
+    res.json(results);
+  } catch (err) {
+    console.log(err);
     res.sendStatus(500);
   }
 });

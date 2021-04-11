@@ -1,4 +1,4 @@
-const paginated = (req, res, next) => {
+const paginated = (req, __, next) => {
   if (
     !req.query.limit ||
     !Number.isInteger(req.query.limit) ||
