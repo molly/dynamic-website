@@ -1,0 +1,33 @@
+{
+  "name": "reading-list",
+  "version": "0.0.1",
+  "description": "API to power the reading lists on my website",
+  "engines": {
+    "node": "14.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molly/reading-list.git"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/molly/reading-list/issues"
+  },
+  "homepage": "https://github.com/molly/reading-list#readme",
+  "author": "Molly White"
+}
