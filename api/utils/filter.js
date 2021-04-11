@@ -14,12 +14,13 @@ const matches = (maybeValue, search) => {
 
 const filter = ({ results }, req) => {
   let filteredResults = results.slice();
+
   // DATES
   if (req.query.startDate) {
     const startMoment = moment(req.query.startDate);
     filteredResults = filteredResults.filter((article) => {
       const m = moment(article.date);
-      m.isSameOrAfter(startMoment);
+      return m.isSameOrAfter(startMoment);
     });
   }
 
@@ -27,7 +28,7 @@ const filter = ({ results }, req) => {
     const endMoment = moment(req.query.endDate);
     filteredResults = filteredResults.filter((article) => {
       const m = moment(article.date);
-      m.isSameOrBefore(endMoment);
+      return m.isSameOrBefore(endMoment);
     });
   }
 
@@ -58,6 +59,14 @@ const filter = ({ results }, req) => {
         matches(article.tags, search)
     );
   }
+
+  // ORDER
+  filteredResults.sort(function (a, b) {
+    if (req.query.order && req.query.order === 'reverse') {
+      return moment(a.date) - moment(b.date);
+    }
+    return moment(b.date) - moment(a.date);
+  });
 
   return { results: filteredResults };
 };
