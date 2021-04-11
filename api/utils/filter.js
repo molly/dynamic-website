@@ -56,7 +56,8 @@ const filter = ({ results }, req) => {
         matches(article.author, search) ||
         matches(article.work, search) ||
         matches(article.publisher, search) ||
-        matches(article.tags, search)
+        matches(article.tags, search) ||
+        matches(article.summary, search)
     );
   }
 

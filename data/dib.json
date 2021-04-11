@@ -1,1 +1,39 @@
-[]
+[
+  {
+    "title": "A feminist internet would be better for everyone",
+    "author": "Charlotte Jee",
+    "date": "2021-04-01",
+    "work": "MIT Technology Review",
+    "href": "https://www.technologyreview.com/2021/04/01/1020478/feminist-internet-culture-activist-harassment-herd-signal/",
+    "tags": [
+      "GENDER", "ETHICAL SOFTWARE"
+    ],
+    "week": "March 29–April 2, 2021",
+    "summary":"Jee envisions a version of the Internet that was built with the intention of being safe for women, rather than with halfhearted protections added on later. She talks about ways this would be accomplished, including giving more control to users, reducing the online economy's reliance on advertising and data collection/sale, and using strict privacy settings by default. She also talks about how tech companies always need to consider how their products could be misused."
+  },
+  {
+    "title": "Doctor: This unethical Arkansas law should horrify all in medical profession",
+    "author": "Jack Turban",
+    "date": "2021-04-02",
+    "publisher": "CNN",
+    "workItalics": false,
+    "preposition": "for",
+    "href": "https://www.cnn.com/2021/04/02/opinions/arkansas-anti-transgender-law-medical-ethics-turban/index.html",
+    "tags": ["GENDER", "TRANS ISSUES", "CURRENT EVENTS"],
+    "week": "March 29–April 2, 2021",
+    "summary": "The so-called Medical Ethics and Diversity Act introduced in Arkansas allows healthcare workers to deny non-emergency healthcare to individuals based on their personal moral objections. Turban writes that this contradicts health care providers' professional responsibilities, and that the \"non-emergency\" provision does not prevent this from threatening individuals' lives."
+  },
+  {
+    "title": "It's not 'them' — it's us!",
+    "author": "Betsy Leondar-Wright",
+    "date": "July 2006",
+    "work": "Class Matters",
+    "href": "http://www.classmatters.org/2006_07/its-not-them.php",
+    "tags": ["CLASS"],
+    "week": "March 22–26, 2021",
+    "summary": "This is an excellent article that a friend who read this page recommended to me, and I similarly recommend it to anyone else reading this. Leondar-Wright discusses how progressive-middle-class activists (PMCs) often do not see characteristics of our own that can be alienating to members of the working class, and how our alternative values can \"confuse us about who's the enemy\" and \"may [cause us to] take a superior attitude that working-class people will correctly read as classism\". She also distinguishes between \"essential weirdness\" (for example, gay people may seem weird to a particular group, but it is essential for organizations to support them being out) and personal differences that are very important to an individual and must be respected (a recovering alcoholic not drinking even if it seems weird in a particular space), from personal choices that ought not to be imposed on others (a vegan planning an all-vegan menu at a conference not devoted to veganism) and \"inessential weirdness\" (a group of activists suggesting everyone howl like wolves during a coffee break). \"So here's a shorthand version of my point: if you want to build cross-class alliances, don't howl. If howling is important to you, go off on a howling retreat with other howlers; don't do it in coalition spaces. Blend in if there's not a strong reason not to. Truly, you can be your authentic self without indulging your impulses to howl.\" The article ends with a list of five guidelines for PMC activists to follow to maximize the effectiveness of their work, and to help build cross-class alliances."
+  },
+  {
+    "title": "Advocate for gun control laws"
+  }
+]
