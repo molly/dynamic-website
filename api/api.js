@@ -3,7 +3,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const PRESS_DEFAULTS = require('../data/pressDefaults');
-// const DIB = require('../data/dib');
+const DIB = require('../data/dibDefaults');
 
 const paginate = require('./utils/paginate');
 const preprocess = require('./utils/preprocess');
@@ -39,11 +39,7 @@ router.get('/press', async (req, res) => {
 
 router.get('/dib', async (req, res) => {
   try {
-    const results = await getPaginatedAndFiltered(
-      '../data/dib.json',
-      null,
-      req
-    );
+    const results = await getPaginatedAndFiltered('../data/dib.json', DIB, req);
     res.json(results);
   } catch (err) {
     res.status(500).send(err);

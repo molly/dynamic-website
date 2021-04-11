@@ -27,7 +27,7 @@ const preprocess = (data, { defaultArticle, tagText }) => {
   const allTags = Object.keys(tagsMap).map((tag) => ({
     text: Object.prototype.hasOwnProperty.call(tagText, tag)
       ? tagText[tag]
-      : tag.toLowerCase(),
+      : tag.toLowerCase().replace('_', ' '),
     value: tag,
     frequency: tagsMap[tag],
   }));

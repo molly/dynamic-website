@@ -12,16 +12,7 @@ const PRESS_DEFAULTS = {
   tags: [],
 };
 
-const PRESS_TAGS = {
-  ARBITRATION: 'arbitration',
-  BREAKING_NEWS: 'breaking news',
-  DISINFORMATION: 'disinformation',
-  GENDER_GAP: 'gender gap',
-  HARASSMENT: 'harassment',
-  TECHNOLOGY: 'technology',
-  TWITTER: 'twitter',
-  WIKIPEDIA: 'wikipedia',
-};
+const PRESS_TAGS = {};
 
 module.exports = {
   defaultArticle: PRESS_DEFAULTS,
