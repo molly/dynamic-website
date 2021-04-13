@@ -1,9 +1,6 @@
 const paginated = (req, __, next) => {
-  if (
-    !req.query.limit ||
-    !Number.isInteger(req.query.limit) ||
-    req.query.limit <= 5
-  ) {
+  const limit = req.query.limit && parseInt(req.query.limit, 10);
+  if (!limit || !Number.isInteger(limit) || limit <= 5) {
     req.query.limit = 5;
   }
   if (req.query.limit > 50) {
