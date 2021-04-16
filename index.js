@@ -3,7 +3,10 @@ const path = require('path');
 const https = require('https');
 const fs = require('fs');
 
-const config = require('./config');
+let config;
+if (process.argv[2] === 'prod') {
+  config = require('./config');
+}
 const getPaginatedAndFiltered = require('./data/utils/getPaginatedAndFiltered');
 const PRESS_DEFAULTS = require('./data/pressDefaults');
 
