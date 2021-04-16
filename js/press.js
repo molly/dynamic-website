@@ -2,8 +2,11 @@
   document.getElementById('filters').addEventListener('submit', function (e) {
     e.preventDefault();
     var query = document.getElementById('search-input').value;
-    if (query) {
-      var url = new URL(window.location);
+    var url = new URL(window.location);
+    if (url.searchParams.has('search') && !query) {
+      url.searchParams.delete('search');
+      window.location = url;
+    } else if (query) {
       url.searchParams.set('search', query);
       window.location = url;
     }
