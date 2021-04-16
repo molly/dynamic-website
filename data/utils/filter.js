@@ -34,17 +34,10 @@ const filter = ({ results }, req) => {
 
   // TAGS
   if (req.query.tags) {
-    if (Array.isArray(req.query.tags)) {
-      const tags = req.query.tags.slice().map((tag) => tag.toUpperCase());
-      filteredResults = filteredResults.filter((article) =>
-        article.tags.some((tag) => tags.includes(tag))
-      );
-    } else {
-      const tag = req.query.tags.toUpperCase();
-      filteredResults = filteredResults.filter((article) =>
-        article.tags.includes(tag)
-      );
-    }
+    const tags = req.query.tags.split('-');
+    filteredResults = filteredResults.filter((article) =>
+      article.tags.some((tag) => tags.includes(tag))
+    );
   }
 
   // SEARCH

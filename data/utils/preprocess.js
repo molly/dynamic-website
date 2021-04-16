@@ -31,6 +31,7 @@ const preprocess = (data, { defaultArticle, tagText }) => {
     value: tag,
     frequency: tagsMap[tag],
   }));
+  allTags.sort((a, b) => a.text.localeCompare(b.text));
 
   return { results: processed, allTags };
 };

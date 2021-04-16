@@ -1,0 +1,51 @@
+extends ../../../website-v2/src/pug/templates/base.pug
+
+block vars
+  - var htmlClass = 'reading';
+
+block head 
+  link(rel='stylesheet', href='http://localhost:8000/css/reading.css')
+
+block body
+  .content-box
+    p I feel it is important for the public to understand Wikipedia—foremost
+      |  how it works, but also the challenges we face as a project,
+      |  particularly when it comes to diversity of editors and
+      |  content. I also sometimes speak about technology, diversity, and
+      |  online harassment, both in and outside of the context of Wikipedia.
+
+    h3 Press and other mentions
+
+    .filters
+      .filter-box
+        span.title
+          b Filter
+        div.tags
+          for tag in allTags
+            button(
+              class=["tag", 'tag-' + tag.value],
+              onclick='onTagClick("' + tag.value + '")',
+              aria-pressed=selectedTags.includes(tag.value).toString()
+            ) #{tag.text}
+        
+        form#search-form
+          label(for="search")
+          input#search(type="search", aria-label="Search articles on this page")
+          button(type="submit") Search
+        
+      span.article-count 
+        if totalResults !== totalUnfilteredResults
+          | #{totalResults} results matching these filters out of #{totalUnfilteredResults} total results.
+        else
+          | #{totalUnfilteredResults} results 
+
+    .articles(aria-live="polite",  aria-busy='true')
+      #articlesContainer
+        include ../mixins/pressArticle.pug
+        each article in results
+          +pressArticle(article)
+        
+block pre-javascript 
+  script(src='http://localhost:8000/js/polyfills/url-search-params-polyfill.js')
+block post-javascript
+  script(src='static/press.js')

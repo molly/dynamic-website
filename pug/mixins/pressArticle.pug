@@ -1,0 +1,32 @@
+mixin pressArticle(article)
+  div(class='article')
+    div.title
+      a(href=article.href) "#{article.title}"
+
+      if article.parenthetical
+        |  (#{article.parenthetical})
+
+      if article.parenthetical || !article.title.match(/[.?!]$/m)
+        |.
+
+    div.byline
+      if article.author
+        | #{article.author} #{article.preposition} 
+
+      if article.work
+        if !article.workItalics
+          | #{article.work}.
+        else
+          i #{article.work}.
+
+      if article.publisher
+        |  #{article.publisher}.
+
+      if article.formattedDate
+        |  #{article.formattedDate}.
+      else
+        |
+
+    if article.tags
+      div(class="tags")
+        span.tags= article.tags.map(function(t) { return t.replace('_', ' ') }).join(', ')
