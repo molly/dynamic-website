@@ -19,7 +19,7 @@ function getTagsListFromUrl(url = null) {
   }
   var urlParam = url.searchParams.get('tags');
   if (urlParam) {
-    return decodeURIComponent(urlParam.replace('_', ' ')).split('-');
+    return decodeURIComponent(urlParam).split('-');
   }
   return [];
 }
