@@ -8,7 +8,7 @@
       window.location = url;
     } else if (query) {
       url.searchParams.set('search', query);
-      window.location = url;
+      window.location.replace(url);
     }
   });
 })();
@@ -53,14 +53,14 @@ function onTagClick(tag) {
       url.searchParams.set('tags', newTagString);
     }
   }
-  window.location = url;
+  window.location.replace(url);
 }
 
 // eslint-disable-next-line no-unused-vars
 function onPageChangeClick(pageNumber) {
   var url = new URL(window.location);
   url.searchParams.set('page', pageNumber);
-  window.location = url;
+  window.location.replace(url);
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -71,5 +71,5 @@ function changeSortOrder(order) {
   } else {
     url.searchParams.delete('order');
   }
-  window.location = url;
+  window.location.replace(url);
 }
