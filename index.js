@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const https = require('https');
 
 const getPaginatedAndFiltered = require('./data/utils/getPaginatedAndFiltered');
 const PRESS_DEFAULTS = require('./data/pressDefaults');
@@ -24,6 +25,6 @@ app.get('/press', async (req, res) => {
   });
 });
 
-app.listen(PORT);
+https.createServer(app).listen(PORT);
 
 module.exports = app;
