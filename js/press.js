@@ -2,9 +2,11 @@
   document.getElementById('filters').addEventListener('submit', function (e) {
     e.preventDefault();
     var query = document.getElementById('search-input').value;
-    var url = new URL(window.location);
-    url.searchParams.set('search', query);
-    window.location = url;
+    if (query) {
+      var url = new URL(window.location);
+      url.searchParams.set('search', query);
+      window.location = url;
+    }
   });
 })();
 
