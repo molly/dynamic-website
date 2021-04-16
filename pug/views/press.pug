@@ -4,7 +4,7 @@ block vars
   - var htmlClass = 'reading';
 
 block head
-  link(rel="stylesheet", href="http://localhost:8000/css/reading.css")
+  link(rel="stylesheet", href="/css/reading.css")
 
 block body
   .content-box
@@ -71,7 +71,10 @@ block body
 
 block pre-javascript
   script(
-    src="http://localhost:8000/js/polyfills/url-search-params-polyfill.js"
+    src="static/url-search-params-polyfill.js"
+  )
+  script(
+    src="static/classlist-polyfill.js"
   )
 block post-javascript
   script(src="static/press.js")
