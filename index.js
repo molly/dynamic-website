@@ -17,7 +17,7 @@ app.use('/static', express.static(path.join(__dirname, 'js')));
 app.set('views', path.join(__dirname, 'pug/views'));
 app.set('view engine', 'pug');
 
-app.get('/press', async (req, res) => {
+app.get('/reading/press', async (req, res) => {
   const results = await getPaginatedAndFiltered(
     '../press.json',
     PRESS_DEFAULTS,
