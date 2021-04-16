@@ -1,13 +1,11 @@
 (function () {
-  document
-    .getElementById('search-form')
-    .addEventListener('submit', function (e) {
-      e.preventDefault();
-      var query = document.getElementById('search').value;
-      var url = new URL(window.location);
-      url.searchParams.set('search', query);
-      window.location = url;
-    });
+  document.getElementById('filters').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var query = document.getElementById('search-input').value;
+    var url = new URL(window.location);
+    url.searchParams.set('search', query);
+    window.location = url;
+  });
 })();
 
 function getTagsListFromUrl(url = null) {

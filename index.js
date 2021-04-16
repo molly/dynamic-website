@@ -19,7 +19,10 @@ app.get('/press', async (req, res) => {
   );
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   console.log(results);
-  res.render('press.pug', { selectedTags, ...results });
+  res.render('press.pug', {
+    query: { ...req.query, tags: selectedTags },
+    ...results,
+  });
 });
 
 app.listen(PORT);

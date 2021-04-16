@@ -17,21 +17,22 @@ block body
     h3 Press and other mentions
 
     .filters
-      .filter-box
-        span.title
-          b Filter
-        div.tags
+      form.filter-box#filters
+        label(for="filters").title Filter
+        label(for="tags") By tag
+        fieldset.tags#tags
           for tag in allTags
             button(
               class=["tag", 'tag-' + tag.value],
               onclick='onTagClick("' + tag.value + '")',
-              aria-pressed=selectedTags.includes(tag.value).toString()
+              aria-pressed=query.tags.includes(tag.value).toString()
             ) #{tag.text}
         
-        form#search-form
-          label(for="search")
-          input#search(type="search", aria-label="Search articles on this page")
-          button(type="submit") Search
+        .search-form
+          label(for="search") Search
+          .search-group
+            input#search-input(type="search", aria-label="Search articles on this page", value=query.search)
+            button#search-submit(type="submit") Search
         
       span.article-count 
         if totalResults !== totalUnfilteredResults
