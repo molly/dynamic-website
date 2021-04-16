@@ -50,3 +50,21 @@ function onTagClick(tag) {
   }
   window.location = url;
 }
+
+// eslint-disable-next-line no-unused-vars
+function onPageChangeClick(pageNumber) {
+  var url = new URL(window.location);
+  url.searchParams.set('page', pageNumber);
+  window.location = url;
+}
+
+// eslint-disable-next-line no-unused-vars
+function changeSortOrder(order) {
+  var url = new URL(window.location);
+  if (order === 'reverse') {
+    url.searchParams.set('order', 'reverse');
+  } else {
+    url.searchParams.delete('order');
+  }
+  window.location = url;
+}
