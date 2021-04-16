@@ -27,6 +27,7 @@ block body
               class=['tag', 'tag-' + tag.value],
               onclick='onTagClick("' + tag.value + '")',
               aria-pressed=query.tags.includes(tag.value).toString()
+              type="button"
             ) #{tag.text}
 
         .search-form
@@ -46,7 +47,7 @@ block body
           else
             | #{totalUnfilteredResults} results
 
-        button.sort-order(
+        button(type="button").sort-order(
           onclick='changeSortOrder("' + (query.order === 'reverse' ? 'normal' : 'reverse') + '")'
         )
           i(
@@ -68,6 +69,7 @@ block body
         button(
           onClick='onPageChangeClick(' + pageNumber + ')',
           aria-pressed=pageNumber === currentPage
+          type="button"
         ) #{pageNumber}
 
 block pre-javascript
