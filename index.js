@@ -3,6 +3,7 @@ const path = require('path');
 const https = require('https');
 const fs = require('fs');
 
+const config = require('./config');
 const getPaginatedAndFiltered = require('./data/utils/getPaginatedAndFiltered');
 const PRESS_DEFAULTS = require('./data/pressDefaults');
 
@@ -30,11 +31,9 @@ if (process.argv[2] === 'prod') {
   https
     .createServer(
       {
-        key: fs.readFileSync(
-          '/etc/letsencrypt/live/mollywhite.net/privkey.pem'
-        ),
-        cert: fs.readFileSync('/etc/letsencrypt/live/mollywhite.net/cert.pem'),
-        ca: fs.readFileSync('/etc/letsencrypt/live/mollywhite.net/chain.pem'),
+        key: fs.readFileSync(`${config.certPath}/privkey.pem`),
+        cert: fs.readFileSync(`${config.certPath}/cert.pem`),
+        ca: fs.readFileSync(`${config.certPath}/chain.pem`),
       },
       app
     )
