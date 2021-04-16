@@ -1,11 +1,12 @@
 const express = require('express');
 const path = require('path');
 const https = require('https');
+const fs = require('fs');
 
 const getPaginatedAndFiltered = require('./data/utils/getPaginatedAndFiltered');
 const PRESS_DEFAULTS = require('./data/pressDefaults');
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 const app = express();
 app.use('/static', express.static(path.join(__dirname, 'js')));
@@ -25,6 +26,21 @@ app.get('/press', async (req, res) => {
   });
 });
 
-https.createServer(app).listen(PORT);
+if (process.argv[2] === 'prod') {
+  https
+    .createServer(
+      {
+        key: fs.readFileSync(
+          '/etc/letsencrypt/live/mollywhite.net/privkey.pem'
+        ),
+        cert: fs.readFileSync('/etc/letsencrypt/live/mollywhite.net/cert.pem'),
+        ca: fs.readFileSync('/etc/letsencrypt/live/mollywhite.net/chain.pem'),
+      },
+      app
+    )
+    .listen(PORT);
+} else {
+  app.listen(PORT);
+}
 
 module.exports = app;

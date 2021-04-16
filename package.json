@@ -7,8 +7,9 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "watch": "nodemon --watch"
+    "start": "node index.js dev",
+    "watch": "nodemon --watch",
+    "prod": "node index.js prod"
   },
   "dependencies": {
     "cors": "^2.8.5",
