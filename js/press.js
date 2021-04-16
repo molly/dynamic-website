@@ -34,7 +34,7 @@ function onTagClick(tag) {
   // Set URL param
   var url = new URL(window.location);
   var tags = getTagsListFromUrl(url);
-  if (!tags) {
+  if (!tags.length) {
     url.searchParams.set('tags', urlEncodeTags(tag));
   } else {
     var newTagsArr;
