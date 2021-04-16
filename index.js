@@ -42,5 +42,3 @@ if (process.argv[2] === 'prod') {
 } else {
   app.listen(PORT);
 }
-
-module.exports = app;
