@@ -41,6 +41,7 @@
     "date": "2003",
     "publisher": "Knopf",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390275656l/25366.jpg",
+    "border": true,
     "href": "https://www.goodreads.com/book/show/25366.Grotesque", 
     "status": "read",
     "started": "2020-03-28",
