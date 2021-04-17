@@ -13,10 +13,10 @@ const matches = (maybeValue, search) => {
   return false;
 };
 
-function makeSortByDate(order) {
+function makeSortBySimpleDateKey(order, key) {
   return function (a, b) {
-    const sortValA = moment(a.date, MOMENT_FORMATS);
-    const sortValB = moment(b.date, MOMENT_FORMATS);
+    const sortValA = moment(a[key], MOMENT_FORMATS);
+    const sortValB = moment(b[key], MOMENT_FORMATS);
     if (order && order === 'reverse') {
       return sortValA - sortValB;
     }
@@ -79,11 +79,17 @@ const filter = ({ results }, req, { defaultKey }) => {
     });
   }
 
-  // TAGS
+  // TAGS AND STATUSES
   if (req.query.tags) {
     const tags = req.query.tags.split('-');
     filteredResults = filteredResults.filter((article) =>
       article.tags.some((tag) => tags.includes(tag.value))
+    );
+  }
+  if (req.query.status) {
+    const statuses = req.query.status.split('-');
+    filteredResults = filteredResults.filter(
+      (article) => article.status && statuses.includes(article.status)
     );
   }
 
@@ -104,8 +110,10 @@ const filter = ({ results }, req, { defaultKey }) => {
   // ORDER
   if (defaultKey === 'DIB') {
     filteredResults.sort(makeSortByWeek(req.query.order));
+  } else if (defaultKey === 'BOOK') {
+    filteredResults.sort(makeSortBySimpleDateKey(req.query.order, 'started'));
   } else {
-    filteredResults.sort(makeSortByDate(req.query.order));
+    filteredResults.sort(makeSortBySimpleDateKey(req.query.order, 'date'));
   }
 
   return { results: filteredResults };

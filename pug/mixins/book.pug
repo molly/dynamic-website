@@ -1,0 +1,50 @@
+mixin book(book) 
+  div(class='book')
+    if book.imageSrc 
+      if book.href
+        a(href=book.href)
+          img.book-cover(src=book.imageSrc)
+      else
+        img.book-cover(src=book.imageSrc)
+
+    .book-details
+      div.title
+        i #{book.title}
+      
+      .reading-info
+        if book.status 
+          div(class=['status', book.status])
+            if book.status === 'currentlyReading'
+              | Currently reading
+            else if book.status === 'read'
+              | Read
+            else if book.status === 'toRead'
+              | To read
+        
+        if book.started
+          .reading-dates 
+            | Started #{book.formattedStarted}
+            if !book.completed
+              | .
+            else 
+              | ; completed #{book.formattedCompleted}.
+
+      div.byline
+        if book.author
+          | #{book.author}.      
+
+        if book.publisher
+          |  Published by #{book.publisher}
+          if !book.formattedDate
+            | .
+          else
+            | , #{book.formattedDate}.
+        else 
+          if book.formattedDate
+            | Published #{book.formattedDate}. 
+      
+      
+            
+      if book.tags
+        div(class="tags")
+          span.tags= book.tags.map(function(t) { return t.text }).join(', ')

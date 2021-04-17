@@ -1,18 +1,29 @@
 .filters
   form#filters.filter-box
     label.title(for="filters") Filter
+
     label(for="tags") By tag
     fieldset#tags.tags
       each tag in allTags
         .button-group
-          button(
-            class=['tag', 'tag-' + tag.value],
+          button.tag(
             onclick='onTagClick("' + tag.value + '")',
             aria-pressed=query.tags.includes(tag.value).toString()
             type="button"
           ) #{tag.text}
           if showTagCount
             span.tag-count (#{tag.frequency})
+
+    if showStatusFilter 
+      label(for="tags") By reading status
+      fieldset#status.tags
+        each status in [{text: "currently reading", value: "currentlyReading"}, {text: "read", value: "read"}, {text: "to read", value: "toRead"}]
+          .button-group
+            button.tag(
+              onclick='onStatusClick("' + status.value + '")',
+              aria-pressed=query.statuses.includes(status.value).toString()
+              type="button"
+            ) #{status.text}
 
     .search-form
       label(for="search") Search

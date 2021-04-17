@@ -15,49 +15,55 @@
   });
 })();
 
-function getTagsListFromUrl(url = null) {
+function getListFromUrl(url = null, query) {
   if (!url) {
     url = new URL(window.location);
   }
-  var urlParam = url.searchParams.get('tags');
+  var urlParam = url.searchParams.get(query);
   if (urlParam) {
     return decodeURIComponent(urlParam).split('-');
   }
   return [];
 }
 
-function urlEncodeTags(tags) {
-  var tagsStr = Array.isArray(tags) ? tags.join('-') : tags;
-  return encodeURIComponent(tagsStr.replace(' ', '_'));
+function urlEncodeList(list) {
+  var listStr = Array.isArray(list) ? list.join('-') : list;
+  return encodeURIComponent(listStr.replace(' ', '_'));
+}
+
+function onMultiSelectClick(field) {
+  return function (value) {
+    // Set URL param
+    var url = new URL(window.location);
+    var values = getListFromUrl(url, field);
+    if (!values.length) {
+      url.searchParams.set(field, urlEncodeList(value));
+    } else {
+      var newValuesArr;
+      if (values.includes(value)) {
+        newValuesArr = values.filter(function (t) {
+          return t !== value;
+        });
+      } else {
+        newValuesArr = values.slice();
+        newValuesArr.push(value);
+      }
+      const newQueryString = urlEncodeList(newValuesArr);
+      if (newQueryString == '') {
+        url.searchParams.delete(field);
+      } else {
+        url.searchParams.set(field, newQueryString);
+      }
+    }
+    url.searchParams.delete('page');
+    window.location.replace(url);
+  };
 }
 
 // eslint-disable-next-line no-unused-vars
-function onTagClick(tag) {
-  // Set URL param
-  var url = new URL(window.location);
-  var tags = getTagsListFromUrl(url);
-  if (!tags.length) {
-    url.searchParams.set('tags', urlEncodeTags(tag));
-  } else {
-    var newTagsArr;
-    if (tags.includes(tag)) {
-      newTagsArr = tags.filter(function (t) {
-        return t !== tag;
-      });
-    } else {
-      newTagsArr = tags.slice();
-      newTagsArr.push(tag);
-    }
-    const newTagString = urlEncodeTags(newTagsArr);
-    if (newTagString == '') {
-      url.searchParams.delete('tags');
-    } else {
-      url.searchParams.set('tags', newTagString);
-    }
-  }
-  url.searchParams.delete('page');
-  window.location.replace(url);
-}
+var onTagClick = onMultiSelectClick('tags');
+// eslint-disable-next-line no-unused-vars
+var onStatusClick = onMultiSelectClick('status');
 
 // eslint-disable-next-line no-unused-vars
 function onPageChangeClick(pageNumber) {

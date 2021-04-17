@@ -10,6 +10,7 @@ if (process.argv[2] === 'prod') {
 const getPaginatedAndFiltered = require('./data/utils/getPaginatedAndFiltered');
 const PRESS_DEFAULTS = require('./data/pressDefaults');
 const DIB_DEFAULTS = require('./data/dibDefaults');
+const BOOK_DEFAULTS = require('./data/books/bookDefaults');
 
 const PORT = 5000;
 
@@ -40,6 +41,20 @@ app.get('/reading/dib', async (req, res) => {
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   res.render('dib.pug', {
     query: { ...req.query, tags: selectedTags },
+    ...results,
+  });
+});
+
+app.get('/reading/wikipedia', async (req, res) => {
+  const results = await getPaginatedAndFiltered(
+    '../books/wikipedia.json',
+    BOOK_DEFAULTS,
+    req
+  );
+  const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
+  const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
+  res.render('wikipedia-books.pug', {
+    query: { ...req.query, tags: selectedTags, statuses: selectedStatuses },
     ...results,
   });
 });
