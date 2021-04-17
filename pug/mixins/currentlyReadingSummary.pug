@@ -1,0 +1,11 @@
+- var shortForm = true
+mixin currentlyReadingSummary(currentlyReading)
+  if currentlyReading.length
+    .currently-reading
+      b Currently reading
+      include ./book.pug
+      +book(currentlyReading[0])
+      if currentlyReading.length === 2
+        span.others ... and one other book.
+      else if currentlyReading.length > 2
+        span.others ... and #{currentlyReading.length - 1} other books.

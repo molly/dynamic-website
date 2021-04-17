@@ -1,14 +1,7 @@
-const fs = require('fs').promises;
-const path = require('path');
-
+const getLocalJson = require('../utils/getLocalJson');
 const paginate = require('./paginate');
 const preprocess = require('./preprocess');
 const filter = require('./filter');
-
-const getLocalJson = async (relativePath) => {
-  const data = await fs.readFile(path.join(__dirname, relativePath), 'utf8');
-  return JSON.parse(data);
-};
 
 const getPaginatedAndFiltered = async (
   relativePath,

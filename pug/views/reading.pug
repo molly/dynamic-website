@@ -1,0 +1,61 @@
+extends ../symlinks/templates/base.pug
+
+block vars
+  - var htmlClass = 'reading';
+  - var importPrefix = 'http://localhost:8000'
+  - var showTagCount = true
+
+block head
+  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
+
+block body
+  .content-box
+    p Interested in what I'm reading these days? Check out my reading lists.
+
+    div.reading-section
+      h4
+        a(href="/reading/dib") DI&amp;B reading list 
+      | A list of articles I'm reading to further my education on a broad range of topics including
+      | racial justice and accessibility. This is updated often, as I set a goal to read at least 
+      | two articles a week on these topics. 
+      | I most recently read "
+      a(href=mostRecentDib.href) #{mostRecentDib.title} 
+      | "
+      if mostRecentDib.author
+        | by #{mostRecentDib.author} #{mostRecentDib.preposition} 
+
+        if mostRecentDib.work
+          if !mostRecentDib.workItalics
+            | #{mostRecentDib.work}.
+          else
+            i #{mostRecentDib.work}.
+
+        if mostRecentDib.publisher
+          |  #{mostRecentDib.publisher}.
+
+        if !mostRecentDib.work && !mostRecentDib.publisher
+          |.
+      else 
+        |.
+        
+    .reading-section
+      h4
+        a(href="/reading/pleasure") Books I'm reading for my own enjoyment
+      | A list of mostly fiction books I'm reading, have read, or want to read.
+      include ../mixins/currentlyReadingSummary.pug
+      +currentlyReadingSummary(currentlyReadingPleasure)
+        
+    .reading-section
+      h4
+        a(href="/reading/wikipedia") Books I'm reading for my work on Wikipedia
+      | A list of books I'm reading, have read, or want to read for Wikipedia articles I'm writing.
+      include ../mixins/currentlyReadingSummary.pug
+      +currentlyReadingSummary(currentlyReadingWikipedia)
+        
+    .reading-section
+      h4
+        a(href="/reading/work") Work-related books
+      | A list of books I'm reading, have read, or want to read that are related to my professional work.
+      include ../mixins/currentlyReadingSummary.pug
+      +currentlyReadingSummary(currentlyReadingWork)
+        

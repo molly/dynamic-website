@@ -27,33 +27,35 @@ mixin book(book)
         if book.author
           | #{book.author}.      
 
-        if book.publisher
-          |  Published by #{book.publisher}
-          if !book.formattedDate
-            | .
-          else
-            | , #{book.formattedDate}.
-        else 
-          if book.formattedDate
-            | Published #{book.formattedDate}. 
-      
-      .reading-info
-        if book.status 
-          div(class=['status', book.status])
-            if book.status === 'currentlyReading'
-              | Currently reading
-            else if book.status === 'read'
-              | Read
-            else if book.status === 'toRead'
-              | To read
-        
-        if book.formattedStarted
-          .reading-dates 
-            | Started #{book.formattedStarted}
-            if !book.formattedCompleted
+        if !shortForm
+          if book.publisher
+            |  Published by #{book.publisher}
+            if !book.formattedDate
               | .
-            else 
-              | ; completed #{book.formattedCompleted}.
+            else
+              | , #{book.formattedDate}.
+          else 
+            if book.formattedDate
+              | Published #{book.formattedDate}. 
+      
+      if !shortForm
+        .reading-info
+          if book.status 
+            div(class=['status', book.status])
+              if book.status === 'currentlyReading'
+                | Currently reading
+              else if book.status === 'read'
+                | Read
+              else if book.status === 'toRead'
+                | To read
+          
+          if book.formattedStarted
+            .reading-dates 
+              | Started #{book.formattedStarted}
+              if !book.formattedCompleted
+                | .
+              else 
+                | ; completed #{book.formattedCompleted}.
             
       if book.tags
         div(class="tags")

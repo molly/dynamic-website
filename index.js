@@ -7,7 +7,10 @@ let config;
 if (process.argv[2] === 'prod') {
   config = require('./config');
 }
-const getPaginatedAndFiltered = require('./data/utils/getPaginatedAndFiltered');
+
+const getPaginatedAndFiltered = require('./data/filter/getPaginatedAndFiltered');
+const getLandingPageSummary = require('./data/filter/landing');
+
 const PRESS_DEFAULTS = require('./data/pressDefaults');
 const DIB_DEFAULTS = require('./data/dibDefaults');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
@@ -30,6 +33,11 @@ app.get('/press', async (req, res) => {
     query: { ...req.query, tags: selectedTags },
     ...results,
   });
+});
+
+app.get('/reading', async (req, res) => {
+  const results = await getLandingPageSummary();
+  res.render('reading.pug', results);
 });
 
 app.get('/reading/dib', async (req, res) => {
