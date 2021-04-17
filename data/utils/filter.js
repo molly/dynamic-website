@@ -1,4 +1,5 @@
 const moment = require('moment');
+const MOMENT_FORMATS = ['YYYY-MM-DD', 'YYYY-MM', 'YYYY'];
 
 const matches = (maybeValue, search) => {
   if (!maybeValue) {
@@ -12,22 +13,68 @@ const matches = (maybeValue, search) => {
   return false;
 };
 
-const filter = ({ results }, req) => {
+function makeSortByDate(order) {
+  return function (a, b) {
+    const sortValA = moment(a.date, MOMENT_FORMATS);
+    const sortValB = moment(b.date, MOMENT_FORMATS);
+    if (order && order === 'reverse') {
+      return sortValA - sortValB;
+    }
+    return sortValB - sortValA;
+  };
+}
+
+const SAME_MONTH_REGEX = new RegExp(/([A-Za-z]+ \d{1,2})–\d{1,2}(, \d{4})/);
+const DIFFERENT_MONTHS_REGEX = new RegExp(
+  /([A-Za-z]+ \d{1,2})–[A-Za-z]+ \d{1,2}(, \d{4})/
+);
+function getMomentFromWeek(week) {
+  const sameMatch = week.match(SAME_MONTH_REGEX);
+  if (sameMatch) {
+    return moment(sameMatch[1] + sameMatch[2], 'MMMM D, YYYY');
+  }
+  const differentMatch = week.match(DIFFERENT_MONTHS_REGEX);
+  if (differentMatch) {
+    return moment(differentMatch[1] + differentMatch[2], 'MMMM D, YYYY');
+  }
+  return moment('1970-01-01', MOMENT_FORMATS);
+}
+
+function makeSortByWeek(order) {
+  return function (a, b) {
+    const sortValA = getMomentFromWeek(a.week);
+    const sortValB = getMomentFromWeek(b.week);
+    if (order && order === 'reverse') {
+      return sortValA - sortValB;
+    }
+    return sortValB - sortValA;
+  };
+}
+
+const filter = ({ results }, req, { defaultKey }) => {
   let filteredResults = results.slice();
 
   // DATES
   if (req.query.startDate) {
-    const startMoment = moment(req.query.startDate);
+    const startMoment = moment(req.query.startDate, [
+      'YYYY-MM-DD',
+      'YYYY-MM',
+      'YYYY',
+    ]);
     filteredResults = filteredResults.filter((article) => {
-      const m = moment(article.date);
+      const m = moment(article.date, MOMENT_FORMATS);
       return m.isSameOrAfter(startMoment);
     });
   }
 
   if (req.query.endDate) {
-    const endMoment = moment(req.query.endDate);
+    const endMoment = moment(req.query.endDate, [
+      'YYYY-MM-DD',
+      'YYYY-MM',
+      'YYYY',
+    ]);
     filteredResults = filteredResults.filter((article) => {
-      const m = moment(article.date);
+      const m = moment(article.date, MOMENT_FORMATS);
       return m.isSameOrBefore(endMoment);
     });
   }
@@ -55,12 +102,11 @@ const filter = ({ results }, req) => {
   }
 
   // ORDER
-  filteredResults.sort(function (a, b) {
-    if (req.query.order && req.query.order === 'reverse') {
-      return moment(a.date) - moment(b.date);
-    }
-    return moment(b.date) - moment(a.date);
-  });
+  if (defaultKey === 'DIB') {
+    filteredResults.sort(makeSortByWeek(req.query.order));
+  } else {
+    filteredResults.sort(makeSortByDate(req.query.order));
+  }
 
   return { results: filteredResults };
 };

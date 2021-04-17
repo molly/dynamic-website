@@ -2,20 +2,32 @@ extends ../symlinks/templates/base.pug
 
 block vars
   - var htmlClass = 'reading';
-  - var importPrefix = 'https://www.mollywhite.net'
+  - var importPrefix = 'http://localhost:8000'
 
 block head
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 
 block body
   .content-box
-    p I feel it is important for the public to understand Wikipedia—foremost 
-      | how it works, but also the challenges we face as a project, 
-      | particularly when it comes to diversity of editors and 
-      | content. I also sometimes speak about technology, diversity, and 
-      | online harassment, both in and outside of the context of Wikipedia.
+    p
+      | In the beginning of February, I made a commitment to myself to read at least two articles a 
+      | week pertaining to diversity, inclusion, and belonging (DI&amp;B). I believe constant 
+      | learning on these topics, and their intersection with the technology industry, is not 
+      | optional and is key to being both a good manager and team member, but also to being a 
+      | conscientous participant in the industry.
+    p
+      | I have been maintaining a private list of these articles, along with a brief summary, but 
+      | realized it might be useful to others looking to do the same thing to publish my list here. 
+      | I will continue to update it as I read more, though because it is much easier for me to 
+      | take private notes than update this page, it may lag behind somewhat.
+    p
+      | I care very much about making sure I am consuming a representative and wide range of 
+      | topics in this area, and so welcome suggestions and recommendations! 
+      | If you know of anything I ought to be reading, please 
+      a(href="/contact") send it my way
+      | .
 
-    h3(aria-sort=query.order === 'reverse' ? 'descending' : 'ascending') Press and other mentions
+    h3(aria-sort=query.order === 'reverse' ? 'descending' : 'ascending') DI&amp;B reading list
 
     .filters
       form#filters.filter-box
@@ -23,12 +35,14 @@ block body
         label(for="tags") By tag
         fieldset#tags.tags
           each tag in allTags
-            button(
-              class=['tag', 'tag-' + tag.value],
-              onclick='onTagClick("' + tag.value + '")',
-              aria-pressed=query.tags.includes(tag.value).toString()
-              type="button"
-            ) #{tag.text}
+            .button-group
+              button(
+                class=['tag', 'tag-' + tag.value],
+                onclick='onTagClick("' + tag.value + '")',
+                aria-pressed=query.tags.includes(tag.value).toString()
+                type="button"
+              ) #{tag.text}
+              span.tag-count (#{tag.frequency})
 
         .search-form
           label(for="search") Search
@@ -62,9 +76,9 @@ block body
 
     .articles
       #articlesContainer
-        include ../mixins/pressArticle.pug
+        include ../mixins/dibArticle.pug
         each article in results
-          +pressArticle(article)
+          +dibArticle(article)
 
     label(for="paginator") Page
     fieldset#paginator

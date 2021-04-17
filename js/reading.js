@@ -5,9 +5,11 @@
     var url = new URL(window.location);
     if (url.searchParams.has('search') && !query) {
       url.searchParams.delete('search');
+      url.searchParams.delete('page');
       window.location = url;
     } else if (query) {
       url.searchParams.set('search', query);
+      url.searchParams.delete('page');
       window.location.replace(url);
     }
   });
@@ -53,6 +55,7 @@ function onTagClick(tag) {
       url.searchParams.set('tags', newTagString);
     }
   }
+  url.searchParams.delete('page');
   window.location.replace(url);
 }
 
@@ -71,6 +74,7 @@ function changeSortOrder(order) {
   } else {
     url.searchParams.delete('order');
   }
+  url.searchParams.delete('page');
   window.location.replace(url);
 }
 

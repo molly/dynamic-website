@@ -15,9 +15,14 @@ const DIB_DEFAULTS = {
   week: null,
 };
 
-const DIB_TAGS = {};
+const DIB_TAGS = {
+  antiasian_racism: 'anti-Asian racism',
+  antiblack_racism: 'anti-Black racism',
+  covid19: 'COVID-19',
+};
 
 module.exports = {
   defaultArticle: DIB_DEFAULTS,
   tagText: DIB_TAGS,
+  defaultKey: 'DIB',
 };

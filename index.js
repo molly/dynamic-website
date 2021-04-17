@@ -9,6 +9,7 @@ if (process.argv[2] === 'prod') {
 }
 const getPaginatedAndFiltered = require('./data/utils/getPaginatedAndFiltered');
 const PRESS_DEFAULTS = require('./data/pressDefaults');
+const DIB_DEFAULTS = require('./data/dibDefaults');
 
 const PORT = 5000;
 
@@ -25,6 +26,19 @@ app.get('/press', async (req, res) => {
   );
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   res.render('press.pug', {
+    query: { ...req.query, tags: selectedTags },
+    ...results,
+  });
+});
+
+app.get('/reading/dib', async (req, res) => {
+  const results = await getPaginatedAndFiltered(
+    '../dib.json',
+    DIB_DEFAULTS,
+    req
+  );
+  const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
+  res.render('dib.pug', {
     query: { ...req.query, tags: selectedTags },
     ...results,
   });

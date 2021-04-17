@@ -17,4 +17,5 @@ const PRESS_TAGS = {};
 module.exports = {
   defaultArticle: PRESS_DEFAULTS,
   tagText: PRESS_TAGS,
+  defaultKey: 'PRESS',
 };

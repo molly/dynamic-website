@@ -1,0 +1,49 @@
+mixin dibArticle(article)
+  div(class='article')
+    div.title
+      a(href=article.href) "#{article.title}"
+
+      if article.parenthetical
+        |  (#{article.parenthetical})
+
+      if article.parenthetical || !article.title.match(/[.?!]$/m)
+        |.
+
+    div.byline
+      if article.author
+        | #{article.author} #{article.preposition} 
+
+      if article.work
+        if !article.workItalics
+          | #{article.work}.
+        else
+          i #{article.work}.
+
+      if article.publisher
+        |  #{article.publisher}.
+
+      if article.formattedDate
+        |  #{article.formattedDate}.
+      else
+        |
+
+    .details 
+      span.weekOf Read during the week of #{article.week}
+
+      .summary
+        != article.summary
+    
+    if article.relatedReading.length 
+      .related-reading
+        i.fab.fa-wikipedia-w
+        span.header Related reading: 
+
+        ul 
+          each rr, index in article.relatedReading 
+            a(href=rr.href) #{rr.title}
+            if index !== article.relatedReading.length - 1
+              span , 
+
+    if article.tags
+      div(class="tags")
+        span.tags= article.tags.map(function(t) { return t.replace('_', ' ') }).join(', ')
