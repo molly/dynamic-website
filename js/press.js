@@ -73,3 +73,10 @@ function changeSortOrder(order) {
   }
   window.location.replace(url);
 }
+
+// eslint-disable-next-line no-unused-vars
+function clearFilters() {
+  var url = new URL(window.location);
+  url.search = '';
+  window.location.replace(url);
+}

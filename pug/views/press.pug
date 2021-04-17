@@ -39,6 +39,8 @@ block body
               value=query.search
             )
             button#search-submit(type="submit") Search
+        
+        button.link-styled(type="button", onClick='clearFilters()') Clear filters
 
       .filter-subtext
         span.article-count 
@@ -47,7 +49,8 @@ block body
           else
             | #{totalUnfilteredResults} results
 
-        button(type="button").sort-order(
+        button.link-styled(
+          type="button",
           onclick='changeSortOrder("' + (query.order === 'reverse' ? 'normal' : 'reverse') + '")'
         )
           i(
