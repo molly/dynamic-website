@@ -8,7 +8,7 @@ const getLimit = (queryLimit, defaults) => {
     limit = defaults.default || 10;
   }
 
-  limit = Math.max(limit, defaults.min || 10);
+  limit = Math.max(limit, defaults.min || 5);
   limit = Math.min(limit, defaults.max || 50);
   return limit;
 };
