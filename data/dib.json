@@ -1,243 +1,325 @@
 [
-  {
-    "title": "A feminist internet would be better for everyone",
-    "author": "Charlotte Jee",
-    "date": "2021-04-01",
-    "work": "MIT Technology Review",
-    "href": "https://www.technologyreview.com/2021/04/01/1020478/feminist-internet-culture-activist-harassment-herd-signal/",
-    "tags": [
-      "feminism",
-      "gender",
-      "tech_industry"
-    ],
-    "week": "March 29–April 2, 2021",
-    "summary": "Jee envisions a version of the Internet that was built with the intention of being safe for women, rather than with halfhearted protections added on later. She talks about ways this would be accomplished, including giving more control to users, reducing the online economy's reliance on advertising and data collection and sale, and using strict privacy settings by default. She also talks about how tech companies always need to consider how their products could be misused."
-  },
-  {
-    "title": "Doctor: This unethical Arkansas law should horrify all in medical profession",
-    "author": "Jack Turban",
-    "date": "2021-04-02",
-    "publisher": "CNN",
-    "preposition": "for",
-    "workItalics": false,
-    "href": "https://www.cnn.com/2021/04/02/opinions/arkansas-anti-transgender-law-medical-ethics-turban/index.html",
-    "tags": [
-      "gender",
-      "trans_issues",
-      "current_events"
-    ],
-    "week": "March 29–April 2, 2021",
-    "summary": "The so-called Medical Ethics and Diversity Act introduced in Arkansas allows healthcare workers to deny non-emergency healthcare to individuals based on their personal moral objections. Turban writes that this contradicts health care providers' professional responsibilities, and that the \"non-emergency\" provision does not prevent this from threatening individuals' lives."
-  },
-  {
-    "title": "It's not 'them' — it's us!",
-    "author": "Betsy Leondar-Wright",
-    "date": "2006-07",
-    "work": "Class Matters",
-    "href": "http://www.classmatters.org/2006_07/its-not-them.php",
-    "tags": [
-      "class"
-    ],
-    "week": "March 22–26, 2021",
-    "summary": "This is an excellent article that a friend who read this page recommended to me, and I similarly recommend it to anyone else reading this. Leondar-Wright discusses how progressive-middle-class activists (PMCs) often do not see characteristics of our own that can be alienating to members of the working class, and how our alternative values can \"confuse us about who's the enemy\" and \"may [cause us to] take a superior attitude that working-class people will correctly read as classism\". She also distinguishes between \"essential weirdness\" (for example, gay people may seem weird to a particular group, but it is essential for organizations to support them being out) and personal differences that are very important to an individual and must be respected (a recovering alcoholic not drinking even if it seems weird in a particular space), from personal choices that ought not to be imposed on others (a vegan planning an all-vegan menu at a conference not devoted to veganism) and \"inessential weirdness\" (a group of activists suggesting everyone howl like wolves during a coffee break).<br/>\"So here's a shorthand version of my point: if you want to build cross-class alliances, don't howl. If howling is important to you, go off on a howling retreat with other howlers; don't do it in coalition spaces. Blend in if there's not a strong reason not to. Truly, you can be your authentic self without indulging your impulses to howl.\" The article ends with a list of five guidelines for PMC activists to follow to maximize the effectiveness of their work, and to help build cross-class alliances."
-    },
     {
-      "title": "Advocate for gun control laws",
-      "author": "Tracey Onyenacho",
-      "date": "2021-03-25",
-      "work": "Anti-Racism Daily",
-      "href": "https://www.antiracismdaily.com/archives/advocate-for-gun-control-laws-anti-racism-daily",
-      "tags": [
-        "gun_control",
-        "current_events"
-      ],
-      "week": "March 22–26, 2021",
-      "summary": "Onyenacho outlines some of the existing gun control legislation in place, including background checks and mandatory waiting periods. They also explain that if a background check is not completed in time (three days), a person may purchase a firearm&mdash;basically, an objection must be raised in that three-day period, and regardless of whether it's because no concern was discovered or because the FBI didn't have time to run the check, a person may proceed with the purchase. She outlines some proposed changes to gun control legislation, including extending the time period for background checks to be run, and requiring private gun sellers to run background checks (a decision which is currently up to the states). I was shocked at how many people own guns&mdash;they cite the <a href='https://www.pewresearch.org/social-trends/2017/06/22/the-demographics-of-gun-ownership/'>Pew Research Center's 2017 report</a> to show that 48% of white men own a firearm, as do 24% of white women. 24% of non-white men and 16% of non-white women do as well. I would be curious to know how those statistics have changed, particularly given reports of <a href='https://gunsandamerica.org/story/20/06/01/gun-sales-continue-to-boom-during-the-pandemic/'>increased gun purchasing in the past year or two</a>. I looked around for more recent data but it understandably seems to lag a bit&mdash;a lot of more recent sources were citing the same 2017 Pew study. At the top of the article, the author provides a list of actions to take to support gun control legislation.",
-      "relatedReading": [
-        {
-          "title": "Brady Handgun Violence Prevention Act",
-          "href": "https://en.wikipedia.org/wiki/Brady_Handgun_Violence_Prevention_Act"
-        }
-      ]
-    },
-    {
-      "title": "An urban farm embarks on its first season, determined to serve its community",
-      "author": "Jocelyn Ruggiero",
-      "date": "2021-03-23",
-      "work": "The Boston Globe",
-      "href": "https://www.bostonglobe.com/2021/03/23/lifestyle/an-urban-farm-embarks-its-first-season-determined-serve-its-community/",
-      "tags": [
-        "class",
-        "massachusetts"
-      ],
-      "week": "March 22–26, 2021",
-      "summary": "Ruggiero profiles the Bello family's Agric Organics Urban Farm in Wilbraham, which they created after observing the severity of the food desert in Springfield, which has the second-lowest per-capita income in Massachusetts. They will allow people to participate in a CSA program using <a href='https://www.mass.gov/snap-benefits-formerly-food-stamps'>SNAP cards</a>, sell produce for affordable prices, and donate at least 10% of their vegetables.",
-      "relatedReading": [
-        {
-          "title": "Urban agriculture",
-          "href": "https://en.wikipedia.org/wiki/Urban_agriculture"
-        },
-        {
-          "title": "food desert",
-          "href": "https://en.wikipedia.org/wiki/Food_desert"
-        }
-      ]
-    },
-    {
-      "title": "The Mobile Performance Inequality Gap, 2021",
-      "author": "Alex Russell",
-      "date": "2021-03-07",
-      "work": "Infrequently Noted",
-      "href": "https://infrequently.org/2021/03/the-performance-inequality-gap/",
-      "tags": [
-        "accessibility",
-        "tech_industry"
-      ],
-      "week": "March 15–19, 2021",
-      "summary": "Russell discusses the current baseline for mobile device performance, and how frontend developers are creating poor experiences for many users by building single page applications and other web experiences that are much heavier than what these devices (and networks) can support. \"When we construct a digital world to the limits of the best devices, the worse an experience we build, on average, for those who cannot afford iPhones or $800 Samsung flagships.\""
-    },
-    {
-      "title": "Experts Say the 'New Normal' in 2025 Will Be Far More Tech-Driven, Presenting More Big Challenges",
-      "author": "Janna Anderson, Lee Rainie, and Emily A. Vogels",
-      "date": "2021-02-18",
-      "preposition": "for",
-      "publisher": "the Pew Research Center",
-      "href": "https://www.pewresearch.org/internet/2021/02/18/experts-say-the-new-normal-in-2025-will-be-far-more-tech-driven-presenting-more-big-challenges/",
-      "tags": [
-        "covid19"
-      ],
-      "week": "March 15–19, 2021",
-      "summary": "Canvassing by the Pew Research Center summarizes a sample of expert opinions on how life will be in 2025. Notably more respondents (47%) believed that life will be \"mostly worse\" for people in 2025 than before the pandemic than believed would be \"mostly better\" (39%), though not when combined with the number who said it will be roughly the same (14%). Concerns about 2025 included worsening economic inequality, increasing power of Big Tech, and the continuing spread of misinformation. Positive predictions for 2025 included reforms relating to racial and social justice, quality of life improvements as a result of increased flexible working, and technological growth in spaces including healthcare and education. The point about misinformation really hit home for me: \"Many respondents said their deepest worry is over the seemingly unstoppable manipulation of public perception, emotion and action via online disinformation – lies and hate speech deliberately weaponized in order to propagate destructive biases and fears. They worry about significant damage to social stability and cohesion and the reduced likelihood of rational deliberation and evidence-based policymaking.\" There is a long appendix of each expert's takes, and they are very thought-provoking."
-    },
-    {
-      "title": "Your first attempt at making anything accessible will be awful",
-      "author": "Sheri Byrne-Haber",
-      "date": "2020-10-22",
-      "work": "her blog",
-      "workItalics": false,
-      "href": "https://sheribyrnehaber.com/attempt-making-anything-accessible-awful/",
-      "tags": [
-        "accessibility",
-        "ability"
-      ],
-      "week": "March 8–12, 2021",
-      "summary": "Byrne-Haber explains that making websites accessible is very difficult, but that that shouldn't be an excuse to avoid doing it. I particularly like point 3: \"Even people with disabilities can’t represent the needs of everyone with any disability\", and the takeaway: \"98% of websites are completely inaccessible. You couldn’t possibly do any worse than they are. The starting point is giving a damn.\" Something is better than nothing."
-    },
-    {
-      "title": "The Displays: On Anti-Racist Study and Institutional Enclosure",
-      "author": "David James Hudson",
-      "date": "2020-10-22",
-      "work": "up//root",
-      "href": "https://www.uproot.space/features/hudson-the-displays?s=03",
-      "tags": [
-        "antiblack_racism",
-        "race"
-      ],
-      "week": "March 8–12, 2021",
-      "summary": "Hudson writes about the performative nature of companies, government institutions, and other organizations in beginning anti-racist initiatives in response to the murder of George Floyd, and how they ignore their own deeply embedded structural racism. \"It is hard to sustain interest when the frameworks for doing so center around shock and spectacle, when the institutional terms for doing so offer relief of such shocks through the efficiency of individual reform, when doing such a something is seen as better than doing nothing, is celebrated prominently, its outer limits those of containment rather than mere capacity.\"",
-      "relatedReading": [
-        {
-          "title": "Performative activism",
-          "href": "https://en.wikipedia.org/wiki/Performative_activism"
-        }
-      ]
-    },
-    {
-      "title": "Ignoring The History Of Anti-Asian Racism Is Another Form Of Violence",
-      "author": "Connie Wun",
-      "date": "2021-03-01",
-      "work": "Elle",
-      "href": "https://www.elle.com/culture/career-politics/a35635188/anti-asian-racism-history-violence/",
-      "tags": [
-        "antiasian_racism",
-        "race",
-        "current_events"
-      ],
-      "week": "March 1–5, 2021",
-      "summary": "Asian–American history, including the wars that brought many Asian Americans to the US, is not taught or even acknowledged adequately. \"As Dr. Mimi Kim, who works on community accountability and transformative justice, once said about the Korean War and its impacts: 'The violence is also in the forgetting.'\" There is a myth that Asian Americans are unaffected by white supremacy, which is very much not the case.",
-      "relatedReading": [
-        {
-          "title": "Yuri Kochiyama",
-          "href": "https://en.wikipedia.org/wiki/Yuri_Kochiyama"
-        },
-        {
-          "title": "David Fagen",
-          "href": "https://en.wikipedia.org/wiki/David_Fagen"
-        },
-        {
-          "title": "Stop Asian Hate",
-          "href": "https://en.wikipedia.org/wiki/Stop_Asian_Hate"
-        }
-      ]
-    },
-    {
-      "title": "The George Floyd Act wouldn't have saved George Floyd’s life. That says it all",
-      "author": "Derecka Purnell",
-      "date": "2021-03-04",
-      "work": "The Guardian",
-      "href": "https://www.theguardian.com/commentisfree/2021/mar/04/the-george-floyd-act-wouldnt-have-saved-george-floyds-life-thats-says-it-all",
-      "tags": [
-        "antiblack_racism",
-        "race",
-        "class",
-        "current_events"
-      ],
-      "week": "March 1–5, 2021",
-      "summary": "The George Floyd Act, which bans police from using chokeholds, would not have saved George Floyd, who did not die from the use of a chokehold. \"[Police] can show up and attempt to stop the crime, but they can’t stop the underlying conditions that give rise to it: class exploitation and poverty. Floyd appeared to need cash, not the police.\" The author is also critical of Democrats for taking performative actions without championing meaningful changes.",
+        "title": "Our Black Maternal Health Crisis Is a Racial Justice Issue That Demands Bold Solutions",
+        "author": "U.S. Representative Ayanna Pressley and Dr. Myechia Minter Jordan",
+        "date": "2021-04-16",
+        "work": "The Root",
+        "href": "https://theglowup.theroot.com/our-black-maternal-health-crisis-is-a-racial-justice-is-1846698139",
+        "tags": [
+            "race",
+            "antiblack_racism",
+            "reproductive_justice"
+        ],
+        "week": "April 19–23, 2021",
+        "summary": "Pressley and Dr. Jordan describe disparities in maternal healthcare as a result of racism and inequitable access, and explain how maternal healthcare is a racial justice issue that requires substantive solutions. They suggest expanding Medicaid to cover more maternity-related issues and a longer period of time. It explains the Healthy MOMMIES Act, introduced by Pressley and colleagues. The piece also describes the importance of oral health to overall health, which is an interesting topic that I had not considered specifically in relation to maternal healthcare.",
         "relatedReading": [
-          {
-            "title": "George Floyd Justice in Policing Act",
-            "href": "https://en.wikipedia.org/wiki/George_Floyd_Justice_in_Policing_Act"
-          }
+            {
+                "title": "Black maternal mortality in the United States",
+                "href": "https://en.wikipedia.org/wiki/Black_maternal_mortality_in_the_United_States"
+            }
         ]
-      },
-      {
+    },
+    {
+        "title": "The Daunte Wright Shooting: What We Know So Far",
+        "author": "Dingane Xaba, Niko Georgiades, Unicorn Riot ",
+        "date": "2021-04-15",
+        "preposition": "for",
+        "publisher": "Unicorn Riot",
+        "href": "https://unicornriot.ninja/2021/the-daunte-wright-shooting-what-we-know-so-far/",
+        "tags": [
+            "race",
+            "antiblack_racism",
+            "policing",
+            "current_events"
+        ],
+        "week": "April 12–16, 2021",
+        "summary": "The authors give an overview of the events leading up to and surrounding the police killing of Daunte Wright, as well as ensuing protests. They describe ongoing issues with police response to protests in Minneapolis, including violence against protesters, targeting of press, and holding detained individuals on suspicion of riot charges, likely related only to possession of gas masks.",
+        "relatedReading": [
+            {
+                "title": "Killing of Daunte Wright",
+                "href": "https://en.wikipedia.org/wiki/Killing_of_Daunte_Wright"
+            },
+            {
+                "title": "Daunte Wright protests",
+                "href": "https://en.wikipedia.org/wiki/Daunte_Wright_protests"
+            },
+            {
+                "title": "2020–2021 Minneapolis–Saint Paul racial justice protests",
+                "href": "https://en.wikipedia.org/wiki/2020%E2%80%932021_Minneapolis%E2%80%93Saint_Paul_racial_justice_protests"
+            }
+        ]
+    },
+    {
+        "title": "Meet the introverts who are dreading a return to normal",
+        "author": "Roxanne Roberts",
+        "date": "2021-04-10",
+        "work": "The Washington Post",
+        "href": "https://www.washingtonpost.com/lifestyle/style/introverts-are-dreading-a-return-to-the-noise-crowds-and-small-talk-of-normal-life/2021/04/09/386006b0-987b-11eb-b28d-bfa7bb5cb2a5_story.html",
+        "tags": ["mental_health", "covid19"],
+        "week": "April 12–16, 2021",
+        "summary": "Roberts discusses introverts who are apprehensive about \"returning to normal\" after widespread vaccination and easing of COVID-19 restrictions. I didn't agree with a lot of it—particularly the comparison between returning to post-COVID normalcy and returning to prison—though I did find the statement by the psychoogist they interviewed to be thought-provoking: \"The pandemic is what psychologist Susan Krauss Whitbourne calls a 'time of measurement' effect — the rare historical event so profound that it alters perceptions and personalities. 'So psychology won’t be the same for a number of years now, just as after World War I and World War II.'\" I also appreciated the mention of the dissonance between the happiness 2020 has brought some of us, and the horror of the pandemic."
+    },
+    {
+        "title": "How to provide anti-racist mental health care",
+        "author": "Jude Mary Cénat",
+        "date": "2020-07-08",
+        "work": "The Lancet",
+        "href": "https://www.thelancet.com/pdfs/journals/lanpsy/PIIS2215-0366(20)30309-6.pdf",
+        "tags": ["antiblack_racism", "mental_health", "race"],
+        "week": "April 5–9, 2021",
+        "summary": "Cénat describes the impact of individual, institutional, and systemic racism on the health of those it affects. The article describes racism within the medical and psychiatric fields, and urges practicioners to take an anti-racist approach in their treatment. The article provides a long list of guidelines to provide anti-racist mental health care, which includes advice for practioners to increase their awareness of racism and use culturally-appropriate assessments."
+    },
+    {
+        "title": "Meet the gun-toting 'Tenacious Unicorns' in rural Colorado",
+        "author": "Eric Siegel",
+        "date": "2021-01-14",
+        "work": "High Country News",
+        "href": "https://www.hcn.org/issues/53.2/south-communities-meet-the-gun-toting-tenacious-unicorns-in-rural-colorado",
+        "tags": ["antifascism", "trans_issues", "gun_control", "lgbt"],
+        "week": "April 5–9, 2021",
+        "summary": "I stumbled across the Tenacious Unicorn Ranch <a href='https://twitter.com/TenaciousRanch'>on Twitter</a> in March, when they were asking for donations to fund protective measures (fencing, floodlights, etc.) against local militia that were threatening the people who live there. It's worth a follow for the alpaca (and dog and other livestock) photos alone, but it's also such a cool idea, and I love their <a href='https://twitter.com/TenaciousRanch/status/1378502709020565505'>futuristic \"earthship\" building</a>. I sought out an article to learn more about the group and found this profile by a Colorado journalist. Immediately drawn in by the photographs and the quote about geodesic domes (\"They are weird but useful, which is the essence of queer.\"), I loved reading about how they made a home for themselves even in an area that had become a \"cauldron of right-wing conservatism\" and galvanized other progressives. This was published before the heightened harassment by militias and other members of the right-wing, but discusses many of the challenges they've faced with local groups who challenge their right to live and farm in the area. It also informed me about Mission: Wolf, another countercultural community in the area that is focused on creating a wolf sanctuary, which I am interested to learn about."
+    },
+    {
+        "title": "A feminist internet would be better for everyone",
+        "author": "Charlotte Jee",
+        "date": "2021-04-01",
+        "work": "MIT Technology Review",
+        "href": "https://www.technologyreview.com/2021/04/01/1020478/feminist-internet-culture-activist-harassment-herd-signal/",
+        "tags": [
+            "feminism",
+            "gender",
+            "tech_industry"
+        ],
+        "week": "March 29–April 2, 2021",
+        "summary": "Jee envisions a version of the Internet that was built with the intention of being safe for women, rather than with halfhearted protections added on later. She talks about ways this would be accomplished, including giving more control to users, reducing the online economy's reliance on advertising and data collection and sale, and using strict privacy settings by default. She also talks about how tech companies always need to consider how their products could be misused."
+    },
+    {
+        "title": "Doctor: This unethical Arkansas law should horrify all in medical profession",
+        "author": "Jack Turban",
+        "date": "2021-04-02",
+        "publisher": "CNN",
+        "preposition": "for",
+        "workItalics": false,
+        "href": "https://www.cnn.com/2021/04/02/opinions/arkansas-anti-transgender-law-medical-ethics-turban/index.html",
+        "tags": [
+            "gender",
+            "trans_issues",
+            "lgbt",
+            "current_events"
+        ],
+        "week": "March 29–April 2, 2021",
+        "summary": "The so-called Medical Ethics and Diversity Act introduced in Arkansas allows healthcare workers to deny non-emergency healthcare to individuals based on their personal moral objections. Turban writes that this contradicts health care providers' professional responsibilities, and that the \"non-emergency\" provision does not prevent this from threatening individuals' lives."
+    },
+    {
+        "title": "It's not 'them' — it's us!",
+        "author": "Betsy Leondar-Wright",
+        "date": "2006-07",
+        "work": "Class Matters",
+        "href": "http://www.classmatters.org/2006_07/its-not-them.php",
+        "tags": [
+            "class"
+        ],
+        "week": "March 22–26, 2021",
+        "summary": "This is an excellent article that a friend who read this page recommended to me, and I similarly recommend it to anyone else reading this. Leondar-Wright discusses how progressive-middle-class activists (PMCs) often do not see characteristics of our own that can be alienating to members of the working class, and how our alternative values can \"confuse us about who's the enemy\" and \"may [cause us to] take a superior attitude that working-class people will correctly read as classism\". She also distinguishes between \"essential weirdness\" (for example, gay people may seem weird to a particular group, but it is essential for organizations to support them being out) and personal differences that are very important to an individual and must be respected (a recovering alcoholic not drinking even if it seems weird in a particular space), from personal choices that ought not to be imposed on others (a vegan planning an all-vegan menu at a conference not devoted to veganism) and \"inessential weirdness\" (a group of activists suggesting everyone howl like wolves during a coffee break).<br/>\"So here's a shorthand version of my point: if you want to build cross-class alliances, don't howl. If howling is important to you, go off on a howling retreat with other howlers; don't do it in coalition spaces. Blend in if there's not a strong reason not to. Truly, you can be your authentic self without indulging your impulses to howl.\" The article ends with a list of five guidelines for PMC activists to follow to maximize the effectiveness of their work, and to help build cross-class alliances."
+    },
+    {
+        "title": "Advocate for gun control laws",
+        "author": "Tracey Onyenacho",
+        "date": "2021-03-25",
+        "work": "Anti-Racism Daily",
+        "href": "https://www.antiracismdaily.com/archives/advocate-for-gun-control-laws-anti-racism-daily",
+        "tags": [
+            "gun_control",
+            "current_events"
+        ],
+        "week": "March 22–26, 2021",
+        "summary": "Onyenacho outlines some of the existing gun control legislation in place, including background checks and mandatory waiting periods. They also explain that if a background check is not completed in time (three days), a person may purchase a firearm&mdash;basically, an objection must be raised in that three-day period, and regardless of whether it's because no concern was discovered or because the FBI didn't have time to run the check, a person may proceed with the purchase. She outlines some proposed changes to gun control legislation, including extending the time period for background checks to be run, and requiring private gun sellers to run background checks (a decision which is currently up to the states). I was shocked at how many people own guns&mdash;they cite the <a href='https://www.pewresearch.org/social-trends/2017/06/22/the-demographics-of-gun-ownership/'>Pew Research Center's 2017 report</a> to show that 48% of white men own a firearm, as do 24% of white women. 24% of non-white men and 16% of non-white women do as well. I would be curious to know how those statistics have changed, particularly given reports of <a href='https://gunsandamerica.org/story/20/06/01/gun-sales-continue-to-boom-during-the-pandemic/'>increased gun purchasing in the past year or two</a>. I looked around for more recent data but it understandably seems to lag a bit&mdash;a lot of more recent sources were citing the same 2017 Pew study. At the top of the article, the author provides a list of actions to take to support gun control legislation.",
+        "relatedReading": [
+            {
+                "title": "Brady Handgun Violence Prevention Act",
+                "href": "https://en.wikipedia.org/wiki/Brady_Handgun_Violence_Prevention_Act"
+            }
+        ]
+    },
+    {
+        "title": "An urban farm embarks on its first season, determined to serve its community",
+        "author": "Jocelyn Ruggiero",
+        "date": "2021-03-23",
+        "work": "The Boston Globe",
+        "href": "https://www.bostonglobe.com/2021/03/23/lifestyle/an-urban-farm-embarks-its-first-season-determined-serve-its-community/",
+        "tags": [
+            "class",
+            "massachusetts"
+        ],
+        "week": "March 22–26, 2021",
+        "summary": "Ruggiero profiles the Bello family's Agric Organics Urban Farm in Wilbraham, which they created after observing the severity of the food desert in Springfield, which has the second-lowest per-capita income in Massachusetts. They will allow people to participate in a CSA program using <a href='https://www.mass.gov/snap-benefits-formerly-food-stamps'>SNAP cards</a>, sell produce for affordable prices, and donate at least 10% of their vegetables.",
+        "relatedReading": [
+            {
+                "title": "Urban agriculture",
+                "href": "https://en.wikipedia.org/wiki/Urban_agriculture"
+            },
+            {
+                "title": "food desert",
+                "href": "https://en.wikipedia.org/wiki/Food_desert"
+            }
+        ]
+    },
+    {
+        "title": "The Mobile Performance Inequality Gap, 2021",
+        "author": "Alex Russell",
+        "date": "2021-03-07",
+        "work": "Infrequently Noted",
+        "href": "https://infrequently.org/2021/03/the-performance-inequality-gap/",
+        "tags": [
+            "accessibility",
+            "tech_industry"
+        ],
+        "week": "March 15–19, 2021",
+        "summary": "Russell discusses the current baseline for mobile device performance, and how frontend developers are creating poor experiences for many users by building single page applications and other web experiences that are much heavier than what these devices (and networks) can support. \"When we construct a digital world to the limits of the best devices, the worse an experience we build, on average, for those who cannot afford iPhones or $800 Samsung flagships.\""
+    },
+    {
+        "title": "Experts Say the 'New Normal' in 2025 Will Be Far More Tech-Driven, Presenting More Big Challenges",
+        "author": "Janna Anderson, Lee Rainie, and Emily A. Vogels",
+        "date": "2021-02-18",
+        "preposition": "for",
+        "publisher": "the Pew Research Center",
+        "href": "https://www.pewresearch.org/internet/2021/02/18/experts-say-the-new-normal-in-2025-will-be-far-more-tech-driven-presenting-more-big-challenges/",
+        "tags": [
+            "covid19"
+        ],
+        "week": "March 15–19, 2021",
+        "summary": "Canvassing by the Pew Research Center summarizes a sample of expert opinions on how life will be in 2025. Notably more respondents (47%) believed that life will be \"mostly worse\" for people in 2025 than before the pandemic than believed would be \"mostly better\" (39%), though not when combined with the number who said it will be roughly the same (14%). Concerns about 2025 included worsening economic inequality, increasing power of Big Tech, and the continuing spread of misinformation. Positive predictions for 2025 included reforms relating to racial and social justice, quality of life improvements as a result of increased flexible working, and technological growth in spaces including healthcare and education. The point about misinformation really hit home for me: \"Many respondents said their deepest worry is over the seemingly unstoppable manipulation of public perception, emotion and action via online disinformation – lies and hate speech deliberately weaponized in order to propagate destructive biases and fears. They worry about significant damage to social stability and cohesion and the reduced likelihood of rational deliberation and evidence-based policymaking.\" There is a long appendix of each expert's takes, and they are very thought-provoking."
+    },
+    {
+        "title": "Your first attempt at making anything accessible will be awful",
+        "author": "Sheri Byrne-Haber",
+        "date": "2020-10-22",
+        "work": "her blog",
+        "workItalics": false,
+        "href": "https://sheribyrnehaber.com/attempt-making-anything-accessible-awful/",
+        "tags": [
+            "accessibility",
+            "ability"
+        ],
+        "week": "March 8–12, 2021",
+        "summary": "Byrne-Haber explains that making websites accessible is very difficult, but that that shouldn't be an excuse to avoid doing it. I particularly like point 3: \"Even people with disabilities can’t represent the needs of everyone with any disability\", and the takeaway: \"98% of websites are completely inaccessible. You couldn’t possibly do any worse than they are. The starting point is giving a damn.\" Something is better than nothing."
+    },
+    {
+        "title": "The Displays: On Anti-Racist Study and Institutional Enclosure",
+        "author": "David James Hudson",
+        "date": "2020-10-22",
+        "work": "up//root",
+        "href": "https://www.uproot.space/features/hudson-the-displays?s=03",
+        "tags": [
+            "antiblack_racism",
+            "race"
+        ],
+        "week": "March 8–12, 2021",
+        "summary": "Hudson writes about the performative nature of companies, government institutions, and other organizations in beginning anti-racist initiatives in response to the murder of George Floyd, and how they ignore their own deeply embedded structural racism. \"It is hard to sustain interest when the frameworks for doing so center around shock and spectacle, when the institutional terms for doing so offer relief of such shocks through the efficiency of individual reform, when doing such a something is seen as better than doing nothing, is celebrated prominently, its outer limits those of containment rather than mere capacity.\"",
+        "relatedReading": [
+            {
+                "title": "Performative activism",
+                "href": "https://en.wikipedia.org/wiki/Performative_activism"
+            }
+        ]
+    },
+    {
+        "title": "Ignoring The History Of Anti-Asian Racism Is Another Form Of Violence",
+        "author": "Connie Wun",
+        "date": "2021-03-01",
+        "work": "Elle",
+        "href": "https://www.elle.com/culture/career-politics/a35635188/anti-asian-racism-history-violence/",
+        "tags": [
+            "antiasian_racism",
+            "race",
+            "current_events"
+        ],
+        "week": "March 1–5, 2021",
+        "summary": "Asian–American history, including the wars that brought many Asian Americans to the US, is not taught or even acknowledged adequately. \"As Dr. Mimi Kim, who works on community accountability and transformative justice, once said about the Korean War and its impacts: 'The violence is also in the forgetting.'\" There is a myth that Asian Americans are unaffected by white supremacy, which is very much not the case.",
+        "relatedReading": [
+            {
+                "title": "Yuri Kochiyama",
+                "href": "https://en.wikipedia.org/wiki/Yuri_Kochiyama"
+            },
+            {
+                "title": "David Fagen",
+                "href": "https://en.wikipedia.org/wiki/David_Fagen"
+            },
+            {
+                "title": "Stop Asian Hate",
+                "href": "https://en.wikipedia.org/wiki/Stop_Asian_Hate"
+            }
+        ]
+    },
+    {
+        "title": "The George Floyd Act wouldn't have saved George Floyd’s life. That says it all",
+        "author": "Derecka Purnell",
+        "date": "2021-03-04",
+        "work": "The Guardian",
+        "href": "https://www.theguardian.com/commentisfree/2021/mar/04/the-george-floyd-act-wouldnt-have-saved-george-floyds-life-thats-says-it-all",
+        "tags": [
+            "antiblack_racism",
+            "race",
+            "class",
+            "current_events",
+            "policing"
+        ],
+        "week": "March 1–5, 2021",
+        "summary": "The George Floyd Act, which bans police from using chokeholds, would not have saved George Floyd, who did not die from the use of a chokehold. \"[Police] can show up and attempt to stop the crime, but they can’t stop the underlying conditions that give rise to it: class exploitation and poverty. Floyd appeared to need cash, not the police.\" The author is also critical of Democrats for taking performative actions without championing meaningful changes.",
+        "relatedReading": [
+            {
+                "title": "George Floyd Justice in Policing Act",
+                "href": "https://en.wikipedia.org/wiki/George_Floyd_Justice_in_Policing_Act"
+            }
+        ]
+    },
+    {
         "title": "Steve Martinez Jailed Again After Refusing To Testify Before A Federal Grand Jury",
         "author": "Ryan Fatica",
         "date": "2021-03-04",
         "work": "It's Going Down",
         "href": "https://itsgoingdown.org/steve-martinez-jailed-again-after-refusing-to-testify-before-a-federal-grand-jury/",
         "tags": [
-          "water_protection",
-          "indigenous_rights"
+            "water_protection",
+            "indigenous_rights"
         ],
         "week": "March 1–5, 2021",
         "summary": "Water protector Steve Martinez is back in custody and faces up to 18 months incarceration for refusing to testify in a grand jury investigation related to the DAPL project and resistance to it. He was previously incarcerated for almost three weeks. \"Federal grand juries have long been used as a way of punishing activists and gaining information that law enforcement can use to charge those participating in social movements with crimes.\"",
         "relatedReading": [
-          {
-            "title": "Dakota Access Pipeline protests",
-            "href": "https://en.wikipedia.org/wiki/Dakota_Access_Pipeline_protests)"
-          }
+            {
+                "title": "Dakota Access Pipeline protests",
+                "href": "https://en.wikipedia.org/wiki/Dakota_Access_Pipeline_protests)"
+            }
         ]
-      },
-      {
+    },
+    {
         "title": "Covid Vaccine Websites Violate Disability Laws, Create Inequity for the Blind",
         "author": "Lauren Weber and Hannah Recht",
         "date": "2021-02-25",
         "work": "Kaiser Health News",
         "href": "https://khn.org/news/article/covid-vaccine-websites-violate-disability-laws-create-inequity-for-the-blind/",
         "tags": [
-          "covid19",
-          "accessibility",
-          "ability"
+            "covid19",
+            "accessibility",
+            "ability"
         ],
         "week": "February 22–26, 2021",
         "summary": "Nearly all vaccine websites across the country do not meet standards required by disability rights laws, and have prevented some blind and visually impaired people from signing up online for vaccination appointments. Blind people are at a higher risk for COVID-19 because they are often unable to distance from people, due to needing assistance with things like grocery shopping."
-      },
-      {
+    },
+    {
         "title": "How to be an Active Bystander for Academic Ableism",
         "author": "Veronica Lewis",
         "date": "2021-02-22",
         "work": "Veronica With Four Eyes",
         "href": "https://veroniiiica.com/2021/02/22/active-bystander-for-academic-ableism/",
         "tags": [
-          "ability",
-          "education"
+            "ability",
+            "education"
         ],
         "week": "February 22–26, 2021",
         "summary": "Discusses some examples of academic ableism, and describes what helpful actions bystanders can take to support the victim of such an event."
-      },
-      {
+    },
+    {
         "title": "Why Being Black Feels So Overwhelming Right Now",
         "author": "Gabriella Effie Forson",
         "date": "2020-06-01",
@@ -246,54 +328,54 @@
         "preposition": "on",
         "href": "https://medium.com/@effiegabriella/why-it-feels-so-overwhelming-right-now-6d2ee308f3b7",
         "tags": [
-          "antiblack_racism",
-          "race",
-          "current_events"
+            "antiblack_racism",
+            "race",
+            "current_events"
         ],
         "week": "February 8–12, 2021",
         "summary": "Forson writes about the challenges of going about life as though it were \"business as usual\" in the summer of 2020, with a powerful analogy. She also describes the dissonance of seeing white people posting online as though things were normal, and lists some actions people can take. \"Don’t shy away because you think it doesn’t concern you. If you love a black person or believe in equality this concerns you.\""
-      },
-      {
+    },
+    {
         "title": "Letter and symbol misrecognition in highly legible typefaces for general, children, dyslexic, visually impaired and ageing readers",
         "author": "Thomas Bohm",
         "date": "2019-05",
         "work": "Typography Journal",
         "href": "https://typography.guru/journal/letters-symbols-misrecognition/",
         "tags": [
-          "accessibility",
-          "ability"
+            "accessibility",
+            "ability"
         ],
         "week": "February 8–12, 2021",
         "summary": "Review of research on characters that are easily confused with other characters, and what typeface changes (for example, serifs) have been shown to increase peoples' ability to distinguish them. Also discusses the existence of \"infant characters\", a term I'd never heard: \"Infant characters, a, g, l, q, y, I, J, 1, 4, 7, 9, are characters specifically designed for people around 6 years old.\" Goes into some detail about how different visual impairments cause different effects (for example, tunnel vision vs. blurry patches vs. poorer vision at the center of one's field of view). Some of the recommendations in the article were surprising to me: \"Sans serif or bracketed serif was preferred over serif. It appears that a slight degree of serif which accentuates the characters ends without distracting from the simple form actually increased legibility.\""
-      },
-      {
+    },
+    {
         "title": "Hidden Curriculum",
         "date": "2015-07-13",
         "work": "The Glossary of Education Reform",
         "href": "https://www.edglossary.org/hidden-curriculum/",
         "tags": [
-          "education"
+            "education"
         ],
         "week": "February 1–5, 2021",
         "summary": "There are lessons and perspectives that students learn in schools (at all levels) that are unofficial and often unacknowledged, and sometimes mirror or contradict a school's stated values. These lessons shape students' perspectives and learnings in different ways, both positive and negative.",
         "relatedReading": [
-          {
-            "title": "Hidden curriculum",
-            "href": "https://en.wikipedia.org/wiki/Hidden_curriculum"
-          }
+            {
+                "title": "Hidden curriculum",
+                "href": "https://en.wikipedia.org/wiki/Hidden_curriculum"
+            }
         ]
-      },
-      {
+    },
+    {
         "title": "The Pinterest Paradox: Cupcakes and Toxicity",
         "author": "Francoise Brougher",
         "date": "2020-08-11",
         "work": "Digital Diplomacy",
         "href": "https://medium.com/digital-diplomacy/the-pinterest-paradox-cupcakes-and-toxicity-57ed6bd76960",
         "tags": [
-          "gender",
-          "tech_industry"
+            "gender",
+            "tech_industry"
         ],
         "week": "February 1–5, 2021",
         "summary": "Francoise Brougher's story of the toxic culture at Pinterest, and some really actionable suggestions on how to be a company that walks the walk when it comes to gender diversity. She later won a large lawsuit against Pinterest for gender discrimination."
-      }
-    ]
+    }
+]

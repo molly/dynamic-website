@@ -18,7 +18,9 @@ const DIB_DEFAULTS = {
 const DIB_TAGS = {
   antiasian_racism: 'anti-Asian racism',
   antiblack_racism: 'anti-Black racism',
+  antifascism: 'anti-fascism',
   covid19: 'COVID-19',
+  lgbt: 'LGBT',
 };
 
 module.exports = {
