@@ -1,3 +1,3 @@
 # reading-list
 
-API to power the reading lists on my website
+Small app to power the various reading lists on my website.
