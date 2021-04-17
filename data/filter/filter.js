@@ -8,7 +8,7 @@ const matches = (maybeValue, search) => {
   }
   if (Array.isArray(maybeValue)) {
     return maybeValue
-      .filter((entry) => typeof entry !== 'string')
+      .filter((entry) => typeof entry === 'string')
       .some((entry) => entry.toLowerCase().includes(search));
   } else if (typeof maybeValue === 'string') {
     return maybeValue.toLowerCase().includes(search);
