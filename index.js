@@ -49,7 +49,8 @@ app.get('/reading/wikipedia', async (req, res) => {
   const results = await getPaginatedAndFiltered(
     '../books/wikipedia.json',
     BOOK_DEFAULTS,
-    req
+    req,
+    { default: 5 }
   );
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   const selectedStatuses = req.query.status ? req.query.status.split('-') : [];

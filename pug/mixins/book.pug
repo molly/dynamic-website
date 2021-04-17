@@ -10,24 +10,10 @@ mixin book(book)
     .book-details
       div.title
         i #{book.title}
-      
-      .reading-info
-        if book.status 
-          div(class=['status', book.status])
-            if book.status === 'currentlyReading'
-              | Currently reading
-            else if book.status === 'read'
-              | Read
-            else if book.status === 'toRead'
-              | To read
-        
-        if book.started
-          .reading-dates 
-            | Started #{book.formattedStarted}
-            if !book.completed
-              | .
-            else 
-              | ; completed #{book.formattedCompleted}.
+
+        if book.subtitle 
+          .subtitle 
+            i #{book.subtitle}
 
       div.byline
         if book.author
@@ -43,7 +29,23 @@ mixin book(book)
           if book.formattedDate
             | Published #{book.formattedDate}. 
       
-      
+      .reading-info
+        if book.status 
+          div(class=['status', book.status])
+            if book.status === 'currentlyReading'
+              | Currently reading
+            else if book.status === 'read'
+              | Read
+            else if book.status === 'toRead'
+              | To read
+        
+        if book.formattedStarted
+          .reading-dates 
+            | Started #{book.formattedStarted}
+            if !book.formattedCompleted
+              | .
+            else 
+              | ; completed #{book.formattedCompleted}.
             
       if book.tags
         div(class="tags")

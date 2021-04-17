@@ -1,6 +1,7 @@
 [
   {
     "title": "Men Who Hate Women",
+    "subtitle": "From Incels to Pickup Artists: The Truth about Extreme Misogyny and How It Affects Us All",
     "author": "Laura Bates",
     "date": "2021-03",
     "publisher": "Simon & Schuster UK",
@@ -8,6 +9,28 @@
     "href": "https://www.goodreads.com/book/show/48635408-men-who-hate-women---from-incels-to-pickup-artists",
     "status": "currentlyReading",
     "started": "2021-04-10",
+    "tags": ["manosphere", "extremism"]
+  },
+  {
+    "title": "Kill All Normies",
+    "subtitle": "Online Culture Wars from 4chan and Tumblr to Trump and the Alt-Right",
+    "author": "Angela Nagle",
+    "date": "2017-06",
+    "publisher": "Zero Books",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492203541l/34858587.jpg",
+    "href": "https://www.goodreads.com/book/show/34858587-kill-all-normies",
+    "status": "toRead",
+    "tags": ["manosphere", "extremism"]
+  },
+  {
+    "title": "Not All Dead White Men",
+    "subtitle": "Classics and Misogyny in the Digital Age",
+    "author": "Donna Zuckerberg",
+    "date": "2018-10",
+    "publisher": "Harvard University Press",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524483798l/38240525.jpg",
+    "href": "https://www.goodreads.com/book/show/38240525-not-all-dead-white-men",
+    "status": "toRead",
     "tags": ["manosphere", "extremism"]
   }
 ]
