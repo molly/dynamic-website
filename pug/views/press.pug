@@ -26,14 +26,7 @@ block body
         each article in results
           +pressArticle(article)
 
-    label(for="paginator") Page
-    fieldset#paginator
-      - for (var pageNumber = 1; pageNumber <= totalPages; pageNumber++)
-        button(
-          onClick='onPageChangeClick(' + pageNumber + ')',
-          aria-pressed=pageNumber === currentPage
-          type="button"
-        ) #{pageNumber}
+    include ../includes/paginator.pug
 
 block pre-javascript
   script(
