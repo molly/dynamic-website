@@ -14,7 +14,7 @@ const getPaginatedAndFiltered = async (
   relativePath,
   defaults,
   req,
-  paginationDefaults = null
+  paginationDefaults
 ) => {
   const data = await getLocalJson(relativePath);
   let resp = preprocess(data, defaults);
