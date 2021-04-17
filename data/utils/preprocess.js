@@ -15,31 +15,26 @@ const preprocess = (data, { defaultArticle, tagText }) => {
         updatedArticle.formattedDate = m.year().toString();
       }
     }
-    updatedArticle.tags = updatedArticle.tags.map((tag) =>
-      Object.prototype.hasOwnProperty.call(tagText, tag)
+    updatedArticle.tags = updatedArticle.tags.map((tag) => ({
+      text: Object.prototype.hasOwnProperty.call(tagText, tag)
         ? tagText[tag]
-        : tag.replace('_', ' ')
-    );
+        : tag.replace('_', ' '),
+      value: tag,
+    }));
     updatedArticle.tags.sort((a, b) =>
-      a.toLowerCase().localeCompare(b.toLowerCase())
+      a.text.toLowerCase().localeCompare(b.text.toLowerCase())
     );
     processed.push(updatedArticle);
     for (let tag of updatedArticle.tags) {
-      if (Object.prototype.hasOwnProperty.call(tagsMap, tag)) {
-        tagsMap[tag] += 1;
+      if (Object.prototype.hasOwnProperty.call(tagsMap, tag.value)) {
+        tagsMap[tag.value].frequency += 1;
       } else {
-        tagsMap[tag] = 1;
+        tagsMap[tag.value] = { ...tag, frequency: 1 };
       }
     }
   }
 
-  const allTags = Object.keys(tagsMap).map((tag) => ({
-    text: Object.prototype.hasOwnProperty.call(tagText, tag)
-      ? tagText[tag]
-      : tag.replace('_', ' '),
-    value: tag,
-    frequency: tagsMap[tag],
-  }));
+  const allTags = Object.values(tagsMap);
   allTags.sort((a, b) =>
     a.text.toLowerCase().localeCompare(b.text.toLowerCase())
   );

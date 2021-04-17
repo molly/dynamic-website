@@ -83,7 +83,7 @@ const filter = ({ results }, req, { defaultKey }) => {
   if (req.query.tags) {
     const tags = req.query.tags.split('-');
     filteredResults = filteredResults.filter((article) =>
-      article.tags.some((tag) => tags.includes(tag))
+      article.tags.some((tag) => tags.includes(tag.value))
     );
   }
 

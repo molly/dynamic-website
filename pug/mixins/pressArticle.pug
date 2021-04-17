@@ -29,4 +29,4 @@ mixin pressArticle(article)
 
     if article.tags
       div(class="tags")
-        span.tags= article.tags.map(function(t) { return t.replace('_', ' ') }).join(', ')
+        span.tags= article.tags.map(function(t) { return t.text }).join(', ')
