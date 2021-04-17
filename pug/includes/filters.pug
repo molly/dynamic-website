@@ -1,0 +1,45 @@
+.filters
+  form#filters.filter-box
+    label.title(for="filters") Filter
+    label(for="tags") By tag
+    fieldset#tags.tags
+      each tag in allTags
+        .button-group
+          button(
+            class=['tag', 'tag-' + tag.value],
+            onclick='onTagClick("' + tag.value + '")',
+            aria-pressed=query.tags.includes(tag.value).toString()
+            type="button"
+          ) #{tag.text}
+          if showTagCount
+            span.tag-count (#{tag.frequency})
+
+    .search-form
+      label(for="search") Search
+      .search-group
+        input#search-input(
+          type="search",
+          aria-label="Search articles on this page",
+          value=query.search
+        )
+        button#search-submit(type="submit") Search
+
+    button.link-styled(type="button", onClick='clearFilters()') Clear filters
+
+  .filter-subtext
+    span.article-count 
+      if totalResults !== totalUnfilteredResults
+        | #{totalResults} results matching these filters out of #{totalUnfilteredResults} total results.
+      else
+        | #{totalUnfilteredResults} results
+
+    button.link-styled(
+      type="button",
+      onclick='changeSortOrder("' + (query.order === 'reverse' ? 'normal' : 'reverse') + '")'
+    )
+      i(
+        class=['fas', query.order === 'reverse' ? 'fa-caret-up' : 'fa-caret-down']
+      )
+      |  
+      != (query.order === reverse) ? 'Newest' : 'Oldest'
+      |  first
