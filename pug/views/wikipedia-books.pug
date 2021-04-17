@@ -11,7 +11,7 @@ block head
 
 block body
   .content-box
-    h3(aria-sort="descending") Wikipedia reading
+    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Wikipedia reading
 
     include ../includes/filters.pug
 

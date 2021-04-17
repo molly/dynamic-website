@@ -11,7 +11,7 @@ block head
 
 block body
   .content-box
-    h3(aria-sort="descending") Pleasure reading
+    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Pleasure reading
 
     include ../includes/filters.pug
 
