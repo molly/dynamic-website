@@ -60,6 +60,36 @@ app.get('/reading/wikipedia', async (req, res) => {
   });
 });
 
+app.get('/reading/work', async (req, res) => {
+  const results = await getPaginatedAndFiltered(
+    '../books/work.json',
+    BOOK_DEFAULTS,
+    req,
+    { default: 5 }
+  );
+  const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
+  const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
+  res.render('work-books.pug', {
+    query: { ...req.query, tags: selectedTags, statuses: selectedStatuses },
+    ...results,
+  });
+});
+
+app.get('/reading/pleasure', async (req, res) => {
+  const results = await getPaginatedAndFiltered(
+    '../books/pleasure.json',
+    BOOK_DEFAULTS,
+    req,
+    { default: 5 }
+  );
+  const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
+  const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
+  res.render('pleasure-books.pug', {
+    query: { ...req.query, tags: selectedTags, statuses: selectedStatuses },
+    ...results,
+  });
+});
+
 if (process.argv[2] === 'prod') {
   https
     .createServer(

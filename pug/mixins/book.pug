@@ -3,9 +3,17 @@ mixin book(book)
     if book.imageSrc 
       if book.href
         a(href=book.href)
-          img.book-cover(src=book.imageSrc)
+          img(
+            class={'book-cover': true, 'bordered': book.border},
+            src=book.imageSrc,
+            alt="Cover image of #{book.title}"
+          )
       else
-        img.book-cover(src=book.imageSrc)
+        img(
+          class={'book-cover': true, 'border': book.border},
+          src=book.imageSrc,
+          alt="Cover image of #{book.title}"
+        )
 
     .book-details
       div.title

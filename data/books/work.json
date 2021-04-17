@@ -1,0 +1,64 @@
+[
+  {
+    "title": "Clean Code",
+    "subtitle": "A Handbook of Agile Software Craftsmanship",
+    "author": "Robert C. Martin",
+    "date": "2008-08",
+    "publisher": "Prentice Hall",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436202607l/3735293._SX318_.jpg",
+    "href": "https://www.goodreads.com/book/show/3735293-clean-code",
+    "status": "currentlyReading",
+    "started": "2021-02-15",
+    "tags": ["programming"]
+  },
+  {
+    "title": "Inclusive Design Patterns",
+    "subtitle": "Coding Accessibility Into Web Design",
+    "author": "Heydon Pickering",
+    "date": "2016",
+    "publisher": "Smashing Magazine",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467273073l/30816008._SX318_.jpg",
+    "href": "https://www.goodreads.com/book/show/30816008-inclusive-design-patterns---coding-accessibility-into-web-design",
+    "status": "toRead",
+    "tags": ["accessibility", "design"]
+  },
+  {
+    "title": "Deep Work",
+    "subtitle": "Rules for Focused Success in a Distracted World",
+    "author": "Cal Newport",
+    "date": "2016-01",
+    "publisher": "Grand Central Publishing",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438131726l/25980294._SY475_.jpg",
+    "href": "https://www.goodreads.com/book/show/25980294-deep-work",
+    "status": "read",
+    "started": "2020-03-13",
+    "completed": "2020-05-02",
+    "tags": ["productivity"]
+  },
+  {
+    "title": "The Manager's Path",
+    "subtitle": "A Guide for Tech Leaders Navigating Growth and Change",
+    "author": "Camille Fournier",
+    "date": "2017-04",
+    "publisher": "O'Reilly Media",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484107737l/33369254._SY475_.jpg",
+    "href": "https://www.goodreads.com/book/show/33369254-the-manager-s-path",
+    "status": "read",
+    "started": "2017-11-28",
+    "completed": "2018-03-16",
+    "tags": ["management", "leadership"]
+  },
+  {
+    "title": "Turn the Ship Around!",
+    "subtitle": "A True Story of Turning Followers into Leaders",
+    "author": "L. David Marquet",
+    "date": "2013-05",
+    "publisher": "Portfolio",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372985913l/18162413.jpg",
+    "href": "https://www.goodreads.com/book/show/18162413-turn-the-ship-around",
+    "status": "read",
+    "started": "2017-09-02",
+    "completed": "2017-11-02",
+    "tags": ["management", "leadership"]
+  }
+]

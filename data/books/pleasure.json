@@ -1,0 +1,85 @@
+[
+  {
+    "title": "Devolution",
+    "subtitle": "A Firsthand Account of the Rainier Sasquatch Massacre",
+    "author": "Max Brooks",
+    "date": "2020-06",
+    "publisher": "Del Rey Books",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566875204l/52454426._SX318_SY475_.jpg",
+    "href": "https://www.goodreads.com/book/show/52454426-devolution", 
+    "status": "currentlyReading",
+    "started": "2021-01-01",
+    "tags": ["thriller", "horror"]
+  },
+  {
+    "title": "The Luminous Dead",
+    "author": "Caitlin Starling",
+    "date": "2020-10",
+    "publisher": "Harper Voyager",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602118536l/55593658._SY475_.jpg",
+    "href": "https://www.goodreads.com/book/show/55593658-the-luminous-dead",
+    "status": "read",
+    "started": "2020-12-25",
+    "completed": "2020-12-27",
+    "tags": ["horror", "science_fiction", "thriller"]
+  },
+  {
+    "title": "Bruno, Chief of Police",
+    "author": "Martin Walker",
+    "date": "2008-04",
+    "publisher": "Quercus Books",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410941802l/3265305.jpg",
+    "href": "https://www.goodreads.com/book/show/3265305-bruno-chief-of-police", 
+    "status": "read",
+    "started": "2020-12-18",
+    "completed": "2020-12-18",
+    "tags": ["mystery"]
+  },
+  {
+    "title": "Grotesque",
+    "author": "Natsuo Kirino",
+    "date": "2003",
+    "publisher": "Knopf",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390275656l/25366.jpg",
+    "href": "https://www.goodreads.com/book/show/25366.Grotesque", 
+    "status": "read",
+    "started": "2020-03-28",
+    "completed": "2020-05-04",
+    "tags": ["mystery"]
+  },
+  {
+    "title": "So You Want to Talk About Race",
+    "author": "Ijeoma Oluo",
+    "date": "2018-01",
+    "publisher": "Seal Press",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555361760l/45143681._SY475_.jpg",
+    "href": "https://www.goodreads.com/book/show/45143681-so-you-want-to-talk-about-race",
+    "status": "read",
+    "completed": "2019-12-29",
+    "started": "2019-12-15",
+    "tags": ["nonfiction", "social_justice"]
+  },
+  {
+    "title": "The Surgeon",
+    "author": "Tess Gerritsen",
+    "date": "2001-10",
+    "publisher": "Ballantine Books",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515006630l/37806456.jpg",
+    "href": "https://www.goodreads.com/book/show/37806456-the-surgeon",
+    "status": "read",
+    "started": "2019-06-06",
+    "completed": "2019-06-08",
+    "tags": ["mystery", "thriller"]
+  },
+  {
+    "title": "On Democracy",
+    "author": "E.B. White",
+    "date": "2019-05",
+    "publisher": "Harper",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553539386l/41154341.jpg",
+    "href": "https://www.goodreads.com/book/show/41154341-on-democracy",
+    "status": "read",
+    "started": "2019-04-26",
+    "completed": "2019-06-06"
+  }
+]

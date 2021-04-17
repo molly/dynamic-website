@@ -1,0 +1,41 @@
+extends ../symlinks/templates/base.pug
+
+block vars
+  - var htmlClass = 'reading';
+  - var importPrefix = 'https://www.mollywhite.net'
+  - var showTagCount = true
+  - var showStatusFilter = true
+
+block head
+  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
+
+block body
+  .content-box
+    h3(aria-sort="descending") Pleasure reading
+
+    include ../includes/filters.pug
+
+    .articles
+      #articlesContainer
+        include ../mixins/book.pug
+        each book in results
+          +book(book)
+
+    label(for="paginator") Page
+    fieldset#paginator
+      - for (var pageNumber = 1; pageNumber <= totalPages; pageNumber++)
+        button(
+          onClick='onPageChangeClick(' + pageNumber + ')',
+          aria-pressed=pageNumber === currentPage
+          type="button"
+        ) #{pageNumber}
+
+block pre-javascript
+  script(
+    src="/static/url-search-params-polyfill.js"
+  )
+  script(
+    src="/static/classlist-polyfill.js"
+  )
+block post-javascript
+  script(src="/static/reading.js")
