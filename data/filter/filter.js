@@ -7,7 +7,9 @@ const matches = (maybeValue, search) => {
     return false;
   }
   if (Array.isArray(maybeValue)) {
-    return maybeValue.some((entry) => entry.toLowerCase().includes(search));
+    return maybeValue
+      .filter((entry) => typeof entry !== 'string')
+      .some((entry) => entry.toLowerCase().includes(search));
   } else if (typeof maybeValue === 'string') {
     return maybeValue.toLowerCase().includes(search);
   }
@@ -76,7 +78,10 @@ const filter = ({ results }, req, { defaultKey }) => {
         matches(article.author, search) ||
         matches(article.work, search) ||
         matches(article.publisher, search) ||
-        matches(article.tags, search) ||
+        matches(
+          article.tags.map((t) => t.text),
+          search
+        ) ||
         matches(article.summary, search)
     );
   }
