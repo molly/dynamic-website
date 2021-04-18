@@ -1,5 +1,16 @@
 [
   {
+    "title": "Still Life",
+    "author": "Louise Penny",
+    "date": "2005",
+    "publisher": "Sphere",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467838579l/30918623._SY475_.jpg",
+    "href": "https://www.goodreads.com/book/show/338691.Still_Life",
+    "status": "currentlyReading",
+    "started": "2021-04-18",
+    "tags": ["mystery"]
+  },
+  {
     "title": "Devolution",
     "subtitle": "A Firsthand Account of the Rainier Sasquatch Massacre",
     "author": "Max Brooks",
@@ -7,14 +18,14 @@
     "publisher": "Del Rey Books",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566875204l/52454426._SX318_SY475_.jpg",
     "href": "https://www.goodreads.com/book/show/52454426-devolution", 
-    "status": "currentlyReading",
+    "status": "read",
     "started": "2021-01-01",
     "tags": ["thriller", "horror"]
   },
   {
     "title": "The Luminous Dead",
     "author": "Caitlin Starling",
-    "date": "2020-10",
+    "date": "2019-04",
     "publisher": "Harper Voyager",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602118536l/55593658._SY475_.jpg",
     "href": "https://www.goodreads.com/book/show/55593658-the-luminous-dead",
