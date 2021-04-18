@@ -25,7 +25,9 @@ mixin book(book)
 
       div.byline
         if book.author
-          | #{book.author}.      
+          | #{book.author}
+          if !shortForm
+            | .      
 
         if !shortForm
           if book.publisher
