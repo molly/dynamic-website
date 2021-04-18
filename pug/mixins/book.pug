@@ -1,7 +1,7 @@
 mixin book(book) 
   div(class='book')
     if book.imageSrc 
-      if book.href
+      if book.href && !shortForm
         a(href=book.href)
           img(
             class={'book-cover': true, 'bordered': book.border},
