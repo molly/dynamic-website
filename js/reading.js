@@ -6,7 +6,7 @@
     if (url.searchParams.has('search') && !query) {
       url.searchParams.delete('search');
       url.searchParams.delete('page');
-      window.location = url;
+      window.location.replace(url);
     } else if (query) {
       url.searchParams.set('search', query);
       url.searchParams.delete('page');
