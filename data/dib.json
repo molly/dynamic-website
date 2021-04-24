@@ -1,5 +1,49 @@
 [
     {
+        "title": "COVID-19, Resource Colonialism & Indigenous Resistance",
+        "author": "Klee Benally",
+        "date": "2021-04-22",
+        "work": "Indigenous Action",
+        "href": "https://www.indigenousaction.org/covid-19-resource-colonialism-indigenous-resistance/",
+        "tags": [
+            "indigenous_rights",
+            "covid19",
+            "food_security"
+        ],
+        "week": "April 19–23, 2021",
+        "summary": "While some attention has been paid to the high incidence of COVID-19 among indigenous people, Benally says it is being misattributed and misportrayed in dehumanizing, colonialist ways. Benally describes the additional factors that are not being widely acknowledged, such as methane pollution of Diné lands contributing to lung weakness and thus making people more susceptible to the virus. He gives a detailed history of mining operations in the area, as well as efforts by Diné environmental groups to resist them, and interference by politicians on the Navajo Nation. He also describes the status of Diné Bikéyah as a food desert, and explains that this was only a result of colonialist invasion and continued policies that negatively impact access to food and farming. Benally criticizes white saviors—\"Self-appointed allies, ranging in political spectrum from anarchists to Christian missionaries\"—who have attempted to treat the Diné as a charity project, and to maintain control over them. He also describes the mutual aid and direct action that has been happening within Diné Bikéyah.",
+        "relatedReading": [
+            {
+                "title": "COVID-19 pandemic in the Navajo Nation",
+                "href": "https://en.wikipedia.org/wiki/COVID-19_pandemic_in_the_Navajo_Nation"
+            },
+            {
+                "title": "white savior",
+                "href": "https://en.wikipedia.org/wiki/White_savior"
+            }
+        ]
+    },
+    {
+        "title": "We Are Fighting for a World Where Ma’Khia Bryant Would Have Lived",
+        "author": "Amna A. Akbar and Treva B. Lindsey",
+        "date": "2021-04-22",
+        "work": "Truthout",
+        "href": "https://truthout.org/articles/we-are-fighting-for-a-world-where-makhia-bryant-would-have-lived/",
+        "tags": [
+            "race",
+            "antiblack_racism",
+            "policing"
+        ],
+        "week": "April 19–23, 2021",
+        "summary": "The authors explain how the killing of Ma'Khia Bryant was one in a long string of killings by police in the United States, but also in Columbus, Ohio specifically. They discuss how Bryant was not a \"perfect victim\" and how that has led some people to dismiss her killing as justified. \"Ma'Khia Bryant isn’t a mythical, perfect victim, nor does she need to be for us to unequivocally affirm that her death was unnecessary. She’s someone who forces us to contend with our values and challenge our continued investment in a system of policing that sees killing a Black girl with a knife as the only reasonable and effective response. The question we need to ask is not whether Reardon had the legal right to kill her, but rather: Didn’t Ma’Khia and the other people involved in the altercation deserve to live?\"",
+        "relatedReading": [
+            {
+                "title": "Killing of Ma'Khia Bryant",
+                "href": "https://en.wikipedia.org/wiki/Killing_of_Ma%27Khia_Bryant"
+            }
+        ]
+    },
+    {
         "title": "Our Black Maternal Health Crisis Is a Racial Justice Issue That Demands Bold Solutions",
         "author": "U.S. Representative Ayanna Pressley and Dr. Myechia Minter Jordan",
         "date": "2021-04-16",
@@ -29,8 +73,7 @@
         "tags": [
             "race",
             "antiblack_racism",
-            "policing",
-            "current_events"
+            "policing"
         ],
         "week": "April 12–16, 2021",
         "summary": "The authors give an overview of the events leading up to and surrounding the police killing of Daunte Wright, as well as ensuing protests. They describe ongoing issues with police response to protests in Minneapolis, including violence against protesters, targeting of press, and holding detained individuals on suspicion of riot charges, likely related only to possession of gas masks.",
@@ -116,8 +159,7 @@
         "tags": [
             "gender",
             "trans_issues",
-            "lgbt",
-            "current_events"
+            "lgbt"
         ],
         "week": "March 29–April 2, 2021",
         "summary": "The so-called Medical Ethics and Diversity Act introduced in Arkansas allows healthcare workers to deny non-emergency healthcare to individuals based on their personal moral objections. Turban writes that this contradicts health care providers' professional responsibilities, and that the \"non-emergency\" provision does not prevent this from threatening individuals' lives."
@@ -141,8 +183,7 @@
         "work": "Anti-Racism Daily",
         "href": "https://www.antiracismdaily.com/archives/advocate-for-gun-control-laws-anti-racism-daily",
         "tags": [
-            "gun_control",
-            "current_events"
+            "gun_control"
         ],
         "week": "March 22–26, 2021",
         "summary": "Onyenacho outlines some of the existing gun control legislation in place, including background checks and mandatory waiting periods. They also explain that if a background check is not completed in time (three days), a person may purchase a firearm&mdash;basically, an objection must be raised in that three-day period, and regardless of whether it's because no concern was discovered or because the FBI didn't have time to run the check, a person may proceed with the purchase. She outlines some proposed changes to gun control legislation, including extending the time period for background checks to be run, and requiring private gun sellers to run background checks (a decision which is currently up to the states). I was shocked at how many people own guns&mdash;they cite the <a href='https://www.pewresearch.org/social-trends/2017/06/22/the-demographics-of-gun-ownership/'>Pew Research Center's 2017 report</a> to show that 48% of white men own a firearm, as do 24% of white women. 24% of non-white men and 16% of non-white women do as well. I would be curious to know how those statistics have changed, particularly given reports of <a href='https://gunsandamerica.org/story/20/06/01/gun-sales-continue-to-boom-during-the-pandemic/'>increased gun purchasing in the past year or two</a>. I looked around for more recent data but it understandably seems to lag a bit&mdash;a lot of more recent sources were citing the same 2017 Pew study. At the top of the article, the author provides a list of actions to take to support gun control legislation.",
@@ -161,6 +202,7 @@
         "href": "https://www.bostonglobe.com/2021/03/23/lifestyle/an-urban-farm-embarks-its-first-season-determined-serve-its-community/",
         "tags": [
             "class",
+            "food_security",
             "massachusetts"
         ],
         "week": "March 22–26, 2021",
@@ -243,8 +285,7 @@
         "href": "https://www.elle.com/culture/career-politics/a35635188/anti-asian-racism-history-violence/",
         "tags": [
             "antiasian_racism",
-            "race",
-            "current_events"
+            "race"
         ],
         "week": "March 1–5, 2021",
         "summary": "Asian–American history, including the wars that brought many Asian Americans to the US, is not taught or even acknowledged adequately. \"As Dr. Mimi Kim, who works on community accountability and transformative justice, once said about the Korean War and its impacts: 'The violence is also in the forgetting.'\" There is a myth that Asian Americans are unaffected by white supremacy, which is very much not the case.",
@@ -341,8 +382,7 @@
         "href": "https://medium.com/@effiegabriella/why-it-feels-so-overwhelming-right-now-6d2ee308f3b7",
         "tags": [
             "antiblack_racism",
-            "race",
-            "current_events"
+            "race"
         ],
         "week": "February 8–12, 2021",
         "summary": "Forson writes about the challenges of going about life as though it were \"business as usual\" in the summer of 2020, with a powerful analogy. She also describes the dissonance of seeing white people posting online as though things were normal, and lists some actions people can take. \"Don’t shy away because you think it doesn’t concern you. If you love a black person or believe in equality this concerns you.\""
