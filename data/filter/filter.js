@@ -1,6 +1,7 @@
 const moment = require('moment');
 const { makeSortByWeek } = require('../utils/weekUtils');
-const MOMENT_FORMATS = ['YYYY-MM-DD', 'YYYY-MM', 'YYYY'];
+const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
+const MOMENT_FORMATS = require('../constants/momentFormats');
 
 const matches = (maybeValue, search) => {
   if (!maybeValue) {
@@ -15,17 +16,6 @@ const matches = (maybeValue, search) => {
   }
   return false;
 };
-
-function makeSortBySimpleDateKey(order, key) {
-  return function (a, b) {
-    const sortValA = moment(a[key], MOMENT_FORMATS);
-    const sortValB = moment(b[key], MOMENT_FORMATS);
-    if (order && order === 'reverse') {
-      return sortValA - sortValB;
-    }
-    return sortValB - sortValA;
-  };
-}
 
 const filter = ({ results }, req, { defaultKey }) => {
   let filteredResults = results.slice();
@@ -90,9 +80,9 @@ const filter = ({ results }, req, { defaultKey }) => {
   if (defaultKey === 'DIB') {
     filteredResults.sort(makeSortByWeek(req.query.order));
   } else if (defaultKey === 'BOOK') {
-    filteredResults.sort(makeSortBySimpleDateKey(req.query.order, 'started'));
+    filteredResults.sort(makeSortBySimpleDateKey('started', req.query.order));
   } else {
-    filteredResults.sort(makeSortBySimpleDateKey(req.query.order, 'date'));
+    filteredResults.sort(makeSortBySimpleDateKey('date', req.query.order));
   }
 
   return { results: filteredResults };

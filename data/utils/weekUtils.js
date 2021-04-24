@@ -1,6 +1,6 @@
 const moment = require('moment');
+const MOMENT_FORMATS = require('../constants/momentFormats');
 
-const MOMENT_FORMATS = ['YYYY-MM-DD', 'YYYY-MM', 'YYYY'];
 const SAME_MONTH_REGEX = new RegExp(/([A-Za-z]+ \d{1,2})–\d{1,2}(, \d{4})/);
 const DIFFERENT_MONTHS_REGEX = new RegExp(
   /([A-Za-z]+ \d{1,2})–[A-Za-z]+ \d{1,2}(, \d{4})/

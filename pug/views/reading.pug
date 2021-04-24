@@ -2,7 +2,7 @@ extends ../symlinks/templates/base.pug
 
 block vars
   - var htmlClass = 'reading';
-  - var importPrefix = 'https://www.mollywhite.net'
+  - var importPrefix = 'http://localhost:8000' 
   - var showTagCount = true
 
 block head
@@ -13,7 +13,7 @@ block body
     p Interested in what I'm reading these days? Check out my reading lists.
 
     div.reading-section
-      h4
+      h3
         a(href="/reading/dib") DI&amp;B reading list 
       | This is updated often, as I try to read at least two articles a week on these topics. 
       | I most recently read "
@@ -37,21 +37,21 @@ block body
         |.
         
     .reading-section
-      h4
+      h3
         a(href="/reading/pleasure") Books I'm reading for my own enjoyment
       | A list of mostly fiction books I'm reading, have read, or want to read.
       include ../mixins/currentlyReadingSummary.pug
       +currentlyReadingSummary(currentlyReadingPleasure)
         
     .reading-section
-      h4
+      h3
         a(href="/reading/wikipedia") Books I'm reading for my work on Wikipedia
       | A list of books I'm reading, have read, or want to read for Wikipedia articles I'm writing.
       include ../mixins/currentlyReadingSummary.pug
       +currentlyReadingSummary(currentlyReadingWikipedia)
         
     .reading-section
-      h4
+      h3
         a(href="/reading/work") Work-related books
       | A list of books I'm reading, have read, or want to read that are related to my professional work.
       include ../mixins/currentlyReadingSummary.pug
