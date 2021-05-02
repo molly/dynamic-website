@@ -16,7 +16,11 @@ mixin book(book)
         )
 
     .book-details
+      if book.type === "chapter"
+        .chapter-title "#{book.chapterTitle}".
       div.title
+        if book.type === "chapter"
+          | in 
         i #{book.title}
 
         if book.subtitle 
@@ -27,7 +31,11 @@ mixin book(book)
         if book.author
           | #{book.author}
           if !shortForm
-            | .      
+            | .
+        if book.editor 
+          if book.author 
+            |  
+          | #{book.editor} (ed.).
 
         if !shortForm
           if book.publisher
