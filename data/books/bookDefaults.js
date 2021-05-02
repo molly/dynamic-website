@@ -13,6 +13,7 @@ const BOOK_DEFAULTS = {
   formattedStarted: null,
   completed: null,
   formattedCompleted: null,
+  targetArticles: [],
 };
 
 const BOOK_TAGS = {};

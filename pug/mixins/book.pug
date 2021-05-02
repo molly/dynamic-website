@@ -1,5 +1,5 @@
 mixin book(book) 
-  div(class='book')
+  .book
     if book.imageSrc 
       if book.href && !shortForm
         a(href=book.href)
@@ -18,7 +18,7 @@ mixin book(book)
     .book-details
       if book.type === "chapter"
         .chapter-title "#{book.chapterTitle}".
-      div.title
+      .title
         if book.type === "chapter"
           | in 
         i #{book.title}
@@ -27,7 +27,7 @@ mixin book(book)
           .subtitle 
             i #{book.subtitle}
 
-      div.byline
+      .byline
         if book.author
           | #{book.author}
           if !shortForm
@@ -62,6 +62,21 @@ mixin book(book)
               else 
                 | ; completed #{book.formattedCompleted}.
             
+      if page === 'wikipedia' && !shortForm 
+        if book.targetArticles.length 
+          .target-articles
+            span.header For article
+              if book.targetArticles.length === 1
+                |: 
+              else 
+                |s: 
+            
+            ul 
+              each ta, index in book.targetArticles
+                a(href=ta.href) #{ta.title}
+                if index !== book.targetArticles.length - 1
+                  span , 
+
       if book.tags
-        div(class="tags")
+        .tags
           span.tags= book.tags.map(function(t) { return t.text }).join(', ')

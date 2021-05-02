@@ -1,6 +1,6 @@
 mixin pressArticle(article)
-  div(class='article')
-    div.title
+  .article
+    .title
       a(href=article.href) "#{article.title}"
 
       if article.parenthetical
@@ -9,7 +9,7 @@ mixin pressArticle(article)
       if article.parenthetical || !article.title.match(/[.?!]$/m)
         |.
 
-    div.byline
+    .byline
       if article.author
         | #{article.author} #{article.preposition} 
 
@@ -28,5 +28,5 @@ mixin pressArticle(article)
         |
 
     if article.tags
-      div(class="tags")
+      .tags
         span.tags= article.tags.map(function(t) { return t.text }).join(', ')

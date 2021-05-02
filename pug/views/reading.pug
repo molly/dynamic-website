@@ -2,6 +2,7 @@ extends ../symlinks/templates/base.pug
 
 block vars
   - var htmlClass = 'reading';
+  - var page = 'reading';
   - var importPrefix = 'https://www.mollywhite.net'
   - var showTagCount = true
 
@@ -12,7 +13,7 @@ block body
   .content-box
     p Interested in what I'm reading these days? Check out my reading lists.
 
-    div.reading-section
+    .reading-section
       h3
         a(href="/reading/dib") DI&amp;B reading list 
       | This is updated often, as I try to read at least two articles a week on these topics. 
