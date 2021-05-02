@@ -8,7 +8,7 @@
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598518504l/48635408._SY475_.jpg",
     "border": true,
     "href": "https://www.goodreads.com/book/show/48635408-men-who-hate-women---from-incels-to-pickup-artists",
-    "status": "currentlyReading",
+    "status": "reference",
     "started": "2021-04-10",
     "tags": ["manosphere", "extremism"]
   },
@@ -21,7 +21,7 @@
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492203541l/34858587.jpg",
     "border": true,
     "href": "https://www.goodreads.com/book/show/34858587-kill-all-normies",
-    "status": "toRead",
+    "status": "reference",
     "tags": ["manosphere", "extremism"]
   },
   {
@@ -32,7 +32,7 @@
     "publisher": "Harvard University Press",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524483798l/38240525.jpg",
     "href": "https://www.goodreads.com/book/show/38240525-not-all-dead-white-men",
-    "status": "toRead",
+    "status": "reference",
     "tags": ["manosphere", "extremism"]
   }
 ]

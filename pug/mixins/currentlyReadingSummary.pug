@@ -2,14 +2,10 @@
 mixin currentlyReadingSummary(books)
   if books.length
     .currently-reading
-      b
-        case books[0].status
-          when 'currentlyReading'
-            | Currently reading 
-          when 'read'
-            | Recently read 
-          when 'toRead'
-            | To read
+      .status
+        b
+          != READING_STATUSES_MAP[books[0].status][0].toUpperCase() + READING_STATUSES_MAP[books[0].status].substr(1)
+          
         
       include ./book.pug
       +book(books[0])

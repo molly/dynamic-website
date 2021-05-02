@@ -11,6 +11,10 @@ if (process.argv[2] === 'prod') {
 const getPaginatedAndFiltered = require('./data/filter/getPaginatedAndFiltered');
 const getLandingPageSummary = require('./data/filter/landing');
 
+const {
+  READING_STATUSES_MAP,
+  READING_STATUSES_LISTS,
+} = require('./data/constants/readingStatuses');
 const PRESS_DEFAULTS = require('./data/pressDefaults');
 const DIB_DEFAULTS = require('./data/dibDefaults');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
@@ -37,7 +41,7 @@ app.get('/press', async (req, res) => {
 
 app.get('/reading', async (req, res) => {
   const results = await getLandingPageSummary();
-  res.render('reading.pug', results);
+  res.render('reading.pug', { READING_STATUSES_MAP, ...results });
 });
 
 app.get('/reading/dib', async (req, res) => {
@@ -64,6 +68,8 @@ app.get('/reading/wikipedia', async (req, res) => {
   const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
   res.render('wikipedia-books.pug', {
     query: { ...req.query, tags: selectedTags, statuses: selectedStatuses },
+    READING_STATUSES_LIST: READING_STATUSES_LISTS.wikipedia,
+    READING_STATUSES_MAP,
     ...results,
   });
 });
@@ -79,6 +85,8 @@ app.get('/reading/work', async (req, res) => {
   const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
   res.render('work-books.pug', {
     query: { ...req.query, tags: selectedTags, statuses: selectedStatuses },
+    READING_STATUSES_LIST: READING_STATUSES_LISTS.work,
+    READING_STATUSES_MAP,
     ...results,
   });
 });
@@ -94,6 +102,8 @@ app.get('/reading/pleasure', async (req, res) => {
   const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
   res.render('pleasure-books.pug', {
     query: { ...req.query, tags: selectedTags, statuses: selectedStatuses },
+    READING_STATUSES_LIST: READING_STATUSES_LISTS.pleasure,
+    READING_STATUSES_MAP,
     ...results,
   });
 });

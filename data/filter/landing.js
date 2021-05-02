@@ -19,17 +19,35 @@ const processTags = (item, tagText) => {
   return item;
 };
 
+const getBooksOfStatusSortedByStartDate = (books, status) => {
+  // Get all books with this status and sort by start date
+  const booksOfStatus = books.filter((book) => book.status === status);
+  if (booksOfStatus.length) {
+    if (booksOfStatus.length > 1) {
+      booksOfStatus.sort(makeSortBySimpleDateKey('started'));
+    }
+    return booksOfStatus;
+  }
+  return [];
+};
+
 const getBooksToShow = (books) => {
-  const currentlyReading = books.filter(
-    (book) => book.status === 'currentlyReading'
+  // Show most recent currently reading books
+  const currentlyReading = getBooksOfStatusSortedByStartDate(
+    books,
+    'currentlyReading'
   );
   if (currentlyReading.length) {
-    if (currentlyReading.length > 1) {
-      currentlyReading.sort(makeSortBySimpleDateKey('started'));
-    }
     return currentlyReading;
   }
 
+  // Show most recent reference books
+  const reference = getBooksOfStatusSortedByStartDate(books, 'reference');
+  if (reference.length) {
+    return reference;
+  }
+
+  // Show most recently completed books if they were completed in the last month
   const read = books.filter((book) => book.status === 'read');
   if (read.length) {
     if (read.length > 1) {
@@ -43,6 +61,7 @@ const getBooksToShow = (books) => {
     }
   }
 
+  // Show a random "to read" book
   const toRead = books.filter((book) => book.status === 'toRead');
   if (toRead.length) {
     if (toRead.length > 1) {

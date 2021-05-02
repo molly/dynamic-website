@@ -44,12 +44,7 @@ mixin book(book)
         .reading-info
           if book.status 
             div(class=['status', book.status])
-              if book.status === 'currentlyReading'
-                | Currently reading
-              else if book.status === 'read'
-                | Read
-              else if book.status === 'toRead'
-                | To read
+              != READING_STATUSES_MAP[book.status][0].toUpperCase() + READING_STATUSES_MAP[book.status].substr(1)
           
           if book.formattedStarted
             .reading-dates 

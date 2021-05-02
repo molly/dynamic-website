@@ -2,7 +2,7 @@ extends ../symlinks/templates/base.pug
 
 block vars
   - var htmlClass = 'reading';
-  - var importPrefix = 'https://www.mollywhite.net' 
+  - var importPrefix = 'https://www.mollywhite.net'
   - var showTagCount = true
 
 block head
@@ -38,22 +38,19 @@ block body
         
     .reading-section
       h3
-        a(href="/reading/pleasure") Books I'm reading for my own enjoyment
-      | A list of mostly fiction books I'm reading, have read, or want to read.
+        a(href="/reading/pleasure") Pleasure
       include ../mixins/currentlyReadingSummary.pug
       +currentlyReadingSummary(currentlyReadingPleasure)
         
     .reading-section
       h3
-        a(href="/reading/wikipedia") Books I'm reading for my work on Wikipedia
-      | A list of books I'm reading, have read, or want to read for Wikipedia articles I'm writing.
+        a(href="/reading/wikipedia") Wikipedia
       include ../mixins/currentlyReadingSummary.pug
       +currentlyReadingSummary(currentlyReadingWikipedia)
         
     .reading-section
       h3
-        a(href="/reading/work") Work-related books
-      | A list of books I'm reading, have read, or want to read that are related to my professional work.
+        a(href="/reading/work") Work-related
       include ../mixins/currentlyReadingSummary.pug
       +currentlyReadingSummary(currentlyReadingWork)
         

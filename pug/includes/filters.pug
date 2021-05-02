@@ -17,7 +17,7 @@
     if showStatusFilter 
       label(for="tags") By reading status
       fieldset#status.tags
-        each status in [{text: "currently reading", value: "currentlyReading"}, {text: "read", value: "read"}, {text: "to read", value: "toRead"}]
+        each status in READING_STATUSES_LIST 
           .button-group
             button.tag(
               onclick='onStatusClick("' + status.value + '")',
