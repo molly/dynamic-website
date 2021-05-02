@@ -6,6 +6,8 @@ block vars
   - var showTagCount = true
 
 block head
+  include ../symlinks/mixins/titleAndDescription.pug
+  +titleAndDescription('Press', 'Press mentions and interviews with Molly White.')
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 
 block body

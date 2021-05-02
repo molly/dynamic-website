@@ -9,7 +9,9 @@ block vars
 
 block head
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
-
+  include ../symlinks/mixins/titleAndDescription.pug
+  +titleAndDescription('Work-related reading', 'Molly White\'s work-related reading list.')
+  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 block body
   .content-box
     h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Work-related reading

@@ -9,6 +9,9 @@ block vars
 
 block head
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
+  include ../symlinks/mixins/titleAndDescription.pug
+  +titleAndDescription('Wikipedia reading', 'Molly White\'s Wikipedia reading list.')
+  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 
 block body
   .content-box
