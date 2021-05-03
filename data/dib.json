@@ -1,5 +1,23 @@
 [
     {
+        "title": "Reaching 'Herd Immunity' Is Unlikely in the U.S., Experts Now Believe",
+        "author": "Apoorva Mandavilli",
+        "date": "2021-05-03",
+        "work": "The New York Times",
+        "href": "https://www.nytimes.com/2021/05/03/health/covid-herd-immunity-vaccine.html",
+        "tags": [
+            "covid19"
+        ],
+        "week": "May 3–7, 2021",
+        "summary": "Herd immunity, once believed to be an achievable goal that would mark the end of the pandemic and a return to normalcy, is no longer something most scientists believe to be possible. This is due to a combination of increased thresholds of vaccination that would be require to achieve such immunity (due to the emergence of more contagious variants of the virus), and hesitancy among the general population to be vaccinated. Mandavilli discusses how herd immunity would need to be achieved at all levels&mdash;at the local, city level as well as on a state-, country-, and worldwide level, before it would be truly effective. She discusses what a future without herd immunity may look like.",
+        "relatedReading": [
+            {
+                "title": "Herd immunity",
+                "href": "https://en.wikipedia.org/wiki/Herd_immunity"
+            }
+        ]
+    },
+    {
         "title": "'We are witnessing a crime against humanity': Arundhati Roy on India's Covid catastrophe",
         "author": "Arundhati Roy",
         "date": "2021-04-28",
