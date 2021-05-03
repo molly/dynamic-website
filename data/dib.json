@@ -1,5 +1,46 @@
 [
     {
+        "title": "'We are witnessing a crime against humanity': Arundhati Roy on India's Covid catastrophe",
+        "author": "Arundhati Roy",
+        "date": "2021-04-28",
+        "work": "The Guardian",
+        "href": "https://www.theguardian.com/news/2021/apr/28/crime-against-humanity-arundhati-roy-india-covid-catastrophe",
+        "tags": [
+            "covid19",
+            "india"
+        ],
+        "week": "April 26–30, 2021",
+        "summary": "Roy describes the extent of the COVID-19 crisis currently affecting India, as well as the fact that the estimates are likely to be far lower than reality. He also describes what could graciously be called failures in leadership and government, but which he believes would more accurately be called crimes against humanity, that have resulted in this crisis.",
+        "relatedReading": [
+            {
+                "title": "COVID-19 pandemic in India",
+                "href": "https://en.wikipedia.org/wiki/COVID-19_pandemic_in_India"
+            },
+            {
+                "title": "Narendra Modi",
+                "href": "https://en.wikipedia.org/wiki/Narendra_Modi"
+            }
+        ]
+    },
+    {
+        "title": "When communities try to hold police accountable, law enforcement fights back",
+        "author": "Nicole Dungca and Jenn Abelson",
+        "date": "2021-04-27",
+        "work": "The Washington Post",
+        "href": "https://www.washingtonpost.com/investigations/interactive/2021/civilian-oversight-police-accountability/",
+        "week": "April 26–30, 2021",
+        "tags": [
+            "policing"
+        ],
+        "summary": "The <i>Washington Post</i> investigated civilian review boards of police departments, finding that they were ineffectual and often powerless to hold police officers and departments accountable. For example, in Louisville, where Breonna Taylor was murdered in March of 2020, the Citizens Commission on Police Accountability couldn't open an investigation or take citizen complaints; it was limited to reviewing alread-closed internal affairs investigations. Even upon such a review, they could not recommend disclipline; only opine on whether the investigation was sufficient and recommend policy or training changes. In Minneapolis, the officer who murdered George Floyd had already been the subject of 22 misconduct complaints from 2003–2015, and the civilian reviewers handled twelve, but Chauvin remained an officer and did not change his conduct in any way that prevented him from killing Floyd. Some locations massively limit the power of such review committees, and some bar them outright. In some places where oversight committees can recommend disciplinary action for officers, the final decision lies with the police chiefs. Police unions, individuals in law enforcement, and politicians have also tried to block laws calling for more oversight, and pressure those in oversight roles.",
+        "relatedReading": [
+            {
+                "title": "Civilian oversight",
+                "href": "https://en.wikipedia.org/wiki/Civilian_oversight"
+            }
+        ]
+    },
+    {
         "title": "COVID-19, Resource Colonialism & Indigenous Resistance",
         "author": "Klee Benally",
         "date": "2021-04-22",
@@ -11,7 +52,7 @@
             "food_security"
         ],
         "week": "April 19–23, 2021",
-        "summary": "While some attention has been paid to the high incidence of COVID-19 among indigenous people, Benally says it is being misattributed and misportrayed in dehumanizing, colonialist ways. Benally describes the additional factors that are not being widely acknowledged, such as methane pollution of Diné lands contributing to lung weakness and thus making people more susceptible to the virus. He gives a detailed history of mining operations in the area, as well as efforts by Diné environmental groups to resist them, and interference by politicians on the Navajo Nation. He also describes the status of Diné Bikéyah as a food desert, and explains that this was only a result of colonialist invasion and continued policies that negatively impact access to food and farming. Benally criticizes white saviors—\"Self-appointed allies, ranging in political spectrum from anarchists to Christian missionaries\"—who have attempted to treat the Diné as a charity project, and to maintain control over them. He also describes the mutual aid and direct action that has been happening within Diné Bikéyah.",
+        "summary": "While some attention has been paid to the high incidence of COVID-19 among Indigenous people, Benally says it is being misattributed and misportrayed in dehumanizing, colonialist ways. Benally describes the additional factors that are not being widely acknowledged, such as methane pollution of Diné lands contributing to lung weakness and thus making people more susceptible to the virus. He gives a detailed history of mining operations in the area, as well as efforts by Diné environmental groups to resist them, and interference by politicians on the Navajo Nation. He also describes the status of Diné Bikéyah as a food desert, and explains that this was only a result of colonialist invasion and continued policies that negatively impact access to food and farming. Benally criticizes white saviors—\"Self-appointed allies, ranging in political spectrum from anarchists to Christian missionaries\"—who have attempted to treat the Diné as a charity project, and to maintain control over them. He also describes the mutual aid and direct action that has been happening within Diné Bikéyah.",
         "relatedReading": [
             {
                 "title": "COVID-19 pandemic in the Navajo Nation",
