@@ -1,13 +1,25 @@
 [
   {
+    "title": "The Martian",
+    "author": "Andy Weir",
+    "date": "2014",
+    "publisher": "Crown",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413706054l/18007564.jpg",
+    "href": "https://www.goodreads.com/book/show/18007564-the-martian",
+    "status": "currentlyReading",
+    "started": "2021-05-04",
+    "tags": ["science_fiction", "survival"]
+  },
+  {
     "title": "Still Life",
     "author": "Louise Penny",
     "date": "2005",
     "publisher": "Sphere",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467838579l/30918623._SY475_.jpg",
     "href": "https://www.goodreads.com/book/show/338691.Still_Life",
-    "status": "currentlyReading",
+    "status": "read",
     "started": "2021-04-18",
+    "completed": "2021-05-04",
     "tags": ["mystery"]
   },
   {
