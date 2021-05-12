@@ -58,6 +58,7 @@ const getRssResults = async () => {
     article.entryHtml = dibPugTemplate({
       article,
     });
+
     article.rssSummary = makeSummary(article);
     if (!article.entryAdded) {
       article.entryAdded = getMomentFromWeek(article.week).toISOString();

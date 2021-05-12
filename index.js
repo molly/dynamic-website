@@ -111,6 +111,7 @@ app.get('/reading/pleasure', async (req, res) => {
 
 app.get('/reading/dib/feed.xml', async (req, res) => {
   const results = await getRssResults();
+  console.log(results[0]);
   res.set('Content-Type', 'text/xml');
   res.render('dib-feed.pug', {
     results,

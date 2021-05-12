@@ -23,7 +23,7 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
       published= article.entryAdded
       updated= article.entryAdded
       id #{entryUrl}
-      content(xml:base="https://mollywhite.net/reading/dib" type="html")= article.entryHtml
+      content(xml:base="https://mollywhite.net/reading/dib" type="html")= pug.escape(article.entryHtml)
       summary(type="text")= article.rssSummary
       each tag in article.tags 
         category(term=tag.value, label=tag.text)
