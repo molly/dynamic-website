@@ -13,6 +13,7 @@ const DIB_DEFAULTS = {
   summary: null,
   relatedReading: [],
   week: null,
+  entryAdded: null,
 };
 
 const DIB_TAGS = {

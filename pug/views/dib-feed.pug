@@ -1,0 +1,24 @@
+doctype xml 
+feed(xmlns="http://www.w3.org/2005/Atom")
+  id https://www.mollywhite.net/reading/dib/feed.xml
+  title(type="html")= "Molly White's DI&amp;B Reading List"
+  author
+    name Molly White 
+    email molly.white5@gmail.com
+    uri https://www.mollywhite.net
+  link(rel="self" href="https://www.mollywhite.net/reading/dib/feed.xml")
+  link(rel="alternate" href="https://mollywhite.net/reading/dib")
+  icon https://mollywhite.net/images/icons/apple-touch-icon.png
+  rights(type="html")= 'Copyright &copy; Molly White&nbsp;' + new Date().getFullYear() + '.'
+
+  each article, index in results
+    - var entryUrl = "https://mollywhite.net/reading/dib?search=" + encodeURIComponent(article.title)
+    entry
+      title(type="html")= article.title 
+      link(href=entryUrl rel="alternate" type="text/html" title=article.title)
+      published= article.entryAdded
+      updated= article.entryAdded
+      id #{entryUrl}
+      content(xml:base="https://mollywhite.net/reading/dib" type="html")= article.entryHtml
+      each tag in article.tags 
+        category(term=tag.value, label=tag.text)

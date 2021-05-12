@@ -10,6 +10,7 @@ if (process.argv[2] === 'prod') {
 
 const getPaginatedAndFiltered = require('./data/filter/getPaginatedAndFiltered');
 const getLandingPageSummary = require('./data/filter/landing');
+const getRssResults = require('./data/filter/rss');
 
 const {
   READING_STATUSES_MAP,
@@ -105,6 +106,14 @@ app.get('/reading/pleasure', async (req, res) => {
     READING_STATUSES_LIST: READING_STATUSES_LISTS.pleasure,
     READING_STATUSES_MAP,
     ...results,
+  });
+});
+
+app.get('/reading/dib/feed.xml', async (req, res) => {
+  const results = await getRssResults();
+  res.set('Content-Type', 'text/xml');
+  res.render('dib-feed.pug', {
+    results,
   });
 });
 

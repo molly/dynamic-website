@@ -1,4 +1,4 @@
-mixin dibArticle(article)
+mixin dibArticle(article, rss=false)
   .article
     .title
       a(href=article.href) "#{article.title}"
@@ -11,7 +11,10 @@ mixin dibArticle(article)
 
     .byline
       if article.author
-        | #{article.author} #{article.preposition} 
+        | #{article.author}
+      
+      if article.work || article.publisher 
+        |  #{article.preposition} 
 
       if article.work
         if !article.workItalics
@@ -24,10 +27,8 @@ mixin dibArticle(article)
 
       if article.formattedDate
         |  #{article.formattedDate}.
-      else
-        |
 
-    .details 
+    .details
       span.weekOf Read during the week of #{article.week}
 
       .summary
@@ -35,15 +36,15 @@ mixin dibArticle(article)
     
     if article.relatedReading.length 
       .related-reading
-        i.fab.fa-wikipedia-w
+        if !rss
+          i.fab.fa-wikipedia-w
         span.header Related reading: 
 
-        ul 
-          each rr, index in article.relatedReading 
-            a(href=rr.href) #{rr.title}
-            if index !== article.relatedReading.length - 1
-              span , 
+        each rr, index in article.relatedReading
+          a(href=rr.href) #{rr.title}
+          if index !== article.relatedReading.length - 1
+            | , 
 
-    if article.tags
+    if !rss && article.tags
       .tags 
         span.tags= article.tags.map(function(t) { return t.text }).join(', ')
