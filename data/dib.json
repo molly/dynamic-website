@@ -37,6 +37,10 @@
         ],
         "week": "May 3–7, 2021",
         "summary": "Herd immunity, once believed to be an achievable goal that would mark the end of the pandemic and a return to normalcy, is no longer something most scientists believe to be possible. This is due to a combination of increased thresholds of vaccination that would be require to achieve such immunity (due to the emergence of more contagious variants of the virus), and hesitancy among the general population to be vaccinated. Mandavilli discusses how herd immunity would need to be achieved at all levels&mdash;at the local, city level as well as on a state-, country-, and worldwide level, before it would be truly effective. She discusses what a future without herd immunity may look like.",
+        "image": {
+            "src": "https://static01.nyt.com/images/2021/05/09/science/01VIRUS-HERDIMMUNITY1/merlin_187076355_4547cef9-0f3d-4e73-a575-37ad53a85244-superJumbo.jpg",
+            "alt": "A healthcare professional gives a vaccine in a large stadium type venue."
+        },
         "relatedReading": [
             {
                 "title": "Herd immunity",
@@ -56,6 +60,10 @@
         ],
         "week": "April 26–30, 2021",
         "summary": "Roy describes the extent of the COVID-19 crisis currently affecting India, as well as the fact that the estimates are likely to be far lower than reality. He also describes what could graciously be called failures in leadership and government, but which he believes would more accurately be called crimes against humanity, that have resulted in this crisis.",
+        "image": {
+            "src": "https://media.guim.co.uk/ad1cb98e9af28e54e72680aa773bba32f37887b6/0_5_2762_1554/1000.jpg",
+            "alt": "People stand outside near a row of oxygen canisters."
+        },
         "relatedReading": [
             {
                 "title": "COVID-19 pandemic in India",
@@ -78,6 +86,10 @@
             "tech_industry"
         ],
         "summary": "Newton explains how a list of \"funny\" customer names led to choice by Basecamp leadership to ban \"societal and political discussions\" at work, which led to a third of their workforce leaving the company. The impetus for the blog post, which also announced the end of \"paternalistic benefits\", committees, and 360 reviews, was previously unknown.",
+        "image": {
+            "src": "https://cdn.substack.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fd64e7dd6-44bf-4b5c-8fc5-330d0dc374e9_1028x578.png",
+            "alt": "Basecamp logo"
+        },
         "relatedReading": [
             {
                 "title": "Basecamp",
@@ -95,6 +107,10 @@
         "tags": [
             "policing"
         ],
+        "image": {
+            "src": "https://img.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/CKOZ2KUOTEI6XIZ63IUJIHFZVQ.jpg&w=1800",
+            "alt": "Sharpied dates on a wall indicate police killings. The writing reads: \"5/16/19 (NMSP); 7/3/19 (APD); 3/3/20 (BCSO); 6/7/18 (RRPD)\""
+        },
         "summary": "The <i>Washington Post</i> investigated civilian review boards of police departments, finding that they were ineffectual and often powerless to hold police officers and departments accountable. For example, in Louisville, where Breonna Taylor was murdered in March of 2020, the Citizens Commission on Police Accountability couldn't open an investigation or take citizen complaints; it was limited to reviewing alread-closed internal affairs investigations. Even upon such a review, they could not recommend disclipline; only opine on whether the investigation was sufficient and recommend policy or training changes. In Minneapolis, the officer who murdered George Floyd had already been the subject of 22 misconduct complaints from 2003–2015, and the civilian reviewers handled twelve, but Chauvin remained an officer and did not change his conduct in any way that prevented him from killing Floyd. Some locations massively limit the power of such review committees, and some bar them outright. In some places where oversight committees can recommend disciplinary action for officers, the final decision lies with the police chiefs. Police unions, individuals in law enforcement, and politicians have also tried to block laws calling for more oversight, and pressure those in oversight roles.",
         "relatedReading": [
             {
@@ -116,6 +132,10 @@
         ],
         "week": "April 19–23, 2021",
         "summary": "While some attention has been paid to the high incidence of COVID-19 among Indigenous people, Benally says it is being misattributed and misportrayed in dehumanizing, colonialist ways. Benally describes the additional factors that are not being widely acknowledged, such as methane pollution of Diné lands contributing to lung weakness and thus making people more susceptible to the virus. He gives a detailed history of mining operations in the area, as well as efforts by Diné environmental groups to resist them, and interference by politicians on the Navajo Nation. He also describes the status of Diné Bikéyah as a food desert, and explains that this was only a result of colonialist invasion and continued policies that negatively impact access to food and farming. Benally criticizes white saviors—\"Self-appointed allies, ranging in political spectrum from anarchists to Christian missionaries\"—who have attempted to treat the Diné as a charity project, and to maintain control over them. He also describes the mutual aid and direct action that has been happening within Diné Bikéyah.",
+        "image": {
+            "src": "https://www.indigenousaction.org/wp-content/uploads/navajo-covid-resistance-thegem-blog-default.jpg",
+            "alt": "Graphic with the title and author of the post, with the biohazard symbol and a person wearing a gas mask"
+        },
         "relatedReading": [
             {
                 "title": "COVID-19 pandemic in the Navajo Nation",
@@ -140,6 +160,10 @@
         ],
         "week": "April 19–23, 2021",
         "summary": "The authors explain how the killing of Ma'Khia Bryant was one in a long string of killings by police in the United States, but also in Columbus, Ohio specifically. They discuss how Bryant was not a \"perfect victim\" and how that has led some people to dismiss her killing as justified. \"Ma'Khia Bryant isn’t a mythical, perfect victim, nor does she need to be for us to unequivocally affirm that her death was unnecessary. She’s someone who forces us to contend with our values and challenge our continued investment in a system of policing that sees killing a Black girl with a knife as the only reasonable and effective response. The question we need to ask is not whether Reardon had the legal right to kill her, but rather: Didn’t Ma’Khia and the other people involved in the altercation deserve to live?\"",
+        "image": {
+            "src": "https://truthout.org/wp-content/uploads/2018/05/2021_0422-osu-protest-2400x1600.jpg",
+            "alt": "Ohio State students hold a sit in. Many have signs reading things like \"Say Their Names\" and \"Stop Killing Us\""
+        },
         "relatedReading": [
             {
                 "title": "Killing of Ma'Khia Bryant",
@@ -160,6 +184,10 @@
         ],
         "week": "April 19–23, 2021",
         "summary": "Pressley and Dr. Jordan describe disparities in maternal healthcare as a result of racism and inequitable access, and explain how maternal healthcare is a racial justice issue that requires substantive solutions. They suggest expanding Medicaid to cover more maternity-related issues and a longer period of time. It explains the Healthy MOMMIES Act, introduced by Pressley and colleagues. The piece also describes the importance of oral health to overall health, which is an interesting topic that I had not considered specifically in relation to maternal healthcare.",
+        "image": {
+            "src": "https://i.kinja-img.com/gawker-media/image/upload/c_fit,f_auto,g_center,pg_1,q_60,w_1600/uqjajo0i1fk6nriiuaet.jpg",
+            "alt": "A pregnant Black couple, with only their midsections visible. One has their hands on the pregnant person's stomach."
+        },
         "relatedReading": [
             {
                 "title": "Black maternal mortality in the United States",
@@ -181,6 +209,10 @@
         ],
         "week": "April 12–16, 2021",
         "summary": "The authors give an overview of the events leading up to and surrounding the police killing of Daunte Wright, as well as ensuing protests. They describe ongoing issues with police response to protests in Minneapolis, including violence against protesters, targeting of press, and holding detained individuals on suspicion of riot charges, likely related only to possession of gas masks.",
+        "image": {
+            "src": "https://unicornriot.ninja/wp-content/uploads/2021/04/daunte.jpg",
+            "alt": "Daunte Wright holding his child at their first birthday party"
+        },
         "relatedReading": [
             {
                 "title": "Killing of Daunte Wright",
@@ -206,6 +238,10 @@
             "mental_health",
             "covid19"
         ],
+        "image": {
+            "src": "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/5JXNQUUY3QI6XJWQCPJAPKW3PA.jpg&w=916",
+            "alt": "Illustration of two people indoors reading books, while people walk around outside"
+        },
         "week": "April 12–16, 2021",
         "summary": "Roberts discusses introverts who are apprehensive about \"returning to normal\" after widespread vaccination and easing of COVID-19 restrictions. I didn't agree with a lot of it—particularly the comparison between returning to post-COVID normalcy and returning to prison—though I did find the statement by the psychoogist they interviewed to be thought-provoking: \"The pandemic is what psychologist Susan Krauss Whitbourne calls a 'time of measurement' effect — the rare historical event so profound that it alters perceptions and personalities. 'So psychology won’t be the same for a number of years now, just as after World War I and World War II.'\" I also appreciated the mention of the dissonance between the happiness 2020 has brought some of us, and the horror of the pandemic."
     },

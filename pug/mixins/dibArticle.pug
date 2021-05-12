@@ -1,16 +1,20 @@
 mixin dibArticle(article, rss=false)
   .article
-    if rss && article.image
-      img(src=article.image.src, class="webfeedsFeaturedVisual", alt=article.image.alt)
+    if rss
+      if article.image 
+        img(src=article.image.src, class="webfeedsFeaturedVisual", alt=article.image.alt, style="max-width: 300px;")
+      else 
+        img(src='https://www.mollywhite.net/images/mollyandmax.png', class="webfeedsFeaturedVisual", alt='Illustration of Molly White holding her cat Max.', style="max-width: 300px;")
 
-    .title
-      a(href=article.href) "#{article.title}"
+    if !rss
+      .title
+        a(href=article.href) "#{article.title}"
 
-      if article.parenthetical
-        |  (#{article.parenthetical})
+        if article.parenthetical
+          |  (#{article.parenthetical})
 
-      if article.parenthetical || !article.title.match(/[.?!]$/m)
-        |.
+        if article.parenthetical || !article.title.match(/[.?!]$/m)
+          |.
 
     .byline
       if article.author
