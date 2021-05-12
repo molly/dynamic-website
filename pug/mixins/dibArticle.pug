@@ -1,5 +1,9 @@
 mixin dibArticle(article, rss=false)
   .article
+    if rss && article.image
+      .image.webfeedsFeaturedVisual
+        img(src=article.image.src, alt=article.image.alt)
+
     .title
       a(href=article.href) "#{article.title}"
 

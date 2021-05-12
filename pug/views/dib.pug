@@ -6,6 +6,7 @@ block vars
   - var showTagCount = true 
 
 block head
+  link(rel="alternate", type="application/rss+xml", title="Molly White's DI&B Reading List", href="https://mollywhite.net/reading/dib/feed.xml")
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
   include ../symlinks/mixins/titleAndDescription.pug
   +titleAndDescription('DI&B reading', 'Molly White\'s diversity, inclusion, and belonging reading list.')
