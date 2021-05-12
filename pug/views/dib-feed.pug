@@ -20,5 +20,6 @@ feed(xmlns="http://www.w3.org/2005/Atom")
       updated= article.entryAdded
       id #{entryUrl}
       content(xml:base="https://mollywhite.net/reading/dib" type="html")= article.entryHtml
+      summary(type="text")= article.rssSummary
       each tag in article.tags 
         category(term=tag.value, label=tag.text)
