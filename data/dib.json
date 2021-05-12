@@ -1,5 +1,28 @@
 [
     {
+        "title": "Politicizing Critical Race Theory Is Meant to Keep Public Education Oppressive, Biased and Basic",
+        "author": "Tanesha Peeples",
+        "date": "2021-04-30",
+        "work": "Education Post",
+        "href": "https://educationpost.org/politicizing-critical-race-theory-is-meant-to-keep-public-education-oppressive-biased-and-basic/",
+        "week": "May 3–7, 2021",
+        "tags": [
+            "education",
+            "race"
+        ],
+        "summary": "Peeples criticizes legislators and those lobbying for bills that would ban the teaching of critical race theory in public schools. She compares the \"parent advocacy groups\" (<a href='https://www.stltoday.com/news/local/education/culture-struggle-over-equity-and-race-rages-in-rockwood-school-district/article_e12c6a77-d6ed-57cc-9bb5-84577ba82798.html#tracking-source=home-top-story-1'>reported upon</a> by the <i>St. Louis Post-Dispatch</i>) who allege that school districts are \"pushing social justice and equity ideals that amount to a Marxist takeover of schools that paints white students as oppressors and Black students as victims\" to the women in the KKK who harassed and threatened Black school administrators for diversifying curriculum and school leadership.",
+        "relatedReading": [
+            {
+                "title": "Critical race theory",
+                "href": "https://en.wikipedia.org/wiki/Critical_race_theory"
+            },
+            {
+                "title": "Ku Klux Klan § Women",
+                "href": "https://en.wikipedia.org/wiki/Ku_Klux_Klan#Women"
+            }
+        ]
+    },
+    {
         "title": "Reaching 'Herd Immunity' Is Unlikely in the U.S., Experts Now Believe",
         "author": "Apoorva Mandavilli",
         "date": "2021-05-03",
@@ -37,6 +60,24 @@
             {
                 "title": "Narendra Modi",
                 "href": "https://en.wikipedia.org/wiki/Narendra_Modi"
+            }
+        ]
+    },
+    {
+        "title": "What really happened at Basecamp",
+        "author": "Casey Newton",
+        "date": "2021-04-27",
+        "work": "Platformer",
+        "href": "https://www.platformer.news/p/-what-really-happened-at-basecamp",
+        "week": "April 26–30, 2021",
+        "tags": [
+            "tech_industry"
+        ],
+        "summary": "Newton explains how a list of \"funny\" customer names led to choice by Basecamp leadership to ban \"societal and political discussions\" at work, which led to a third of their workforce leaving the company. The impetus for the blog post, which also announced the end of \"paternalistic benefits\", committees, and 360 reviews, was previously unknown.",
+        "relatedReading": [
+            {
+                "title": "Basecamp",
+                "href": "https://en.wikipedia.org/wiki/Basecamp_(company)"
             }
         ]
     },
