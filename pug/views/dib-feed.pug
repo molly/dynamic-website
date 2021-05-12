@@ -2,17 +2,17 @@ doctype xml
 feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss/1.0")
   id https://www.mollywhite.net/reading/dib/feed.xml
   title(type="html")= "Molly White's DI&amp;B Reading List"
-  description(type="html")= "I read and share at least two articles a week pertaining to diversity, inclusion, and belonging (DI&B). I believe constant learning on these topics, and their intersection with the technology industry, is not optional and is key to being both a good manager and team member, but also to being a conscientous participant in the industry."
   author
     name Molly White 
     email molly.white5@gmail.com
     uri https://www.mollywhite.net
-  link(rel="self" href="https://www.mollywhite.net/reading/dib/feed.xml")
+  link(rel="self" href="https://mollywhite.net/reading/dib/feed.xml")
   link(rel="alternate" href="https://mollywhite.net/reading/dib")
   icon https://mollywhite.net/images/icons/apple-touch-icon.png
   webfeeds:icon https://mollywhite.net/images/icons/apple-touch-icon.png
   webfeeds:cover(image="https://www.mollywhite.net/images/mollyandmax.png")
   webfeeds:accentColor 96B78
+  updated= results[0].entryAdded
   rights(type="html")= 'Copyright &copy; Molly White&nbsp;' + new Date().getFullYear() + '.'
 
   each article, index in results
@@ -23,7 +23,7 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
       published= article.entryAdded
       updated= article.entryAdded
       id #{entryUrl}
-      content(xml:base="https://mollywhite.net/reading/dib" type="html")= pug.escape(article.entryHtml)
+      content(xml:base="https://mollywhite.net/reading/dib" type="html")= article.entryHtml 
       summary(type="text")= article.rssSummary
       each tag in article.tags 
         category(term=tag.value, label=tag.text)
