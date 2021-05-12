@@ -21,7 +21,11 @@ block body
       a(href="/contact") send it my way
       | .
 
-    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') DI&amp;B reading list
+    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') DI&amp;B reading list 
+    div.rss-link
+      i.fas.fa-rss(aria-hidden="true") 
+      |  
+      a(href="https://mollywhite.net/reading/dib/feed.xml", target="_blank") Subscribe 
 
     include ../includes/filters.pug
 
