@@ -1,5 +1,17 @@
 [
     {
+        "title": "Words Matter: Alternatives for Charged Terminology in the Computing Profession",
+        "publisher": "the Association for Computing Machinery",
+        "preposition": "by",
+        "href": "https://www.acm.org/diversity-inclusion/words-matter",
+        "week": "May 17–21, 2021",
+        "tags": [
+            "tech_industry"
+        ],
+        "summary": "ACM provides a list of common technological terms they suggest avoiding, as they can be exclusionary or offensive. They also provide a list of alternatives. I thought this was very useful, as I recently found myself struggling to come up with a synonym for \"blacklist\" (ACM suggests \"blocklist\"). They also have a form at the bottom to allow people to submit more items to the (fairly short) list. I'll be curious to see what's added over time.",
+        "entryAdded": "2021-05-18T22:47:00.652Z"
+    },
+    {
         "title": "The Masks Are (Finally) Coming Off",
         "author": "Michael Brendan Dougherty",
         "date": "April 23, 2021",
