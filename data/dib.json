@@ -1,12 +1,33 @@
 [
     {
+        "title": "The Masks Are (Finally) Coming Off",
+        "author": "Michael Brendan Dougherty",
+        "date": "April 23, 2021",
+        "work": "National Review",
+        "href": "https://www.nationalreview.com/2021/04/the-masks-are-finally-coming-off/",
+        "week": "May 17–21, 2021",
+        "tags": [
+            "covid19",
+            "opposing_views"
+        ],
+        "summary": "Dougherty writes about mask mandates as they begin to lift, taking the view that some of them (masks outdoors, masking children in schools) they have been unjustified for a long time.",
+        "image": {
+            "src": "https://i0.wp.com/www.nationalreview.com/wp-content/uploads/2021/04/florida-covid-signs.jpg?w=1592&ssl=1",
+            "alt": "Two unmasked people walk under signs urging mask-wearing and social distancing during Spring Break in Fort Lauderdale, Fla., March 24, 2021."
+        },
+        "entryAdded": "2021-05-18T22:37:50.794Z"
+    },
+    {
         "title": "How The Politics Of White Liberals And White Conservatives Are Shaped By Whiteness",
         "author": "Hakeem Jefferson and Koji Takahashi",
         "date": "May 10, 2021",
         "work": "FiveThirtyEight",
         "href": "https://fivethirtyeight.com/features/how-the-politics-of-white-liberals-and-white-conservatives-are-shaped-by-whiteness/",
         "week": "May 10–14, 2021",
-        "tags": ["race", "whiteness"],
+        "tags": [
+            "race",
+            "whiteness"
+        ],
         "summary": "The authors explore how white Americans across the political spectrum view their whiteness, and how they react to others' perceptions of their whiteness. They discuss the ways people react to things like the association between whiteness and privilege.",
         "image": {
             "src": "https://fivethirtyeight.com/wp-content/uploads/2021/05/WHITE-IDENTITY-Topper.png?w=1400",
@@ -21,7 +42,9 @@
         "work": "The Atlantic",
         "href": "https://www.theatlantic.com/ideas/archive/2019/02/religion-workism-making-americans-miserable/583441/",
         "week": "May 10–14, 2021",
-        "tags": ["tech_industry"],
+        "tags": [
+            "tech_industry"
+        ],
         "summary": "\"Workism\" is when work is central to one's identity and defines their life's purpose; it is also the belief that policies to promote human welfare must always promote more work. Workism is common in wealthy men, but people across all classes and genders are finding themselves immersed in a culture that centers around work.<br/>I found one portion of this article questionable: \"95 percent of teens said 'having a job or career they enjoy' would be 'extremely or very important' to them as an adult. This ranked higher than any other priority, including 'helping other people who are in need' (81 percent) or getting married (47 percent). Finding meaning at work beats family and kindness as the top ambition of today's young people.\" This seems an odd conclusion to draw, and it seems odd to include it in an article about workism at all. I think most people who do not define themselves around their work still wish to have a job they enjoy, and it also seems odd to infer that a teenager not prioritizing marriage highly means they don't highly value family in general.",
         "image": {
             "src": "https://cdn.theatlantic.com/thumbor/K7Yc90AX8licThSYmv3lMidAMJA=/0x1815:2312x3116/1440x810/media/img/mt/2019/02/RTX9YBO/original.jpg",
