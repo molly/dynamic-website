@@ -1,5 +1,16 @@
 [
     {
+        "title": "Poor in Tech",
+        "author": "Meg Elison",
+        "work": "her blog",
+        "workItalics": false,
+        "href": "http://megelison.com/poor-in-tech",
+        "week": "May 17–21, 2021",
+        "tags": ["tech_industry", "class"],
+        "summary": "Elison lists a number of examples of times she knew she was the only person at her tech startup, and times when she felt alienated by her wealthy colleagues who made assumptions that everyone they worked with was like them. ",
+        "entryAdded": "2021-05-19T18:04:58.406Z"
+    },
+    {
         "title": "Words Matter: Alternatives for Charged Terminology in the Computing Profession",
         "publisher": "the Association for Computing Machinery",
         "preposition": "by",
