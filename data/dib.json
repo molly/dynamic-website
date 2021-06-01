@@ -1,12 +1,72 @@
 [
     {
+        "title": "The Awkward Playdate Negotiations When Your Kids Aren’t Vaccinated Yet",
+        "author": "Alina Dizik",
+        "work": "The Wall Street Journal",
+        "href": "https://www.wsj.com/articles/the-awkward-playdate-negotiations-when-your-kids-arent-vaccinated-yet-11622570400?mod=hp_featst_pos4",
+        "week": "June 1–6, 2021",
+        "tags": [
+            "covid19",
+            "family"
+        ],
+        "summary": "Although more and more adults are becoming fully vaccinated each day, there is still no vaccine available for children under 12. While they are less susceptible to serious illness from COVID-19, they are still at risk for the illness. Some parents are beginning to relax the precautions they were taking with their children, allowing large unmasked group get-togethers, whereas others are continuing to be more cautious. Parents are having to navigate discussing COVID safety with parents who are more ambivalent, and also figure out how to balance safety with potentially introducing difficulties into their childrens' friendships. One parent said of their willingness to relax a previously-enforced precaution: \"You don’t want to be the first parent and you don’t want to be last.\"",
+        "entryAdded": "2021-06-01T22:55:20.817Z",
+        "image": {
+            "src": "https://images.wsj.net/im-346730/square",
+            "alt": "A group of unmasked children play on a large swing."
+        }
+    },
+    {
+        "title": "Promote agricultural education",
+        "author": "Tiffany Onyejiaka",
+        "work": "Anti-Racism Daily",
+        "href": "https://www.antiracismdaily.com/archives/promote-agricultural-education-anti-racism-daily",
+        "week": "May 24–28, 2021",
+        "tags": [
+            "food_security",
+            "education"
+        ],
+        "summary": "Onyejiaka advocates for including agricultural education in students' curriculums, both to teach students how to grow vegetables and other crops, but also to teach them about histories of inequality in access to food (particularly produce) by race and income.",
+        "entryAdded": "2021-05-26T00:00:00.000Z",
+        "relatedReading": {
+            "title": "Agricultural education",
+            "href": "https://en.wikipedia.org/wiki/Agricultural_education"
+        }
+    },
+    {
+        "title": "The Invisible \"THEY\"",
+        "author": "Jules Rey",
+        "work": "Unicorn Riot",
+        "href": "https://unicornriot.ninja/2021/the-invisible-they/",
+        "week": "May 24–28, 2021",
+        "tags": [
+            "lgbt",
+            "trans_issues"
+        ],
+        "summary": "Brazil continues to be an extremely hostile country towards trans people, as reflected in healthcare, politics, and society in general. However, there is some positive change happening: thirty trans candidates were elected in the most recent election, and a judge recently recognized peoples' rights to have their gender acknowledged as neutral (in the specific case, allowing a name and gender change on official documents).",
+        "entryAdded": "2021-05-26T00:00:00.000Z",
+        "image": {
+            "src": "https://unicornriot.ninja/wp-content/uploads/2021/04/sao-paulo-lgbt-gay-pride-parade-trans.jpg",
+            "alt": "Brazilians celebrating during one of São Paulo’s pride parades"
+        },
+        "relatedReading": [
+            {
+                "title": "Transgender rights in Brazil",
+                "href": "https://en.wikipedia.org/wiki/Transgender_rights_in_Brazil"
+            }
+        ]
+    },
+    {
         "title": "Poor in Tech",
         "author": "Meg Elison",
         "work": "her blog",
         "workItalics": false,
         "href": "http://megelison.com/poor-in-tech",
         "week": "May 17–21, 2021",
-        "tags": ["tech_industry", "class"],
+        "tags": [
+            "tech_industry",
+            "class"
+        ],
         "summary": "Elison lists a number of examples of times she knew she was the only person at her tech startup, and times when she felt alienated by her wealthy colleagues who made assumptions that everyone they worked with was like them. ",
         "entryAdded": "2021-05-19T18:04:58.406Z"
     },
