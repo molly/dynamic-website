@@ -11,10 +11,12 @@
         ],
         "summary": "Worcester nurses at Saint Vincent Hospital have been striking since March 8, over \"safe staffing\"&mdash;that is, ensuring there are a proper number of nurses to treat patients. The head of the nurse's union says that the fight against the strike by the company that owns the hospital is about power; she says that the amount the hospital has spent on police and security related to the strike could easily fund the extra staffing the strikers are demanding. The hospital has also recently threatened to permanently replace the nurses who are striking, which she describes as a scare tactic, because the hospital has been unable to fill positions since before the strike.",
         "entryAdded": "2021-06-04T20:22:47.045Z",
-        "relatedReading": {
-            "title": "2021 Saint Vincent Hospital strike",
-            "href": "https://en.wikipedia.org/wiki/2021_Saint_Vincent_Hospital_strike"
-        },
+        "relatedReading": [
+            {
+                "title": "2021 Saint Vincent Hospital strike",
+                "href": "https://en.wikipedia.org/wiki/2021_Saint_Vincent_Hospital_strike"
+            }
+        ],
         "image": {
             "src": "https://images.jacobinmag.com/wp-content/uploads/2021/05/26104747/GettyImages-1231614438.jpg",
             "alt": "Nurses strike outside Saint Vincent Hospital. Some hold signs that say \"Shame on Tenet CEO Carolyn Jackson\", and some hold signs that say \"St. Vincent Hospital Safe Staffing Now\""
@@ -49,10 +51,12 @@
         ],
         "summary": "Onyejiaka advocates for including agricultural education in students' curriculums, both to teach students how to grow vegetables and other crops, but also to teach them about histories of inequality in access to food (particularly produce) by race and income.",
         "entryAdded": "2021-05-26T00:00:00.000Z",
-        "relatedReading": {
-            "title": "Agricultural education",
-            "href": "https://en.wikipedia.org/wiki/Agricultural_education"
-        }
+        "relatedReading": [
+            {
+                "title": "Agricultural education",
+                "href": "https://en.wikipedia.org/wiki/Agricultural_education"
+            }
+        ]
     },
     {
         "title": "The Invisible \"THEY\"",
