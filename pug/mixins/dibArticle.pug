@@ -36,7 +36,9 @@ mixin dibArticle(article, rss=false)
         |  #{article.formattedDate}.
 
     .details
-      span.weekOf Read during the week of #{article.week}
+      span.weekOf
+      =article.parenthetical === "Video" ? 'Watched' : 'Read'
+      |  during the week of #{article.week}
 
       .summary
         != article.summary

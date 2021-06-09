@@ -20,7 +20,9 @@ block body
       h3
         a(href="/reading/dib") DI&amp;B reading list 
       | This is updated often, as I try to read at least two articles a week on these topics. 
-      | I most recently read "
+      | I most recently  
+      =mostRecentDib.parenthetical === 'Video' ? 'watched' : 'read'
+      |  "
       a(href=mostRecentDib.href) #{mostRecentDib.title} 
       | "
       if mostRecentDib.author
