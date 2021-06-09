@@ -1,21 +1,52 @@
 [
     {
+        "title": "Report: Asian American Women Twice as Likely to Be Targets of Anti-Asian Hate",
+        "work": "Reappropriate",
+        "href": "http://reappropriate.co/2021/05/report-asian-american-women-twice-as-likely-to-be-targets-of-anti-asian-hate/",
+        "date": "2021-05-21",
+        "tags": [
+            "antiasian_racism"
+        ],
+        "summary": "A joint study by the National Asian Pacific American Women’s Forum (NAPAWF) and Stop AAPI Hate found that Asian American women are twice as likely as Asian American men to self-report being targeted in anti-Asian hate incidents. The study also found that half of AAPI women experienced a specific incident of anti-Asian racism in the last two years. Although thhe COVID-19 Hate Crimes Act provides some positive investments in community-centered solutions to anti-Asian hate, many Asian American and LGBTQ groups oppose it due to its mostly carceral solutions.",
+        "entryAdded": "2021-06-09T14:05:54.044Z",
+        "relatedReading": [
+            {
+                "title": "Xenophobia and racism related to the COVID-19 pandemic § United States",
+                "href": "https://en.wikipedia.org/wiki/Xenophobia_and_racism_related_to_the_COVID-19_pandemic#United_States"
+            }
+        ]
+    },
+    {
         "title": "The AIDS Memorial Quilt",
         "author": "Cleve Jones and the National AIDS Memorial project",
+        "preposition": "by",
         "publisher": "BBC World News Witness History",
+        "date": "2020-07-04",
         "href": "https://www.youtube.com/watch?v=hX0Ju8IhoXQ",
         "parenthetical": "Video",
         "week": "June 7–11, 2021",
-        "tags": ["lgbt"],
-        "summary": "Cleve Jones, the activist who came up with the idea of the AIDS memorial quilt, describes the painful history of the AIDS crisis in the 1980s, and what led him to begin the quilt project both to commemorate those who died from AIDS, but also force people to pay attention.",
+        "tags": [
+            "lgbt"
+        ],
+        "summary": "Cleve Jones, the activist who came up with the idea of the AIDS memorial quilt, describes the painful history of the AIDS crisis that began in the 1980s, and what led him to begin the quilt project both to commemorate those who died from AIDS, but also force people to pay attention.",
         "entryAdded": "2021-06-09T13:45:52.187Z",
-        "relatedReading": [{"title": "NAMES Project AIDS Memorial Quilt", "href": "https://en.wikipedia.org/wiki/NAMES_Project_AIDS_Memorial_Quilt"}, {"title": "Cleve Jones", "href": "https://en.wikipedia.org/wiki/Cleve_Jones"}]
+        "relatedReading": [
+            {
+                "title": "NAMES Project AIDS Memorial Quilt",
+                "href": "https://en.wikipedia.org/wiki/NAMES_Project_AIDS_Memorial_Quilt"
+            },
+            {
+                "title": "Cleve Jones",
+                "href": "https://en.wikipedia.org/wiki/Cleve_Jones"
+            }
+        ]
     },
     {
         "title": "Nurses in Massachusetts Are Striking for Their Patients",
         "author": "Katie Murphy, interviewed by Alexandra Bruns-Smith and Matthew Erlich",
         "work": "Jacobin",
         "href": "https://jacobinmag.com/2021/05/nurses-strike-worcester-saint-vincent/",
+        "date": "2021-05-26",
         "week": "June 1–6, 2021",
         "tags": [
             "healthcare",
@@ -38,6 +69,7 @@
         "title": "The Awkward Playdate Negotiations When Your Kids Aren’t Vaccinated Yet",
         "author": "Alina Dizik",
         "work": "The Wall Street Journal",
+        "date": "2021-06-01",
         "href": "https://www.wsj.com/articles/the-awkward-playdate-negotiations-when-your-kids-arent-vaccinated-yet-11622570400?mod=hp_featst_pos4",
         "week": "June 1–6, 2021",
         "tags": [
@@ -55,6 +87,7 @@
         "title": "Promote agricultural education",
         "author": "Tiffany Onyejiaka",
         "work": "Anti-Racism Daily",
+        "date": "2021-05-26",
         "href": "https://www.antiracismdaily.com/archives/promote-agricultural-education-anti-racism-daily",
         "week": "May 24–28, 2021",
         "tags": [
@@ -74,6 +107,7 @@
         "title": "The Invisible \"THEY\"",
         "author": "Jules Rey",
         "work": "Unicorn Riot",
+        "date": "2021-04-29",
         "href": "https://unicornriot.ninja/2021/the-invisible-they/",
         "week": "May 24–28, 2021",
         "tags": [
@@ -97,6 +131,7 @@
         "title": "Poor in Tech",
         "author": "Meg Elison",
         "work": "her blog",
+        "date": "2021-05-19",
         "workItalics": false,
         "href": "http://megelison.com/poor-in-tech",
         "week": "May 17–21, 2021",
@@ -122,7 +157,7 @@
     {
         "title": "The Masks Are (Finally) Coming Off",
         "author": "Michael Brendan Dougherty",
-        "date": "April 23, 2021",
+        "date": "2021-04-23",
         "work": "National Review",
         "href": "https://www.nationalreview.com/2021/04/the-masks-are-finally-coming-off/",
         "week": "May 17–21, 2021",
@@ -140,7 +175,7 @@
     {
         "title": "How The Politics Of White Liberals And White Conservatives Are Shaped By Whiteness",
         "author": "Hakeem Jefferson and Koji Takahashi",
-        "date": "May 10, 2021",
+        "date": "2021-05-10",
         "work": "FiveThirtyEight",
         "href": "https://fivethirtyeight.com/features/how-the-politics-of-white-liberals-and-white-conservatives-are-shaped-by-whiteness/",
         "week": "May 10–14, 2021",
@@ -158,7 +193,7 @@
     {
         "title": "Workism Is Making Americans Miserable",
         "author": "Derek Thompson",
-        "date": "February 24, 2019",
+        "date": "2019-02-24",
         "work": "The Atlantic",
         "href": "https://www.theatlantic.com/ideas/archive/2019/02/religion-workism-making-americans-miserable/583441/",
         "week": "May 10–14, 2021",
