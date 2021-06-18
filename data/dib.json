@@ -1,5 +1,90 @@
 [
     {
+        "title": "Who's left out when tech embraces Juneteenth?",
+        "author": "Mathew Katz",
+        "work": "Tech Briefs",
+        "publisher": "LinkedIn",
+        "href": "https://www.linkedin.com/pulse/whos-left-out-when-tech-embraces-juneteenth-mathew-katz/",
+        "date": "2020-06-19",
+        "week": "June 14–18, 2021",
+        "tags": ["race", "tech_industry"],
+        "summary": "Katz wrote last year about tech companies giving employees the day off for Juneteenth. He points out that there are many days, such as Martin Luther King, Jr. Day, where white collar workers get the day off but many others don't, and that Juneteenth risks becoming one of these holidays. He points out how last year, when Uber gave its largely white corporate employees the day off, its more racially diverse workforce of drivers didn't get a paid holiday. He concludes by saying that \"Unless Congress acts to make Juneteenth a federal holiday -- and let me be clear, they should -- largely-white tech companies run the risk of creating yet another two-tiered American holiday that leaves many people of color behind.\" I think he is overly optimistic to think that Juneteenth becoming a federal holiday, as it just has, will be enough to prevent this split.",
+        "entryAdded": "2021-06-18T17:22:34.120Z"
+    },
+    {
+        "title": "Much More Than A Holiday: How Tech Companies Should Commemorate Juneteenth",
+        "author": "Brenda D. Wilkerson",
+        "work": "Forbes",
+        "href": "https://www.forbes.com/sites/brendadwilkerson/2021/06/17/much-more-than-a-holiday-how-tech-companies-should-commemorate-juneteenth/",
+        "date": "2021-06-17",
+        "week": "June 14–18, 2021",
+        "tags": [
+            "race",
+            "tech_industry"
+        ],
+        "summary": "Wilkerson outlines how tech companies can commemorate Juneteenth in a meaningful way. Her list includes making a 5- to 10-year plan to make meaningful actions, being prepared to answer for past missteps, continuously evaluating and scoring how they are doing on DEI initiatives, creating a buddy system among other leaders, and looking beyond their company and employees.",
+        "entryAdded": "2021-06-18T17:13:03.729Z",
+        "relatedReading": [
+            {
+                "title": "Juneteenth",
+                "href": "https://en.wikipedia.org/wiki/Juneteenth"
+            }
+        ]
+    },
+    {
+        "title": "Attorneys for woman in Winston Smith's car say she did not see him with a gun",
+        "author": "Maya Rao and Alex Chhith",
+        "work": "Star Tribune",
+        "href": "https://www.startribune.com/attorneys-for-woman-in-winston-smith-s-car-say-she-did-not-see-him-with-a-gun/600066960/",
+        "date": "2021-06-11",
+        "week": "June 14–18, 2021",
+        "tags": [
+            "race",
+            "policing",
+            "antiblack_racism"
+        ],
+        "summary": "On June 3, law enforcement killed Winston Boogie Smith, a 32-year-old Black man, after alleging he drew a gun on them while they were attempting to arrest him on a warrant. This description of events has been contradicted by a woman who was in the car with him, who said she had never seen a gun on Smith or in his car. The incident is complicated by the fact that the warrant was served by U.S. Marshals assisted by local law enforcement, who were not allowed to use body cameras or dashcams while making the arrest, a policy which has been changed in the aftermath of Smith's death.",
+        "entryAdded": "2021-06-18T17:12:55.470Z",
+        "image": {
+            "src": "https://chorus.stimg.co/22651732/ows_1f0ddd78_e293_46ff_a4f0_718c4e5f19fb.jpg?w=262.5&h=600&format=auto%2Ccompress&cs=tinysrgb&auto=compress&crop=faces&dpr=2",
+            "alt": "Winston Boogie Smith"
+        },
+        "relatedReading": [
+            {
+                "title": "Killing of Winston Boogie Smith",
+                "href": "https://en.wikipedia.org/wiki/Killing_of_Winston_Boogie_Smith"
+            },
+            {
+                "title": "Winston Boogie Smith protests",
+                "href": "https://en.wikipedia.org/wiki/Winston_Boogie_Smith_protests"
+            }
+        ]
+    },
+    {
+        "title": "Two Marin schools forced to integrate after years of segregation and battles for funding",
+        "author": "Jill Tucker and Emma Talley",
+        "work": "San Francisco Chronicle",
+        "href": "https://www.sfchronicle.com/education/article/Two-Marin-schools-forced-to-integrate-after-years-16256418.php",
+        "date": "2021-06-18",
+        "week": "June 14–18, 2021",
+        "tags": [
+            "education",
+            "race"
+        ],
+        "summary": "The authors underscore how racial segregation in schools is not a phenomenon of the past, giving the example of two schools in Marin, a county which, despite its reputation as a bastion of liberal politics, is the most segregated county in the Bay Area. Until being forced to integration, two schools in the same zip code were massively different in terms of the racial breakdown of their students, the funding allocated per student, and educational outcomes.",
+        "entryAdded": "2021-06-18T16:57:55.731Z",
+        "image": {
+            "src": "https://web.archive.org/web/20210618163229im_/https://s.hdnux.com/photos/01/20/50/65/21138757/7/ratio3x2_2400.jpg",
+            "alt": "A student and her mother stand outside Bayside Martin Luther King Jr. Academy, which before the desegregation had only 8% white students"
+        },
+        "relatedReading": [
+            {
+                "title": "Racial segregation in the United States § Contemporary segregation",
+                "href": "https://en.wikipedia.org/wiki/Racial_segregation_in_the_United_States#Contemporary_segregation"
+            }
+        ]
+    },
+    {
         "title": "Airbnb Is Spending Millions of Dollars to Make Nightmares Go Away",
         "author": "Olivia Carville",
         "work": "Bloomberg Businessweek",
