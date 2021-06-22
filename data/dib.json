@@ -1,5 +1,20 @@
 [
     {
+        "title": "Trolls use a little-known Twitter feature to swarm others with abuse, and their targets say Twitter hasn’t done much to stop it",
+        "author": "Lauren Feiner",
+        "work": "CNBC",
+        "href": "https://www.cnbc.com/2019/06/07/how-trolls-use-twitter-lists-to-target-and-harass-other-users.html",
+        "date": "2019-06-09",
+        "week": "June 21–25, 2021",
+        "tags": ["tech_industry", "online_harassment"],
+        "summary": "After talking to someone on Twitter about how they had experienced the usage of Twitter's \"lists\" feature in harassment campaigns targeting them, I found this CNBC article discussing this longterm issue with the platform. There is no way to remove oneself from a Twitter list, prevent yourself from being added to lists, or otherwise deter their usage as a tool to amplify harassment campaigns often targeted a gender or racial minorities.",
+        "entryAdded": "2021-06-22T23:28:15.995Z",
+        "image": {
+            "src": "https://image.cnbcfm.com/api/v1/image/104024371-RTSR1PD.jpg?v=1555432964&w=630&h=354",
+            "alt": "Sillhouttes of people looking at cell phones, overlaid on a Twitter blue background with the Twitter logo"
+        }
+    },
+    {
         "title": "Who's left out when tech embraces Juneteenth?",
         "author": "Mathew Katz",
         "work": "Tech Briefs",
@@ -7,7 +22,10 @@
         "href": "https://www.linkedin.com/pulse/whos-left-out-when-tech-embraces-juneteenth-mathew-katz/",
         "date": "2020-06-19",
         "week": "June 14–18, 2021",
-        "tags": ["race", "tech_industry"],
+        "tags": [
+            "race",
+            "tech_industry"
+        ],
         "summary": "Katz wrote last year about tech companies giving employees the day off for Juneteenth. He points out that there are many days, such as Martin Luther King, Jr. Day, where white collar workers get the day off but many others don't, and that Juneteenth risks becoming one of these holidays. He points out how last year, when Uber gave its largely white corporate employees the day off, its more racially diverse workforce of drivers didn't get a paid holiday. He concludes by saying that \"Unless Congress acts to make Juneteenth a federal holiday -- and let me be clear, they should -- largely-white tech companies run the risk of creating yet another two-tiered American holiday that leaves many people of color behind.\" I think he is overly optimistic to think that Juneteenth becoming a federal holiday, as it just has, will be enough to prevent this split.",
         "entryAdded": "2021-06-18T17:22:34.120Z"
     },
