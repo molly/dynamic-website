@@ -1,12 +1,30 @@
 [
     {
+        "title": "The Diversity and Inclusion Industry Has Lost Its Way",
+        "author": "Kim Tran",
+        "work": "Harper's Bazaar",
+        "href": "https://www.harpersbazaar.com/culture/features/a35915670/the-diversity-and-inclusion-industry-has-lost-its-way/",
+        "date": "2021-03-23",
+        "week": "June 21–25, 2021",
+        "tags": ["tech_industry", "workers_rights"],
+        "summary": "Kim Tran writes that \"DEI is a corporate litigation shield meant to protect those in power from the people over whom they wield it.\" She asks, \"What would it mean to radically reimagine DEI? To recast it not as a mere shadow, but a reflection of the social protest from which it formed?\" She suggests that \"DEI needs to shed its bourgeois skin\", and that individuals employed in DEI ought to join rank-and-file workers engaging in actions like the Wayfair walkouts and the attempts to unionize at Amazon warehouses.",
+        "entryAdded": "2021-06-26T20:08:52.344Z",
+        "image": {
+            "src": "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/leadembed-1616521476.jpg?resize=768:*",
+            "alt": "A digital illustration of raised fists collaged with people on a staircase"
+        }
+    },
+    {
         "title": "Trolls use a little-known Twitter feature to swarm others with abuse, and their targets say Twitter hasn’t done much to stop it",
         "author": "Lauren Feiner",
         "work": "CNBC",
         "href": "https://www.cnbc.com/2019/06/07/how-trolls-use-twitter-lists-to-target-and-harass-other-users.html",
         "date": "2019-06-09",
         "week": "June 21–25, 2021",
-        "tags": ["tech_industry", "online_harassment"],
+        "tags": [
+            "tech_industry",
+            "online_harassment"
+        ],
         "summary": "After talking to someone on Twitter about how they had experienced the usage of Twitter's \"lists\" feature in harassment campaigns targeting them, I found this CNBC article discussing this longterm issue with the platform. There is no way to remove oneself from a Twitter list, prevent yourself from being added to lists, or otherwise deter their usage as a tool to amplify harassment campaigns often targeted a gender or racial minorities.",
         "entryAdded": "2021-06-22T23:28:15.995Z",
         "image": {
