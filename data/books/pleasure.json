@@ -1,13 +1,25 @@
 [
   {
+    "title": "Sabriel",
+    "author": "Garth Nix",
+    "date": "1995",
+    "publisher": "HarperCollins",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1293655399l/518848.jpg",
+    "href": "https://www.goodreads.com/book/show/518848.Sabriel",
+    "status": "currentlyReading",
+    "started": "2021-07-10",
+    "tags": ["fantasy"]
+  },
+  {
     "title": "The Silent Patient",
     "author": "Alex Michaelides",
     "date": "2019-02",
     "publisher": "Celadon Books",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582759969l/40097951._SX318_.jpg",
     "href": "https://www.goodreads.com/book/show/40097951-the-silent-patient",
-    "status": "currentlyReading",
+    "status": "read",
     "started": "2021-07-09",
+    "completed": "2021-07-09",
     "tags": ["thriller"]
   },
   {
