@@ -1,9 +1,9 @@
 const moment = require('moment');
 const MOMENT_FORMATS = require('../constants/momentFormats');
 
-const SAME_MONTH_REGEX = new RegExp(/([A-Za-z]+ \d{1,2})–\d{1,2}(, \d{4})/);
+const SAME_MONTH_REGEX = new RegExp(/([A-Za-z]+ \d{1,2})[-–]\d{1,2}(, \d{4})/);
 const DIFFERENT_MONTHS_REGEX = new RegExp(
-  /([A-Za-z]+ \d{1,2})–[A-Za-z]+ \d{1,2}(, \d{4})/
+  /([A-Za-z]+ \d{1,2})[-–][A-Za-z]+ \d{1,2}(, \d{4})/
 );
 
 function getMomentFromWeek(week) {

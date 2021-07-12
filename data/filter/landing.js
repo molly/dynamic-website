@@ -84,6 +84,7 @@ const getLandingPageSummary = async () => {
     ...DIB_DEFAULTS.defaultArticle,
     ...dib.sort(makeSortByWeek())[0],
   };
+  console.log(dib.sort(makeSortByWeek()))
 
   const pleasure = await getLocalJson('../books/pleasure.json');
   const currentlyReadingPleasure = getBooksToShow(pleasure).map((book) =>
