@@ -16,10 +16,12 @@
             "src": "https://cdn.theatlantic.com/thumbor/6fwq-FWUzSOzjDlb1hGWZpS3taA=/0x0:2000x1125/1920x1080/media/img/2018/06/15/LeonardoSantamaria_Atlantic_TobaccoLabor_1/original.jpg",
             "alt": "An illustration of a child holding a large leafy plant over their head, looking out over a field."
         },
-        "relatedReading": [{
-            "title": "Child labor laws in the United States",
-            "href": "https://en.wikipedia.org/wiki/Child_labor_laws_in_the_United_States"
-        }]
+        "relatedReading": [
+            {
+                "title": "Child labor laws in the United States",
+                "href": "https://en.wikipedia.org/wiki/Child_labor_laws_in_the_United_States"
+            }
+        ]
     },
     {
         "title": "Apple isn’t backing down from its hybrid work model, according to internal note",
