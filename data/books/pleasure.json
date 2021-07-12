@@ -1,13 +1,25 @@
 [
   {
+    "title": "Lirael",
+    "author": "Garth Nix",
+    "date": "2001",
+    "publisher": "HarperCollins",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1294087829l/47645.jpg",
+    "href": "https://www.goodreads.com/book/show/47624.Lirael",
+    "status": "currentlyReading",
+    "started": "2021-07-11",
+    "tags": ["fantasy"]
+  },
+  {
     "title": "Sabriel",
     "author": "Garth Nix",
     "date": "1995",
     "publisher": "HarperCollins",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1293655399l/518848.jpg",
     "href": "https://www.goodreads.com/book/show/518848.Sabriel",
-    "status": "currentlyReading",
+    "status": "read",
     "started": "2021-07-10",
+    "completed": "2021-07-11",
     "tags": ["fantasy"]
   },
   {
@@ -26,7 +38,7 @@
    "title": "Parable of the Sower",
    "author": "Octavia Butler",
    "date": "1993",
-   "publisher": "Four Walls Eight Windows", 
+   "publisher": "Four Walls Eight Windows",
    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1265033068l/543225.jpg",
    "href": "https://www.goodreads.com/book/show/52397.Parable_of_the_Sower",
    "status": "read",
