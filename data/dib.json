@@ -1,5 +1,27 @@
 [
     {
+        "title": "The Overlooked Children Working in America's Tobacco Fields",
+        "author": "Ariel Ramchandani",
+        "work": "The Atlantic",
+        "href": "https://www.theatlantic.com/family/archive/2018/06/child-labor-tobacco/562964/",
+        "date": "2018-06-21",
+        "week": "July 5-9, 2021",
+        "tags": [
+            "workers_rights",
+            "childrens_rights"
+        ],
+        "summary": "Children as young as ten years old are working in American fields for large companies, picking cash crops including tobacco and produce. Although working in tobacco fields holds particular dangers with the exposure to nicotine (which is neurotoxic), all farm labor is particularly dangerous to children due to pesticide exposure, high physical demands, usage of dangerous machinery and tools, exposure to extreme weather, and many other reasons. The issue is in part due to poor regulations, but even existing regulations that would prevent child labor are largely unenforced and ineffective.",
+        "entryAdded": "2021-07-12T20:23:43.607Z",
+        "image": {
+            "src": "https://cdn.theatlantic.com/thumbor/6fwq-FWUzSOzjDlb1hGWZpS3taA=/0x0:2000x1125/1920x1080/media/img/2018/06/15/LeonardoSantamaria_Atlantic_TobaccoLabor_1/original.jpg",
+            "alt": "An illustration of a child holding a large leafy plant over their head, looking out over a field."
+        },
+        "relatedReading": [{
+            "title": "Child labor laws in the United States",
+            "href": "https://en.wikipedia.org/wiki/Child_labor_laws_in_the_United_States"
+        }]
+    },
+    {
         "title": "Apple isn’t backing down from its hybrid work model, according to internal note",
         "author": "Zoe Schiffer",
         "work": "The Verge",
