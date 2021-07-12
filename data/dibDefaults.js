@@ -20,11 +20,13 @@ const DIB_TAGS = {
   antiasian_racism: 'anti-Asian racism',
   antiblack_racism: 'anti-Black racism',
   antifascism: 'anti-fascism',
+  childrens_rights: "children's rights",
   covid19: 'COVID-19',
   india: 'India',
   indigenous_rights: 'Indigenous rights',
   lgbt: 'LGBT',
   massachusetts: 'Massachusetts',
+  workers_rights: "workers' rights",
 };
 
 module.exports = {
