@@ -49,7 +49,7 @@
         "date": "2021-07-12",
         "week": "July 12–16, 2021",
         "tags": [
-            "tech_industry"
+            "tech_industry", "gender"
         ],
         "summary": "Audits at Facebook showed that more than fifty employees misused their access to user data for personal reasons, and that many of the incidents involved male employees looking up women they were interested in romantically. One employee was able to use his access to track down a woman who had rented a new hotel room after a fight, and another was able to show up at a park where a prospective date was socializing with friends. Because of few security measures and auditing, they are unable to know the full scope of data that was improperly accessed in this way.",
         "entryAdded": "2021-07-15T16:57:43.842Z",
@@ -94,6 +94,18 @@
                 "href": "https://en.wikipedia.org/wiki/Child_labor_laws_in_the_United_States"
             }
         ]
+    },
+    {
+        "title": "Understand the TikTok strike.",
+        "author": "Nicole Cardoza",
+        "work": "Anti-Racism Daily",
+        "href": "https://www.antiracismdaily.com/archives/understand-the-tiktok-strike-anti-racism-daily",
+        "date": "2021-06-30",
+        "week": "June 28–July 2, 2021",
+        "tags": [
+            "antiblack_racism"
+        ],
+        "summary": "Black TikTok creators are on strike over cultural appropriation and not being given credit for their content (or having credit stolen) on the TikTok app. White creators have been miscredited as creators of viral TikTok trends, and have benefited from sponsorships and media recognition that belongs to Black creators."
     },
     {
         "title": "Apple isn’t backing down from its hybrid work model, according to internal note",
