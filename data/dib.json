@@ -1,5 +1,77 @@
 [
     {
+        "title": "Making the Subway Safer With Fewer Police",
+        "author": "Hadriana Lowenkron",
+        "work": "Bloomberg CityLab",
+        "href": "https://www.bloomberg.com/news/articles/2021-07-13/safer-public-transit-with-fewer-police",
+        "date": "2021-07-15",
+        "week": "July 12–16, 2021",
+        "tags": [
+            "policing",
+            "race"
+        ],
+        "summary": "A recent report from a NYC transit think tank argues that heavy police presence on public transit has exacerbated issues of racism in policing, and is not the best way to promote public safety. The report argues that police should deprioritize enforcing low-level offenses like fare evasion and public sleeping, and increase unarmed personnel to offer aid for those who are unhoused or experiencing mental health issues. According to the report, 90% of people arrested for fare-related offenses by the NYPD from October 2017 to June 2019 were people of color. Furthermore, officers in the NYPD testified they were told to focus on Black and brown fare evaders, and ignore those who were white or Asian.",
+        "entryAdded": "2021-07-15T22:11:22.674Z",
+        "image": {
+            "src": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iCagtR_MFd3o/v1/1800x-1.jpg",
+            "alt": "Police officers walk through the Union Square subway station"
+        }
+    },
+    {
+        "title": "I’m Not a Reporter. But I’m Verified as One on Twitter",
+        "author": "Albert Fox Cahn",
+        "work": "Wired",
+        "href": "https://www.wired.com/story/opinion-im-not-a-reporter-but-im-verified-as-one-on-twitter/",
+        "date": "2021-07-13",
+        "week": "July 12–16, 2021",
+        "tags": [
+            "tech_industry",
+            "race"
+        ],
+        "summary": "Cahn explains Twitter's new criteria for verifying accounts, and how it disadvantages activists (particularly of color). According to Cahn, it is much easier to be verified as a journalist, since they only need to submit three recent bylines; activists must satisfy a slew of requirements such as being in the top 0.05% of users in a region, or starting a major hashtag. According to anti-racist economist Kim Crayton, \"that blue check automatically means that what you have to say is of value, and without it, particularly if you’re on the front lines, particularly if you’re a Black woman, you’re questioned.\"",
+        "entryAdded": "2021-07-15T17:03:32.062Z",
+        "image": {
+            "src": "https://media.wired.com/photos/60eccd93aacef0398a186193/master/w_2240,c_limit/twitter-verification-bias.jpg",
+            "alt": "A Black person holding a sign above their head with a checkmark on it peeks out of a hole in the ground"
+        },
+        "relatedReading": [
+            {
+                "title": "Twitter verification",
+                "href": "https://en.wikipedia.org/wiki/Twitter_verification"
+            }
+        ]
+    },
+    {
+        "title": "Exclusive extract: how Facebook's engineers spied on women",
+        "author": "Sheera Frenkel and Cecilia Kang",
+        "work": "The Telegraph",
+        "href": "https://www.telegraph.co.uk/news/2021/07/12/exclusive-extract-facebooks-engineers-spied-women/",
+        "date": "2021-07-12",
+        "week": "July 12–16, 2021",
+        "tags": [
+            "tech_industry"
+        ],
+        "summary": "Audits at Facebook showed that more than fifty employees misused their access to user data for personal reasons, and that many of the incidents involved male employees looking up women they were interested in romantically. One employee was able to use his access to track down a woman who had rented a new hotel room after a fight, and another was able to show up at a park where a prospective date was socializing with friends. Because of few security measures and auditing, they are unable to know the full scope of data that was improperly accessed in this way.",
+        "entryAdded": "2021-07-15T16:57:43.842Z",
+        "image": {
+            "src": "https://www.telegraph.co.uk/content/dam/news/2021/07/09/060721_FACEBOOK-digital_trans_NvBQzQNjv4BqqVzuuqpFlyLIwiB6NTmJwfSVWeZ_vEN7c6bHu2jJnT8.jpg?imwidth=1280",
+            "alt": "Hands typing on a keyboard, overlaid with a sillhouette of a woman"
+        }
+    },
+    {
+        "title": "Five ways to include d/Deaf users in your designs",
+        "author": "Rachele DiTullio",
+        "publisher": "TPGi",
+        "href": "https://www.tpgi.com/five-ways-to-include-d-deaf-users-in-your-designs/",
+        "date": "2021-07-07",
+        "week": "July 5–9, 2021",
+        "tags": [
+            "accessibility"
+        ],
+        "summary": "DiTullio gives a list of five ways to improve online experiences for d/Deaf users: including visual indicators of audio cues, providing text equivalents of audio content, providing sign language, writing with d/Deaf people in mind, and testing designs with d/Deaf people.",
+        "entryAdded": "2021-07-15T22:16:24.141Z"
+    },
+    {
         "title": "The Overlooked Children Working in America's Tobacco Fields",
         "author": "Ariel Ramchandani",
         "work": "The Atlantic",
