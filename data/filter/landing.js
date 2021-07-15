@@ -1,4 +1,5 @@
 const moment = require('moment');
+const MOMENT_FORMATS = require('../constants/momentFormats');
 const getLocalJson = require('../utils/getLocalJson');
 const { makeSortByWeek } = require('../utils/weekUtils');
 const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
@@ -19,12 +20,22 @@ const processTags = (item, tagText) => {
   return item;
 };
 
-const getBooksOfStatusSortedByStartDate = (books, status) => {
+const getBooksOfStatusSortedByStartDate = (
+  books,
+  status,
+  recentOnly = false
+) => {
   // Get all books with this status and sort by start date
   const booksOfStatus = books.filter((book) => book.status === status);
   if (booksOfStatus.length) {
     if (booksOfStatus.length > 1) {
       booksOfStatus.sort(makeSortBySimpleDateKey('started'));
+    }
+    if (recentOnly) {
+      const monthAgo = moment().subtract(1, 'month');
+      return booksOfStatus.filter((book) =>
+        moment(book.started, MOMENT_FORMATS).isAfter(monthAgo)
+      );
     }
     return booksOfStatus;
   }
@@ -42,7 +53,7 @@ const getBooksToShow = (books) => {
   }
 
   // Show most recent reference books
-  const reference = getBooksOfStatusSortedByStartDate(books, 'reference');
+  const reference = getBooksOfStatusSortedByStartDate(books, 'reference', true);
   if (reference.length) {
     return reference;
   }
@@ -84,7 +95,6 @@ const getLandingPageSummary = async () => {
     ...DIB_DEFAULTS.defaultArticle,
     ...dib.sort(makeSortByWeek())[0],
   };
-  console.log(dib.sort(makeSortByWeek()))
 
   const pleasure = await getLocalJson('../books/pleasure.json');
   const currentlyReadingPleasure = getBooksToShow(pleasure).map((book) =>
