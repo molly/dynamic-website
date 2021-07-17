@@ -1,5 +1,28 @@
 [
     {
+        "title": "Company That Aims to Solve the 'Crisis of Toxicity Online' Makes Money From the Daily Caller and Ben Shapiro",
+        "author": "Shoshana Wodinsky",
+        "work": "Gizmodo",
+        "href": "https://gizmodo.com/company-that-aims-to-solve-the-crisis-of-toxicity-onlin-1847292477",
+        "date": "2021-07-16",
+        "week": "July 12–16, 2021",
+        "tags": [
+            "tech_industry"
+        ],
+        "summary": "A company that claims to provide a more socially conscious advertising platform to companies is displaying ads on sites like the <i>Daily Caller</i> and those run by Ben Shapiro. More generally, Wodinsky talks about the motivations behind companies removing ads from far-right sites.",
+        "entryAdded": "2021-07-17T18:42:28.744Z",
+        "image": {
+            "src": "https://i.kinja-img.com/gawker-media/image/upload/c_fit,f_auto,g_center,pg_1,q_60,w_1600/5c9706686441bfba2906b3e6f0ee9559.jpg",
+            "alt": "A man wearing an American flag print gater covering most of his face holds a riot shield while standing in a crowd of other men."
+        },
+        "relatedReading": [
+            {
+                "title": "2020 Facebook ad boycotts",
+                "href": "https://en.wikipedia.org/wiki/2020_Facebook_ad_boycotts"
+            }
+        ]
+    },
+    {
         "title": "Making the Subway Safer With Fewer Police",
         "author": "Hadriana Lowenkron",
         "work": "Bloomberg CityLab",
@@ -49,7 +72,8 @@
         "date": "2021-07-12",
         "week": "July 12–16, 2021",
         "tags": [
-            "tech_industry", "gender"
+            "tech_industry",
+            "gender"
         ],
         "summary": "Audits at Facebook showed that more than fifty employees misused their access to user data for personal reasons, and that many of the incidents involved male employees looking up women they were interested in romantically. One employee was able to use his access to track down a woman who had rented a new hotel room after a fight, and another was able to show up at a park where a prospective date was socializing with friends. Because of few security measures and auditing, they are unable to know the full scope of data that was improperly accessed in this way.",
         "entryAdded": "2021-07-15T16:57:43.842Z",
