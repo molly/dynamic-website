@@ -1,5 +1,43 @@
 [
     {
+        "title": "Female Twitch Streamers Spend Their Lives Online. Predators Are Watching.",
+        "author": "Jesselyn Cook",
+        "work": "HuffPost",
+        "href": "https://www.huffpost.com/entry/female-twitch-streamers-sexual-harassment_n_60e8ab3ee4b06dfc5e215f54",
+        "date": "2021-07-20",
+        "week": "July 19–23, 2021",
+        "tags": [
+            "tech_industry",
+            "online_harassment"
+        ],
+        "summary": "Women who stream on Twitch face enormous amounts of harassment, particularly sexual harassment, enduring an \"environment where extreme harassment, rape and death threats, blackmailing, stalking and worse have become regular workplace hazards.\" Dedicated subreddits have been created to share unintentionally revealing screengrabs and digitally-created porn of these women, and their attempts to have the subreddits and similarly abusive channels removed have largely been futile. One streamer pays $2,500 a month for a firm to help remove sexualized images of her from the internet, and even then platforms usually only remove it when claims are filed based on copyright rather than on sexual harassment grounds. Some viewers have developed parasocial relationships with the female streamers, and some streamers have been targeted with violent threats and both online and in-person stalking.",
+        "entryAdded": "2021-07-20T20:23:07.042Z",
+        "image": {
+            "src": "https://img.huffingtonpost.com/asset/60f583714100006a7081b9ea.jpg",
+            "alt": "Collage of two images; one on the left shows a closeup of the face of streamer SweetAnita looking downwards; the one on the right shows a red-filtered image of her looking at a cell phone in her hand."
+        }
+    },
+    {
+        "title": "Opinion: This San Francisco-based website is a favorite of neo-Nazis to spread their hatred",
+        "author": "Steven Stalinsky",
+        "work": "SFGate",
+        "href": "https://www.sfgate.com/california-politics/article/Internet-Archive-Neo-Nazis-white-supremacist-SF-16320465.php",
+        "date": "2021-07-20",
+        "week": "July 19–23, 2021",
+        "tags": [
+            "tech_industry",
+            "extremism"
+        ],
+        "summary": "The Internet Archive, a massive online library, has been used by neo-Nazis, antisemites, and other white supremacist and racist groups to host propoganda and incitement. Stalinsky writes about how the organization has done little to prevent usage by extremist and terrorist groups, even after years of knowing of their usage of the site, and claims that it is not responsible for the content shared using its service.",
+        "entryAdded": "2021-07-20T20:12:13.109Z",
+        "relatedReading": [
+            {
+                "title": "Internet Archive",
+                "href": "https://en.wikipedia.org/wiki/Internet_Archive"
+            }
+        ]
+    },
+    {
         "title": "Company That Aims to Solve the 'Crisis of Toxicity Online' Makes Money From the Daily Caller and Ben Shapiro",
         "author": "Shoshana Wodinsky",
         "work": "Gizmodo",
@@ -7,7 +45,8 @@
         "date": "2021-07-16",
         "week": "July 12–16, 2021",
         "tags": [
-            "tech_industry"
+            "tech_industry",
+            "extremism"
         ],
         "summary": "A company that claims to provide a more socially conscious advertising platform to companies is displaying ads on sites like the <i>Daily Caller</i> and those run by Ben Shapiro. More generally, Wodinsky talks about the motivations behind companies removing ads from far-right sites.",
         "entryAdded": "2021-07-17T18:42:28.744Z",
@@ -809,7 +848,11 @@
             "lgbt"
         ],
         "week": "April 5–9, 2021",
-        "summary": "I stumbled across the Tenacious Unicorn Ranch <a href='https://twitter.com/TenaciousRanch'>on Twitter</a> in March, when they were asking for donations to fund protective measures (fencing, floodlights, etc.) against local militia that were threatening the people who live there. It's worth a follow for the alpaca (and dog and other livestock) photos alone, but it's also such a cool idea, and I love their <a href='https://twitter.com/TenaciousRanch/status/1378502709020565505'>futuristic \"earthship\" building</a>. I sought out an article to learn more about the group and found this profile by a Colorado journalist. Immediately drawn in by the photographs and the quote about geodesic domes (\"They are weird but useful, which is the essence of queer.\"), I loved reading about how they made a home for themselves even in an area that had become a \"cauldron of right-wing conservatism\" and galvanized other progressives. This was published before the heightened harassment by militias and other members of the right-wing, but discusses many of the challenges they've faced with local groups who challenge their right to live and farm in the area. It also informed me about Mission: Wolf, another countercultural community in the area that is focused on creating a wolf sanctuary, which I am interested to learn about."
+        "summary": "I stumbled across the Tenacious Unicorn Ranch <a href='https://twitter.com/TenaciousRanch'>on Twitter</a> in March, when they were asking for donations to fund protective measures (fencing, floodlights, etc.) against local militia that were threatening the people who live there. It's worth a follow for the alpaca (and dog and other livestock) photos alone, but it's also such a cool idea, and I love their <a href='https://twitter.com/TenaciousRanch/status/1378502709020565505'>futuristic \"earthship\" building</a>. I sought out an article to learn more about the group and found this profile by a Colorado journalist. Immediately drawn in by the photographs and the quote about geodesic domes (\"They are weird but useful, which is the essence of queer.\"), I loved reading about how they made a home for themselves even in an area that had become a \"cauldron of right-wing conservatism\" and galvanized other progressives. This was published before the heightened harassment by militias and other members of the right-wing, but discusses many of the challenges they've faced with local groups who challenge their right to live and farm in the area. It also informed me about Mission: Wolf, another countercultural community in the area that is focused on creating a wolf sanctuary, which I am interested to learn about.",
+        "relatedReading": {
+            "title": "Tenacious Unicorn Ranch",
+            "href": "https://en.wikipedia.org/wiki/Tenacious_Unicorn_Ranch"
+        }
     },
     {
         "title": "A feminist internet would be better for everyone",
