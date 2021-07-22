@@ -19,47 +19,51 @@ block body
     .reading-section
       h3
         a(href="/reading/dib") DI&amp;B reading list 
-      | This is updated often, as I try to read at least two articles a week on these topics. 
-      | I most recently  
-      =mostRecentDib.parenthetical === 'Video' ? 'watched' : 'read'
-      |  "
-      a(href=mostRecentDib.href) #{mostRecentDib.title} 
-      | "
-      if mostRecentDib.author
-        |  by #{mostRecentDib.author} #{mostRecentDib.preposition}  
 
-        if mostRecentDib.work
-          if !mostRecentDib.workItalics
-            | #{mostRecentDib.work}.
-          else
-            i #{mostRecentDib.work}.
+      .reading-section-body  
+        | This is updated often, as I try to read at least two articles a week on these topics. 
+        | I most recently  
+        =mostRecentDib.parenthetical === 'Video' ? 'watched' : 'read'
+        |  "
+        a(href=mostRecentDib.href) #{mostRecentDib.title} 
+        | "
+        if mostRecentDib.author
+          |  by #{mostRecentDib.author} #{mostRecentDib.preposition}  
 
-        if mostRecentDib.publisher
-          |  #{mostRecentDib.publisher}.
+          if mostRecentDib.work
+            if !mostRecentDib.workItalics
+              | #{mostRecentDib.work}.
+            else
+              i #{mostRecentDib.work}.
 
-        if !mostRecentDib.work && !mostRecentDib.publisher
+          if mostRecentDib.publisher
+            |  #{mostRecentDib.publisher}.
+
+          if !mostRecentDib.work && !mostRecentDib.publisher
+            |.
+        else 
           |.
-      else 
-        |.
-        
+          
     .reading-section
       h3
         a(href="/reading/pleasure") Pleasure
-      include ../mixins/currentlyReadingSummary.pug
-      +currentlyReadingSummary(currentlyReadingPleasure)
+      .reading-section-body  
+        include ../mixins/currentlyReadingSummary.pug
+        +currentlyReadingSummary(currentlyReadingPleasure)
         
     .reading-section
       h3
         a(href="/reading/reference") Reference 
-      p
+      .reading-section-body  
         | Books I'm reading for reference purposes. Most of my reference reading is related to Wikipedia articles I'm
         | working on, but I also include educational but non-work-related reading in this list.
-      include ../mixins/currentlyReadingSummary.pug
-      +currentlyReadingSummary(currentlyReadingReference)
+        include ../mixins/currentlyReadingSummary.pug
+        +currentlyReadingSummary(currentlyReadingReference)
         
     .reading-section
       h3
         a(href="/reading/work") Work-related
-      include ../mixins/currentlyReadingSummary.pug
-      +currentlyReadingSummary(currentlyReadingWork)
+      .reading-section-body  
+        include ../mixins/currentlyReadingSummary.pug
+        +currentlyReadingSummary(currentlyReadingWork)
         
