@@ -62,10 +62,11 @@ mixin book(book)
               else 
                 | ; completed #{book.formattedCompleted}.
             
-      if page === 'wikipedia' && !shortForm 
+      if page === 'reference' && !shortForm 
         if book.targetArticles.length 
           .target-articles
-            span.header For article
+            i.fab.fa-wikipedia-w
+            span.header For Wikipedia article
               if book.targetArticles.length === 1
                 |: 
               else 

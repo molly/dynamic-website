@@ -2,7 +2,7 @@ extends ../symlinks/templates/base.pug
 
 block vars
   - var htmlClass = 'reading';
-  - var page = 'wikipedia';
+  - var page = 'reference';
   - var importPrefix = 'https://www.mollywhite.net';
   - var showTagCount = true;
   - var showStatusFilter = true;
@@ -10,12 +10,12 @@ block vars
 block head
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
   include ../symlinks/mixins/titleAndDescription.pug
-  +titleAndDescription('Wikipedia reading', 'Molly White\'s Wikipedia reading list.')
+  +titleAndDescription('Reference reading', 'Molly White\'s reference reading list.')
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 
 block body
   .content-box
-    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Wikipedia reading
+    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Reference reading
 
     include ../includes/filters.pug
 

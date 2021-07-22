@@ -58,18 +58,18 @@ app.get('/reading/dib', async (req, res) => {
   });
 });
 
-app.get('/reading/wikipedia', async (req, res) => {
+app.get('/reading/reference', async (req, res) => {
   const results = await getPaginatedAndFiltered(
-    '../books/wikipedia.json',
+    '../books/reference.json',
     BOOK_DEFAULTS,
     req,
     { default: 5 }
   );
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
-  res.render('wikipedia-books.pug', {
+  res.render('reference-books.pug', {
     query: { ...req.query, tags: selectedTags, statuses: selectedStatuses },
-    READING_STATUSES_LIST: READING_STATUSES_LISTS.wikipedia,
+    READING_STATUSES_LIST: READING_STATUSES_LISTS.reference,
     READING_STATUSES_MAP,
     ...results,
   });

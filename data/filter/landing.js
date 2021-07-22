@@ -101,8 +101,8 @@ const getLandingPageSummary = async () => {
     processTags(book, BOOK_DEFAULTS.tagText)
   );
 
-  const wikipedia = await getLocalJson('../books/wikipedia.json');
-  const currentlyReadingWikipedia = getBooksToShow(wikipedia).map((book) =>
+  const reference = await getLocalJson('../books/reference.json');
+  const currentlyReadingReference = getBooksToShow(reference).map((book) =>
     processTags(book, BOOK_DEFAULTS.tagText)
   );
 
@@ -114,7 +114,7 @@ const getLandingPageSummary = async () => {
   return {
     mostRecentDib,
     currentlyReadingPleasure,
-    currentlyReadingWikipedia,
+    currentlyReadingReference,
     currentlyReadingWork,
   };
 };

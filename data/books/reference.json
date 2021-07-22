@@ -1,5 +1,18 @@
 [
     {
+        "title": "The Happiness Trap",
+        "subtitle": "How to Stop Struggling and Start Living",
+        "author": "Russ Harris",
+        "date": "2007",
+        "publisher": "Trumpeter",
+        "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394326031l/11255745.jpg",
+        "border": true,
+        "href": "https://www.goodreads.com/book/show/11255745-the-happiness-trap",
+        "status": "currentlyReading",
+        "started": "2021-07-21",
+        "tags": ["mental_health"]
+    },
+    {
         "title": "Men Who Hate Women",
         "subtitle": "From Incels to Pickup Artists: The Truth about Extreme Misogyny and How It Affects Us All",
         "author": "Laura Bates",
@@ -94,5 +107,17 @@
                 "title": "Men Going Their Own Way"
             }
         ]
-    }
+    },
+    {
+        "title": "So You Want to Talk About Race",
+        "author": "Ijeoma Oluo",
+        "date": "2018-01",
+        "publisher": "Seal Press",
+        "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555361760l/45143681._SY475_.jpg",
+        "href": "https://www.goodreads.com/book/show/45143681-so-you-want-to-talk-about-race",
+        "status": "read",
+        "completed": "2019-12-29",
+        "started": "2019-12-15",
+        "tags": ["social_justice"]
+      }
 ]

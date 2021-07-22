@@ -50,9 +50,12 @@ block body
         
     .reading-section
       h3
-        a(href="/reading/wikipedia") Wikipedia
+        a(href="/reading/reference") Reference 
+      p
+        | Books I'm reading for reference purposes. Most of my reference reading is related to Wikipedia articles I'm
+        | working on, but I also include educational but non-work-related reading in this list.
       include ../mixins/currentlyReadingSummary.pug
-      +currentlyReadingSummary(currentlyReadingWikipedia)
+      +currentlyReadingSummary(currentlyReadingReference)
         
     .reading-section
       h3
