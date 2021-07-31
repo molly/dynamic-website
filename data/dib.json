@@ -1,5 +1,29 @@
 [
     {
+        "title": "'You’re the Problem': When They Spoke Up About Misconduct, They Were Offered Mental Health Services",
+        "author": "Alisha Haridasani Gupta and Ruchika Tulshyan",
+        "work": "The New York Times",
+        "href": "https://www.nytimes.com/2021/07/28/us/google-workplace-complaints-counseling.html",
+        "date": "2021-07-28",
+        "week": "July 26–30, 2021",
+        "tags": [
+            "tech_industry",
+            "mental_health"
+        ],
+        "summary": "Employees at Google have described a pattern at the company where employees reporting issues like harassment and discrimination were directed to employee assistance programs (EAPs) for mental health counselling in lieu of proper investigations into the issues. They also describe scenarios where the company subpoenaed records from these counselling sessions to use against them in litigation. Some employees describe how this made them feel that the problem was with them, not with the employee(s) acting in harassing or discriminatory ways.",
+        "entryAdded": "2021-07-31T17:01:41.557Z",
+        "image": {
+            "src": "https://static01.nyt.com/images/2021/07/14/us/IHW-COUNSELING/IHW-COUNSELING-superJumbo.jpg?quality=90&auto=webp",
+            "alt": "A digital collage of eyes and mouths, superimposed over an illustration of a computer and a chat bubble."
+        },
+        "relatedReading": [
+            {
+                "title": "Employee assistance program",
+                "href": "https://en.wikipedia.org/wiki/Employee_assistance_program"
+            }
+        ]
+    },
+    {
         "title": "Department of Fair Employment and Housing v. Activision Blizzard, Inc.",
         "parenthetical": "Legal complaint",
         "href": "https://aboutblaw.com/YJw",
