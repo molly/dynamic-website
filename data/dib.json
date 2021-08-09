@@ -1,5 +1,104 @@
 [
     {
+        "title": "The Delta Variant Is Sending More Children to the Hospital. Are They Sicker, Too?",
+        "author": "Emily Anthes",
+        "work": "The New York Times",
+        "href": "https://www.nytimes.com/2021/08/09/health/coronavirus-children-delta.html",
+        "date": "2021-08-09",
+        "week": "August 9–13, 2021",
+        "tags": [
+            "covid19",
+            "healthcare",
+            "family"
+        ],
+        "summary": "Children have been particularly affected by the COVID-19 Delta variant, and doctors are questioning whether the variant could be particularly dangerous in younger people. Scientists have said there is insufficient evidence to draw conclusions about whether the Delta variant causes more severe illness in children than other variants. In the UK, where there was a surge in Delta variant cases before the one in the US, there was no clear evidence that children were at particular risk for serious illness from this variant.",
+        "entryAdded": "2021-08-09T18:07:44.461Z",
+        "image": {
+            "src": "https://static01.nyt.com/images/2021/08/06/science/00virus-kids-delta-1/merlin_192910797_d75b91c4-59fd-4836-bc42-3b22f3c54cc7-jumbo.jpg?quality=90&auto=webp",
+            "alt": "A twelve-year-old wearing a mask sits on some steps, with a younger child and an older adult standing behind her in a door way"
+        },
+        "relatedReading": [
+            {
+                "title": "SARS-CoV-2 Delta variant",
+                "href": "https://en.wikipedia.org/wiki/SARS-CoV-2_Delta_variant"
+            },
+            {
+                "title": "Impact of the COVID-19 pandemic on children",
+                "href": "https://en.wikipedia.org/wiki/Impact_of_the_COVID-19_pandemic_on_children"
+            }
+        ]
+    },
+    {
+        "title": "Editorial: MBTA shows bad side of remote working",
+        "date": "2021-08-08",
+        "week": "August 9–13, 2021",
+        "href": "https://www.bostonherald.com/2021/08/08/editorial-mbta-shows-bad-side-of-remote-working/",
+        "tags": [
+            "differing_perspectives",
+            "remote_work"
+        ],
+        "entryAdded": "2021-08-09T19:09:20.781Z",
+        "summary": "An executive working remotely for the Massachusetts Bay Transportation Authority was recently discovered to have spent nine months \"double-dipping\" by working simultaneously for the Denver transit agency. Editorial staff at the <i>Boston Herald</i> point to this as an example of the \"bad side of remote working\" that results from employers who \"[fail] to police remote workers\": \"This is what’s wrong with remote work. Some will look to cut corners.\" The authors argue that the MBTA owes it to taxpayers and riders to monitor their employees.",
+        "image": {
+            "src": "https://www.bostonherald.com/wp-content/uploads/2021/04/orangenl02.jpg?w=1573",
+            "alt": "Orange line MBTA trains sit on the tracks at a station"
+        }
+    },
+    {
+        "title": "Covid-19 Vaccine Mandates Split Corporate America",
+        "author": "Chip Cutter, Sarah Nassauer and Bob Tita",
+        "work": "The Wall Street Journal",
+        "href": "https://www.wsj.com/articles/covid-19-vaccine-mandates-split-corporate-america-walmart-amazon-disney-delta-11628098239",
+        "date": "2021-08-04",
+        "week": "August 2–6, 2021",
+        "tags": [
+            "covid19"
+        ],
+        "summary": "More than a third of eligible adult Americans haven't gotten a COVID-19 vaccine, and employers are weighing approaches to requiring or encouraging vaccination among their workforce. Some are requiring vaccines (either for all staff, or for new hires only), some have offered various incentives or tried to educate their employees about the vaccine, and some have not made any statements on the matter.",
+        "entryAdded": "2021-08-09T18:19:53.318Z",
+        "image": {
+            "src": "https://images.wsj.net/im-379913?width=700&size=1.5&pixel_ratio=1.5",
+            "alt": "Masked employees at Disneyland standing in a line wave at guests"
+        }
+    },
+    {
+        "title": "Looking for COVID-19 'Miracle Drugs'? We Already Have Them. They're Called Vaccines",
+        "author": "Claire Berlinski and Yuri Deigin",
+        "work": "Quilette",
+        "href": "https://quillette.com/2021/07/06/looking-for-covid-19-miracle-drugs-we-already-have-them-theyre-called-vaccines/",
+        "date": "2021-07-06",
+        "week": "August 2–6, 2021",
+        "tags": [
+            "covid19",
+            "differing_perspectives",
+            "healthcare"
+        ],
+        "summary": "An article from <i>Quillette</i>, a generally libertarian- and right-leaning publication, offers an interesting and admirable attempt to convince its readers to be wary of COVID-19 misinformation, and to get vaccinated against COVID-19. Berlinski and Deigin describe Bret Weinstein's statements about COVID-19, which they say evolved from \"entertaining theories that might not be <i>right</i> but could do no harm, to theories that cannot be right and are sure to do harm\". They criticize Weinstein's claims that ivermectin is a COVID-19 \"miracle drug\" (which they say is inaccurate but also relatively harmless, as ivermectin has few side effects), as well as his statements that the approved COVID-19 vaccines are so unsafe that people are dying from them en masse (statements they describe as \"deadly\"). The article offers a perspective that is both deeply libertarian, and also often missing from publications further to the right: \"It is Weinstein's right under the First Amendment to say all of this. But let’s not confuse a right to say something with something being right to say.\" It also debunks some of the claims that Weinstein has made on his podcast (for example, \"The impression listeners might get from Weinstein’s podcast is that children are at no risk from this disease. This is false.\"), and details the actual risks of COVID-19 vaccines and the scale at which side effects such as blood clots have been observed. The article concludes: \"To put things simply: We have proof that ivermectin is terrific for river blindness and head lice. But if you're taking it to prevent COVID-19 because you heard it was '99 percent effective' on a podcast—while forgoing an mRNA vaccine, because you think that's too dangerous—you’ve been misled, and you're endangering yourself, your family, your community, and your country. No one disputes Bret Weinstein's right to embrace the theory that ivermectin is a miracle drug, or to regale his listeners with vaccine horror stories and conspiracy theories. But the rest of us reserve the right to be appalled by his judgment and ethics.\"",
+        "entryAdded": "2021-08-09T19:13:58.584Z",
+        "relatedReading": [
+            {
+                "title": "Bret Weinstein",
+                "href": "https://en.wikipedia.org/wiki/Bret_Weinstein"
+            },
+            {
+                "title": "COVID-19 misinformation",
+                "href": "https://en.wikipedia.org/wiki/COVID-19_misinformation"
+            },
+            {
+                "title": "COVID-19 drug repurposing research",
+                "href": "https://en.wikipedia.org/wiki/COVID-19_drug_repurposing_research"
+            },
+            {
+                "title": "Ivermectin",
+                "href": "https://en.wikipedia.org/wiki/Ivermectin"
+            },
+            {
+                "title": "Quillette",
+                "href": "https://en.wikipedia.org/wiki/Quillette"
+            }
+        ]
+    },
+    {
         "title": "The Kick-Ass Shit That Women In The Game Industry Don't Get Enough Credit For",
         "author": "Ari Notis and Patricia Hernandez",
         "work": "Kotaku",
@@ -288,6 +387,7 @@
         "date": "2021-06-29",
         "week": "June 28–July 2, 2021",
         "tags": [
+            "remote_work",
             "tech_industry"
         ],
         "summary": "Apple recently announced that it will require employees to return to the office on three days a week. After employees wrote to leadership asking them to reconsider, saying that \"without the inclusivity that flexibility brings, many of us feel we have to choose between either a combination of our families, our well-being, and being empowered to do our best work, or being a part of Apple\", Apple denied the request.",
@@ -641,7 +741,7 @@
         "week": "May 17–21, 2021",
         "tags": [
             "covid19",
-            "opposing_views"
+            "differing_perspectives"
         ],
         "summary": "Dougherty writes about mask mandates as they begin to lift, taking the view that some of them (masks outdoors, masking children in schools) they have been unjustified for a long time.",
         "image": {
