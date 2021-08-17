@@ -10,6 +10,7 @@ if (process.argv[2] === 'prod') {
 
 const getPaginatedAndFiltered = require('./data/filter/getPaginatedAndFiltered');
 const getLandingPageSummary = require('./data/filter/landing');
+const getWikipediaWriting = require('./data/filter/wikipediaWritingFilter');
 const getRssResults = require('./data/filter/rss');
 
 const {
@@ -105,6 +106,15 @@ app.get('/reading/pleasure', async (req, res) => {
     query: { ...req.query, tags: selectedTags, statuses: selectedStatuses },
     READING_STATUSES_LIST: READING_STATUSES_LISTS.pleasure,
     READING_STATUSES_MAP,
+    ...results,
+  });
+});
+
+app.get('/wikipedia-work', async (req, res) => {
+  const results = await getWikipediaWriting(req, { default: 20 });
+  const selectedTopics = req.query.tags ? req.query.tags.split('-') : [];
+  res.render('wikipedia-writing.pug', {
+    query: { ...req.query, topics: selectedTopics },
     ...results,
   });
 });
