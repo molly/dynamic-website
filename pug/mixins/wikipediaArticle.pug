@@ -1,0 +1,48 @@
+mixin wikipediaArticle(article)
+  .article.flex
+    .left
+      .title 
+        a(href='https://en.wikipedia.org/wiki/' + article.title.replace(' ', '_')) #{article.title}
+      | #{article.description}
+      .details
+        if article.created
+          | Article created in #{article.year}
+        else 
+          | Began editing in #{article.year}
+
+      .icons
+        if article.created
+          .icon 
+            i.fas.fa-plus(title="Created", aria-hidden="true")
+            .sr-only Created
+        if article.biography 
+          .icon 
+            i.fas.fa-user(title="Biography", aria-hidden="true")
+            .sr-only Biography
+        if article.translation
+          .icon 
+            i.fas.fa-language(title="Translation", aria-hidden="true")
+            .sr-only Translation
+        if article.WIR 
+          .icon
+            a(href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Women_in_Red")
+              img(
+                src=`${importPrefix}/images/women_in_red.png`
+                aria-hidden="true"
+                title="Under the purview of WikiProject Women in Red"
+              )
+              .sr-only WikiProject Women in Red
+
+      if article.topics
+        .tags
+          span.tags= article.topics.map(function(t) { return t.text }).join(', ')
+
+    if article.image 
+      .right
+        .image 
+          img(src=article.image.src)
+        .caption
+          | #{article.image.caption}.
+          | (
+          a(href=article.image.href) Attribution
+          | )

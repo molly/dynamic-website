@@ -1,0 +1,50 @@
+.filters
+  form#filters.filter-box
+    label.title(for="filters") Filter
+
+    label(for="tags") By topic area
+    fieldset#tags.tags
+      each topic in allTopics
+        .button-group
+          button.tag(
+            onclick='onTagClick("' + topic.value + '")',
+            aria-pressed=query.topics.includes(topic.value).toString()
+            type="button"
+          ) #{topic.text}
+          if showTagCount
+            span.tag-count (#{topic.frequency})
+
+    .checkboxes 
+      .checkbox-group
+        input(type="checkbox" name="created" value="Created" id="created")
+        label(for="created") Created 
+
+
+    .search-form
+      label(for="search") Search
+      .search-group
+        input#search-input(
+          type="search",
+          aria-label="Search articles on this page",
+          value=query.search
+        )
+        button#search-submit(type="submit") Search
+
+    button.link-styled(type="button", onClick='clearFilters()') Clear filters
+
+  .filter-subtext
+    span.article-count 
+      if totalResults !== totalUnfilteredResults
+        | #{totalResults} results matching these filters out of #{totalUnfilteredResults} total results.
+      else
+        | #{totalUnfilteredResults} results
+
+    button.link-styled(
+      type="button",
+      onclick='changeSortOrder("' + (query.order === 'reverse' ? 'normal' : 'reverse') + '")'
+    )
+      i(
+        class=['fas', query.order === 'reverse' ? 'fa-caret-up' : 'fa-caret-down']
+      )
+      |  
+      != (query.order === reverse) ? 'Ascending' : 'Descending'
