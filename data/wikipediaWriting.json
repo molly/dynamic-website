@@ -31,6 +31,10 @@
             "activism", "women"
         ],
         "description": "1869 – 1948; Italian pacifist, suffragist, and journalist",
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Alma_Dolens",
+            "year": 2015
+        },
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Teresita_Pasini_alias_Alma_Dolens.jpg/936px-Teresita_Pasini_alias_Alma_Dolens.jpg",
             "href": "https://commons.wikimedia.org/wiki/File:Teresita_Pasini_alias_Alma_Dolens.jpg",
@@ -57,6 +61,10 @@
             "medicine"
         ],
         "description": "1792 – 1865; Spanish doctor and the chair of surgery of the School of Medicine at the University of Madrid",
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Diego_de_Argumosa",
+            "year": 2017
+        },
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/5/50/Diego_de_Argumosa_retrato.jpg",
             "caption": "Diego de Argumosa",
@@ -80,8 +88,23 @@
             "medicine",
             "women"
         ],
-        "description": "b. 1941; American gay rights and AIDS activist"
+        "description": "b. 1941; American gay rights and AIDS activist",
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Virginia_Apuzzo",
+            "year": 2017
+        }
     },
+    {
+        "title": "Peter Aucoin",
+        "sortKey": "Aucoin, Peter",
+        "date": "2011-05",
+        "topics": ["law", "political_science"],
+        "description": "1943 – 2011; professor emeritus of political science and public administration at Dalhousie University in Halifax",
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Wikipedia:Recent_additions/2011/June",
+            "year":
+        }
+    }
     {
         "title": "Tuba Azmudeh",
         "sortKey": "Azmudeh, Tuba",
@@ -155,7 +178,11 @@
         "created": true,
         "biography": true,
         "WIR": true,
-        "description": "1945 – 2012; Iranian lawyer and former member of the Iranian Majlis"
+        "description": "1945 – 2012; Iranian lawyer and former member of the Iranian Majlis",
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Mariam_Behruzi",
+            "year": 2015
+        }
     },
     {
         "title": "BitChute",
@@ -225,6 +252,10 @@
         "biography": true,
         "topics": ["women", "women_in_stem", "technology"],
         "description": "b. 1977 or 1978; software developer best known for her work with Drupal",
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Angela_Byron",
+            "year": 2012
+        },
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Angela_Byron.jpg",
             "href": "https://commons.wikimedia.org/wiki/File:Angela_Byron.jpg",
@@ -527,6 +558,10 @@
             "people_of_color"
         ],
         "ga": 2017,
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Mary_Jackson_(engineer)",
+            "year": 2017
+        },
         "description": "1921 – 2005; American mathematician and aerospace engineer at the National Advisory Committee for Aeronautics",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Mary_Jackson_with_a_model_%28cropped%29.jpg/900px-Mary_Jackson_with_a_model_%28cropped%29.jpg",
@@ -777,7 +812,11 @@
         "topics": [
             "women"
         ],
-        "description": "1934 – 2018; American country music journalist, publicist, singer-songwriter, television and radio show host, and cookbook author"
+        "description": "1934 – 2018; American country music journalist, publicist, singer-songwriter, television and radio show host, and cookbook author",
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Hazel_Smith",
+            "year": 2018
+        }
     },
     {
         "title": "Shari Steele",
@@ -825,7 +864,11 @@
             "activism",
             "women"
         ],
-        "description": "b. 1937; special education advocate who founded Singapore's first school for children with multiple disabilities"
+        "description": "b. 1937; special education advocate who founded Singapore's first school for children with multiple disabilities",
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Leaena_Tambyah",
+            "year": 2017
+        }
     },
     {
         "title": "Tenacious Unicorn Ranch",
@@ -893,6 +936,10 @@
             "technology"
         ],
         "description": "b. 1963; American businessman and the operator of the imageboard website 8chan and textboard website 2channel",
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Jim_Watkins_(businessman)",
+            "year": 2020
+        },
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Jim_Watkins_1_%28cropped%29.png",
             "href": "https://commons.wikimedia.org/wiki/File:Jim_Watkins_1_(cropped).png",
