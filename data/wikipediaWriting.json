@@ -2,7 +2,9 @@
     {
         "title": "2021 United States Capitol attack",
         "date": "2021-01",
-        "topics": ["right_wing"],
+        "topics": [
+            "right_wing"
+        ],
         "description": "violent attack on the United States Capitol by a mob of supporters of President Donald Trump",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/2021_storming_of_the_United_States_Capitol_DSC09254-2_%2850820534063%29_%28retouched%29.jpg/1600px-2021_storming_of_the_United_States_Capitol_DSC09254-2_%2850820534063%29_%28retouched%29.jpg",
@@ -28,7 +30,8 @@
         "created": true,
         "biography": true,
         "topics": [
-            "activism", "women"
+            "activism",
+            "women"
         ],
         "description": "1869 – 1948; Italian pacifist, suffragist, and journalist",
         "dyk": {
@@ -98,13 +101,16 @@
         "title": "Peter Aucoin",
         "sortKey": "Aucoin, Peter",
         "date": "2011-05",
-        "topics": ["law", "political_science"],
+        "topics": [
+            "law",
+            "political_science"
+        ],
         "description": "1943 – 2011; professor emeritus of political science and public administration at Dalhousie University in Halifax",
         "dyk": {
             "href": "https://en.wikipedia.org/wiki/Wikipedia:Recent_additions/2011/June",
-            "year":
+            "year": 2011
         }
-    }
+    },
     {
         "title": "Tuba Azmudeh",
         "sortKey": "Azmudeh, Tuba",
@@ -112,7 +118,9 @@
         "created": true,
         "biography": true,
         "WIR": true,
-        "topics": ["women"],
+        "topics": [
+            "women"
+        ],
         "description": "1878 – 1936; Iranian educator who established the first school for girls in Iran in 1907"
     },
     {
@@ -250,7 +258,11 @@
         "date": "2012-03",
         "created": true,
         "biography": true,
-        "topics": ["women", "women_in_stem", "technology"],
+        "topics": [
+            "women",
+            "women_in_stem",
+            "technology"
+        ],
         "description": "b. 1977 or 1978; software developer best known for her work with Drupal",
         "dyk": {
             "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Angela_Byron",
@@ -268,7 +280,10 @@
         "created": true,
         "biography": true,
         "WIR": true,
-        "topics": ["women", "activism"],
+        "topics": [
+            "women",
+            "activism"
+        ],
         "description": "1900 – 1990; Chinese politician and women's rights activist who was the first chair of the All-China Women's Federation, a Chinese women's rights organization",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/9/93/Cai_Chang.jpg",
@@ -401,7 +416,9 @@
     {
         "title": "Feral cat",
         "date": "2015-10",
-        "topics": ["animals"],
+        "topics": [
+            "animals"
+        ],
         "description": "un-owned domestic cats that live outdoors and avoid human contact",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Feral_cat_1.JPG/1599px-Feral_cat_1.JPG",
@@ -500,7 +517,8 @@
         "created": true,
         "biography": true,
         "topics": [
-            "activism", "women"
+            "activism",
+            "women"
         ],
         "description": "1889 – 1970; labor activist and founder of the Amalgamated Clothing Workers of America",
         "image": {
@@ -628,7 +646,9 @@
         "date": "2020-04",
         "biography": true,
         "topics": [
-           "activism", "right_wing", "women"
+            "activism",
+            "right_wing",
+            "women"
         ],
         "description": "American far-right and anti-Muslim political activist, conspiracy theorist, and internet personality",
         "image": {
@@ -642,7 +662,11 @@
         "sortKey": "Malkin, Michelle",
         "date": "2021-03",
         "biography": true,
-        "topics": ["activism", "right_wing", "women"],
+        "topics": [
+            "activism",
+            "right_wing",
+            "women"
+        ],
         "description": "b. 1970; American conservative political commentator",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Michelle_Malkin_12-13-16_IMG_5759_%2830833199773%29.jpg/800px-Michelle_Malkin_12-13-16_IMG_5759_%2830833199773%29.jpg",
@@ -750,7 +774,9 @@
         "title": "Optical braille recognition",
         "date": "2013-07",
         "created": true,
-        "topics": ["technology"],
+        "topics": [
+            "technology"
+        ],
         "description": "technology to capture and process images of braille characters into natural language characters",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Braille_text.jpg/1498px-Braille_text.jpg",
@@ -968,7 +994,10 @@
         "sortKey": "Wohl, Jacob",
         "date": "2019-02",
         "biography": true,
-        "topics": ["right_wing", "activism"],
+        "topics": [
+            "right_wing",
+            "activism"
+        ],
         "description": "American far-right conspiracy theorist, fraudster, and Internet troll",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Jacob_Wohl_%28cropped%29.jpg/800px-Jacob_Wohl_%28cropped%29.jpg",
