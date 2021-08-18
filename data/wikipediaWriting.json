@@ -1,15 +1,941 @@
 [
     {
+        "title": "2021 United States Capitol attack",
+        "date": "2021-01",
+        "topics": ["right_wing"],
+        "description": "violent attack on the United States Capitol by a mob of supporters of President Donald Trump",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/2021_storming_of_the_United_States_Capitol_DSC09254-2_%2850820534063%29_%28retouched%29.jpg/1600px-2021_storming_of_the_United_States_Capitol_DSC09254-2_%2850820534063%29_%28retouched%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:2021_storming_of_the_United_States_Capitol_DSC09254-2_(50820534063)_(retouched).jpg",
+            "caption": "Crowd at the Capitol during the attack"
+        }
+    },
+    {
         "title": "Ali Alexander",
         "sortKey": "Alexander, Ali",
-        "year": 2021,
+        "date": "2021-01",
         "created": true,
         "biography": true,
         "topics": [
             "right_wing",
-            "activist",
-            "US"
+            "activism"
         ],
-        "description": "American far-right activist, social media personality, and conspiracy theorist"
+        "description": "b. 1984 or 1985; American far-right activist, social media personality, and conspiracy theorist"
+    },
+    {
+        "title": "Alma Dolens",
+        "date": "2015-04",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "activism", "women"
+        ],
+        "description": "1869 – 1948; Italian pacifist, suffragist, and journalist",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Teresita_Pasini_alias_Alma_Dolens.jpg/936px-Teresita_Pasini_alias_Alma_Dolens.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Teresita_Pasini_alias_Alma_Dolens.jpg",
+            "caption": "Alma Dolens"
+        }
+    },
+    {
+        "title": "Alt tech",
+        "date": "2020-09",
+        "created": true,
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "a group of websites, social media platforms, and Internet service providers which have become popular among the alt-right, far-right, and others who espouse extreme or fringe opinions"
+    },
+    {
+        "title": "Diego de Argumosa",
+        "sortKey": "Argumosa, Diego",
+        "date": "2017-01",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "medicine"
+        ],
+        "description": "1792 – 1865; Spanish doctor and the chair of surgery of the School of Medicine at the University of Madrid",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/5/50/Diego_de_Argumosa_retrato.jpg",
+            "caption": "Diego de Argumosa",
+            "href": "https://commons.wikimedia.org/wiki/File:Diego_de_Argumosa_retrato.jpg"
+        },
+        "translation": {
+            "href": "https://es.wikipedia.org/wiki/Diego_de_Argumosa",
+            "text": "Spanish good article"
+        }
+    },
+    {
+        "title": "Virginia Apuzzo",
+        "sortKey": "Apuzzo, Virginia",
+        "date": "2017-06",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "lgbtq",
+            "medicine",
+            "women"
+        ],
+        "description": "b. 1941; American gay rights and AIDS activist"
+    },
+    {
+        "title": "Tuba Azmudeh",
+        "sortKey": "Azmudeh, Tuba",
+        "date": "2015-07",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": ["women"],
+        "description": "1878 – 1936; Iranian educator who established the first school for girls in Iran in 1907"
+    },
+    {
+        "title": "The Babylon Bee",
+        "sortKey": "Babylon Bee, The",
+        "italicTitle": true,
+        "date": "2020-12",
+        "topics": [
+            "right_wing"
+        ],
+        "description": "conservative Christian news satire website"
+    },
+    {
+        "title": "Hidiya Hanim Barakat",
+        "sortKey": "Barakat, Hidiya Hanim",
+        "date": "2015-07",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "women"
+        ],
+        "description": "1898 – 1969; Egyptian philanthropist and social worker"
+    },
+    {
+        "title": "Cynthia Barnes-Boyd",
+        "sortKey": "Barnes-Boyd, Cynthia",
+        "date": "2021-08",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "women",
+            "people_of_color",
+            "women_in_stem",
+            "medicine"
+        ],
+        "description": "1953 – 2017; American academic administrator, professor, and nurse"
+    },
+    {
+        "title": "Basilica of Our Lady of Mercy (Yarumal)",
+        "date": "2016-6",
+        "created": true,
+        "topics": [
+            "religion"
+        ],
+        "description": "minor basilica in Yarumal, Colombia",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Basilica_de_Yarumal-Fachada_Principal.JPG/900px-Basilica_de_Yarumal-Fachada_Principal.JPG",
+            "href": "https://commons.wikimedia.org/wiki/File:Basilica_de_Yarumal-Fachada_Principal.JPG",
+            "caption": "The front face of the Basilica of Our Lady of Mercy"
+        },
+        "translation": {
+            "href": "https://es.wikipedia.org/wiki/Bas%C3%ADlica_menor_de_Nuestra_Se%C3%B1ora_de_la_Merced_(Yarumal)",
+            "text": "Spanish featured article"
+        }
+    },
+    {
+        "title": "Mariam Behruzi",
+        "sortKey": "Behruzi, Mariam",
+        "date": "2015-07",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "description": "1945 – 2012; Iranian lawyer and former member of the Iranian Majlis"
+    },
+    {
+        "title": "BitChute",
+        "date": "2019-04",
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "video hosting service known for accommodating far-right individuals and conspiracy theorists, and for hosting hate speech"
+    },
+    {
+        "title": "Black and Pink",
+        "date": "2018-01",
+        "topics": [
+            "activism",
+            "lgbtq",
+            "massachusetts"
+        ],
+        "created": true,
+        "description": "United States prison abolitionist organization supporting LGBTQ and HIV-positive prisoners"
+    },
+    {
+        "title": "Boogaloo movement",
+        "date": "2020-05",
+        "created": true,
+        "topics": [
+            "right_wing"
+        ],
+        "description": "loosely organized far-right anti-government extremist movement in the United States",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Virginia_2nd_Amendment_Rally_%282020_Jan%29_-_49416109936_%28cropped%29.jpg/1143px-Virginia_2nd_Amendment_Rally_%282020_Jan%29_-_49416109936_%28cropped%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Virginia_2nd_Amendment_Rally_(2020_Jan)_-_49416109936_(cropped).jpg",
+            "caption": "Boogaloo boys"
+        }
+    },
+    {
+        "title": "Wilhelm Burmann",
+        "sortKey": "Burmann, Wilhelm",
+        "date": "2020-04",
+        "topics": [
+            "covid19",
+            "lgbtq"
+        ],
+        "created": true,
+        "biography": true,
+        "description": "1939 – 2020; German dancer, ballet master, and teacher"
+    },
+    {
+        "title": "Eliza Byard",
+        "sortKey": "Byard, Eliza",
+        "date": "2016-11",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "lgbtq",
+            "activism",
+            "women"
+        ],
+        "description": "executive director of GLSEN"
+    },
+    {
+        "title": "Angela Byron",
+        "sortKey": "Byron, Angela",
+        "date": "2012-03",
+        "created": true,
+        "biography": true,
+        "topics": ["women", "women_in_stem", "technology"],
+        "description": "b. 1977 or 1978; software developer best known for her work with Drupal",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Angela_Byron.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Angela_Byron.jpg",
+            "caption": "Angela Byron"
+        }
+    },
+    {
+        "title": "Cai Chang",
+        "date": "2015-07",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": ["women", "activism"],
+        "description": "1900 – 1990; Chinese politician and women's rights activist who was the first chair of the All-China Women's Federation, a Chinese women's rights organization",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/9/93/Cai_Chang.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Cai_Chang.jpg",
+            "caption": "Cai Chang"
+        }
+    },
+    {
+        "title": "Christopher Cantwell",
+        "sortKey": "Cantwell, Christopher",
+        "date": "2019-03",
+        "biography": true,
+        "topics": [
+            "activism",
+            "right_wing"
+        ],
+        "description": "b. 1980; American white supremacist, neo-Nazi, antisemitic conspiracy theorist, federal informant, and convicted felon",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/9/9f/ChrisCantwell-2014.png",
+            "href": "https://commons.wikimedia.org/wiki/File:ChrisCantwell-2014.png",
+            "caption": "Christopher Cantwell"
+        }
+    },
+    {
+        "title": "Kyle Chapman (American activist)",
+        "sortKey": "Chapman, Kyle",
+        "date": "2020-11",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "activism",
+            "massachusetts",
+            "right_wing"
+        ],
+        "description": "b. 1975 or 1976; American white nationalist and alt-right activist"
+    },
+    {
+        "title": "Jennifer Childs-Roshak",
+        "sortKey": "Childs-Roshak",
+        "date": "2016-02",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "massachusetts",
+            "medicine",
+            "women",
+            "women_in_stem"
+        ],
+        "description": "American physician who is president and CEO of Planned Parenthood League of Massachusetts"
+    },
+    {
+        "title": "Charlotte Clymer",
+        "sortKey": "Clymer, Charlotte",
+        "date": "2019-09",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "lgbtq",
+            "activism",
+            "women",
+            "trans_nb"
+        ],
+        "description": "American activist, press secretary, and writer",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Charlotte_Clymer.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Charlotte_Clymer.jpg",
+            "caption": "Charlotte Clymer"
+        }
+    },
+    {
+        "title": "COVID-19 pandemic in Massachusetts",
+        "date": "2020-03",
+        "topics": [
+            "massachusetts",
+            "medicine",
+            "covid19"
+        ],
+        "description": "pandemic of coronavirus disease 2019 (COVID-19) in the U.S. state of Massachusetts"
+    },
+    {
+        "title": "Diet Prada",
+        "date": "2020-08",
+        "created": true,
+        "topics": [
+            "popular_culture"
+        ],
+        "description": "Instagram account and fashion watchdog group"
+    },
+    {
+        "title": "Jack Donovan (writer)",
+        "sortKey": "Donovan, Jack",
+        "date": "2021-02",
+        "biography": true,
+        "topics": [
+            "activism",
+            "male_supremacy",
+            "right_wing"
+        ],
+        "description": "b. 1974; American far-right writer and activist",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Jack_Donovan_with_Vajra_-_2021-cropped.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Jack_Donovan_with_Vajra_-_2021-cropped.jpg",
+            "caption": "Jack Donovan"
+        }
+    },
+    {
+        "title": "Epik (company)",
+        "date": "2019-05",
+        "created": true,
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "American domain registrar and web hosting company known for providing services to websites that host far-right, neo-Nazi, and other extremist content"
+    },
+    {
+        "title": "Feminazgûl",
+        "date": "2021-06",
+        "created": true,
+        "topics": [
+            "activism",
+            "american_left",
+            "women"
+        ],
+        "description": "American feminist black metal band"
+    },
+    {
+        "title": "Feral cat",
+        "date": "2015-10",
+        "topics": ["animals"],
+        "description": "un-owned domestic cats that live outdoors and avoid human contact",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Feral_cat_1.JPG/1599px-Feral_cat_1.JPG",
+            "href": "https://commons.wikimedia.org/wiki/File:Feral_cat_1.JPG",
+            "caption": "Feral cat"
+        }
+    },
+    {
+        "title": "Mary Fernández",
+        "sortKey": "Fernández, Mary",
+        "date": "2016-02",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "technology",
+            "women",
+            "women_in_stem"
+        ],
+        "description": "American computer scientist and activist"
+    },
+    {
+        "title": "Gab (social network)",
+        "date": "2019-01",
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "American alt-tech social networking service known for its far-right userbase"
+    },
+    {
+        "title": "River Gallo",
+        "sortKey": "Gallo, River",
+        "date": "2019-09",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "activism",
+            "trans_nb",
+            "people_of_color"
+        ],
+        "description": "Salvadoran-American filmmaker, actor, model, and intersex rights activist"
+    },
+    {
+        "title": "Laure Gaudreault",
+        "sortKey": "Gaudreault, Laure",
+        "date": "2017-09",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "women"
+        ],
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/7/71/Laure_Gaudreault.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Laure_Gaudreault.jpg",
+            "caption": "Laure Gaudreault"
+        },
+        "description": "1889 – 1975; Canadian teacher, trade unionist, and journalist who worked to improve working conditions and wages, and later, retirement rights, for rural women teachers"
+    },
+    {
+        "title": "Gettr",
+        "date": "2021-07",
+        "created": true,
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "alt-tech social media platform targeted to American conservatives"
+    },
+    {
+        "title": "Groypers",
+        "date": "2020-05",
+        "created": true,
+        "topics": [
+            "activism",
+            "right_wing"
+        ],
+        "description": "a group of white nationalist and far-right activists, provocateurs, and internet trolls"
+    },
+    {
+        "title": "Hafnium (group)",
+        "date": "2021-05",
+        "created": true,
+        "topics": [
+            "technology"
+        ],
+        "description": "cyber espionage group"
+    },
+    {
+        "title": "Bessie Abramowitz Hillman",
+        "sortKey": "Hillman, Bessie Abramowitz",
+        "date": "2014-10",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "activism", "women"
+        ],
+        "description": "1889 – 1970; labor activist and founder of the Amalgamated Clothing Workers of America",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/9/94/Bessie_Abramowitz_Hillman.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Bessie_Abramowitz_Hillman.jpg",
+            "caption": "Bessie Abramowitz Hillman"
+        }
+    },
+    {
+        "title": "Gertrude Hunter",
+        "sortKey": "Hunter, Gertrude",
+        "date": "2016-02",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "women_in_stem",
+            "women",
+            "activism",
+            "medicine",
+            "people_of_color",
+            "massachusetts"
+        ],
+        "description": "1926 – 2006; American doctor and professor of medicine"
+    },
+    {
+        "title": "Journal of African American Studies",
+        "date": "2020-08",
+        "created": true,
+        "topics": [
+            "people_of_color"
+        ],
+        "description": "peer-reviewed academic journal that publishes papers in the field of African American studies"
+    },
+    {
+        "title": "Incel",
+        "date": "2018-04",
+        "created": true,
+        "topics": [
+            "male_supremacy"
+        ],
+        "description": "online subculture of people who define themselves as unable to get a romantic or sexual partner despite desiring one",
+        "ga": 2020
+    },
+    {
+        "title": "Mary Jackson (engineer)",
+        "sortKey": "Jackson, Mary",
+        "date": "2016-08",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "women",
+            "women_in_stem",
+            "people_of_color"
+        ],
+        "ga": 2017,
+        "description": "1921 – 2005; American mathematician and aerospace engineer at the National Advisory Committee for Aeronautics",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Mary_Jackson_with_a_model_%28cropped%29.jpg/900px-Mary_Jackson_with_a_model_%28cropped%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Mary_Jackson_with_a_model_(cropped).jpg",
+            "caption": "Jackson holding a wind tunnel model in 1977"
+        }
+    },
+    {
+        "title": "Margaret Killjoy",
+        "sortKey": "Killjoy, Margaret",
+        "date": "2021-06",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "american_left",
+            "lgbtq",
+            "trans_nb",
+            "women"
+        ],
+        "description": "American author and musician",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Margaret_Killjoy.jpg",
+            "href": "https://en.wikipedia.org/wiki/File:Margaret_Killjoy.jpg",
+            "caption": "Margaret Killjoy"
+        }
+    },
+    {
+        "title": "LBRY",
+        "date": "2021-01",
+        "created": true,
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "blockchain-based file-sharing and payment network that powers decentralized platforms, primarily social networks and video platforms"
+    },
+    {
+        "title": "LifeSiteNews",
+        "italicTitle": "true",
+        "date": "2021-05",
+        "created": true,
+        "topics": [
+            "right_wing"
+        ],
+        "description": "Canadian Catholic far-right anti-abortion advocacy and news publication"
+    },
+    {
+        "title": "Nicholas Lim (entrepreneur)",
+        "sortKey": "Lim, Nicholas",
+        "date": "2021-04",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "b. 1997 or 1998; technology entrepreneur and software developer whose companies are known for providing services to far-right and neo-Nazi websites"
+    },
+    {
+        "title": "Laura Loomer",
+        "sortKey": "Loomer, Laura",
+        "date": "2020-04",
+        "biography": true,
+        "topics": [
+           "activism", "right_wing", "women"
+        ],
+        "description": "American far-right and anti-Muslim political activist, conspiracy theorist, and internet personality",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Laura_Loomer_2021.png",
+            "href": "https://commons.wikimedia.org/wiki/File:Laura_Loomer_2021.png",
+            "caption": "Laura Loomer"
+        }
+    },
+    {
+        "title": "Michelle Malkin",
+        "sortKey": "Malkin, Michelle",
+        "date": "2021-03",
+        "biography": true,
+        "topics": ["activism", "right_wing", "women"],
+        "description": "b. 1970; American conservative political commentator",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Michelle_Malkin_12-13-16_IMG_5759_%2830833199773%29.jpg/800px-Michelle_Malkin_12-13-16_IMG_5759_%2830833199773%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Michelle_Malkin_12-13-16_IMG_5759_(30833199773).jpg",
+            "caption": "Michelle Malkin"
+        }
+    },
+    {
+        "title": "Manosphere",
+        "date": "2020-02",
+        "topics": [
+            "male_supremacy"
+        ],
+        "description": "collection of websites, blogs, and online forums promoting masculinity, strong opposition to feminism, and misogyny"
+    },
+    {
+        "title": "Murder of Michelle Martinko",
+        "date": "2020-02",
+        "created": true,
+        "topics": [
+            "crime"
+        ],
+        "description": "murder of an 18-year-old woman in Cedar Rapids, Iowa in 1979"
+    },
+    {
+        "title": "Men Going Their Own Way",
+        "date": "2020-07",
+        "topics": [
+            "male_supremacy"
+        ],
+        "description": "anti-feminist, misogynistic, mostly online community advocating for men to separate themselves from women and from a society which they believe has been corrupted by feminism",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/MGTOW_logo.svg/898px-MGTOW_logo.svg.png",
+            "href": "https://commons.wikimedia.org/wiki/File:MGTOW_logo.svg",
+            "caption": "Men Going Their Own Way logo"
+        }
+    },
+    {
+        "title": "Rob Monster",
+        "sortKey": "Monster, Rob",
+        "date": "2019-05",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "b. 1966 or 1967; Dutch-American technology executive and the founder and chief executive officer of Epik, a domain registrar and web host known for providing services to websites that host far-right, neo-Nazi, and other extremist content",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Rob_Monster_about_Smart_Web.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Rob_Monster_about_Smart_Web.jpg",
+            "caption": "Rob Monster"
+        }
+    },
+    {
+        "title": "Nelle Morton",
+        "sortKey": "Morton, Nelle",
+        "date": "2015-10",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "women",
+            "religion"
+        ],
+        "description": "1905 – 1987; American theologian, professor, feminist activist, and civil rights leader"
+    },
+    {
+        "title": "Elizabeth Murray (painter)",
+        "sortKey": "Murray, Elizabeth",
+        "date": "2018-03",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "women"
+        ],
+        "translation": {
+            "href": "https://es.wikipedia.org/wiki/Elizabeth_Heaphy_de_Murray",
+            "text": "Spanish featured article"
+        },
+        "description": "1815 – 1882; British watercolorist"
+    },
+    {
+        "title": "Works of Elizabeth Murray",
+        "sortKey": "Murray, Elizabeth, works of",
+        "date": "2018-03",
+        "created": true,
+        "topics": [
+            "women"
+        ],
+        "description": "Works by the British watercolorist",
+        "translation": {
+            "href": "https://es.wikipedia.org/wiki/Elizabeth_Heaphy_de_Murray",
+            "text": "Spanish featured article"
+        },
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Elizabeth_Murray%2C_Marruecos_%281849%29.jpg/1599px-Elizabeth_Murray%2C_Marruecos_%281849%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Elizabeth_Murray,_Marruecos_(1849).jpg",
+            "caption": "Marruecos, by Elizabeth Murray in 1849"
+        }
+    },
+    {
+        "title": "Optical braille recognition",
+        "date": "2013-07",
+        "created": true,
+        "topics": ["technology"],
+        "description": "technology to capture and process images of braille characters into natural language characters",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Braille_text.jpg/1498px-Braille_text.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Braille_text.jpg",
+            "caption": "Braille text"
+        }
+    },
+    {
+        "title": "Parler",
+        "date": "2020-08",
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "American microblogging and social networking service that has a significant user base of Donald Trump supporters, conservatives, conspiracy theorists, and far-right extremists"
+    },
+    {
+        "title": "Perjury trap",
+        "date": "2018-01",
+        "created": true,
+        "topics": [
+            "law"
+        ],
+        "description": "prosecutorial strategy"
+    },
+    {
+        "title": "Kasturi Rajadhyaksha",
+        "sortKey": "Rajadhyaksha, Kasturi",
+        "date": "2016-03",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "medicine",
+            "women",
+            "women_in_stem"
+        ],
+        "description": "1923 or 1924 – 2010; Indian physician and community worker"
+    },
+    {
+        "title": "The Satanic Bible",
+        "sortKey": "Satanic Bible, The",
+        "italicTitle": true,
+        "date": "2011-10",
+        "topics": [
+            "religion"
+        ],
+        "ga": 2012,
+        "description": "central religious text of LaVeyan Satanism"
+    },
+    {
+        "title": "Hazel Smith",
+        "sortKey": "Smith, Hazel",
+        "date": "2018-12",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "women"
+        ],
+        "description": "1934 – 2018; American country music journalist, publicist, singer-songwriter, television and radio show host, and cookbook author"
+    },
+    {
+        "title": "Shari Steele",
+        "sortKey": "Steele, Shari",
+        "date": "2020-03",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "law",
+            "women",
+            "women_in_stem",
+            "technology"
+        ],
+        "description": "technologist, lawyer, and activist for digital freedom",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Shari_Steele.png",
+            "href": "https://commons.wikimedia.org/wiki/File:Shari_Steele.png",
+            "caption": "Shari Steele"
+        }
+    },
+    {
+        "title": "Jeanne Spurlock",
+        "sortKey": "Spurlock, Jeanne",
+        "date": "2016-03",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "women",
+            "women_in_stem",
+            "people_of_color",
+            "medicine"
+        ],
+        "description": "1921 – 1999; American psychiatrist, professor, and author"
+    },
+    {
+        "title": "Leaena Tambyah",
+        "date": "2017-09",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "women"
+        ],
+        "description": "b. 1937; special education advocate who founded Singapore's first school for children with multiple disabilities"
+    },
+    {
+        "title": "Tenacious Unicorn Ranch",
+        "date": "2021-07",
+        "created": true,
+        "topics": [
+            "activism",
+            "american_left",
+            "lgbtq",
+            "trans_nb",
+            "women"
+        ],
+        "description": "queer and transgender community and working ranch in Custer County, Colorado, United States",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/2/28/Tenacious_Unicorn_Ranch_alpaca_%28cropped%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Tenacious_Unicorn_Ranch_alpaca_(cropped).jpg",
+            "caption": "Alpaca at the Tenacious Unicorn Ranch"
+        },
+        "dyk": {
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Tenacious_Unicorn_Ranch",
+            "year": 2021
+        }
+    },
+    {
+        "title": "France Théoret",
+        "sortKey": "Théoret, France",
+        "date": "2017-08",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "women"
+        ],
+        "description": "b. 1942; Canadian feminist, author, poet, and teacher",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/France_Th%C3%A9oret_cropped.jpg/900px-France_Th%C3%A9oret_cropped.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:France_Th%C3%A9oret_cropped.jpg",
+            "caption": "France Théoret"
+        }
+    },
+    {
+        "title": "Bret Victor",
+        "date": "2016-11",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "technology"
+        ],
+        "description": "interface designer, computer scientist, and electrical engineer",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Bret_Victor.png",
+            "href": "https://commons.wikimedia.org/wiki/File:Bret_Victor.png",
+            "caption": "Bret Victor"
+        }
+    },
+    {
+        "title": "Jim Watkins (businessman)",
+        "sortKey": "Watkins, Jim",
+        "date": "2020-08",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "b. 1963; American businessman and the operator of the imageboard website 8chan and textboard website 2channel",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Jim_Watkins_1_%28cropped%29.png",
+            "href": "https://commons.wikimedia.org/wiki/File:Jim_Watkins_1_(cropped).png",
+            "caption": "Jim Watkins"
+        }
+    },
+    {
+        "title": "Ron Watkins",
+        "sortKey": "Watkins, Ron",
+        "date": "2021-01",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "right_wing",
+            "technology"
+        ],
+        "description": "b. 1987 or 1988; American conspiracy theorist and site administrator of the imageboard website 8chan",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Ronald_Watkins_%28cropped%29.jpg",
+            "href": "https://en.wikipedia.org/wiki/File:Ronald_Watkins_(cropped).jpg",
+            "caption": "Ron Watkins"
+        }
+    },
+    {
+        "title": "Jacob Wohl",
+        "sortKey": "Wohl, Jacob",
+        "date": "2019-02",
+        "biography": true,
+        "topics": ["right_wing", "activism"],
+        "description": "American far-right conspiracy theorist, fraudster, and Internet troll",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Jacob_Wohl_%28cropped%29.jpg/800px-Jacob_Wohl_%28cropped%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Jacob_Wohl_(cropped).jpg",
+            "caption": "Jacob Wohl"
+        }
+    },
+    {
+        "title": "Young Patriots Organization",
+        "date": "2020-08",
+        "topics": [
+            "american_left",
+            "activism"
+        ],
+        "description": "American leftist organization of mostly White Southerners from Uptown, Chicago"
     }
 ]

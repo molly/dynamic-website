@@ -16,9 +16,55 @@
 
     .checkboxes 
       .checkbox-group
-        input(type="checkbox" name="created" value="Created" id="created")
+        input(
+          type="checkbox"
+          name="created"
+          value="Created" 
+          checked=query.created
+          id="created"
+          onclick='onCheckboxClick("created")'  
+        )
         label(for="created") Created 
-
+      .checkbox-group
+        input(
+          type="checkbox"
+          name="biography"
+          value="Biography" 
+          checked=query.bio
+          id="biography"
+          onclick='onCheckboxClick("bio")'  
+        )
+        label(for="biography") Biography
+      .checkbox-group
+        input(
+          type="checkbox"
+          name="wir"
+          value="Women in Red" 
+          checked=query.wir
+          id="wir"
+          onclick='onCheckboxClick("wir")'  
+        )
+        label(for="wir") Women in Red 
+      .checkbox-group
+        input(
+          type="checkbox"
+          name="translation"
+          value="Translation" 
+          checked=query.translation
+          id="translation"
+          onclick='onCheckboxClick("translation")'
+        )
+        label(for="translation") Translation
+      .checkbox-group
+        input(
+          type="checkbox"
+          name="ga"
+          value="Good article" 
+          checked=query.ga
+          id="ga"
+          onclick='onCheckboxClick("ga")'
+        )
+        label(for="ga") Good article
 
     .search-form
       label(for="search") Search
@@ -47,4 +93,4 @@
         class=['fas', query.order === 'reverse' ? 'fa-caret-up' : 'fa-caret-down']
       )
       |  
-      != (query.order === reverse) ? 'Ascending' : 'Descending'
+      != (query.order === reverse) ? 'Most recent' : 'Least recent'

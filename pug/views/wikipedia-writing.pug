@@ -14,7 +14,7 @@ block head
 
 block body
   .content-box
-    p My content contributions to Wikipedia
+    p An incomplete list of my content contributions to Wikipedia
 
     include ../includes/wikipedia-filters.pug
 
@@ -23,6 +23,8 @@ block body
         include ../mixins/wikipediaArticle.pug
         each article in results
           +wikipediaArticle(article)
+          
+    include ../includes/paginator.pug
 
 block pre-javascript
   script(

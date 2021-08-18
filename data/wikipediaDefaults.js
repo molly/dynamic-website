@@ -1,7 +1,9 @@
 const WIKIPEDIA_DEFAULTS = {
   title: null,
+  italicTitle: false,
   sortKey: null,
-  year: null,
+  date: '1970-01-01',
+  formattedDate: null,
   created: false,
   biography: false,
   WIR: false,
@@ -13,7 +15,13 @@ const WIKIPEDIA_DEFAULTS = {
   image: null,
 };
 
-const WIKIPEDIA_TOPICS = {};
+const WIKIPEDIA_TOPICS = {
+  american_left: 'American left',
+  covid19: 'COVID-19',
+  lgbtq: 'LGBTQ',
+  trans_nb: 'trans and non-binary people',
+  women_in_stem: 'women in STEM',
+};
 
 module.exports = {
   defaultArticle: WIKIPEDIA_DEFAULTS,

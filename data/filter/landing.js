@@ -11,7 +11,7 @@ const processTags = (item, tagText) => {
   item.tags = item.tags.map((tag) => ({
     text: Object.prototype.hasOwnProperty.call(tagText, tag)
       ? tagText[tag]
-      : tag.replace('_', ' '),
+      : tag.replace(/_/g, ' '),
     value: tag,
   }));
   item.tags.sort((a, b) =>

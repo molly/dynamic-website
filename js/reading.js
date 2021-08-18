@@ -66,6 +66,18 @@ var onTagClick = onMultiSelectClick('tags');
 var onStatusClick = onMultiSelectClick('status');
 
 // eslint-disable-next-line no-unused-vars
+function onCheckboxClick(value) {
+  var url = new URL(window.location);
+  if (url.searchParams.has(value)) {
+    url.searchParams.delete(value);
+  } else {
+    url.searchParams.set(value, 'true');
+  }
+  url.searchParams.delete('page');
+  window.location.replace(url);
+}
+
+// eslint-disable-next-line no-unused-vars
 function onPageChangeClick(pageNumber) {
   var url = new URL(window.location);
   url.searchParams.set('page', pageNumber);
