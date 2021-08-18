@@ -1,0 +1,37 @@
+extends ../symlinks/templates/base.pug
+
+block vars
+  - var htmlClass = 'wikipedia-writing';
+  - var page = 'wikipedia-writing';
+  - var importPrefix = 'http://localhost:8000'
+  - var showTagCount = true
+
+block head
+  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
+  include ../symlinks/mixins/titleAndDescription.pug
+  +titleAndDescription('Wikipedia writing', 'My content contributions to Wikipedia')
+  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
+
+block body
+  .content-box
+    p An incomplete list of my content contributions to Wikipedia
+
+    include ../includes/wikipedia-filters.pug
+
+    .articles 
+      #articlesContainer 
+        include ../mixins/wikipediaArticle.pug
+        each article in results
+          +wikipediaArticle(article)
+          
+    include ../includes/paginator.pug
+
+block pre-javascript
+  script(
+    src="/static/url-search-params-polyfill.js"
+  )
+  script(
+    src="/static/classlist-polyfill.js"
+  )
+block post-javascript
+  script(src="/static/reading.js")

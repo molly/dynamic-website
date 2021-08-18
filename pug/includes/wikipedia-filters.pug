@@ -1,0 +1,96 @@
+.filters
+  form#filters.filter-box
+    label.title(for="filters") Filter
+
+    label(for="tags") By topic area
+    fieldset#tags.tags
+      each topic in allTopics
+        .button-group
+          button.tag(
+            onclick='onTagClick("' + topic.value + '")',
+            aria-pressed=query.topics.includes(topic.value).toString()
+            type="button"
+          ) #{topic.text}
+          if showTagCount
+            span.tag-count (#{topic.frequency})
+
+    .checkboxes 
+      .checkbox-group
+        input(
+          type="checkbox"
+          name="created"
+          value="Created" 
+          checked=query.created
+          id="created"
+          onclick='onCheckboxClick("created")'  
+        )
+        label(for="created") Created 
+      .checkbox-group
+        input(
+          type="checkbox"
+          name="biography"
+          value="Biography" 
+          checked=query.bio
+          id="biography"
+          onclick='onCheckboxClick("bio")'  
+        )
+        label(for="biography") Biography
+      .checkbox-group
+        input(
+          type="checkbox"
+          name="wir"
+          value="Women in Red" 
+          checked=query.wir
+          id="wir"
+          onclick='onCheckboxClick("wir")'  
+        )
+        label(for="wir") Women in Red 
+      .checkbox-group
+        input(
+          type="checkbox"
+          name="translation"
+          value="Translation" 
+          checked=query.translation
+          id="translation"
+          onclick='onCheckboxClick("translation")'
+        )
+        label(for="translation") Translation
+      .checkbox-group
+        input(
+          type="checkbox"
+          name="ga"
+          value="Good article" 
+          checked=query.ga
+          id="ga"
+          onclick='onCheckboxClick("ga")'
+        )
+        label(for="ga") Good article
+
+    .search-form
+      label(for="search") Search
+      .search-group
+        input#search-input(
+          type="search",
+          aria-label="Search articles on this page",
+          value=query.search
+        )
+        button#search-submit(type="submit") Search
+
+    button.link-styled(type="button", onClick='clearFilters()') Clear filters
+
+  .filter-subtext
+    span.article-count 
+      if totalResults !== totalUnfilteredResults
+        | #{totalResults} results matching these filters out of #{totalUnfilteredResults} total results.
+      else
+        | #{totalUnfilteredResults} results
+
+    button.link-styled(
+      type="button",
+      onclick='changeSortOrder("' + (query.order === 'reverse' ? 'normal' : 'reverse') + '")'
+    )
+      i(
+        class=['fas', query.order === 'reverse' ? 'fa-caret-up' : 'fa-caret-down']
+      )
+      |  
+      != (query.order === reverse) ? 'Most recent' : 'Least recent'

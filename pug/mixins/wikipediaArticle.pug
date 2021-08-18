@@ -1,0 +1,73 @@
+mixin wikipediaArticle(article)
+  .article.flex
+    .left
+      .title 
+        a(href='https://en.wikipedia.org/wiki/' + article.title.replace(' ', '_'))
+          if article.italicTitle 
+            i #{article.title}
+          else 
+            | #{article.title}
+      | #{article.description}
+      .details
+        if article.created
+          | Created article in #{article.formattedDate}
+        else 
+          | Began editing in #{article.formattedDate}
+        if article.translation 
+          |; translated from the 
+          a(href=article.translation.href) #{article.translation.text}
+
+      .icons
+        if article.created
+          .icon 
+            i.fas.fa-plus(title="Created", aria-hidden="true")
+            .sr-only Created
+        if article.biography 
+          .icon 
+            i.fas.fa-user(title="Biography", aria-hidden="true")
+            .sr-only Biography
+        if article.translation
+          .icon 
+            i.fas.fa-language(title="Translation", aria-hidden="true")
+            .sr-only Translation
+        if article.WIR 
+          .icon-image
+            a(href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Women_in_Red")
+              img(
+                src=`${importPrefix}/images/wir.png`
+                aria-hidden="true"
+                title="Under the purview of WikiProject Women in Red"
+              )
+              .sr-only WikiProject Women in Red
+        if article.ga
+          .icon-image
+            a(href="https://en.wikipedia.org/wiki/Wikipedia:Good_articles")
+              img(
+                src=`${importPrefix}/images/ga.png`
+                aria-hidden="true"
+                title=`${article.ga} good article`
+              )
+              .sr-only `${article.ga} good article`
+        if article.dyk
+          .icon-image
+            a(href=article.dyk.href)
+              img(
+                src=`${importPrefix}/images/dyk.png`
+                aria-hidden="true"
+                title=`${article.dyk.year} did you know article`
+              )
+              .sr-only `${article.dyk.year} good article`
+
+      if article.topics
+        .tags
+          span.tags= article.topics.map(function(t) { return t.text }).join(', ')
+
+    if article.image 
+      .right
+        .image 
+          img(src=article.image.src)
+        .caption
+          | #{article.image.caption}.
+          | (
+          a(href=article.image.href) Attribution
+          | )

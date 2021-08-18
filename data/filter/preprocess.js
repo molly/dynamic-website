@@ -51,7 +51,7 @@ const preprocess = (data, { defaultArticle, tagText, defaultKey }) => {
     updatedArticle.tags = updatedArticle.tags.map((tag) => ({
       text: Object.prototype.hasOwnProperty.call(tagText, tag)
         ? tagText[tag]
-        : tag.replace('_', ' '),
+        : tag.replace(/_/g, ' '),
       value: tag,
     }));
     updatedArticle.tags.sort((a, b) =>
