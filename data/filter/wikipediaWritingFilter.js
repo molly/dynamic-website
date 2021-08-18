@@ -81,6 +81,9 @@ const filter = ({ results }, req) => {
   if (req.query.ga) {
     filteredResults = filteredResults.filter((article) => article.ga);
   }
+  if (req.query.dyk) {
+    filteredResults = filteredResults.filter((article) => article.dyk);
+  }
 
   if (req.query.search) {
     const search = req.query.search.toLowerCase();
