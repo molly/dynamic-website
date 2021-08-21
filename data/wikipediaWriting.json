@@ -998,12 +998,24 @@
             "right_wing",
             "activism"
         ],
-        "description": "American far-right conspiracy theorist, fraudster, and Internet troll",
+        "description": "b. 1997; American far-right conspiracy theorist, fraudster, and Internet troll",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Jacob_Wohl_%28cropped%29.jpg/800px-Jacob_Wohl_%28cropped%29.jpg",
             "href": "https://commons.wikimedia.org/wiki/File:Jacob_Wohl_(cropped).jpg",
             "caption": "Jacob Wohl"
         }
+    },
+    {
+        "title": "Gladys Wood",
+        "sortKey": "Wood, Gladys",
+        "date": "2021-08",
+        "biography": true,
+        "created": true,
+        "WIR": true,
+        "topics": [
+            "massachusetts", "people_of_color", "women"
+        ],
+        "description": "1916 – 2017; American educator and academic administrator who was the first African-American principal in the Boston Public Schools"
     },
     {
         "title": "Young Patriots Organization",
