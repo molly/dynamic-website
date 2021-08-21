@@ -19,6 +19,7 @@ const WIKIPEDIA_TOPICS = {
   american_left: 'American left',
   covid19: 'COVID-19',
   lgbtq: 'LGBTQ',
+  massachusetts: 'Massachusetts',
   trans_nb: 'trans and non-binary people',
   women_in_stem: 'women in STEM',
 };
