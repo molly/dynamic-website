@@ -13,7 +13,7 @@ const preprocess = (data, query) => {
     const updatedArticle = { ...defaultArticle, ...article };
 
     // Date
-    updatedArticle.date = moment(article.date, 'YYYY-MM');
+    updatedArticle.date = moment(article.date, 'YYYY-MM-DD');
     updatedArticle.formattedDate = updatedArticle.date.format('MMMM YYYY');
 
     // Topics
@@ -37,7 +37,7 @@ const preprocess = (data, query) => {
   }
 
   processed.sort((a, b) => {
-    if (a.date.month() === b.date.month() && a.date.year() === b.date.year()) {
+    if (a.date.isSame(b.date)) {
       const sortA = a.sortKey || a.title;
       const sortB = b.sortKey || b.title;
       return sortA.toLowerCase().localeCompare(sortB.toLowerCase());
