@@ -990,6 +990,21 @@
         }
     },
     {
+        "title": "Georgette Watson",
+        "sortKey": "Watson, Georgette",
+        "date": "2021-08-22",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": ["activism", "massachusetts", "people_of_color", "women"],
+        "description": "b. 1943/1944 – 2008; American anti-drug activist",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Activist_Georgette_Watson_%28center%29_holding_proclamation_%289501946811%29_%28cropped%29.jpg/900px-Activist_Georgette_Watson_%28center%29_holding_proclamation_%289501946811%29_%28cropped%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Activist_Georgette_Watson_(center)_holding_proclamation_(9501946811)_(cropped).jpg",
+            "caption": "Georgette Watson"
+        }
+    },
+    {
         "title": "Jacob Wohl",
         "sortKey": "Wohl, Jacob",
         "date": "2019-02-11",
