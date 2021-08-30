@@ -6,7 +6,11 @@
         "date": "2021-08-30",
         "week": "August 30–September 3, 2021",
         "summary": "Employees at Apple often link their personal and work accounts for various reasons, including so they can beta test software, and because it is difficult to switch between iCloud accounts. As a result, they have been subjected to major invasions of privacy, including their messages, photos, and other data being exposed. They have been told they are not allowed to wipe any of their devices, potentially exposing extremely personal data including tax and loan information and compromising photographs.",
-        "tags": ["tech_industry", "privacy", "workers_rights"],
+        "tags": [
+            "tech_industry",
+            "privacy",
+            "workers_rights"
+        ],
         "entryAdded": "2021-08-30T19:05:31.391Z"
     },
     {
@@ -16,8 +20,17 @@
         "date": "2021-08-19",
         "week": "August 30–September 3, 2021",
         "summary": "The authors describe an \"infodemic\" that is occurring in concert with the pandemic, where deceptive material about COVID-19, masks, and vaccines is spreading widely and resulting in those who believe it taking fewer preventative steps against the disease. They discuss engaging pandemic-response playbooks to try to counteract misinformation before it goes viral.",
-        "tags": ["covid19", "healthcare"],
-        "entryAdded": "2021-08-30T19:22:38.347Z"
+        "tags": [
+            "covid19",
+            "healthcare"
+        ],
+        "entryAdded": "2021-08-30T19:22:38.347Z",
+        "relatedReading": [
+            {
+                "title": "Infodemic",
+                "href": "https://en.wikipedia.org/wiki/Infodemic"
+            }
+        ]
     },
     {
         "title": "Pride Feelings",
@@ -27,7 +40,11 @@
         "date": "2021-07-06",
         "week": "August 23–27, 2021",
         "summary": "Smilges talks about how LGBTQ Pride is so often inaccessible to them and their disabled friends for various reasons—\"they're too loud, too crowded, and too filled with unwanted or accidental touch, as well as planned without basic accommodations, like ramps, sign language interpreters, and food/drink alternatives for people with specific dietary needs\". They talk about the commodification of Pride, and how it is built around serving those who are wealthy, not disabled, gender-conforming, and white. They also talk about how they are rethinking the emotions around disability and queer pride.",
-        "tags": ["mental_health", "lgbt", "accessibility"],
+        "tags": [
+            "mental_health",
+            "lgbt",
+            "accessibility"
+        ],
         "entryAdded": "2021-08-30T18:57:57.898Z"
     },
     {
@@ -38,7 +55,9 @@
         "date": "2021-08-22",
         "week": "August 23–27, 2021",
         "summary": "Kaczorowski describes her recent experience with burnout, and how it's different from her experiences with the phenomenon before the pandemic began. She gives advice on how to treat people who are experiencing burnout, and she also talks about how she believes that there will be a massive amount of burnout (or people acting on current burnout) in the near future as people move past the uncertainty of the earlier portions of the pandemic.",
-        "tags": ["mental_health"],
+        "tags": [
+            "mental_health"
+        ],
         "entryAdded": "2021-08-23T17:22:09.506Z"
     },
     {
@@ -48,7 +67,9 @@
         "date": "2021-08-18",
         "week": "August 16–20, 2021",
         "summary": "Louise writes about how the media prefers to show disability in the form of \"inspiration porn\" or stories of traumatic events, but refuses to cover serious issues affecting disabled people. She laments the lack of openly disabled journalists, which she says contributes to the continuing narrative of \"person disabled by shocking and traumatic event, hates being disabled, 'overcomes' their disability\".",
-        "tags": ["ability"],
+        "tags": [
+            "ability"
+        ],
         "entryAdded": "2021-08-22T17:46:42.698Z"
     },
     {
@@ -58,7 +79,9 @@
         "date": "2021-06-25",
         "week": "August 16–20, 2021",
         "summary": "Rands writes about stress, things he does to combat stress, and leading indicators of when \"it's about to hit the fan\" in terms of stress. He also talks about how he checks in with his team on their stress levels.",
-        "tags": ["mental_health"],
+        "tags": [
+            "mental_health"
+        ],
         "entryAdded": "2021-08-22T16:36:50.175Z"
     },
     {
