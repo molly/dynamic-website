@@ -1,5 +1,36 @@
 [
     {
+        "title": "Apple Cares About Privacy, Unless You Work at Apple",
+        "author": "Zoe Schiffer",
+        "work": "The Verge",
+        "date": "2021-08-30",
+        "week": "August 30–September 3, 2021",
+        "summary": "Employees at Apple often link their personal and work accounts for various reasons, including so they can beta test software, and because it is difficult to switch between iCloud accounts. As a result, they have been subjected to major invasions of privacy, including their messages, photos, and other data being exposed. They have been told they are not allowed to wipe any of their devices, potentially exposing extremely personal data including tax and loan information and compromising photographs.",
+        "tags": ["tech_industry", "privacy", "workers_rights"],
+        "entryAdded": "2021-08-30T19:05:31.391Z"
+    },
+    {
+        "title": "The Covid-19 Infodemic — Applying the Epidemiologic Model to Counter Misinformation",
+        "author": "David Scales, M.D., Ph.D., Jack Gorman, M.D., and Kathleen H. Jamieson, Ph.D.",
+        "work": "The New England Journal of Medicine",
+        "date": "2021-08-19",
+        "week": "August 30–September 3, 2021",
+        "summary": "The authors describe an \"infodemic\" that is occurring in concert with the pandemic, where deceptive material about COVID-19, masks, and vaccines is spreading widely and resulting in those who believe it taking fewer preventative steps against the disease. They discuss engaging pandemic-response playbooks to try to counteract misinformation before it goes viral.",
+        "tags": ["covid19", "healthcare"],
+        "entryAdded": "2021-08-30T19:22:38.347Z"
+    },
+    {
+        "title": "Pride Feelings",
+        "author": "J. Logan Smilges",
+        "work": "the Disability Visibility Project",
+        "workItalics": false,
+        "date": "2021-07-06",
+        "week": "August 23–27, 2021",
+        "summary": "Smilges talks about how LGBTQ Pride is so often inaccessible to them and their disabled friends for various reasons—\"they're too loud, too crowded, and too filled with unwanted or accidental touch, as well as planned without basic accommodations, like ramps, sign language interpreters, and food/drink alternatives for people with specific dietary needs\". They talk about the commodification of Pride, and how it is built around serving those who are wealthy, not disabled, gender-conforming, and white. They also talk about how they are rethinking the emotions around disability and queer pride.",
+        "tags": ["mental_health", "lgbt", "accessibility"],
+        "entryAdded": "2021-08-30T18:57:57.898Z"
+    },
+    {
         "title": "Burning out and quitting",
         "author": "Maya Kaczorowski",
         "work": "her blog",
