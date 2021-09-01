@@ -5,8 +5,15 @@
         "work": "AP News",
         "date": "2021-09-01",
         "week": "August 30–September 3, 2021",
-        "summary": "The authors describe the Texas law banning most abortions and authorizing vigilante actions against people who seek abortions, doctors who perform them, and those who \"aid and abet\" abortions. The law outlaws the vast majority of abortions, as it prevents termination of pregnancies where a heartbeat can be detected, a stage that is often reached before a person even knows they're pregnant. Many reports have been describing this as a \"six-week abortion\", though this is somewhat misleading, as it is actually four weeks after conception, and two weeks after a missed menstrual cycle. Even a woman who takes a pregnancy test the first day after a period is missed would need to obtain an appointment for an abortion, despite all waiting periods, within two weeks. The law took effect at midnight on September 1, 2021, and the Supreme Court did not take action on emergency requests to block the law. This is the first law banning abortions at such an early stage of pregnancy that has been allowed to take effect, even briefly.",
-        "tags": ["healthcare", "reproductive_justice"],
+        "summary": "The authors describe the Texas law banning most abortions and authorizing vigilante actions against people who seek abortions, doctors who perform them, and those who \"aid and abet\" abortions. The law outlaws the vast majority of abortions, as it prevents termination of pregnancies where a heartbeat can be detected, a stage that is often reached before a person even knows they're pregnant. Many reports have been describing this as a \"six-week abortion\", though this is somewhat misleading, as it is actually four weeks after conception, and two weeks after a missed menstrual cycle. Even a person who takes a pregnancy test the first day after a period is missed would need to obtain an appointment for an abortion, despite all waiting periods, within two weeks. The law took effect at midnight on September 1, 2021, and the Supreme Court did not take action on emergency requests to block the law. This is the first law banning abortions at such an early stage of pregnancy that has been allowed to take effect, even briefly.",
+        "tags": [
+            "healthcare",
+            "reproductive_justice"
+        ],
+        "relatedReading": {
+            "title": "Texas Heartbeat Act",
+            "href": "https://en.wikipedia.org/wiki/Texas_Heartbeat_Act"
+        },
         "entryAdded": "2021-09-01T17:36:25.912Z"
     },
     {
@@ -28,6 +35,7 @@
         "author": "Nicole Forsgren",
         "work": "a16z Future",
         "date": "2021-06-15",
+        "week": "August 30–September 3, 2021",
         "summary": "Forsgren writes about measuring workplace productivity, and the limitations of using common metrics like lines of code or number of commits to do so. She speaks about a \"more holistic framework\" to measure productivity, which would factor in dimensions like satisfaction, well-being, communication, and collaboration, along with measurements of efficiency or output. She discusses how naive interpretations of GitHub statistics, which show increased time working, more code pushed, and faster merges since the beginning of the COVID-19 pandemic, would suggest a positive outlook on productivity, but that these ignore the enormous amount of burnout and dissatisfaction in the tech industry that point to this being very unsustainable. While I like her idea of a holistic view of productivity, I am generally skeptical of telemetry and automated \"measurements\" of productivity, which I think do a disservice to workers.",
         "tags": [
             "tech_industry"
