@@ -20,6 +20,9 @@ const processTags = (item, tagText) => {
   return item;
 };
 
+const getAllBooksSortedByStartDate = (books) =>
+  books.sort(makeSortBySimpleDateKey('started'));
+
 const getBooksOfStatusSortedByStartDate = (
   books,
   status,
@@ -102,9 +105,9 @@ const getLandingPageSummary = async () => {
   );
 
   const reference = await getLocalJson('../books/reference.json');
-  const currentlyReadingReference = getBooksToShow(reference).map((book) =>
-    processTags(book, BOOK_DEFAULTS.tagText)
-  );
+  const currentlyReadingReference = getAllBooksSortedByStartDate(
+    reference
+  ).map((book) => processTags(book, BOOK_DEFAULTS.tagText));
 
   const work = await getLocalJson('../books/work.json');
   const currentlyReadingWork = getBooksToShow(work).map((book) =>
