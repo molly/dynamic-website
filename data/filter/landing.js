@@ -4,7 +4,7 @@ const getLocalJson = require('../utils/getLocalJson');
 const { makeSortByWeek } = require('../utils/weekUtils');
 const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
 
-const DIB_DEFAULTS = require('../dibDefaults');
+const SHORTFORM_DEFAULTS = require('../shortformDefaults');
 const BOOK_DEFAULTS = require('../books/bookDefaults');
 
 const processTags = (item, tagText) => {
@@ -90,10 +90,10 @@ const getBooksToShow = (books) => {
 };
 
 const getLandingPageSummary = async () => {
-  const dib = await getLocalJson('../dib.json');
-  const mostRecentDib = {
-    ...DIB_DEFAULTS.defaultArticle,
-    ...dib.sort(makeSortByWeek())[0],
+  const shortform = await getLocalJson('../shortform.json');
+  const mostRecentShortform = {
+    ...SHORTFORM_DEFAULTS.defaultArticle,
+    ...shortform.sort(makeSortByWeek())[0],
   };
 
   const pleasure = await getLocalJson('../books/pleasure.json');
@@ -112,7 +112,7 @@ const getLandingPageSummary = async () => {
   );
 
   return {
-    mostRecentDib,
+    mostRecentShortform,
     currentlyReadingPleasure,
     currentlyReadingReference,
     currentlyReadingWork,

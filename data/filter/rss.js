@@ -7,7 +7,7 @@ const preprocess = require('./preprocess');
 const { getMomentFromWeek } = require('../utils/weekUtils');
 const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
 
-const DIB_DEFAULTS = require('../dibDefaults');
+const SHORTFORM_DEFAULTS = require('../shortformDefaults');
 
 // Trim the summary to length characters without splitting words, then append ellipses
 const getSummaryExcerpt = (summary, length) => {
@@ -48,14 +48,14 @@ const makeSummary = (article) => {
 };
 
 const getRssResults = async () => {
-  const dibPugTemplate = pug.compileFile(
-    path.join(__dirname, '../../pug/etc/rssDibArticle.pug')
+  const shortformPugTemplate = pug.compileFile(
+    path.join(__dirname, '../../pug/etc/rssArticle.pug')
   );
 
-  const dib = await getLocalJson('../dib.json');
-  const preprocessed = preprocess(dib, DIB_DEFAULTS).results;
+  const shortform = await getLocalJson('../shortform.json');
+  const preprocessed = preprocess(shortform, SHORTFORM_DEFAULTS).results;
   const withRssValues = preprocessed.map((article) => {
-    article.entryHtml = dibPugTemplate({
+    article.entryHtml = shortformPugTemplate({
       article,
     });
 

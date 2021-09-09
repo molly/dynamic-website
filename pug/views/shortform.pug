@@ -6,14 +6,21 @@ block vars
   - var showTagCount = true 
 
 block head
-  link(rel="alternate", type="application/rss+xml", title="Molly White's DI&B Reading List", href="https://mollywhite.net/reading/dib/feed.xml")
+  link(rel="alternate", type="application/rss+xml", title="Molly White's Shortform Reading List", href="https://mollywhite.net/reading/shortform/feed.xml")
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
   include ../symlinks/mixins/titleAndDescription.pug
-  +titleAndDescription('DI&B reading', 'Molly White\'s diversity, inclusion, and belonging reading list.')
+  +titleAndDescription('Shortform reading', 'Molly White\'s shortform reading list.')
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 
 block body
   .content-box
+    p
+      | This is a list of the short-form reading I've been doing lately. As a part of my professional
+      | work, I make sure to read at least two articles a week that pertain to diversity, inclusion,
+      | and belonging (DI&B), and this page used to be used for that specific purpose. However, it's
+      | gradually become a place to record any short-form reading I've done in addition to that goal
+      | as well.
+
     p
       | I care very much about making sure I am consuming a representative and wide range of 
       | topics in this area, and so welcome suggestions and recommendations! If you know of
@@ -21,19 +28,19 @@ block body
       a(href="/contact") send it my way
       | .
 
-    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') DI&amp;B reading list 
+    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Shortform reading list 
     div.rss-link
       i.fas.fa-rss(aria-hidden="true") 
       |  
-      a(href="https://mollywhite.net/reading/dib/feed.xml", target="_blank") Subscribe 
+      a(href="https://mollywhite.net/reading/shortform/feed.xml", target="_blank") Subscribe 
 
     include ../includes/filters.pug
 
     .articles
       #articlesContainer
-        include ../mixins/dibArticle.pug
+        include ../mixins/shortformArticle.pug
         each article in results
-          +dibArticle(article)
+          +shortformArticle(article)
 
     include ../includes/paginator.pug
 
