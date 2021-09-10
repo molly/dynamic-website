@@ -16,8 +16,14 @@
         "title": "Actual play",
         "date": "2021-08-31",
         "created": true,
-        "topics": ["popular_culture"],
-        "description": "genre of podcast or web show in which people play tabletop role-playing games for an audience"
+        "topics": [
+            "popular_culture"
+        ],
+        "description": "genre of podcast or web show in which people play tabletop role-playing games for an audience",
+        "dyk": {
+            "href:": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Actual_play",
+            "year": 2021
+        }
     },
     {
         "title": "Ali Alexander",
@@ -1003,7 +1009,12 @@
         "created": true,
         "biography": true,
         "WIR": true,
-        "topics": ["activism", "massachusetts", "people_of_color", "women"],
+        "topics": [
+            "activism",
+            "massachusetts",
+            "people_of_color",
+            "women"
+        ],
         "description": "b. 1943/1944 – 2008; American anti-drug activist",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Activist_Georgette_Watson_%28center%29_holding_proclamation_%289501946811%29_%28cropped%29.jpg/900px-Activist_Georgette_Watson_%28center%29_holding_proclamation_%289501946811%29_%28cropped%29.jpg",
@@ -1035,7 +1046,9 @@
         "created": true,
         "WIR": true,
         "topics": [
-            "massachusetts", "people_of_color", "women"
+            "massachusetts",
+            "people_of_color",
+            "women"
         ],
         "description": "1916 – 2017; American educator and academic administrator who was the first African-American principal in the Boston Public Schools"
     },
