@@ -1,234 +1,245 @@
 [
-  {
-     "title":"The Tensions Behind Wikipedia’s New Code of Conduct",
-     "author":"Stephen Harrison",
-     "date":"2021-03-03",
-     "work":"Slate",
-     "href":"https://slate.com/technology/2021/03/wikipedia-code-of-conduct-harassment.html",
-     "tags":[
-        "wikipedia",
-        "harassment"
-     ]
-  },
-  {
-     "title":"Twitter's 'Birdwatch' Aims to Crowdsource Fight Against Misinformation",
-     "author":"Shannon Bond",
-     "date":"2021-02-10",
-     "work":"Morning Edition",
-     "publisher":"NPR",
-     "preposition":"on",
-     "parenthetical":"Radio show",
-     "href":"https://www.npr.org/2021/02/10/965839888/twitters-birdwatch-aims-to-crowdsource-fight-against-misinformations",
-     "tags":[
-        "technology",
-        "twitter",
-        "harassment",
-        "disinformation"
-     ]
-  },
-  {
-     "title":"When the Capitol Was Attacked, Wikipedia Went to Work",
-     "author":"Grace Gedye",
-     "date":"2021-02-04",
-     "work":"Washington Monthly",
-     "href":"https://washingtonmonthly.com/2021/02/04/when-the-capitol-was-attacked-wikipedia-went-to-work/",
-     "tags":[
-        "wikipedia",
-        "breaking_news"
-     ]
-  },
-  {
-     "title":"On its 20th birthday, Wikipedia might be the safest place online",
-     "author":"Heather Kelly",
-     "date":"2021-01-15",
-     "work":"The Washington Post",
-     "href":"https://www.washingtonpost.com/technology/2021/01/15/wikipedia-20-year-anniversary/",
-     "tags":[
-        "wikipedia",
-        "disinformation",
-        "breaking_news"
-     ]
-  },
-  {
-     "title":"Wikipedia At 20: The Promises And Pitfalls Of The 'Free Encyclopedia'",
-     "author":"Carmen Baskauf and Lucy Nalpathanchil",
-     "date":"2021-01-28",
-     "work":"Where We Live",
-     "publisher":"WNPR",
-     "preposition":"on",
-     "parenthetical":"Radio show",
-     "href":"https://www.wnpr.org/post/wikipedia-20-promises-and-pitfalls-free-encyclopedia",
-     "tags":[
-        "wikipedia",
-        "disinformation",
-        "gender_gap"
-     ]
-  },
-  {
-     "title":"Twitter wants your help fighting falsehoods. It’s risky, but it might just work",
-     "author":"Alex Pasternack",
-     "date":"2021-01-28",
-     "work":"FastCompany",
-     "href":"https://www.fastcompany.com/90598070/twitter-birdwatch-misinformation-risks",
-     "tags":[
-        "technology",
-        "twitter"
-     ]
-  },
-  {
-     "title":"Celebrating 20 years of Wikipedia",
-     "date":"2021-01-18",
-     "publisher":"World Wide Web Foundation",
-     "href":"https://webfoundation.org/2021/01/celebrating-20-years-of-wikipedia/",
-     "tags":[
-        "wikipedia",
-        "breaking_news"
-     ]
-  },
-  {
-     "title":"As a mob attacked the Capitol, a crowd built Wikipedia",
-     "author":"Alex Pasternack",
-     "date":"2021-01-14",
-     "work":"FastCompany",
-     "href":"https://www.fastcompany.com/90593176/wikipedia-capitol-attack-name",
-     "tags":[
-        "wikipedia",
-        "breaking_news"
-     ]
-  },
-  {
-     "title":"The world relies on Wikipedia. Wikipedia relies on you.",
-     "author":"Pats Pena",
-     "date":"2020-11-30",
-     "preposition":"for",
-     "publisher":"The Wikimedia Foundation",
-     "href":"https://wikimediafoundation.org/news/2020/11/30/the-world-relies-on-wikipedia-wikipedia-relies-on-you/",
-     "tags":[
-        "wikipedia",
-        "disinformation"
-     ]
-  },
-  {
-     "title":"How Wikipedia is preparing for Election Day",
-     "author":"Sara Morrison",
-     "date":"2020-11-02",
-     "work":"Recode",
-     "publisher":"Vox",
-     "href":"https://www.vox.com/recode/2020/11/2/21541880/wikipedia-presidential-election-misinformation-social-media",
-     "tags":[
-        "wikipedia",
-        "breaking_news",
-        "harassment",
-        "disinformation"
-     ]
-  },
-  {
-     "title":"Why Did It Take So Long for the Democratic Senate Candidate in Iowa to Get a Wikipedia Page?",
-     "author":"Stephen Harrison",
-     "date":"2020-10-27",
-     "work":"Slate",
-     "href":"https://slate.com/technology/2020/10/theresa-greenfield-iowa-senate-race-wikipedia-page.html",
-     "tags":[
-        "wikipedia",
-        "gender_gap"
-     ]
-  },
-  {
-     "title":"Wikipedia's Plan to Resist Election Day Misinformation",
-     "author":"Noam Cohen",
-     "date":"2020-10-26",
-     "work":"Wired",
-     "href":"https://www.wired.com/story/wikipedias-plan-to-resist-election-day-misinformation/",
-     "tags":[
-        "wikipedia",
-        "breaking_news",
-        "disinformation"
-     ]
-  },
-  {
-     "title":"Wikipedia is a world built by and for men. Rosie Stephenson-Goodknight is changing that.",
-     "author":"Rachael Allen",
-     "date":"2020-04-11",
-     "work":"The Lily",
-     "publisher":"The Washington Post",
-     "href":"https://www.thelily.com/wikipedia-is-a-world-built-by-and-for-men-rosie-stephenson-goodnight-is-changing-that/",
-     "tags":[
-        "wikipedia",
-        "gender_gap"
-     ]
-  },
-  {
-     "title":"How Wikipedia’s volunteers became the web’s best weapon against misinformation",
-     "author":"Alex Pasternack",
-     "date":"2020-03-07",
-     "work":"FastCompany",
-     "href":"https://www.fastcompany.com/90471667/how-wikipedia-volunteers-became-the-webs-best-weapon-against-misinformation",
-     "tags":[
-        "wikipedia",
-        "disinformation",
-        "technology",
-        "twitter"
-     ]
-  },
-  {
-     "title":"The Culture War Has Finally Come For Wikipedia",
-     "author":"Joseph Bernstein",
-     "date":"2019-06-27",
-     "work":"BuzzFeed News",
-     "href":"https://www.buzzfeednews.com/article/josephbernstein/wikipedia-ban-editor-culture-war",
-     "tags":[
-        "wikipedia",
-        "arbitration"
-     ]
-  },
-  {
-     "title":"Why Wikipedia's 'Nuclear Option' Is the Right Call",
-     "author":"Stephen Harrison",
-     "date":"2018-12-17",
-     "work":"Slate",
-     "href":"https://slate.com/technology/2018/12/wikipedia-nuclear-option-administrators-unself-banning.html",
-     "tags":[
-        "wikipedia",
-        "technology"
-     ]
-  },
-  {
-     "title":"Identifying Women's Experiences With and Strategies for Mitigating Negative Effects of Online Harassment",
-     "author":"Jessica Vitak, Kalyani Chadha, Linda Steiner, and Zahra Ashktorab",
-     "date":"2017-02",
-     "work":"CSCW '17: Proceedings of the 2017 ACM Conference on Computer Supported Cooperative Work and Social Computing",
-     "publisher":"Association for Computing Machinery",
-     "href":"https://dl.acm.org/doi/10.1145/2998181.2998337",
-     "tags":[
-        "twitter",
-        "harassment"
-     ]
-  },
-  {
-     "title":"Privacy and Harassment on the Internet",
-     "author":"Katherine Maher",
-     "date":"2016-10-29",
-     "work":"MozFest 2016",
-     "publisher":"Mozilla",
-     "workItalics":false,
-     "preposition":"at",
-     "parenthetical":"Talk",
-     "href":"https://en.wikisource.org/wiki/Privacy_and_Harassment_on_the_Internet",
-     "tags":[
-        "wikipedia",
-        "harassment"
-     ]
-  },
-  {
-     "title":"Wikipedia's Hostility to Women",
-     "author":"Emma Paling",
-     "date":"2015-10-21",
-     "work":"The Atlantic",
-     "href":"https://www.theatlantic.com/technology/archive/2015/10/how-wikipedia-is-hostile-to-women/411619/",
-     "tags":[
-        "wikipedia",
-        "arbitration",
-        "harassment"
-     ]
-  }
+    {
+        "title": "How 9/11 turned a new site called Wikipedia into history’s crowdsourced front page",
+        "author": "Alex Pasternack",
+        "date": "2021-09-11",
+        "work": "FastCompany",
+        "href": "https://www.fastcompany.com/90674998/how-9-11-turned-a-new-site-called-wikipedia-into-historys-crowdsourced-front-page",
+        "tags": [
+            "wikipedia",
+            "breaking_news"
+        ]
+    },
+    {
+        "title": "The Tensions Behind Wikipedia’s New Code of Conduct",
+        "author": "Stephen Harrison",
+        "date": "2021-03-03",
+        "work": "Slate",
+        "href": "https://slate.com/technology/2021/03/wikipedia-code-of-conduct-harassment.html",
+        "tags": [
+            "wikipedia",
+            "harassment"
+        ]
+    },
+    {
+        "title": "Twitter's 'Birdwatch' Aims to Crowdsource Fight Against Misinformation",
+        "author": "Shannon Bond",
+        "date": "2021-02-10",
+        "work": "Morning Edition",
+        "publisher": "NPR",
+        "preposition": "on",
+        "parenthetical": "Radio show",
+        "href": "https://www.npr.org/2021/02/10/965839888/twitters-birdwatch-aims-to-crowdsource-fight-against-misinformations",
+        "tags": [
+            "technology",
+            "twitter",
+            "harassment",
+            "disinformation"
+        ]
+    },
+    {
+        "title": "When the Capitol Was Attacked, Wikipedia Went to Work",
+        "author": "Grace Gedye",
+        "date": "2021-02-04",
+        "work": "Washington Monthly",
+        "href": "https://washingtonmonthly.com/2021/02/04/when-the-capitol-was-attacked-wikipedia-went-to-work/",
+        "tags": [
+            "wikipedia",
+            "breaking_news"
+        ]
+    },
+    {
+        "title": "On its 20th birthday, Wikipedia might be the safest place online",
+        "author": "Heather Kelly",
+        "date": "2021-01-15",
+        "work": "The Washington Post",
+        "href": "https://www.washingtonpost.com/technology/2021/01/15/wikipedia-20-year-anniversary/",
+        "tags": [
+            "wikipedia",
+            "disinformation",
+            "breaking_news"
+        ]
+    },
+    {
+        "title": "Wikipedia At 20: The Promises And Pitfalls Of The 'Free Encyclopedia'",
+        "author": "Carmen Baskauf and Lucy Nalpathanchil",
+        "date": "2021-01-28",
+        "work": "Where We Live",
+        "publisher": "WNPR",
+        "preposition": "on",
+        "parenthetical": "Radio show",
+        "href": "https://www.wnpr.org/post/wikipedia-20-promises-and-pitfalls-free-encyclopedia",
+        "tags": [
+            "wikipedia",
+            "disinformation",
+            "gender_gap"
+        ]
+    },
+    {
+        "title": "Twitter wants your help fighting falsehoods. It’s risky, but it might just work",
+        "author": "Alex Pasternack",
+        "date": "2021-01-28",
+        "work": "FastCompany",
+        "href": "https://www.fastcompany.com/90598070/twitter-birdwatch-misinformation-risks",
+        "tags": [
+            "technology",
+            "twitter"
+        ]
+    },
+    {
+        "title": "Celebrating 20 years of Wikipedia",
+        "date": "2021-01-18",
+        "publisher": "World Wide Web Foundation",
+        "href": "https://webfoundation.org/2021/01/celebrating-20-years-of-wikipedia/",
+        "tags": [
+            "wikipedia",
+            "breaking_news"
+        ]
+    },
+    {
+        "title": "As a mob attacked the Capitol, a crowd built Wikipedia",
+        "author": "Alex Pasternack",
+        "date": "2021-01-14",
+        "work": "FastCompany",
+        "href": "https://www.fastcompany.com/90593176/wikipedia-capitol-attack-name",
+        "tags": [
+            "wikipedia",
+            "breaking_news"
+        ]
+    },
+    {
+        "title": "The world relies on Wikipedia. Wikipedia relies on you.",
+        "author": "Pats Pena",
+        "date": "2020-11-30",
+        "preposition": "for",
+        "publisher": "The Wikimedia Foundation",
+        "href": "https://wikimediafoundation.org/news/2020/11/30/the-world-relies-on-wikipedia-wikipedia-relies-on-you/",
+        "tags": [
+            "wikipedia",
+            "disinformation"
+        ]
+    },
+    {
+        "title": "How Wikipedia is preparing for Election Day",
+        "author": "Sara Morrison",
+        "date": "2020-11-02",
+        "work": "Recode",
+        "publisher": "Vox",
+        "href": "https://www.vox.com/recode/2020/11/2/21541880/wikipedia-presidential-election-misinformation-social-media",
+        "tags": [
+            "wikipedia",
+            "breaking_news",
+            "harassment",
+            "disinformation"
+        ]
+    },
+    {
+        "title": "Why Did It Take So Long for the Democratic Senate Candidate in Iowa to Get a Wikipedia Page?",
+        "author": "Stephen Harrison",
+        "date": "2020-10-27",
+        "work": "Slate",
+        "href": "https://slate.com/technology/2020/10/theresa-greenfield-iowa-senate-race-wikipedia-page.html",
+        "tags": [
+            "wikipedia",
+            "gender_gap"
+        ]
+    },
+    {
+        "title": "Wikipedia's Plan to Resist Election Day Misinformation",
+        "author": "Noam Cohen",
+        "date": "2020-10-26",
+        "work": "Wired",
+        "href": "https://www.wired.com/story/wikipedias-plan-to-resist-election-day-misinformation/",
+        "tags": [
+            "wikipedia",
+            "breaking_news",
+            "disinformation"
+        ]
+    },
+    {
+        "title": "Wikipedia is a world built by and for men. Rosie Stephenson-Goodknight is changing that.",
+        "author": "Rachael Allen",
+        "date": "2020-04-11",
+        "work": "The Lily",
+        "publisher": "The Washington Post",
+        "href": "https://www.thelily.com/wikipedia-is-a-world-built-by-and-for-men-rosie-stephenson-goodnight-is-changing-that/",
+        "tags": [
+            "wikipedia",
+            "gender_gap"
+        ]
+    },
+    {
+        "title": "How Wikipedia’s volunteers became the web’s best weapon against misinformation",
+        "author": "Alex Pasternack",
+        "date": "2020-03-07",
+        "work": "FastCompany",
+        "href": "https://www.fastcompany.com/90471667/how-wikipedia-volunteers-became-the-webs-best-weapon-against-misinformation",
+        "tags": [
+            "wikipedia",
+            "disinformation",
+            "technology",
+            "twitter"
+        ]
+    },
+    {
+        "title": "The Culture War Has Finally Come For Wikipedia",
+        "author": "Joseph Bernstein",
+        "date": "2019-06-27",
+        "work": "BuzzFeed News",
+        "href": "https://www.buzzfeednews.com/article/josephbernstein/wikipedia-ban-editor-culture-war",
+        "tags": [
+            "wikipedia",
+            "arbitration"
+        ]
+    },
+    {
+        "title": "Why Wikipedia's 'Nuclear Option' Is the Right Call",
+        "author": "Stephen Harrison",
+        "date": "2018-12-17",
+        "work": "Slate",
+        "href": "https://slate.com/technology/2018/12/wikipedia-nuclear-option-administrators-unself-banning.html",
+        "tags": [
+            "wikipedia",
+            "technology"
+        ]
+    },
+    {
+        "title": "Identifying Women's Experiences With and Strategies for Mitigating Negative Effects of Online Harassment",
+        "author": "Jessica Vitak, Kalyani Chadha, Linda Steiner, and Zahra Ashktorab",
+        "date": "2017-02",
+        "work": "CSCW '17: Proceedings of the 2017 ACM Conference on Computer Supported Cooperative Work and Social Computing",
+        "publisher": "Association for Computing Machinery",
+        "href": "https://dl.acm.org/doi/10.1145/2998181.2998337",
+        "tags": [
+            "twitter",
+            "harassment"
+        ]
+    },
+    {
+        "title": "Privacy and Harassment on the Internet",
+        "author": "Katherine Maher",
+        "date": "2016-10-29",
+        "work": "MozFest 2016",
+        "publisher": "Mozilla",
+        "workItalics": false,
+        "preposition": "at",
+        "parenthetical": "Talk",
+        "href": "https://en.wikisource.org/wiki/Privacy_and_Harassment_on_the_Internet",
+        "tags": [
+            "wikipedia",
+            "harassment"
+        ]
+    },
+    {
+        "title": "Wikipedia's Hostility to Women",
+        "author": "Emma Paling",
+        "date": "2015-10-21",
+        "work": "The Atlantic",
+        "href": "https://www.theatlantic.com/technology/archive/2015/10/how-wikipedia-is-hostile-to-women/411619/",
+        "tags": [
+            "wikipedia",
+            "arbitration",
+            "harassment"
+        ]
+    }
 ]
