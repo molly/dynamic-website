@@ -18,28 +18,27 @@ block body
 
     .reading-section
       h3
-        a(href="/reading/dib") DI&amp;B reading list 
+        a(href="/reading/shortform") Shortform reading list 
 
       .reading-section-body  
-        | This is updated often, as I try to read at least two articles a week on these topics. 
         | I most recently  
-        =mostRecentDib.parenthetical === 'Video' ? 'watched' : 'read'
+        =mostRecentShortform.parenthetical === 'Video' ? 'watched' : 'read'
         |  "
-        a(href=mostRecentDib.href) #{mostRecentDib.title} 
+        a(href=mostRecentShortform.href) #{mostRecentShortform.title} 
         | "
-        if mostRecentDib.author
-          |  by #{mostRecentDib.author} #{mostRecentDib.preposition}  
+        if mostRecentShortform.author
+          |  by #{mostRecentShortform.author} #{mostRecentShortform.preposition}  
 
-          if mostRecentDib.work
-            if !mostRecentDib.workItalics
-              | #{mostRecentDib.work}.
+          if mostRecentShortform.work
+            if !mostRecentShortform.workItalics
+              | #{mostRecentShortform.work}.
             else
-              i #{mostRecentDib.work}.
+              i #{mostRecentShortform.work}.
 
-          if mostRecentDib.publisher
-            |  #{mostRecentDib.publisher}.
+          if mostRecentShortform.publisher
+            |  #{mostRecentShortform.publisher}.
 
-          if !mostRecentDib.work && !mostRecentDib.publisher
+          if !mostRecentShortform.work && !mostRecentShortform.publisher
             |.
         else 
           |.

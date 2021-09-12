@@ -18,7 +18,7 @@ const {
   READING_STATUSES_LISTS,
 } = require('./data/constants/readingStatuses');
 const PRESS_DEFAULTS = require('./data/pressDefaults');
-const DIB_DEFAULTS = require('./data/dibDefaults');
+const SHORTFORM_DEFAULTS = require('./data/shortformDefaults');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
 
 const PORT = 5000;
@@ -46,14 +46,14 @@ app.get('/reading', async (req, res) => {
   res.render('reading.pug', { READING_STATUSES_MAP, ...results });
 });
 
-app.get('/reading/dib', async (req, res) => {
+app.get('/reading/shortform', async (req, res) => {
   const results = await getPaginatedAndFiltered(
-    '../dib.json',
-    DIB_DEFAULTS,
+    '../shortform.json',
+    SHORTFORM_DEFAULTS,
     req
   );
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
-  res.render('dib.pug', {
+  res.render('shortform.pug', {
     query: { ...req.query, tags: selectedTags },
     ...results,
   });
@@ -119,10 +119,20 @@ app.get('/wikipedia-work', async (req, res) => {
   });
 });
 
+app.get('/reading/shortform/feed.xml', async (req, res) => {
+  const results = await getRssResults();
+  res.set('Content-Type', 'text/xml');
+  res.render('feed.pug', {
+    prefix: 'shortform',
+    results,
+  });
+});
+
 app.get('/reading/dib/feed.xml', async (req, res) => {
   const results = await getRssResults();
   res.set('Content-Type', 'text/xml');
-  res.render('dib-feed.pug', {
+  res.render('feed.pug', {
+    prefix: 'dib',
     results,
   });
 });

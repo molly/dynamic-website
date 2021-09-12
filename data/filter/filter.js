@@ -77,7 +77,7 @@ const filter = ({ results }, req, { defaultKey }) => {
   }
 
   // ORDER
-  if (defaultKey === 'DIB') {
+  if (defaultKey === 'SHORTFORM') {
     filteredResults.sort(makeSortByWeek(req.query.order));
   } else if (defaultKey === 'BOOK') {
     filteredResults.sort(makeSortBySimpleDateKey('started', req.query.order));
