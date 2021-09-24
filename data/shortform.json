@@ -1,7 +1,21 @@
 [
     {
+        "title": "Without Meaningful Allyship, Hearing People are Doomed to a Never-Ending Cycle of Poor Deaf Awareness",
+        "href": "https://rootedinrights.org/without-meaningful-allyship-hearing-people-are-doomed-to-a-never-ending-cycle-of-poor-deaf-awareness/",
+        "author": "Liam O'Dell",
+        "work": "Rooted in Rights",
+        "date": "2021-09-23",
+        "week": "September 20–24, 2021",
+        "summary": "O'Dell writes about how it seems that hearing people go through the exact same basic learnings about Deafness over and over again, and that hearing people are not doing enough to work towards learning and allyship with the Deaf community.",
+        "tags": [
+            "accessibility"
+        ],
+        "entryAdded": "2021-09-24T17:27:35.300Z"
+    },
+    {
         "title": "Texas 6-week abortion ban takes effect, with high court mum",
-        "author": "Mark Sherman, Paul J. Weber, and Jessica Gresko",
+        "href": "https://apnews.com/article/texas-courts-78abf09bc505fd1b0a66502ff8202b79",
+        "author": "Jessica Gresko, Paul J. Weber, and Mark Sherman",
         "work": "AP News",
         "date": "2021-09-01",
         "week": "August 30–September 3, 2021",
@@ -19,6 +33,7 @@
     {
         "title": "As Black users complain of censorship, LinkedIn faces a perception problem",
         "author": "Steven Melendez",
+        "href": "https://www.fastcompany.com/90669854/linkedin-black-censorship-perception-problem",
         "work": "FastCompany",
         "date": "2021-09-01",
         "week": "August 30–September 3, 2021",
@@ -33,6 +48,7 @@
     {
         "title": "On Workplace Productivity",
         "author": "Nicole Forsgren",
+        "href": "https://future.a16z.com/on-workplace-productivity/",
         "work": "a16z Future",
         "date": "2021-06-15",
         "week": "August 30–September 3, 2021",
@@ -45,6 +61,7 @@
     {
         "title": "Pandemic concerns may prime people to discriminate against Asians and Latinos",
         "author": "Amina Khan",
+        "href": "https://www.latimes.com/science/story/2021-09-01/pandemic-concerns-may-prime-people-to-discriminate-against-asians-and-latinos",
         "work": "Los Angeles Times",
         "date": "2021-09-01",
         "week": "August 30–September 3, 2021",
@@ -58,6 +75,7 @@
     {
         "title": "Apple Cares About Privacy, Unless You Work at Apple",
         "author": "Zoe Schiffer",
+        "href": "https://www.theverge.com/22648265/apple-employee-privacy-icloud-id",
         "work": "The Verge",
         "date": "2021-08-30",
         "week": "August 30–September 3, 2021",
@@ -72,6 +90,7 @@
     {
         "title": "The Covid-19 Infodemic — Applying the Epidemiologic Model to Counter Misinformation",
         "author": "David Scales, M.D., Ph.D., Jack Gorman, M.D., and Kathleen H. Jamieson, Ph.D.",
+        "href": "https://www.nejm.org/doi/full/10.1056/NEJMp2103798",
         "work": "The New England Journal of Medicine",
         "date": "2021-08-19",
         "week": "August 30–September 3, 2021",
@@ -91,6 +110,7 @@
     {
         "title": "Pride Feelings",
         "author": "J. Logan Smilges",
+        "href": "https://disabilityvisibilityproject.com/2021/07/06/pride-feelings/",
         "work": "the Disability Visibility Project",
         "workItalics": false,
         "date": "2021-07-06",
@@ -106,6 +126,7 @@
     {
         "title": "Burning out and quitting",
         "author": "Maya Kaczorowski",
+        "href": "https://mayakaczorowski.com/blogs/burnout",
         "work": "her blog",
         "workItalics": false,
         "date": "2021-08-22",
@@ -119,6 +140,7 @@
     {
         "title": "Disability is More Than Just Inspiration or Trauma. When Will Media Cover it Authentically?",
         "author": "Shona Louise",
+        "href": "https://rootedinrights.org/disability-is-more-than-just-inspiration-or-trauma-when-will-media-cover-it-authentically/",
         "work": "Rooted in Rights",
         "date": "2021-08-18",
         "week": "August 16–20, 2021",
@@ -131,6 +153,7 @@
     {
         "title": "The Hotel Giraffe",
         "author": "Michael Lopp",
+        "href": "https://randsinrepose.com/archives/the-hotel-giraffe/",
         "work": "Rands in Repose",
         "date": "2021-06-25",
         "week": "August 16–20, 2021",
@@ -145,6 +168,7 @@
         "author": "Aubrey Blanche",
         "work": "her blog",
         "workItalics": false,
+        "href": "https://adblanche.medium.com/best-for-diversity-lists-actively-hinder-progress-stop-submitting-to-them-70b5d5231ae6",
         "date": "2021-08-11",
         "week": "August 9–13, 2021",
         "tags": [
