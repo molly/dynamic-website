@@ -1,5 +1,15 @@
 [
     {
+        "title": "2021 Epik data breach",
+        "date": "2021-09-22",
+        "created": true,
+        "topics": [
+            "technology",
+            "right_wing"
+        ],
+        "description": "2021 data breach targeting the domain registrar and web services company Epik"
+    },
+    {
         "title": "2021 United States Capitol attack",
         "date": "2021-01-06",
         "topics": [
@@ -370,6 +380,23 @@
         }
     },
     {
+        "title": "Aubrey Cottle",
+        "sortKey": "Cottle, Aubrey",
+        "date": "2021-09-26",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "activism",
+            "technology"
+        ],
+        "description": "b. 1986 or 1987, hacker and founding member of Anonymous",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Aubrey_Cottle_%28Kirtaner%29.png/327px-Aubrey_Cottle_%28Kirtaner%29.png",
+            "href": "https://commons.wikimedia.org/wiki/File:Aubrey_Cottle_(Kirtaner).png",
+            "caption": "Aubrey Cottle"
+        }
+    },
+    {
         "title": "COVID-19 pandemic in Massachusetts",
         "date": "2020-03-25",
         "topics": [
@@ -575,6 +602,22 @@
         ],
         "description": "online subculture of people who define themselves as unable to get a romantic or sexual partner despite desiring one",
         "ga": 2020
+    },
+    {
+        "title": "John Jackson (hacker)",
+        "sortKey": "Jackson, John",
+        "date": "2021-09-26",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "technology"
+        ],
+        "description": "b. 1994 or 1995, security researcher and hacker",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/8/86/John_Jackson_the_founder_of_Sakura_Samurai.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:John_Jackson_the_founder_of_Sakura_Samurai.jpg",
+            "caption": "John Jackson"
+        }
     },
     {
         "title": "Mary Jackson (engineer)",
