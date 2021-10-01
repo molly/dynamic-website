@@ -1,5 +1,33 @@
 [
     {
+        "title": "The return of the hacktivists",
+        "href": "https://techmonitor.ai/technology/cybersecurity/the-return-of-hacktivists",
+        "author": "Greg Noone",
+        "work": "Tech Monitor",
+        "date": "2021-09-30",
+        "week": "September 27–October 1, 2021",
+        "summary": "Hacktivism has experienced a resurgence recently, and particularly in the last few months. Noone researchers what's caused the resurgence, how it differs from the \"glory days\" of Anonymous around 2010, and what ideological and political movements are benefiting from it.",
+        "tags": [
+            "antifascism",
+            "extremism"
+        ],
+        "entryAdded": "2021-10-01T02:27:30.983Z",
+        "relatedReading": [
+            {
+                "title": "Anonymous (hacker group)",
+                "href": "https://en.wikipedia.org/wiki/Anonymous_(hacker_group)"
+            },
+            {
+                "title": "2021 Epik data breach",
+                "href": "https://en.wikipedia.org/wiki/2021_Epik_data_breach"
+            }
+        ],
+        "image": {
+            "src": "https://techmonitor.ai/wp-content/uploads/sites/20/2021/09/GettyImages-1185761996-658x370.jpg",
+            "alt": "A person, photographed from the side, wears a Guy Fawkes mask"
+        }
+    },
+    {
         "title": "Without Meaningful Allyship, Hearing People are Doomed to a Never-Ending Cycle of Poor Deaf Awareness",
         "href": "https://rootedinrights.org/without-meaningful-allyship-hearing-people-are-doomed-to-a-never-ending-cycle-of-poor-deaf-awareness/",
         "author": "Liam O'Dell",
