@@ -3,9 +3,10 @@
         "title": "Women in the Workplace 2021",
         "href": "https://www.mckinsey.com/featured-insights/diversity-and-inclusion/women-in-the-workplace",
         "publisher": "McKinsey & Company",
+        "preposition": "by",
         "date": "2021-09-27",
         "week": "September 27–October 1, 2021",
-        "summary": "McKinsey published their annual study of women in the workplace, which analyzes DI&B efforts in corporate America and the experiences of women in the workplace. This year's study found that women are experiencing significantly higher levels of burnout, while also stepping into leadership positions and taking on additional work to support their colleagues and teams. McKinsey found the work done on DI&B is done by women, and they are largely going unrecognized for it. \"The path forward is clear. Companies need to take bold steps to address burnout. They need to recognize and reward the women leaders who are driving progress. And they need to do the deep cultural work required to create a workplace where all women feel valued.\"",
+        "summary": "McKinsey published their annual study of women in the workplace, which analyzes DI&B efforts in corporate America and the experiences of women in the workplace. This year's study found that women are experiencing significantly higher levels of burnout, while also stepping into leadership positions and taking on additional work to support their colleagues and teams. McKinsey found much of DI&B work is done by women, and they are largely going unrecognized for it. \"The path forward is clear. Companies need to take bold steps to address burnout. They need to recognize and reward the women leaders who are driving progress. And they need to do the deep cultural work required to create a workplace where all women feel valued.\"",
         "tags": ["gender", "race"],
         "entryAdded": "2021-10-01T21:04:46.733Z"
     },
@@ -16,7 +17,7 @@
         "work": "Tech Monitor",
         "date": "2021-09-30",
         "week": "September 27–October 1, 2021",
-        "summary": "Hacktivism has experienced a resurgence recently, and particularly in the last few months. Noone researchers what's caused the resurgence, how it differs from the \"glory days\" of Anonymous around 2010, and what ideological and political movements are benefiting from it.",
+        "summary": "Hacktivism has experienced a resurgence recently, and particularly in the last few months. Noone researches what's caused the resurgence, how it differs from the \"glory days\" of Anonymous around 2010, and what ideological and political movements are benefiting from it.",
         "tags": [
             "antifascism",
             "extremism"
