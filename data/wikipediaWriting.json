@@ -532,6 +532,15 @@
         "description": "alt-tech social media platform targeted to American conservatives"
     },
     {
+        "title": "Aubrey Gordon",
+        "date": "2021-10-01",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": ["activism", "women"],
+        "description": "b. 1982 or 1983; author, podcaster, and fat acceptance activist"
+    },
+    {
         "title": "Groypers",
         "date": "2020-05-20",
         "created": true,
