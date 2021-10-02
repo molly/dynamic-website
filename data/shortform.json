@@ -95,8 +95,21 @@
         "date": "2021-07-27",
         "work": "Human Parts",
         "summary": "Gordon's essay about how she wishes people would just say \"fat\" rather than using euphemisms, or overly medicalized terms like \"obese\", or adding caveats like \"fat but healthy\". She writes about how even when she calls herself fat, people insist she change how she describes her own body, or argue \"no, you're not fat!\"",
-        "tags": ["size"],
+        "tags": [
+            "size"
+        ],
         "entryAdded": "2021-10-01T23:51:10.874Z"
+    },
+    {
+        "title": "It’s Time to Abolish Nursing Homes",
+        "href": "https://www.thenation.com/article/society/abolish-nursing-homes/",
+        "author": "Sara Luterman",
+        "summary": "Luterman argues that we as a society ought to abolish nursing homes. The \"efficiency [of nursing homes] comes at the expense of human dignity\", she says. She describes their history—how they grew out of the almshouses around the beginning of the 20th century, then private homes filled a void left by the welfare system, and gradually nursing homes became more hospital-like (though often still with poor standards of care). The author says that, although many elderly people want to remain in their homes, many are not aware that in-home care is an option made available to them through Medicaid, and those who are face long waiting lists. The author argues that there needs to be more focus on expanding the amount of in-home care available, more funding towards these services, and work around changing cultural attitudes on things like whether an elderly person with dementia can safely live outside of a nursing facility.",
+        "tags": [
+            "healthcare",
+            "age"
+        ],
+        "entryAdded": "2021-10-02T00:07:37.439Z"
     },
     {
         "title": "Texas 6-week abortion ban takes effect, with high court mum",
