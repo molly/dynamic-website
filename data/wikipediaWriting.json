@@ -407,6 +407,17 @@
         "description": "pandemic of coronavirus disease 2019 (COVID-19) in the U.S. state of Massachusetts"
     },
     {
+        "title": "Corsi-Rosenthal Box",
+        "date": "2021-10-09",
+        "topics": ["covid19"],
+        "description": "design for a do-it-yourself air purifier that can be built inexpensively",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Corsi-Rosenthal_Box.jpg/900px-Corsi-Rosenthal_Box.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Corsi-Rosenthal_Box.jpg",
+            "caption": "Corsi-Rosenthal Box"
+        }
+    },
+    {
         "title": "Diet Prada",
         "date": "2020-08-09",
         "created": true,
@@ -537,7 +548,11 @@
         "created": true,
         "biography": true,
         "WIR": true,
-        "topics": ["activism", "lgbtq", "women"],
+        "topics": [
+            "activism",
+            "lgbtq",
+            "women"
+        ],
         "description": "b. 1983; author, podcaster, and fat acceptance activist"
     },
     {
@@ -768,6 +783,13 @@
             "href": "https://commons.wikimedia.org/wiki/File:MGTOW_logo.svg",
             "caption": "Men Going Their Own Way logo"
         }
+    },
+    {
+        "title": "National Centre for Immunisation Research and Surveillance",
+        "date": "2021-10-09",
+        "created": true,
+        "topics": ["covid19", "medicine"],
+        "description": "Australian research organisation focusing on vaccine-preventable diseases and immunisation",
     },
     {
         "title": "Rob Monster",
@@ -1079,6 +1101,7 @@
         "sortKey": "Wohl, Jacob",
         "date": "2019-02-11",
         "biography": true,
+        "ga": true,
         "topics": [
             "right_wing",
             "activism"
