@@ -409,7 +409,9 @@
     {
         "title": "Corsi-Rosenthal Box",
         "date": "2021-10-09",
-        "topics": ["covid19"],
+        "topics": [
+            "covid19"
+        ],
         "description": "design for a do-it-yourself air purifier that can be built inexpensively",
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Corsi-Rosenthal_Box.jpg/900px-Corsi-Rosenthal_Box.jpg",
@@ -788,8 +790,11 @@
         "title": "National Centre for Immunisation Research and Surveillance",
         "date": "2021-10-09",
         "created": true,
-        "topics": ["covid19", "medicine"],
-        "description": "Australian research organisation focusing on vaccine-preventable diseases and immunisation",
+        "topics": [
+            "covid19",
+            "medicine"
+        ],
+        "description": "Australian research organisation focusing on vaccine-preventable diseases and immunisation"
     },
     {
         "title": "Rob Monster",
