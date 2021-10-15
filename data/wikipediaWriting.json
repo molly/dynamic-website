@@ -928,6 +928,11 @@
         "biography": true,
         "WIR": true,
         "topics": ["activism", "technology", "women", "women_in_stem"],
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Cher_Scarlett_%28cropped%29.jpg/900px-Cher_Scarlett_%28cropped%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Cher_Scarlett_(cropped).jpg",
+            "caption": "Cher Scarlett"
+        },
         "description": "b. 1984 or 1985; American software engineer and workers' rights activist"
     },
     {
