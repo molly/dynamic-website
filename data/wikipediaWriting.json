@@ -921,6 +921,16 @@
         "description": "central religious text of LaVeyan Satanism"
     },
     {
+        "title": "Cher Scarlett",
+        "sortKey": "Scarlett, Cher",
+        "date": "2021-10-14",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": ["activism", "technology", "women", "women_in_stem"],
+        "description": "b. 1984 or 1985; American software engineer and workers' rights activist"
+    },
+    {
         "title": "Hazel Smith",
         "sortKey": "Smith, Hazel",
         "date": "2018-12-05",
