@@ -1,6 +1,29 @@
 [
     {
-        "title": "Don’t Let Hybrid Work Set Back Your DEI Efforts",
+        "title": "The last days inside Trailer 83",
+        "author": "Hannah Dreier",
+        "href": "https://www.washingtonpost.com/nation/2021/10/17/disaster-survivors-fema-housing-trailer/",
+        "work": "The Washington Post",
+        "date": "2021-10-17",
+        "week": "October 18–22, 2021",
+        "summary": "Dreier profiles a family whose home was destroyed in a California wildfire, who spent a year living in a trailer park established by FEMA, then were dropped into homelessness as the park closed. The piece is a part of her examination into why so many people become permanently homeless after losing their homes to wildfire, and highlights ways FEMA is failing people as these disasters only increase in severity and frequency.",
+        "tags": [
+            "class"
+        ],
+        "entryAdded": "2021-10-17T22:29:36.601Z",
+        "relatedReading": [
+            {
+                "title": "Camp Fire (2018)",
+                "href": "https://en.wikipedia.org/wiki/Camp_Fire_(2018)"
+            },
+            {
+                "title": "Federal Emergency Management Agency",
+                "href": "https://en.wikipedia.org/wiki/Federal_Emergency_Management_Agency#California_wildfires"
+            }
+        ]
+    },
+    {
+        "title": "Don't Let Hybrid Work Set Back Your DEI Efforts",
         "author": "Alexandra Samuel and Tara Robertson",
         "href": "https://hbr.org/2021/10/dont-let-hybrid-work-set-back-your-dei-efforts",
         "work": "Harvard Business Review",
@@ -39,10 +62,16 @@
             "privacy",
             "tech_industry"
         ],
-        "entryAdded": "2021-10-17T02:40:18.880Z"
+        "entryAdded": "2021-10-17T02:40:18.880Z",
+        "relatedReading": [
+            {
+                "title": "Geo-fence",
+                "href": "https://en.wikipedia.org/wiki/Geo-fence"
+            }
+        ]
     },
     {
-        "title": "I Just Don’t Want to Be Busy Anymore",
+        "title": "I Just Don't Want to Be Busy Anymore",
         "author": "Elena Salaks",
         "href": "https://forge.medium.com/i-just-dont-want-to-be-busy-anymore-ac4dd37c8119",
         "work": "Forge",
