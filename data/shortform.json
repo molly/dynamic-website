@@ -1,5 +1,61 @@
 [
     {
+        "title": "Don’t Let Hybrid Work Set Back Your DEI Efforts",
+        "author": "Alexandra Samuel and Tara Robertson",
+        "href": "https://hbr.org/2021/10/dont-let-hybrid-work-set-back-your-dei-efforts",
+        "work": "Harvard Business Review",
+        "date": "2021-10-13",
+        "week": "October 11–15, 2021",
+        "summary": "Samuel and Robertson outline some things that employers should pay attention to if they are transitioning from being fully remote during the COVID-19 pandemic towards being a hybrid workplace. These include observing who spends more time in the office and at home, ensuring there is equity in who is allowed flexibity in their scheduling of when to be in the office, determining how time in the office affects the promotion process, thinking about how workplace monitoring tools are used, and studying how time at the office (or not) affects employee engagement and retention. I thought it was interesting that the article expressed concern about remote management and monitoring software, while also encouraging employers to use data from things like badge swipes to determine when employees were in the office. It seems to me this data could be used negatively, and possibly pressure employees to come in more than they might otherwise.",
+        "tags": [
+            "tech_industry",
+            "remote_work"
+        ],
+        "entryAdded": "2021-10-17T01:32:58.505Z"
+    },
+    {
+        "title": "This Is How Everyday Sexism Could Stop You From Getting That Promotion",
+        "author": "Jessica Nordell",
+        "href": "https://www.nytimes.com/interactive/2021/10/14/opinion/gender-bias.html",
+        "work": "The New York Times",
+        "date": "2021-10-14",
+        "week": "October 11–15, 2021",
+        "summary": "Researchers created a computer model to illustrate how relatively small instances of gender-based discrimination may build up over time in ways that have marked impacts on women's careers. The author writes about how laws are generally designed to address fairly extreme discriminatory incidents, and don't effectively help with the ongoing, lower-level discrimination that can still have profound effects on a woman's career.",
+        "tags": [
+            "gender"
+        ],
+        "entryAdded": "2021-10-17T02:34:43.474Z"
+    },
+    {
+        "title": "The new warrant: how US police mine Google for your location and search history",
+        "href": "https://www.theguardian.com/us-news/2021/sep/16/geofence-warrants-reverse-search-warrants-police-google",
+        "author": "Johana Bhuiyan",
+        "work": "The Guardian",
+        "date": "2021-09-16",
+        "week": "October 4–8, 2021",
+        "summary": "Police are increasingly issuing warrants for geofence location data—location data used by companies like Google to return results relevant to their physical location. Bhuiyan describes an incident in which a man's user data was being requested by law enforcement because he had gone on a bike ride with his phone in his pocket, in an area where a burglary had occurred. These are reverse search warrants, where police specify a location and ask for individuals meeting those criteria (rather than a traditional warrant, which applies to an individual). Law enforcement are also increasingly using reverse warrants based on keyword searches, where they ask for lists of individuals who performed specific searches. Some privacy experts and lawyers have argued these broad warrants are similar to general warrants, which were prohibited by the fourth amendment.",
+        "tags": [
+            "policing",
+            "privacy",
+            "tech_industry"
+        ],
+        "entryAdded": "2021-10-17T02:40:18.880Z"
+    },
+    {
+        "title": "I Just Don’t Want to Be Busy Anymore",
+        "author": "Elena Salaks",
+        "href": "https://forge.medium.com/i-just-dont-want-to-be-busy-anymore-ac4dd37c8119",
+        "work": "Forge",
+        "date": "2021-09-21",
+        "week": "October 4–8, 2021",
+        "summary": "Salaks writes about burnout and some changes she made to her work schedule to ensure she was prioritizing what is important to her. She talks about how this was difficult for her, given her mindset about work, and how she's trying to change that.",
+        "tags": [
+            "burnout",
+            "tech_industry"
+        ],
+        "entryAdded": "2021-10-17T02:55:10.891Z"
+    },
+    {
         "title": "Women in the Workplace 2021",
         "href": "https://www.mckinsey.com/featured-insights/diversity-and-inclusion/women-in-the-workplace",
         "publisher": "McKinsey & Company",
@@ -8,6 +64,7 @@
         "week": "September 27–October 1, 2021",
         "summary": "McKinsey published their annual study of women in the workplace, which analyzes DI&B efforts in corporate America and the experiences of women in the workplace. This year's study found that women are experiencing significantly higher levels of burnout, while also stepping into leadership positions and taking on additional work to support their colleagues and teams. McKinsey found much of DI&B work is done by women, and they are largely going unrecognized for it. The study also found that women of color are continuing to have a worse experience at work, and \"although the number of White employees who identify as allies to women of color has increased over the past year, the number taking key allyship actions has not.\" The study summarizes, \"The path forward is clear. Companies need to take bold steps to address burnout. They need to recognize and reward the women leaders who are driving progress. And they need to do the deep cultural work required to create a workplace where all women feel valued.\"",
         "tags": [
+            "burnout",
             "gender",
             "race"
         ],
@@ -172,6 +229,7 @@
         "week": "August 30–September 3, 2021",
         "summary": "Forsgren writes about measuring workplace productivity, and the limitations of using common metrics like lines of code or number of commits to do so. She speaks about a \"more holistic framework\" to measure productivity, which would factor in dimensions like satisfaction, well-being, communication, and collaboration, along with measurements of efficiency or output. She discusses how naive interpretations of GitHub statistics, which show increased time working, more code pushed, and faster merges since the beginning of the COVID-19 pandemic, would suggest a positive outlook on productivity, but that these ignore the enormous amount of burnout and dissatisfaction in the tech industry that point to this being very unsustainable. While I like her idea of a holistic view of productivity, I am generally skeptical of telemetry and automated \"measurements\" of productivity, which I think do a disservice to workers.",
         "tags": [
+            "burnout",
             "tech_industry"
         ],
         "entryAdded": "2021-09-01T17:15:34.780Z"
@@ -251,6 +309,7 @@
         "week": "August 23–27, 2021",
         "summary": "Kaczorowski describes her recent experience with burnout, and how it's different from her experiences with the phenomenon before the pandemic began. She gives advice on how to treat people who are experiencing burnout, and she also talks about how she believes that there will be a massive amount of burnout (or people acting on current burnout) in the near future as people move past the uncertainty of the earlier portions of the pandemic.",
         "tags": [
+            "burnout",
             "mental_health"
         ],
         "entryAdded": "2021-08-23T17:22:09.506Z"
