@@ -812,6 +812,17 @@
         "description": "Australian research organisation focusing on vaccine-preventable diseases and immunisation"
     },
     {
+        "title": "National File",
+        "italicTitle": true,
+        "date": "2021-10-24",
+        "created": true,
+        "topics": [
+            "covid19",
+            "right_wing"
+        ],
+        "description": "American right-wing blog known for publishing false or misleading claims about COVID-19"
+    },
+    {
         "title": "Rob Monster",
         "sortKey": "Monster, Rob",
         "date": "2019-05-10",
