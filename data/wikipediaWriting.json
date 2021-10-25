@@ -701,6 +701,21 @@
         "description": "blockchain-based file-sharing and payment network that powers decentralized platforms, primarily social networks and video platforms"
     },
     {
+        "title": "Lillian Lewis",
+        "date": "2021-10-24",
+        "WIR": true,
+        "biography": true,
+        "topics": [
+            "women"
+        ],
+        "description": "1852 – 1899; American stage actor",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Lillian_Lewis%2C_stage_actress.jpg/861px-Lillian_Lewis%2C_stage_actress.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:Lillian_Lewis,_stage_actress.jpg",
+            "caption": "Lillian Lewis"
+        }
+    },
+    {
         "title": "LifeSiteNews",
         "italicTitle": "true",
         "date": "2021-05-09",
