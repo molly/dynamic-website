@@ -1,13 +1,25 @@
 [
   {
+    "title": "Kisscut",
+    "author": "Karin Slaughter",
+    "date": "2003",
+    "publisher": "HarperCollins",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348096108l/21719.jpg",
+    "href": "https://www.goodreads.com/book/show/21719.Kisscut",
+    "started": "2021-10-25",
+    "status": "currentlyReading",
+    "tags": ["thriller", "mystery"]
+  },
+  {
     "title": "Blindsighted",
     "author": "Karin Slaughter",
     "date": "2002",
     "publisher": "HarperCollins",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390283925l/21718.jpg",
     "href": "https://www.goodreads.com/book/show/21718.Blindsighted",
-    "status": "currentlyReading",
+    "status": "read",
     "started": "2021-10-24",
+    "completed": "2021-10-24",
     "tags": ["thriller", "mystery"]
   },
   {
