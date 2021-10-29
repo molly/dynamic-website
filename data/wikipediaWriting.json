@@ -969,6 +969,14 @@
         "description": "b. 1984 or 1985; American software engineer and workers' rights activist"
     },
     {
+        "title": "Sines v. Kessler",
+        "italicTitle": true,
+        "date": "2021-10-28",
+        "created": true,
+        "topics": ["law", "right_wing", "crime"],
+        "description": "ongoing lawsuit related to the 2017 Unite the Right white supremacist rally in Charlottesville"
+    },
+    {
         "title": "Hazel Smith",
         "sortKey": "Smith, Hazel",
         "date": "2018-12-05",
