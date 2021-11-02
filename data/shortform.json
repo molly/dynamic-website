@@ -22,6 +22,20 @@
         ]
     },
     {
+        "title": "It Was Never About Dave",
+        "author": "Terra Field",
+        "work": "her blog",
+        "workItalics": false,
+        "date": "2021-10-18",
+        "week": "October 25–29, 2021",
+        "summary": "Terra Field, a senior software engineer at Netflix and a leader of Netflix's Trans* employee resource group, writes about the recent controversy around Netflix's launch of the Dave Chappelle special, and specifically the reaction to a Twitter thread she created to discuss it.",
+        "tags": [
+            "trans_issues",
+            "tech_industry"
+        ],
+        "entryAdded": "2021-11-02T20:28:03.846Z"
+    },
+    {
         "title": "Netflix workers plan a walkout as the fallout over Dave Chappelle continues",
         "author": "John Koblin",
         "href": "https://www.nytimes.com/2021/10/19/business/media/netflix-dave-chappelle-employee-walkout.html",
