@@ -1,5 +1,68 @@
 [
     {
+        "title": "Day 156 and Social Accommodations",
+        "author": "Julie Fredrickson",
+        "href": "https://jfredrickson.com/day-156-and-social-accommodations/",
+        "work": "her blog",
+        "workItalics": false,
+        "date": "2021-06-06",
+        "week": "November 1–5, 2021",
+        "summary": "Julie Fredrickson writes about the positive difference digital asynchronous communication has on her ability to manage her energy while living with chronic illness. She linked this post in a response to a <a href='https://twitter.com/rakyll/status/1455561127375433734' target='_blank'>tweet</a> I retweeted, about if and how people are helping accommodate interviewees with panic attacks or other anxiety issues.",
+        "tags": [
+            "mental_health",
+            "ability",
+            "accessibility"
+        ],
+        "entryAdded": "2021-11-02T18:10:32.970Z",
+        "relatedReading": [
+            {
+                "title": "Spoon theory",
+                "href": "https://en.wikipedia.org/wiki/Spoon_theory"
+            }
+        ]
+    },
+    {
+        "title": "Netflix workers plan a walkout as the fallout over Dave Chappelle continues",
+        "author": "John Koblin",
+        "href": "https://www.nytimes.com/2021/10/19/business/media/netflix-dave-chappelle-employee-walkout.html",
+        "work": "The New York Times",
+        "date": "2021-10-19",
+        "week": "October 25–29, 2021",
+        "summary": "After the debut of Dave Chappelle’s standup special “The Closer” on Netflix, employees are planning a walkout in protest on Wednesday at their Los Angeles office.",
+        "tags": [
+            "trans_issues",
+            "tech_industry"
+        ],
+        "entryAdded": "2021-11-02T20:01:36.028Z",
+        "relatedReading": [
+            {
+                "title": "The Closer (2021 film) § Jokes about the transgender community",
+                "href": "https://en.wikipedia.org/wiki/The_Closer_(2021_film)#Jokes_about_the_transgender_community"
+            }
+        ]
+    },
+    {
+        "title": "Observations from my month-long Sabbath",
+        "author": "Tricia Hersey",
+        "href": "https://thenapministry.wordpress.com/2019/12/01/observations-from-my-month-long-sabbath/",
+        "work": "The Nap Ministry",
+        "week": "October 25–29, 2021",
+        "date": "2019-12-01",
+        "summary": "Tricia Hersey's learnings from her month-long Sabbath, in which she avoided \"all social media, no events, no email, no discussing Nap Ministry work details, no bookings, and no traveling\".",
+        "tags": [
+            "burnout",
+            "mental_health",
+            "race"
+        ],
+        "entryAdded": "2021-11-02T18:03:50.940Z",
+        "relatedReading": [
+            {
+                "title": "Tricia Hersey",
+                "href": "https://en.wikipedia.org/wiki/Tricia_Hersey"
+            }
+        ]
+    },
+    {
         "title": "The last days inside Trailer 83",
         "author": "Hannah Dreier",
         "href": "https://www.washingtonpost.com/nation/2021/10/17/disaster-survivors-fema-housing-trailer/",
@@ -17,7 +80,7 @@
                 "href": "https://en.wikipedia.org/wiki/Camp_Fire_(2018)"
             },
             {
-                "title": "Federal Emergency Management Agency",
+                "title": "Federal Emergency Management Agency § California wildfires",
                 "href": "https://en.wikipedia.org/wiki/Federal_Emergency_Management_Agency#California_wildfires"
             }
         ]
@@ -64,6 +127,14 @@
         ],
         "entryAdded": "2021-10-17T02:40:18.880Z",
         "relatedReading": [
+            {
+                "title": "Reverse search warrant",
+                "href": "https://en.wikipedia.org/wiki/Reverse_search_warrant"
+            },
+            {
+                "title": "Geo-fence warrant",
+                "href": "https://en.wikipedia.org/wiki/Geo-fence_warrant"
+            },
             {
                 "title": "Geo-fence",
                 "href": "https://en.wikipedia.org/wiki/Geo-fence"
