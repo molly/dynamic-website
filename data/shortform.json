@@ -1,5 +1,25 @@
 [
     {
+        "title": "Facebook, Citing Societal Concerns, Plans to Shut Down Facial Recognition System",
+        "author": "Kashmir Hill and Ryan Mac",
+        "href": "https://www.nytimes.com/2021/11/02/technology/facebook-facial-recognition.html",
+        "work": "The New York Times",
+        "date": "2021-11-02",
+        "week": "November 1–5, 2021",
+        "summary": "Saying it wants \"to find the right balance\" with the technology, the social network will delete the face scan data of more than one billion users.",
+        "tags": [
+            "tech_industry",
+            "privacy"
+        ],
+        "entryAdded": "2021-11-05T22:38:03.387Z",
+        "relatedReading": [
+            {
+                "title": "Facial recognition system",
+                "href": "https://en.wikipedia.org/wiki/Facial_recognition_system"
+            }
+        ]
+    },
+    {
         "title": "Day 156 and Social Accommodations",
         "author": "Julie Fredrickson",
         "href": "https://jfredrickson.com/day-156-and-social-accommodations/",
