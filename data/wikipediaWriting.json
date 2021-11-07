@@ -344,6 +344,16 @@
         "description": "b. 1975 or 1976; American white nationalist and alt-right activist"
     },
     {
+        "title": "Check My Ads",
+        "date": "2021-11-05",
+        "created": true,
+        "topics": [
+            "activism",
+            "technology"
+        ],
+        "description": "the Check My Ads Agency and Check My Ads Institute are organizations founded by Nandini Jammi and Claire Atkin"
+    },
+    {
         "title": "Jennifer Childs-Roshak",
         "sortKey": "Childs-Roshak",
         "date": "2016-02-19",
@@ -670,6 +680,21 @@
         }
     },
     {
+        "title": "Nandini Jammi",
+        "sortKey": "Jammi, Nandini",
+        "date": "2021-11-05",
+        "created": true,
+        "biography": true,
+        "WIR": true,
+        "topics": [
+            "activism",
+            "women",
+            "technology",
+            "women_in_stem"
+        ],
+        "description": "b. 1988 or 1989; American activist and brand safety consultant"
+    },
+    {
         "title": "Margaret Killjoy",
         "sortKey": "Killjoy, Margaret",
         "date": "2021-06-24",
@@ -939,7 +964,9 @@
         "title": "Reverse search warrant",
         "date": "2021-10-17",
         "created": true,
-        "topics": ["law"],
+        "topics": [
+            "law"
+        ],
         "description": "type of search warrant in which law enforcement requests data to identify a potential pool of suspects"
     },
     {
@@ -960,7 +987,12 @@
         "created": true,
         "biography": true,
         "WIR": true,
-        "topics": ["activism", "technology", "women", "women_in_stem"],
+        "topics": [
+            "activism",
+            "technology",
+            "women",
+            "women_in_stem"
+        ],
         "image": {
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Cher_Scarlett_%28cropped%29.jpg/900px-Cher_Scarlett_%28cropped%29.jpg",
             "href": "https://commons.wikimedia.org/wiki/File:Cher_Scarlett_(cropped).jpg",
@@ -973,7 +1005,11 @@
         "italicTitle": true,
         "date": "2021-10-28",
         "created": true,
-        "topics": ["law", "right_wing", "crime"],
+        "topics": [
+            "law",
+            "right_wing",
+            "crime"
+        ],
         "description": "ongoing lawsuit related to the 2017 Unite the Right white supremacist rally in Charlottesville"
     },
     {
