@@ -834,7 +834,11 @@
             "covid19",
             "medicine"
         ],
-        "description": "Australian research organisation focusing on vaccine-preventable diseases and immunisation"
+        "description": "Australian research organisation focusing on vaccine-preventable diseases and immunisation",
+        "dyk": {
+            "year": 2021,
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/National_Centre_for_Immunisation_Research_and_Surveillance"
+        }
     },
     {
         "title": "National File",
@@ -967,7 +971,11 @@
         "topics": [
             "law"
         ],
-        "description": "type of search warrant in which law enforcement requests data to identify a potential pool of suspects"
+        "description": "type of search warrant in which law enforcement requests data to identify a potential pool of suspects",
+        "dyk": {
+            "year": 2021,
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Reverse_search_warrant"
+        }
     },
     {
         "title": "The Satanic Bible",
@@ -998,7 +1006,11 @@
             "href": "https://commons.wikimedia.org/wiki/File:Cher_Scarlett_(cropped).jpg",
             "caption": "Cher Scarlett"
         },
-        "description": "b. 1984 or 1985; American software engineer and workers' rights activist"
+        "description": "b. 1984 or 1985; American software engineer and workers' rights activist",
+        "dyk": {
+            "year": 2021,
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Cher_Scarlett"
+        }
     },
     {
         "title": "Sines v. Kessler",
@@ -1208,6 +1220,10 @@
             "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Jacob_Wohl_%28cropped%29.jpg/800px-Jacob_Wohl_%28cropped%29.jpg",
             "href": "https://commons.wikimedia.org/wiki/File:Jacob_Wohl_(cropped).jpg",
             "caption": "Jacob Wohl"
+        },
+        "dyk": {
+            "year": 2021,
+            "href": "https://en.wikipedia.org/wiki/Template:Did_you_know_nominations/Jacob_Wohl"
         }
     },
     {
