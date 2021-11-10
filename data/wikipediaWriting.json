@@ -1206,6 +1206,15 @@
         }
     },
     {
+        "title": "Web3",
+        "date": "2021-11-09",
+        "created": true,
+        "topics": [
+            "technology"
+        ],
+        "description": "an idea for a version of the Internet that is decentralized and based on public blockchains"
+    },
+    {
         "title": "Jacob Wohl",
         "sortKey": "Wohl, Jacob",
         "date": "2019-02-11",
