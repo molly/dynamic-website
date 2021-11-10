@@ -1,5 +1,44 @@
 [
     {
+        "title": "A Right-Wing Brawler Asked a Court to Protect Him From an Antifascist's Tweets",
+        "author": "Robert Mackey",
+        "href": "https://theintercept.com/2021/11/10/proud-boys-antifascist-tweet-chad-loder-court/",
+        "work": "The Intercept",
+        "date": "2021-11-10",
+        "week": "November 8–12, 2021",
+        "summary": "Adam Kiefer got a restraining order against an antifascist researcher who revealed that he was at the Capitol on Jan. 6. It might have been a costly mistake.",
+        "tags": [
+            "antifascism",
+            "extremism",
+            "journalism"
+        ],
+        "entryAdded": "2021-11-10T16:10:06.885Z",
+        "relatedReading": [
+            {
+                "title": "Strategic lawsuit against public participation",
+                "href": "https://en.wikipedia.org/wiki/Strategic_lawsuit_against_public_participation"
+            },
+            {
+                "title": "Andy Ngo",
+                "href": "https://en.wikipedia.org/wiki/Andy_Ngo"
+            }
+        ]
+    },
+    {
+        "title": "Updating The Verge's background policy",
+        "author": "Nilay Patel",
+        "href": "https://www.theverge.com/press-room/22772113/the-verge-on-background-policy-update",
+        "work": "The Verge",
+        "date": "2021-11-10",
+        "week": "November 8–12, 2021",
+        "summary": "The Verge is updating their public ethics policy to be clearer in their interactions with public relations and corporate communications professionals. They say they're doing this \"because big tech companies in particular have hired a dizzying array of communications staff who routinely push the boundaries of acceptable sourcing in an effort to deflect accountability, pass the burden of truth to the media, and generally control the narratives around the companies they work for while being annoying as hell to deal with.\"",
+        "tags": [
+            "journalism",
+            "tech_industry"
+        ],
+        "entryAdded": "2021-11-10T16:12:41.931Z"
+    },
+    {
         "title": "Why Misogynists Make Great Informants: How Gender Violence on the Left Enables State Violence in Radical Movements",
         "author": "Courtney Desiree Morris",
         "href": "https://incite-national.org/2010/07/15/why-misogynists-make-great-informants-how-gender-violence-on-the-left-enables-state-violence-in-radical-movements/",
@@ -90,7 +129,7 @@
         "work": "The New York Times",
         "date": "2021-10-19",
         "week": "October 25–29, 2021",
-        "summary": "After the debut of Dave Chappelle’s standup special “The Closer” on Netflix, employees are planning a walkout in protest on Wednesday at their Los Angeles office.",
+        "summary": "After the debut of Dave Chappelle's standup special \"The Closer\" on Netflix, employees are planning a walkout in protest on Wednesday at their Los Angeles office.",
         "tags": [
             "trans_issues",
             "tech_industry"
@@ -261,14 +300,15 @@
         }
     },
     {
-        "title": "Spies, Lies, and Stonewalling: What It’s Like to Report on Facebook",
+        "title": "Spies, Lies, and Stonewalling: What It's Like to Report on Facebook",
         "href": "https://www.cjr.org/special_report/reporting-on-facebook.php",
         "author": "Jacob Silverman",
         "work": "Columbia Journalism Review",
         "date": "2020-07-01",
         "week": "September 20–24, 2021",
-        "summary": "Silverman describes the changing relationship between Facebook and journalists, who once reported largely uncritically on whatever scoops they could muster from the fledgling but popular social media company, and who know have learned to be cautious of the company's word. Facebook has a long history of front-running stories, says Silverman, and aggressively uses off-the-record sourcing to obstruct the reporting process. One journalist describes Facebook's comms team as \"willing to lie on record\", and journalists and sources are both hypervigilant of the possibility that Facebook could use its own products to expose leakers. Silverman ends by saying, \"What Facebook has become is the press’s assignment editor, its distribution network, its great antagonist, devourer of its ad revenue, and, through corporate secrecy, a massive block to journalism’s core mission of democratic accountability.\"",
+        "summary": "Silverman describes the changing relationship between Facebook and journalists, who once reported largely uncritically on whatever scoops they could muster from the fledgling but popular social media company, and who know have learned to be cautious of the company's word. Facebook has a long history of front-running stories, says Silverman, and aggressively uses off-the-record sourcing to obstruct the reporting process. One journalist describes Facebook's comms team as \"willing to lie on record\", and journalists and sources are both hypervigilant of the possibility that Facebook could use its own products to expose leakers. Silverman ends by saying, \"What Facebook has become is the press's assignment editor, its distribution network, its great antagonist, devourer of its ad revenue, and, through corporate secrecy, a massive block to journalism's core mission of democratic accountability.\"",
         "tags": [
+            "journalism",
             "tech_industry"
         ],
         "entryAdded": "2021-10-01T21:49:11.404Z"
@@ -320,7 +360,7 @@
         "entryAdded": "2021-10-01T23:51:10.874Z"
     },
     {
-        "title": "It’s Time to Abolish Nursing Homes",
+        "title": "It's Time to Abolish Nursing Homes",
         "href": "https://www.thenation.com/article/society/abolish-nursing-homes/",
         "author": "Sara Luterman",
         "work": "The Nation",
@@ -556,7 +596,7 @@
             "remote_work"
         ],
         "entryAdded": "2021-08-09T19:09:20.781Z",
-        "summary": "An executive working remotely for the Massachusetts Bay Transportation Authority was recently discovered to have spent nine months \"double-dipping\" by working simultaneously for the Denver transit agency. Editorial staff at the <i>Boston Herald</i> point to this as an example of the \"bad side of remote working\" that results from employers who \"[fail] to police remote workers\": \"This is what’s wrong with remote work. Some will look to cut corners.\" The authors argue that the MBTA owes it to taxpayers and riders to monitor their employees.",
+        "summary": "An executive working remotely for the Massachusetts Bay Transportation Authority was recently discovered to have spent nine months \"double-dipping\" by working simultaneously for the Denver transit agency. Editorial staff at the <i>Boston Herald</i> point to this as an example of the \"bad side of remote working\" that results from employers who \"[fail] to police remote workers\": \"This is what's wrong with remote work. Some will look to cut corners.\" The authors argue that the MBTA owes it to taxpayers and riders to monitor their employees.",
         "image": {
             "src": "https://www.bostonherald.com/wp-content/uploads/2021/04/orangenl02.jpg?w=1573",
             "alt": "Orange line MBTA trains sit on the tracks at a station"
@@ -591,7 +631,7 @@
             "differing_perspectives",
             "healthcare"
         ],
-        "summary": "An article from <i>Quillette</i>, a generally libertarian- and right-leaning publication, offers an interesting and admirable attempt to convince its readers to be wary of COVID-19 misinformation, and to get vaccinated against COVID-19. Berlinski and Deigin describe Bret Weinstein's statements about COVID-19, which they say evolved from \"entertaining theories that might not be <i>right</i> but could do no harm, to theories that cannot be right and are sure to do harm\". They criticize Weinstein's claims that ivermectin is a COVID-19 \"miracle drug\" (which they say is inaccurate but also relatively harmless, as ivermectin has few side effects), as well as his statements that the approved COVID-19 vaccines are so unsafe that people are dying from them en masse (statements they describe as \"deadly\"). The article offers a perspective that is both deeply libertarian, and also often missing from publications further to the right: \"It is Weinstein's right under the First Amendment to say all of this. But let’s not confuse a right to say something with something being right to say.\" It also debunks some of the claims that Weinstein has made on his podcast (for example, \"The impression listeners might get from Weinstein’s podcast is that children are at no risk from this disease. This is false.\"), and details the actual risks of COVID-19 vaccines and the scale at which side effects such as blood clots have been observed. The article concludes: \"To put things simply: We have proof that ivermectin is terrific for river blindness and head lice. But if you're taking it to prevent COVID-19 because you heard it was '99 percent effective' on a podcast—while forgoing an mRNA vaccine, because you think that's too dangerous—you’ve been misled, and you're endangering yourself, your family, your community, and your country. No one disputes Bret Weinstein's right to embrace the theory that ivermectin is a miracle drug, or to regale his listeners with vaccine horror stories and conspiracy theories. But the rest of us reserve the right to be appalled by his judgment and ethics.\"",
+        "summary": "An article from <i>Quillette</i>, a generally libertarian- and right-leaning publication, offers an interesting and admirable attempt to convince its readers to be wary of COVID-19 misinformation, and to get vaccinated against COVID-19. Berlinski and Deigin describe Bret Weinstein's statements about COVID-19, which they say evolved from \"entertaining theories that might not be <i>right</i> but could do no harm, to theories that cannot be right and are sure to do harm\". They criticize Weinstein's claims that ivermectin is a COVID-19 \"miracle drug\" (which they say is inaccurate but also relatively harmless, as ivermectin has few side effects), as well as his statements that the approved COVID-19 vaccines are so unsafe that people are dying from them en masse (statements they describe as \"deadly\"). The article offers a perspective that is both deeply libertarian, and also often missing from publications further to the right: \"It is Weinstein's right under the First Amendment to say all of this. But let's not confuse a right to say something with something being right to say.\" It also debunks some of the claims that Weinstein has made on his podcast (for example, \"The impression listeners might get from Weinstein's podcast is that children are at no risk from this disease. This is false.\"), and details the actual risks of COVID-19 vaccines and the scale at which side effects such as blood clots have been observed. The article concludes: \"To put things simply: We have proof that ivermectin is terrific for river blindness and head lice. But if you're taking it to prevent COVID-19 because you heard it was '99 percent effective' on a podcast—while forgoing an mRNA vaccine, because you think that's too dangerous—you've been misled, and you're endangering yourself, your family, your community, and your country. No one disputes Bret Weinstein's right to embrace the theory that ivermectin is a miracle drug, or to regale his listeners with vaccine horror stories and conspiracy theories. But the rest of us reserve the right to be appalled by his judgment and ethics.\"",
         "entryAdded": "2021-08-09T19:13:58.584Z",
         "relatedReading": [
             {
@@ -635,7 +675,7 @@
         }
     },
     {
-        "title": "'You’re the Problem': When They Spoke Up About Misconduct, They Were Offered Mental Health Services",
+        "title": "'You're the Problem': When They Spoke Up About Misconduct, They Were Offered Mental Health Services",
         "author": "Alisha Haridasani Gupta and Ruchika Tulshyan",
         "work": "The New York Times",
         "href": "https://www.nytimes.com/2021/07/28/us/google-workplace-complaints-counseling.html",
@@ -807,7 +847,7 @@
         }
     },
     {
-        "title": "I’m Not a Reporter. But I’m Verified as One on Twitter",
+        "title": "I'm Not a Reporter. But I'm Verified as One on Twitter",
         "author": "Albert Fox Cahn",
         "work": "Wired",
         "href": "https://www.wired.com/story/opinion-im-not-a-reporter-but-im-verified-as-one-on-twitter/",
@@ -817,7 +857,7 @@
             "tech_industry",
             "race"
         ],
-        "summary": "Cahn explains Twitter's new criteria for verifying accounts, and how it disadvantages activists (particularly of color). According to Cahn, it is much easier to be verified as a journalist, since they only need to submit three recent bylines; activists must satisfy a slew of requirements such as being in the top 0.05% of users in a region, or starting a major hashtag. According to anti-racist economist Kim Crayton, \"that blue check automatically means that what you have to say is of value, and without it, particularly if you’re on the front lines, particularly if you’re a Black woman, you’re questioned.\"",
+        "summary": "Cahn explains Twitter's new criteria for verifying accounts, and how it disadvantages activists (particularly of color). According to Cahn, it is much easier to be verified as a journalist, since they only need to submit three recent bylines; activists must satisfy a slew of requirements such as being in the top 0.05% of users in a region, or starting a major hashtag. According to anti-racist economist Kim Crayton, \"that blue check automatically means that what you have to say is of value, and without it, particularly if you're on the front lines, particularly if you're a Black woman, you're questioned.\"",
         "entryAdded": "2021-07-15T17:03:32.062Z",
         "image": {
             "src": "https://media.wired.com/photos/60eccd93aacef0398a186193/master/w_2240,c_limit/twitter-verification-bias.jpg",
@@ -898,7 +938,7 @@
         "summary": "Black TikTok creators are on strike over cultural appropriation and not being given credit for their content (or having credit stolen) on the TikTok app. White creators have been miscredited as creators of viral TikTok trends, and have benefited from sponsorships and media recognition that belongs to Black creators."
     },
     {
-        "title": "Apple isn’t backing down from its hybrid work model, according to internal note",
+        "title": "Apple isn't backing down from its hybrid work model, according to internal note",
         "author": "Zoe Schiffer",
         "work": "The Verge",
         "href": "https://www.theverge.com/2021/6/29/22556615/apple-response-hybrid-work-model-employee-letter-remote",
@@ -934,7 +974,7 @@
         }
     },
     {
-        "title": "Trolls use a little-known Twitter feature to swarm others with abuse, and their targets say Twitter hasn’t done much to stop it",
+        "title": "Trolls use a little-known Twitter feature to swarm others with abuse, and their targets say Twitter hasn't done much to stop it",
         "author": "Lauren Feiner",
         "work": "CNBC",
         "href": "https://www.cnbc.com/2019/06/07/how-trolls-use-twitter-lists-to-target-and-harass-other-users.html",
@@ -1099,7 +1139,7 @@
             "antiasian_racism"
         ],
         "week": "June 7–11, 2021",
-        "summary": "A joint study by the National Asian Pacific American Women’s Forum (NAPAWF) and Stop AAPI Hate found that Asian American women are twice as likely as Asian American men to self-report being targeted in anti-Asian hate incidents. The study also found that half of AAPI women experienced a specific incident of anti-Asian racism in the last two years. Although thhe COVID-19 Hate Crimes Act provides some positive investments in community-centered solutions to anti-Asian hate, many Asian American and LGBTQ groups oppose it due to its mostly carceral solutions.",
+        "summary": "A joint study by the National Asian Pacific American Women's Forum (NAPAWF) and Stop AAPI Hate found that Asian American women are twice as likely as Asian American men to self-report being targeted in anti-Asian hate incidents. The study also found that half of AAPI women experienced a specific incident of anti-Asian racism in the last two years. Although thhe COVID-19 Hate Crimes Act provides some positive investments in community-centered solutions to anti-Asian hate, many Asian American and LGBTQ groups oppose it due to its mostly carceral solutions.",
         "entryAdded": "2021-06-09T14:05:54.044Z",
         "image": {
             "src": "http://reappropriate.co/wp-content/uploads/2021/05/murals-stop-aapi-hate.jpg",
@@ -1162,7 +1202,7 @@
         }
     },
     {
-        "title": "The Awkward Playdate Negotiations When Your Kids Aren’t Vaccinated Yet",
+        "title": "The Awkward Playdate Negotiations When Your Kids Aren't Vaccinated Yet",
         "author": "Alina Dizik",
         "work": "The Wall Street Journal",
         "date": "2021-06-01",
@@ -1172,7 +1212,7 @@
             "covid19",
             "family"
         ],
-        "summary": "Although more and more adults are becoming fully vaccinated each day, there is still no vaccine available for children under 12. While they are less susceptible to serious illness from COVID-19, they are still at risk for the illness. Some parents are beginning to relax the precautions they were taking with their children, allowing large unmasked group get-togethers, whereas others are continuing to be more cautious. Parents are having to navigate discussing COVID safety with parents who are more ambivalent, and also figure out how to balance safety with potentially introducing difficulties into their childrens' friendships. One parent said of their willingness to relax a previously-enforced precaution: \"You don’t want to be the first parent and you don’t want to be last.\"",
+        "summary": "Although more and more adults are becoming fully vaccinated each day, there is still no vaccine available for children under 12. While they are less susceptible to serious illness from COVID-19, they are still at risk for the illness. Some parents are beginning to relax the precautions they were taking with their children, allowing large unmasked group get-togethers, whereas others are continuing to be more cautious. Parents are having to navigate discussing COVID safety with parents who are more ambivalent, and also figure out how to balance safety with potentially introducing difficulties into their childrens' friendships. One parent said of their willingness to relax a previously-enforced precaution: \"You don't want to be the first parent and you don't want to be last.\"",
         "entryAdded": "2021-06-01T22:55:20.817Z",
         "image": {
             "src": "https://images.wsj.net/im-346730/square",
@@ -1214,7 +1254,7 @@
         "entryAdded": "2021-05-26T00:00:00.000Z",
         "image": {
             "src": "https://unicornriot.ninja/wp-content/uploads/2021/04/sao-paulo-lgbt-gay-pride-parade-trans.jpg",
-            "alt": "Brazilians celebrating during one of São Paulo’s pride parades"
+            "alt": "Brazilians celebrating during one of São Paulo's pride parades"
         },
         "relatedReading": [
             {
@@ -1452,7 +1492,7 @@
         ]
     },
     {
-        "title": "We Are Fighting for a World Where Ma’Khia Bryant Would Have Lived",
+        "title": "We Are Fighting for a World Where Ma'Khia Bryant Would Have Lived",
         "author": "Amna A. Akbar and Treva B. Lindsey",
         "date": "2021-04-22",
         "work": "Truthout",
@@ -1463,7 +1503,7 @@
             "policing"
         ],
         "week": "April 19–23, 2021",
-        "summary": "The authors explain how the killing of Ma'Khia Bryant was one in a long string of killings by police in the United States, but also in Columbus, Ohio specifically. They discuss how Bryant was not a \"perfect victim\" and how that has led some people to dismiss her killing as justified. \"Ma'Khia Bryant isn’t a mythical, perfect victim, nor does she need to be for us to unequivocally affirm that her death was unnecessary. She’s someone who forces us to contend with our values and challenge our continued investment in a system of policing that sees killing a Black girl with a knife as the only reasonable and effective response. The question we need to ask is not whether Reardon had the legal right to kill her, but rather: Didn’t Ma’Khia and the other people involved in the altercation deserve to live?\"",
+        "summary": "The authors explain how the killing of Ma'Khia Bryant was one in a long string of killings by police in the United States, but also in Columbus, Ohio specifically. They discuss how Bryant was not a \"perfect victim\" and how that has led some people to dismiss her killing as justified. \"Ma'Khia Bryant isn't a mythical, perfect victim, nor does she need to be for us to unequivocally affirm that her death was unnecessary. She's someone who forces us to contend with our values and challenge our continued investment in a system of policing that sees killing a Black girl with a knife as the only reasonable and effective response. The question we need to ask is not whether Reardon had the legal right to kill her, but rather: Didn't Ma'Khia and the other people involved in the altercation deserve to live?\"",
         "image": {
             "src": "https://truthout.org/wp-content/uploads/2018/05/2021_0422-osu-protest-2400x1600.jpg",
             "alt": "Ohio State students hold a sit in. Many have signs reading things like \"Say Their Names\" and \"Stop Killing Us\""
@@ -1547,7 +1587,7 @@
             "alt": "Illustration of two people indoors reading books, while people walk around outside"
         },
         "week": "April 12–16, 2021",
-        "summary": "Roberts discusses introverts who are apprehensive about \"returning to normal\" after widespread vaccination and easing of COVID-19 restrictions. I didn't agree with a lot of it—particularly the comparison between returning to post-COVID normalcy and returning to prison—though I did find the statement by the psychoogist they interviewed to be thought-provoking: \"The pandemic is what psychologist Susan Krauss Whitbourne calls a 'time of measurement' effect — the rare historical event so profound that it alters perceptions and personalities. 'So psychology won’t be the same for a number of years now, just as after World War I and World War II.'\" I also appreciated the mention of the dissonance between the happiness 2020 has brought some of us, and the horror of the pandemic."
+        "summary": "Roberts discusses introverts who are apprehensive about \"returning to normal\" after widespread vaccination and easing of COVID-19 restrictions. I didn't agree with a lot of it—particularly the comparison between returning to post-COVID normalcy and returning to prison—though I did find the statement by the psychoogist they interviewed to be thought-provoking: \"The pandemic is what psychologist Susan Krauss Whitbourne calls a 'time of measurement' effect — the rare historical event so profound that it alters perceptions and personalities. 'So psychology won't be the same for a number of years now, just as after World War I and World War II.'\" I also appreciated the mention of the dissonance between the happiness 2020 has brought some of us, and the horror of the pandemic."
     },
     {
         "title": "How to provide anti-racist mental health care",
@@ -1704,7 +1744,7 @@
             "ability"
         ],
         "week": "March 8–12, 2021",
-        "summary": "Byrne-Haber explains that making websites accessible is very difficult, but that that shouldn't be an excuse to avoid doing it. I particularly like point 3: \"Even people with disabilities can’t represent the needs of everyone with any disability\", and the takeaway: \"98% of websites are completely inaccessible. You couldn’t possibly do any worse than they are. The starting point is giving a damn.\" Something is better than nothing."
+        "summary": "Byrne-Haber explains that making websites accessible is very difficult, but that that shouldn't be an excuse to avoid doing it. I particularly like point 3: \"Even people with disabilities can't represent the needs of everyone with any disability\", and the takeaway: \"98% of websites are completely inaccessible. You couldn't possibly do any worse than they are. The starting point is giving a damn.\" Something is better than nothing."
     },
     {
         "title": "The Displays: On Anti-Racist Study and Institutional Enclosure",
@@ -1753,7 +1793,7 @@
         ]
     },
     {
-        "title": "The George Floyd Act wouldn't have saved George Floyd’s life. That says it all",
+        "title": "The George Floyd Act wouldn't have saved George Floyd's life. That says it all",
         "author": "Derecka Purnell",
         "date": "2021-03-04",
         "work": "The Guardian",
@@ -1765,7 +1805,7 @@
             "policing"
         ],
         "week": "March 1–5, 2021",
-        "summary": "The George Floyd Act, which bans police from using chokeholds, would not have saved George Floyd, who did not die from the use of a chokehold. \"[Police] can show up and attempt to stop the crime, but they can’t stop the underlying conditions that give rise to it: class exploitation and poverty. Floyd appeared to need cash, not the police.\" The author is also critical of Democrats for taking performative actions without championing meaningful changes.",
+        "summary": "The George Floyd Act, which bans police from using chokeholds, would not have saved George Floyd, who did not die from the use of a chokehold. \"[Police] can show up and attempt to stop the crime, but they can't stop the underlying conditions that give rise to it: class exploitation and poverty. Floyd appeared to need cash, not the police.\" The author is also critical of Democrats for taking performative actions without championing meaningful changes.",
         "relatedReading": [
             {
                 "title": "George Floyd Justice in Policing Act",
@@ -1831,7 +1871,7 @@
             "race"
         ],
         "week": "February 8–12, 2021",
-        "summary": "Forson writes about the challenges of going about life as though it were \"business as usual\" in the summer of 2020, with a powerful analogy. She also describes the dissonance of seeing white people posting online as though things were normal, and lists some actions people can take. \"Don’t shy away because you think it doesn’t concern you. If you love a black person or believe in equality this concerns you.\""
+        "summary": "Forson writes about the challenges of going about life as though it were \"business as usual\" in the summer of 2020, with a powerful analogy. She also describes the dissonance of seeing white people posting online as though things were normal, and lists some actions people can take. \"Don't shy away because you think it doesn't concern you. If you love a black person or believe in equality this concerns you.\""
     },
     {
         "title": "Letter and symbol misrecognition in highly legible typefaces for general, children, dyslexic, visually impaired and ageing readers",
