@@ -535,6 +535,7 @@
         "WIR": true,
         "topics": [
             "activism",
+            "journalism",
             "women"
         ],
         "image": {
@@ -746,6 +747,7 @@
         "date": "2021-05-09",
         "created": true,
         "topics": [
+            "journalism",
             "right_wing"
         ],
         "description": "Canadian Catholic far-right anti-abortion advocacy and news publication"
@@ -847,6 +849,7 @@
         "created": true,
         "topics": [
             "covid19",
+            "journalism",
             "right_wing"
         ],
         "description": "American right-wing blog known for publishing false or misleading claims about COVID-19"
@@ -950,6 +953,16 @@
         "description": "prosecutorial strategy"
     },
     {
+        "title": "Pink-slime journalism",
+        "date": "2021-11-12",
+        "created": true,
+        "topics": [
+            "journalism",
+            "right_wing"
+        ],
+        "description": "a practice in which news outlets which appear to be local publish poor-quality news reports, often to push a right-wing agenda and gather user data"
+    },
+    {
         "title": "Kasturi Rajadhyaksha",
         "sortKey": "Rajadhyaksha, Kasturi",
         "date": "2016-03-28",
@@ -1032,6 +1045,7 @@
         "biography": true,
         "WIR": true,
         "topics": [
+            "journalism",
             "women"
         ],
         "description": "1934 – 2018; American country music journalist, publicist, singer-songwriter, television and radio show host, and cookbook author",
