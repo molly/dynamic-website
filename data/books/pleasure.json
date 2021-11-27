@@ -1,5 +1,16 @@
 [
   {
+    "title": "A Wizard of Earthsea",
+    "author": "Ursula K. Le Guin",
+    "date": "1968",
+    "publisher": "Parnassus Press",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1303992709l/11238484.jpg",
+    "href": "https://www.goodreads.com/book/show/16029682-a-wizard-of-earthsea",
+    "status": "currentlyReading",
+    "started": "2021-11-26",
+    "tags": ["fantasy"]
+  },
+  {
     "title": "Kisscut",
     "author": "Karin Slaughter",
     "date": "2003",
@@ -7,7 +18,8 @@
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348096108l/21719.jpg",
     "href": "https://www.goodreads.com/book/show/21719.Kisscut",
     "started": "2021-10-25",
-    "status": "currentlyReading",
+    "completed": "2021-11-25",
+    "status": "read",
     "tags": ["thriller", "mystery"]
   },
   {
