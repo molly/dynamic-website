@@ -1,5 +1,136 @@
 [
     {
+        "title": "'This Is Blackface': White Actors Are Playing Black Characters In Virtual Reality Diversity Training",
+        "author": "Emily Baker-White",
+        "href": "https://www.buzzfeednews.com/article/emilybakerwhite/diversity-training-mursion-vr-white-actors",
+        "work": "BuzzFeed News",
+        "summary": "Mursion tells big corporate clients that its VR simulations will help teach racial sensitivity. But the actors playing its Black characters are often white.",
+        "date": "2021-12-01",
+        "week": "November 29–December 3, 2021",
+        "tags": [
+            "race",
+            "ability",
+            "neurodiversity",
+            "tech_industry"
+        ],
+        "entryAdded": "2021-12-05T03:24:58.716Z",
+        "relatedReading": [
+            {
+                "title": "Diversity training",
+                "href": "https://en.wikipedia.org/wiki/Diversity_training"
+            },
+            {
+                "title": "Blackface",
+                "href": "https://en.wikipedia.org/wiki/Blackface"
+            }
+        ]
+    },
+    {
+        "title": "The Token Disconnect",
+        "author": "Stephen Diehl",
+        "href": "https://www.stephendiehl.com/blog/disconnect.html",
+        "work": "their blog",
+        "summary": "Diehl gives their (negative) opinion on crypto. \"Silicon Valley ran dry on large breakthroughs in software, so we decided to invent the 'blockchain', a simulacrum of innovation that organically fermented from the anti-institutional themes in the Western zeitgeist to spawn an absurdly large asset bubble with absolutely nothing at the center. There is no there there, and crypto morphed into a pure speculative mania which attracted a fanatic quasi-religious movement fueled by gambling addiction and the pseudo-intellectual narrative economics of the scheme. All conversation around crypto is now simply the sound and fury of post-hoc myth making to rationalize away the collective incoherence of the bubble in a near perfect exemplar of the motivated reasoning of economic determinism.\"",
+        "workItalics": false,
+        "date": "November 27, 2021",
+        "week": "November 29–December 3, 2021",
+        "tags": [
+            "technology",
+            "crypto",
+            "tech_industry"
+        ],
+        "entryAdded": "2021-12-05T03:20:48.053Z",
+        "relatedReading": [
+            {
+                "title": "Cryptocurrency",
+                "href": "https://en.wikipedia.org/wiki/Cryptocurrency"
+            },
+            {
+                "title": "Blockchain",
+                "href": "https://en.wikipedia.org/wiki/Blockchain"
+            }
+        ]
+    },
+    {
+        "title": "The Handwavy Technobabble Nothingburger",
+        "author": "Stephen Diehl",
+        "work": "their blog",
+        "workItalics": false,
+        "href": "https://www.stephendiehl.com/blog/nothing-burger.html",
+        "date": "November 24, 2021",
+        "week": "November 22–26, 2021",
+        "summary": "Crypto skepticism has to go hand in hand with a deeper understanding of why the technology doesn’t work as its advocates claim, in addition to the legal and regulatory arguments against its existence.",
+        "tags": [
+            "technology",
+            "crypto",
+            "tech_industry"
+        ],
+        "entryAdded": "2021-12-05T04:20:17.854Z",
+        "relatedReading": [
+            {
+                "title": "Meme coin",
+                "href": "https://en.wikipedia.org/wiki/Meme_coin"
+            },
+            {
+                "title": "Smart contract",
+                "href": "https://en.wikipedia.org/wiki/Smart_contract"
+            },
+            {
+                "title": "Stablecoin",
+                "href": "https://en.wikipedia.org/wiki/Stablecoin"
+            }
+        ]
+    },
+    {
+        "title": "Life Outside the Boys Club: Why I Spoke Up About Rivian's Toxic Bro Culture (and Got Fired).",
+        "author": "Laura Schwab",
+        "publisher": "Medium",
+        "href": "https://medium.com/@lauraschwab1/life-outside-the-boys-club-why-i-spoke-up-about-rivians-toxic-bro-culture-and-got-fired-15600b999ae7",
+        "date": "November 4, 2021",
+        "week": "November 22–26, 2021",
+        "summary": "Schwab talks about her experience at Rivian, an electric vehicle startup. Rivian has described itself as a company that hugely values culture, but Schwab says she encountered sexism and bro culture there, and was fired for speaking out about it.",
+        "tags": [
+            "tech_industry",
+            "gender"
+        ],
+        "entryAdded": "2021-12-05T04:54:14.591Z",
+        "relatedReading": [
+            {
+                "title": "Rivian",
+                "href": "https://en.wikipedia.org/wiki/Rivian"
+            }
+        ]
+    },
+    {
+        "title": "Tolerance is not inclusion. Here's how to get inclusion right.",
+        "author": "Megan Rose Dickey",
+        "href": "https://www.protocol.com/manuals/the-inclusive-workplace/inclusion-manual",
+        "work": "The Protocol",
+        "date": "September 27, 2021",
+        "week": "November 15–19, 2021",
+        "summary": "There's a variety of steps companies can take to try to foster and measure inclusion.",
+        "tags": [
+            "tech_industry"
+        ],
+        "entryAdded": "2021-12-05T04:38:57.671Z"
+    },
+    {
+        "title": "Diversity’s Fault Lines",
+        "author": "Lawrence Goodman",
+        "href": "https://www.brandeis.edu/magazine/2021/fall/featured-stories/mayorga.html",
+        "work": "Brandeis Magazine",
+        "date": "2021",
+        "week": "November 15–19, 2021",
+        "summary": "Sociologist Sarah Mayorga examines the coded ways white people engage with their Black and Latinx neighbors.",
+        "tags": [
+            "race",
+            "antiblack_racism",
+            "antilatino_racism",
+            "whiteness"
+        ],
+        "entryAdded": "2021-12-05T03:08:39.017Z"
+    },
+    {
         "title": "The Anti-Blackness of 'Professionalism'",
         "author": "Avianne",
         "href": "https://hoodcommunist.org/2021/11/04/the-anti-blackness-of-professionalism/",
