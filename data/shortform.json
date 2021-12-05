@@ -1,5 +1,31 @@
 [
     {
+        "title": "Web3 Is Bullshit",
+        "author": "Stephen Diehl",
+        "href": "https://www.stephendiehl.com/blog/web3-bullshit.html",
+        "work": "their blog",
+        "summary": "Diehl gives their (negative) opinion on crypto and web3. \"Web3 is a deeply polarizing topic for technologists because it’s designed to be that way. It’s a rhetorical trick to set up a false dichotomy between the legacy internet world of popup ads and Zuckerbergs—which legitimately does suck—and a fantasy world built on technologically incoherent pipe dreams and phoney crypto-populism.\"",
+        "workItalics": false,
+        "date": "December 4, 2021",
+        "week": "December 6–10, 2021",
+        "tags": [
+            "technology",
+            "crypto",
+            "tech_industry"
+        ],
+        "entryAdded": "2021-12-05T06:08:23.216Z",
+        "relatedReading": [
+            {
+                "title": "Web3",
+                "href": "https://en.wikipedia.org/wiki/Web3"
+            },
+            {
+                "title": "Cryptocurrency bubble",
+                "href": "https://en.wikipedia.org/wiki/Cryptocurrency_bubble"
+            }
+        ]
+    },
+    {
         "title": "'This Is Blackface': White Actors Are Playing Black Characters In Virtual Reality Diversity Training",
         "author": "Emily Baker-White",
         "href": "https://www.buzzfeednews.com/article/emilybakerwhite/diversity-training-mursion-vr-white-actors",
