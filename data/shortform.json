@@ -1,5 +1,64 @@
 [
     {
+        "title": "The Third Web",
+        "author": "tante",
+        "href": "https://tante.cc/2021/12/17/the-third-web/",
+        "work": "his blog",
+        "workItalics": false,
+        "summary": "tante presents definitions of concepts including blockchain, NFTs, and DAOs, and describes how they have come to be known as \"web3\". He then describes his own strong opposition to the concept that many are touting as the future of the web.",
+        "date": "2021-12-17",
+        "week": "December 13–17, 2021",
+        "tags": [
+            "tech_industry",
+            "crypto",
+            "technology"
+        ],
+        "entryAdded": "2021-12-18T02:45:04.770Z",
+        "relatedReading": [
+            {
+                "title": "Web3",
+                "href": "https://en.wikipedia.org/wiki/Web3"
+            }
+        ]
+    },
+    {
+        "title": "The Web3 Fraud",
+        "author": "Nicholas Weaver",
+        "href": "https://www.usenix.org/publications/loginonline/web3-fraud",
+        "work": "Usenix",
+        "summary": "The technical underpinnings are so terrible that it is clear they exist only to hype the underlying cryptocurrencies.  The actual utility of these \"decentralized\" systems is already available in modern distributed systems in ways that are several orders of magnitude more efficient and more capable.",
+        "date": "2021-12-16",
+        "week": "December 13–17, 2021",
+        "tags": [
+            "tech_industry",
+            "crypto",
+            "technology"
+        ],
+        "entryAdded": "2021-12-18T02:47:34.298Z",
+        "relatedReading": [
+            {
+                "title": "Web3",
+                "href": "https://en.wikipedia.org/wiki/Web3"
+            }
+        ]
+    },
+    {
+        "title": "Great Protocol Politics",
+        "author": "Parag Khanna and Balaji S. Srinivasan",
+        "href": "https://foreignpolicy.com/2021/12/11/bitcoin-ethereum-cryptocurrency-web3-great-protocol-politics/",
+        "work": "Foreign Policy",
+        "summary": "The 21st century doesn't belong to China, the United States, or Silicon Valley. It belongs to the internet.",
+        "date": "2021-12-11",
+        "week": "December 13–17, 2021",
+        "tags": [
+            "tech_industry",
+            "crypto",
+            "technology",
+            "differing_perspectives"
+        ],
+        "entryAdded": "2021-12-18T02:55:25.698Z"
+    },
+    {
         "title": "Web3 Is Bullshit",
         "author": "Stephen Diehl",
         "href": "https://www.stephendiehl.com/blog/web3-bullshit.html",
