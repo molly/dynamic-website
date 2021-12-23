@@ -2,7 +2,7 @@ const BASE_READING_STATUSES_LIST = [
   { text: 'currently reading', value: 'currentlyReading' },
   { text: 'read', value: 'read' },
   { text: 'reference', value: 'reference' },
-  { text: 'did not finish', value: 'didNotFinish' },
+  { text: 'shelved', value: 'shelved' },
   { text: 'to read', value: 'toRead' },
 ];
 
