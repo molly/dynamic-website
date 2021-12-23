@@ -1,12 +1,23 @@
 [
   {
+    "title": "The Road",
+    "author": "Cormac McCarthy",
+    "date": "2006",
+    "publisher": "Alfred A. Knopf",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600241424l/6288.jpg",
+    "href": "https://www.goodreads.com/book/show/6288.The_Road",
+    "status": "currentlyReading",
+    "started": "2021-12-22",
+    "tags": ["post-apocalyptic", "science fiction"]
+  },
+  {
     "title": "A Wizard of Earthsea",
     "author": "Ursula K. Le Guin",
     "date": "1968",
     "publisher": "Parnassus Press",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1303992709l/11238484.jpg",
     "href": "https://www.goodreads.com/book/show/16029682-a-wizard-of-earthsea",
-    "status": "currentlyReading",
+    "status": "shelved",
     "started": "2021-11-26",
     "tags": ["fantasy"]
   },
