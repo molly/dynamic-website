@@ -1,13 +1,25 @@
 [
   {
+    "title": "The Terror",
+    "author": "Dan Simmons",
+    "date": "2007",
+    "publisher": "Little, Brown and Company",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442713631l/3974._SY475_.jpg",
+    "href": "https://www.goodreads.com/book/show/3974.The_Terror",
+    "status": "currentlyReading",
+    "started": "2021-12-25",
+    "tags": ["horror", "survival"]
+  },
+  {
     "title": "The Road",
     "author": "Cormac McCarthy",
     "date": "2006",
     "publisher": "Alfred A. Knopf",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600241424l/6288.jpg",
     "href": "https://www.goodreads.com/book/show/6288.The_Road",
-    "status": "currentlyReading",
+    "status": "read",
     "started": "2021-12-22",
+    "completed": "2021-12-24",
     "tags": ["post-apocalyptic", "science fiction"]
   },
   {
