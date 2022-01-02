@@ -13,6 +13,7 @@ const PRESS_DEFAULTS = {
 };
 
 const PRESS_TAGS = {
+  twitter: 'Twitter',
   wikipedia: 'Wikipedia',
   wikipedia_arbitration: 'Wikipedia: arbitration',
   wikipedia_breaking_news: 'Wikipedia: breaking news',
