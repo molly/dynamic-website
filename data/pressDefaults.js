@@ -12,7 +12,12 @@ const PRESS_DEFAULTS = {
   tags: [],
 };
 
-const PRESS_TAGS = {};
+const PRESS_TAGS = {
+  wikipedia: 'Wikipedia',
+  wikipedia_arbitration: 'Wikipedia: arbitration',
+  wikipedia_breaking_news: 'Wikipedia: breaking news',
+  wikipedia_gender_gap: 'Wikipedia: gender gap',
+};
 
 module.exports = {
   defaultArticle: PRESS_DEFAULTS,

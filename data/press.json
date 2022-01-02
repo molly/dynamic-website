@@ -18,7 +18,7 @@
         "href": "https://www.fastcompany.com/90674998/how-9-11-turned-a-new-site-called-wikipedia-into-historys-crowdsourced-front-page",
         "tags": [
             "wikipedia",
-            "breaking_news"
+            "wikipedia_breaking_news"
         ]
     },
     {
@@ -56,7 +56,7 @@
         "href": "https://washingtonmonthly.com/2021/02/04/when-the-capitol-was-attacked-wikipedia-went-to-work/",
         "tags": [
             "wikipedia",
-            "breaking_news"
+            "wikipedia_breaking_news"
         ]
     },
     {
@@ -68,7 +68,7 @@
         "tags": [
             "wikipedia",
             "disinformation",
-            "breaking_news"
+            "wikipedia_breaking_news"
         ]
     },
     {
@@ -83,7 +83,7 @@
         "tags": [
             "wikipedia",
             "disinformation",
-            "gender_gap"
+            "wikipedia_gender_gap"
         ]
     },
     {
@@ -104,7 +104,7 @@
         "href": "https://webfoundation.org/2021/01/celebrating-20-years-of-wikipedia/",
         "tags": [
             "wikipedia",
-            "breaking_news"
+            "wikipedia_breaking_news"
         ]
     },
     {
@@ -115,7 +115,7 @@
         "href": "https://www.fastcompany.com/90593176/wikipedia-capitol-attack-name",
         "tags": [
             "wikipedia",
-            "breaking_news"
+            "wikipedia_breaking_news"
         ]
     },
     {
@@ -139,7 +139,7 @@
         "href": "https://www.vox.com/recode/2020/11/2/21541880/wikipedia-presidential-election-misinformation-social-media",
         "tags": [
             "wikipedia",
-            "breaking_news",
+            "wikipedia_breaking_news",
             "harassment",
             "disinformation"
         ]
@@ -152,7 +152,7 @@
         "href": "https://slate.com/technology/2020/10/theresa-greenfield-iowa-senate-race-wikipedia-page.html",
         "tags": [
             "wikipedia",
-            "gender_gap"
+            "wikipedia_gender_gap"
         ]
     },
     {
@@ -163,7 +163,7 @@
         "href": "https://www.wired.com/story/wikipedias-plan-to-resist-election-day-misinformation/",
         "tags": [
             "wikipedia",
-            "breaking_news",
+            "wikipedia_breaking_news",
             "disinformation"
         ]
     },
@@ -176,7 +176,7 @@
         "href": "https://www.thelily.com/wikipedia-is-a-world-built-by-and-for-men-rosie-stephenson-goodnight-is-changing-that/",
         "tags": [
             "wikipedia",
-            "gender_gap"
+            "wikipedia_gender_gap"
         ]
     },
     {
@@ -200,7 +200,7 @@
         "href": "https://www.buzzfeednews.com/article/josephbernstein/wikipedia-ban-editor-culture-war",
         "tags": [
             "wikipedia",
-            "arbitration"
+            "wikipedia_arbitration"
         ]
     },
     {
@@ -249,7 +249,7 @@
         "href": "https://www.theatlantic.com/technology/archive/2015/10/how-wikipedia-is-hostile-to-women/411619/",
         "tags": [
             "wikipedia",
-            "arbitration",
+            "wikipedia_arbitration",
             "harassment"
         ]
     }
