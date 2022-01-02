@@ -1,6 +1,17 @@
 [
     {
-        "title": "How 9/11 turned a new site called Wikipedia into history’s crowdsourced front page",
+        "title": "Cos'è questa storia del web3",
+        "author": "Viola Stefanello",
+        "date": "2021-12-20",
+        "work": "Wired",
+        "parenthetical": "in Italian",
+        "href": "https://www.wired.it/article/web3-futuro-internet-blockchain/",
+        "tags": [
+            "technology"
+        ]
+    },
+    {
+        "title": "How 9/11 turned a new site called Wikipedia into history's crowdsourced front page",
         "author": "Alex Pasternack",
         "date": "2021-09-11",
         "work": "FastCompany",
@@ -11,7 +22,7 @@
         ]
     },
     {
-        "title": "The Tensions Behind Wikipedia’s New Code of Conduct",
+        "title": "The Tensions Behind Wikipedia's New Code of Conduct",
         "author": "Stephen Harrison",
         "date": "2021-03-03",
         "work": "Slate",
@@ -76,7 +87,7 @@
         ]
     },
     {
-        "title": "Twitter wants your help fighting falsehoods. It’s risky, but it might just work",
+        "title": "Twitter wants your help fighting falsehoods. It's risky, but it might just work",
         "author": "Alex Pasternack",
         "date": "2021-01-28",
         "work": "FastCompany",
@@ -169,7 +180,7 @@
         ]
     },
     {
-        "title": "How Wikipedia’s volunteers became the web’s best weapon against misinformation",
+        "title": "How Wikipedia's volunteers became the web's best weapon against misinformation",
         "author": "Alex Pasternack",
         "date": "2020-03-07",
         "work": "FastCompany",
