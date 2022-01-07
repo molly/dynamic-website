@@ -13,6 +13,7 @@ const PRESS_DEFAULTS = {
 };
 
 const PRESS_TAGS = {
+  crypto: 'Crypto and web3',
   twitter: 'Twitter',
   wikipedia: 'Wikipedia',
   wikipedia_arbitration: 'Wikipedia: arbitration',
