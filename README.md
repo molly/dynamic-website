@@ -1,5 +1,9 @@
-# reading-list
+# Dynamic portions of my website
 
-Small app to power the various reading lists on my website.
+Small app to power the dynamic portions of my website:
 
-https://www.mollywhite.net/reading
+- [reading lists](https://www.mollywhite.net/reading)
+- [press page](https://www.mollywhite.net/press)
+- [wikipedia articles](https://www.mollywhite.net/wikipedia-work)
+
+The static site files can be found at [website-v2](https://github.com/molly/website-v2).
