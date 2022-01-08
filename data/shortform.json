@@ -1,5 +1,40 @@
 [
     {
+        "title": "Why 1,320 Therapists Are Worried About Mental Health in America Right Now",
+        "author": "Tara Parker-Pope, Christina Caron and Mónica Cordero Sancho",
+        "href": "https://www.nytimes.com/interactive/2021/12/16/well/mental-health-crisis-america-covid.html",
+        "work": "The New York Times",
+        "summary": "As Americans head into a third year of pandemic living, therapists around the country are finding themselves on the front lines of a mental health crisis. Social workers, psychologists and counselors from every state say they can’t keep up with an unrelenting demand for their services, and many must turn away patients — including children — who are desperate for support.",
+        "date": "2021-12-17",
+        "week": "January 3–7, 2022",
+        "tags": [
+            "mental_health",
+            "covid19"
+        ],
+        "entryAdded": "2022-01-08T03:05:07.961Z"
+    },
+    {
+        "title": "Tailwind and the Femininity of CSS",
+        "author": "Elaina Natario",
+        "href": "https://thoughtbot.com/blog/tailwind-and-the-femininity-of-css",
+        "work": "the Thoughtbot blog",
+        "workItalics": false,
+        "summary": "When it comes down to the root of the problem, perhaps it isn’t CSS itself but our unwillingness to examine our sexist ideas of what is worthy in web development.",
+        "date": "2021-12-15",
+        "week": "January 3–7, 2022",
+        "tags": [
+            "tech_industry",
+            "gender"
+        ],
+        "entryAdded": "2022-01-08T02:59:59.672Z",
+        "relatedReading": [
+            {
+                "title": "CSS",
+                "href": "https://en.wikipedia.org/wiki/CSS"
+            }
+        ]
+    },
+    {
         "title": "The Third Web",
         "author": "tante",
         "href": "https://tante.cc/2021/12/17/the-third-web/",
