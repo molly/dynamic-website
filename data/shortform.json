@@ -1,5 +1,20 @@
 [
     {
+        "title": "My first impressions of web3",
+        "author": "Moxie Marlinspike",
+        "href": "https://moxie.org/2022/01/07/web3-first-impressions.html",
+        "work": "his blog",
+        "workItalics": false,
+        "summary": "Moxie Marlinspike gives his impressions on web3 after dabbling in dApps and NFTs.",
+        "date": "2022-01-07",
+        "week": "January 10–14",
+        "tags": [
+            "crypto",
+            "technology"
+        ],
+        "entryAdded": "2022-01-09T04:36:37.807Z"
+    },
+    {
         "title": "Why 1,320 Therapists Are Worried About Mental Health in America Right Now",
         "author": "Tara Parker-Pope, Christina Caron and Mónica Cordero Sancho",
         "href": "https://www.nytimes.com/interactive/2021/12/16/well/mental-health-crisis-america-covid.html",
