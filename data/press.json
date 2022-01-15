@@ -1,5 +1,51 @@
 [
     {
+        "title": "Cryptoland wants to be an NFT paradise—it sounds like a digital FyreFest",
+        "author": "Eleanor Pahl",
+        "date": "2022-01-14",
+        "work": "The Daily Dot",
+        "href": "https://www.dailydot.com/debug/cryptoland-nft/",
+        "tags": [
+            "crypto",
+            "technology"
+        ]
+    },
+    {
+        "title": "Wikimedia Foundation Called to Stop Accepting Crypto Amid Environmental Concerns",
+        "author": "Scott Chipolina",
+        "work": "Decrypt",
+        "href": "https://decrypt.co/90356/wikimedia-foundation-called-stop-accepting-crypto-amid-environmental-concerns",
+        "tags": [
+            "crypto",
+            "technology",
+            "wikipedia"
+        ]
+    },
+    {
+        "title": "Wiki contributors want to drop crypto donations over environmental concerns",
+        "author": "Ezra Reguerra",
+        "date": "2021-01-13",
+        "work": "Cointelegraph",
+        "href": "https://cointelegraph.com/news/wiki-contributors-want-to-drop-crypto-donations-over-environmental-concerns",
+        "tags": [
+            "crypto",
+            "technology",
+            "wikipedia"
+        ]
+    },
+    {
+        "title": "Wikipedia Faces Pressure to Stop Accepting Crypto Donations on Environmental Grounds",
+        "author": "Aoyon Ashraf",
+        "date": "2022-01-12",
+        "work": "CoinDesk",
+        "href": "https://www.coindesk.com/business/2022/01/12/wikipedia-faces-pressure-to-stop-accepting-crypto-donations-on-environmental-grounds/",
+        "tags": [
+            "crypto",
+            "technology",
+            "wikipedia"
+        ]
+    },
+    {
         "title": "Why Cryptoland Is Being Called Blockchain’s Fyre Festival",
         "author": "Zachariah Kelly",
         "date": "2022-01-11",

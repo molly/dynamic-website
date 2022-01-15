@@ -1,5 +1,21 @@
 [
     {
+        "title": "A Move for 'Algorithmic Reparation' Calls for Racial Justice in AI",
+        "author": "Khari Johnson",
+        "href": "https://www.wired.com/story/move-algorithmic-reparation-calls-racial-justice-ai/",
+        "work": "Wired",
+        "summary": "Researchers are encouraging those who work in AI to explicitly consider racism, gender, and other structural inequalities.",
+        "date": "2021-12-23",
+        "week": "January 10–14, 2022",
+        "tags": [
+            "race",
+            "technology",
+            "tech_industry",
+            "gender"
+        ],
+        "entryAdded": "2022-01-15T22:52:16.663Z"
+    },
+    {
         "title": "My first impressions of web3",
         "author": "Moxie Marlinspike",
         "href": "https://moxie.org/2022/01/07/web3-first-impressions.html",
