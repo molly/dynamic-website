@@ -1,5 +1,35 @@
 [
     {
+        "title": "American Workers Are Burned Out, and Bosses Are Struggling to Respond",
+        "author": "Te-Ping Chen and Ray A. Smith",
+        "href": "https://www.wsj.com/articles/worker-burnout-resignations-pandemic-stress--11640099198",
+        "work": "The Wall Street Journal",
+        "summary": "Workplace stress is rampant and resignations have risen; employers are trying four-day workweeks, mandatory vacation days and other new ways of working",
+        "date": "2021-12-21",
+        "week": "January 17–21, 2022",
+        "tags": [
+            "burnout",
+            "mental_health",
+            "tech_industry"
+        ],
+        "entryAdded": "2022-01-20T17:10:06.031Z"
+    },
+    {
+        "title": "Starving Afghans Use Crypto to Sidestep U.S. Sanctions, Failing Banks, and the Taliban",
+        "author": "Lee Fang",
+        "href": "https://theintercept.com/2022/01/19/crypto-afghanistan-sanctions-taliban/",
+        "work": "The Intercept",
+        "summary": "NGOs looking to provide emergency aid to Afghanistan are turning to cryptocurrency.",
+        "date": "2022-01-19",
+        "week": "January 17–21, 2022",
+        "tags": [
+            "crypto",
+            "technology",
+            "differing_perspectives"
+        ],
+        "entryAdded": "2022-01-20T16:40:19.806Z"
+    },
+    {
         "title": "A Move for 'Algorithmic Reparation' Calls for Racial Justice in AI",
         "author": "Khari Johnson",
         "href": "https://www.wired.com/story/move-algorithmic-reparation-calls-racial-justice-ai/",
