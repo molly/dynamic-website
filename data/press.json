@@ -1,5 +1,16 @@
 [
     {
+        "title": "So you want to be a Web3 developer",
+        "author": "Scott Carey",
+        "date": "2022-01-24",
+        "work": "InfoWorld",
+        "href": "https://www.infoworld.com/article/3648071/so-you-want-to-be-a-web3-developer.html",
+        "tags": [
+            "crypto",
+            "technology"
+        ]
+    },
+    {
         "title": "Mozilla stops accepting cryptocurrency, Wikipedia may be next: Are dominos falling?",
         "author": "Brandon Vigliarolo",
         "date": "2022-01-17",
