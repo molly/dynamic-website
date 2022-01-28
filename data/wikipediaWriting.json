@@ -592,6 +592,23 @@
         "description": "cyber espionage group"
     },
     {
+        "title": "Kelsey Hightower",
+        "sortKey": "Hightower, Kelsey",
+        "date": "2022-01-28",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "people_of_color",
+            "technology"
+        ],
+        "description": "b. 1980 or 1981; software engineer, developer advocate, and speaker known for his work with Kubernetes, open-source software, and cloud computing",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Kelsey_Hightower.png/1106px-Kelsey_Hightower.png",
+            "href": "https://commons.wikimedia.org/wiki/File:Kelsey_Hightower.png",
+            "caption": "Kelsey Hightower"
+        }
+    },
+    {
         "title": "Bessie Abramowitz Hillman",
         "sortKey": "Hillman, Bessie Abramowitz",
         "date": "2014-10-23",
@@ -1000,7 +1017,10 @@
         "date": "2021-11-27",
         "created": true,
         "biography": true,
-        "topics": ["massachusetts", "people_of_color"],
+        "topics": [
+            "massachusetts",
+            "people_of_color"
+        ],
         "description": "1913 – 1995; American microwave physicist"
     },
     {
