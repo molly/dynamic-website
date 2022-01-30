@@ -1,5 +1,54 @@
 [
     {
+        "title": "Line Goes Up - The Problem With NFTs",
+        "parenthetical": "Video",
+        "author": "Dan Olson",
+        "href": "https://www.youtube.com/watch?v=YQ_xWvX1n9g",
+        "work": "Folding Ideas",
+        "summary": "If someone pitches you on a \"great\" Web3 project, ask them if it requires buying or selling crypto to do what they say it does.",
+        "date": "2022-01-21",
+        "week": "January 24–28, 2022",
+        "tags": [
+            "technology",
+            "crypto",
+            "privacy"
+        ],
+        "entryAdded": "2022-01-30T03:33:24.416Z"
+    },
+    {
+        "title": "Best practices for writing code comments",
+        "author": "Ellen Spertus",
+        "href": "https://stackoverflow.blog/2021/12/23/best-practices-for-writing-code-comments/",
+        "work": "the Stack Overflow blog",
+        "workItalics": false,
+        "summary": "While there are many resources to help programmers write better code—such as books and static analyzers—there are few for writing better comments. While it's easy to measure the quantity of comments in a program, it's hard to measure the quality, and the two are not necessarily correlated. A bad comment is worse than no comment at all.",
+        "date": "2021-12-23",
+        "week": "January 24–28, 2022",
+        "tags": [
+            "technology"
+        ],
+        "entryAdded": "2022-01-30T03:20:33.169Z"
+    },
+    {
+        "title": "Patriot Front Fascist Leak Exposes Nationwide Racist Campaigns",
+        "author": "Chris Schiano and Dan Feidt",
+        "href": "https://unicornriot.ninja/2022/patriot-front-fascist-leak-exposes-nationwide-racist-campaigns/",
+        "work": "Unicorn Riot",
+        "summary": "The detailed inner workings and operations of neo-Nazi organization Patriot Front have come to light after a massive leak from their chat servers. This release includes more than 400 gigabytes of data published by Unicorn Riot. Ostensibly private, unedited videos and direct messages reveal a campaign to organize acts of racial hatred while indoctrinating teenagers into national socialism (Nazism). The information stands as a chilling reminder that fascist organizing thrives in secrecy and obscurity.",
+        "week": "January 17–21, 2022",
+        "tags": [
+            "extremism",
+            "race"
+        ],
+        "entryAdded": "2022-01-30T03:13:47.420Z",
+        "relatedReading": [
+            {
+                "href": "https://en.wikipedia.org/wiki/Patriot_Front",
+                "title": "Patriot Front"
+            }
+        ]
+    },
+    {
         "title": "American Workers Are Burned Out, and Bosses Are Struggling to Respond",
         "author": "Te-Ping Chen and Ray A. Smith",
         "href": "https://www.wsj.com/articles/worker-burnout-resignations-pandemic-stress--11640099198",
