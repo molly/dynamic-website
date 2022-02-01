@@ -7,25 +7,21 @@ block vars
 
 block head
   include ../symlinks/mixins/titleAndDescription.pug
-  +titleAndDescription('Press', 'Press mentions and interviews with Molly White.')
+  +titleAndDescription('Press coverage of my projects', 'Press mentions of projects by Molly White.')
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 
 block body
   .content-box
-    p
-      | I sometimes speak about topics including technology, Wikipedia, disinformation, diversity, and 
-      | online harassment.
     p 
-      | If you are a journalist hoping to speak with me, feel free to 
-      a(href="contact") contact me
-      | . I generally prefer to communicate via email rather than voice or video.
-
+      | Some of the  
+      a(href="/projects") projects
+      |  I've built have been mentioned in the press.
     p
-      | I also collect press mentions of my projects on a  
-      a(href="/projects-press") separate page 
-      | .
+      | See my  
+      a(href="/press") general press page 
+      |  for media mentions of me or my writing, or interviews with me personally.
 
-    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Press and other mentions
+    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Press coverage of my projects
 
     include ../includes/filters.pug
 

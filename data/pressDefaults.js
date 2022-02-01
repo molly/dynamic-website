@@ -14,6 +14,8 @@ const PRESS_DEFAULTS = {
 
 const PRESS_TAGS = {
   twitter: 'Twitter',
+  w3igg: 'Web3 is going just great',
+  wikimedia_timeline: 'Wikimedia timeline',
   wikipedia: 'Wikipedia',
   wikipedia_arbitration: 'Wikipedia: arbitration',
   wikipedia_breaking_news: 'Wikipedia: breaking news',
