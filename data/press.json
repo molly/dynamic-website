@@ -1,5 +1,18 @@
 [
     {
+        "title": "Why you can’t rebuild Wikipedia with crypto",
+        "author": "Casey Newton",
+        "date": "2022-02-16",
+        "work": "The Verge",
+        "parenthetical": "originally published on Platformer",
+        "href": "https://www.theverge.com/2022/2/16/22936487/molly-white-web3-is-going-just-great",
+        "tags": [
+            "crypto",
+            "technology",
+            "wikipedia"
+        ]
+    },
+    {
         "title": "Bored Apes, BuzzFeed and the Battle for the Future of the Internet",
         "author": "Maxwell Strachan",
         "date": "2022-02-14",
@@ -39,6 +52,7 @@
         "author": "Cam Newton",
         "date": "2022-01-28",
         "work": "The Verge",
+        "parenthetical": "originally published on Platformer",
         "href": "https://www.theverge.com/2022/1/28/22906010/web3-nft-internet-history-video-platformer",
         "tags": [
             "crypto",
