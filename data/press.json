@@ -1,5 +1,29 @@
 [
     {
+        "title": "Web3 is Wonky",
+        "author": "Cas Piancey and Bennett Tomlin",
+        "date": "2022-02-26",
+        "work": "Crypto Critics' Corner",
+        "parenthetical": "Podcast",
+        "href": "https://podcasts.apple.com/us/podcast/crypto-critics-corner/id1557045965?i=1000552325994",
+        "tags": [
+            "crypto",
+            "technology"
+        ]
+    },
+    {
+        "title": "Is Web 3 a Grift?",
+        "author": "Jason Calacanis and Molly Wood",
+        "date": "2022-02-25",
+        "work": "This Week in Startups",
+        "parenthetical": "Video",
+        "href": "https://www.youtube.com/watch?v=q1n9muQSIGE",
+        "tags": [
+            "crypto",
+            "technology"
+        ]
+    },
+    {
         "title": "I Found The Tech Angle On The Vibe Shift",
         "author": "Charlie Warzel",
         "date": "2022-02-17",
