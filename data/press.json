@@ -1,5 +1,27 @@
 [
     {
+        "title": "Molly White Thinks Web3 is Going Just Great",
+        "author": "Ethan Zuckerman",
+        "date": "2022-03-02",
+        "work": "Reimagining the Internet",
+        "href": "https://publicinfrastructure.org/podcast/58-molly-white/",
+        "parenthetical": "Podcast",
+        "tags": [
+            "crypto",
+            "technology"
+        ]
+    },
+    {
+        "title": "Web3 is an empty buzzword – but beware, it can still hurt you",
+        "author": "Annalee Newitz",
+        "date": "2022-03-02",
+        "href": "https://www.newscientist.com/article/mg25333760-200-web3-is-an-empty-buzzword-but-beware-it-can-still-hurt-you/",
+        "tags": [
+            "crypto",
+            "technology"
+        ]
+    },
+    {
         "title": "Web 3 is Going Great with Molly White | E1396",
         "author": "Jason Calacanis and Molly Wood",
         "date": "2022-02-28",
