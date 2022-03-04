@@ -1,5 +1,19 @@
 [
     {
+        "title": "Attack of the 50-Foot Blockchain",
+        "subtitle": "Bitcoin, Blockchain, Ethereum & Smart Contracts",
+        "author": "David Gerard",
+        "date": "2017",
+        "publisher": "David Gerard",
+        "href": "https://www.goodreads.com/book/show/35525995-attack-of-the-50-foot-blockchain",
+        "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502560607l/36008252._SY475_.jpg",
+        "status": "currentlyReading",
+        "started": "2022-02-15",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
         "title": "African-Americans in Boston",
         "subtitle": "More than 350 Years",
         "author": "Robert C. Hayden",
@@ -9,7 +23,11 @@
         "href": "https://archive.org/details/africanamericans00hayd_0/mode/1up",
         "status": "reference",
         "started": "2021-08-20",
-        "tags": ["history", "black history", "biographical"]
+        "tags": [
+            "history",
+            "black history",
+            "biographical"
+        ]
     },
     {
         "title": "The Happiness Trap",
@@ -22,7 +40,9 @@
         "href": "https://www.goodreads.com/book/show/11255745-the-happiness-trap",
         "status": "shelved",
         "started": "2021-07-21",
-        "tags": ["mental_health"]
+        "tags": [
+            "mental_health"
+        ]
     },
     {
         "title": "Men Who Hate Women",
@@ -65,11 +85,11 @@
             "extremism"
         ],
         "targetArticles": [
-          {
-              "href": "https://en.wikipedia.org/wiki/Jack_Donovan_(writer)",
-              "title": "Jack Donovan"
-          }
-      ]
+            {
+                "href": "https://en.wikipedia.org/wiki/Jack_Donovan_(writer)",
+                "title": "Jack Donovan"
+            }
+        ]
     },
     {
         "title": "Kill All Normies",
@@ -130,6 +150,8 @@
         "status": "read",
         "completed": "2019-12-29",
         "started": "2019-12-15",
-        "tags": ["social_justice"]
-      }
+        "tags": [
+            "social_justice"
+        ]
+    }
 ]
