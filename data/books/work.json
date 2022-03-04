@@ -1,5 +1,19 @@
 [
   {
+    "title": "Attack of the 50-Foot Blockchain",
+    "subtitle": "Bitcoin, Blockchain, Ethereum & Smart Contracts",
+    "author": "David Gerard",
+    "date": "2017",
+    "publisher": "David Gerard",
+    "href": "https://www.goodreads.com/book/show/35525995-attack-of-the-50-foot-blockchain",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502560607l/36008252._SY475_.jpg",
+    "status": "currentlyReading",
+    "started": "2022-02-15",
+    "tags": [
+      "crypto"
+    ]
+  },
+  {
     "title": "Clean Code",
     "subtitle": "A Handbook of Agile Software Craftsmanship",
     "author": "Robert C. Martin",
@@ -10,7 +24,10 @@
     "status": "read",
     "started": "2021-02-15",
     "completed": "2021-04-23",
-    "tags": ["programming", "book_club"]
+    "tags": [
+      "programming",
+      "book_club"
+    ]
   },
   {
     "title": "Inclusive Design Patterns",
@@ -21,7 +38,10 @@
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467273073l/30816008._SX318_.jpg",
     "href": "https://www.goodreads.com/book/show/30816008-inclusive-design-patterns---coding-accessibility-into-web-design",
     "status": "toRead",
-    "tags": ["accessibility", "design"]
+    "tags": [
+      "accessibility",
+      "design"
+    ]
   },
   {
     "title": "Deep Work",
@@ -34,7 +54,9 @@
     "status": "read",
     "started": "2020-03-13",
     "completed": "2020-05-02",
-    "tags": ["productivity"]
+    "tags": [
+      "productivity"
+    ]
   },
   {
     "title": "The Manager's Path",
@@ -47,7 +69,10 @@
     "status": "read",
     "started": "2017-11-28",
     "completed": "2018-03-16",
-    "tags": ["management", "leadership"]
+    "tags": [
+      "management",
+      "leadership"
+    ]
   },
   {
     "title": "Turn the Ship Around!",
@@ -60,6 +85,9 @@
     "status": "read",
     "started": "2017-09-02",
     "completed": "2017-11-02",
-    "tags": ["management", "leadership"]
+    "tags": [
+      "management",
+      "leadership"
+    ]
   }
 ]

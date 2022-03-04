@@ -8,7 +8,10 @@
     "href": "https://www.goodreads.com/book/show/3974.The_Terror",
     "status": "currentlyReading",
     "started": "2021-12-25",
-    "tags": ["horror", "survival"]
+    "tags": [
+      "horror",
+      "survival"
+    ]
   },
   {
     "title": "The Road",
@@ -20,7 +23,10 @@
     "status": "read",
     "started": "2021-12-22",
     "completed": "2021-12-24",
-    "tags": ["post-apocalyptic", "science fiction"]
+    "tags": [
+      "post-apocalyptic",
+      "science fiction"
+    ]
   },
   {
     "title": "A Wizard of Earthsea",
@@ -31,7 +37,9 @@
     "href": "https://www.goodreads.com/book/show/16029682-a-wizard-of-earthsea",
     "status": "shelved",
     "started": "2021-11-26",
-    "tags": ["fantasy"]
+    "tags": [
+      "fantasy"
+    ]
   },
   {
     "title": "Kisscut",
@@ -43,7 +51,10 @@
     "started": "2021-10-25",
     "completed": "2021-11-25",
     "status": "read",
-    "tags": ["thriller", "mystery"]
+    "tags": [
+      "thriller",
+      "mystery"
+    ]
   },
   {
     "title": "Blindsighted",
@@ -55,7 +66,10 @@
     "status": "read",
     "started": "2021-10-24",
     "completed": "2021-10-24",
-    "tags": ["thriller", "mystery"]
+    "tags": [
+      "thriller",
+      "mystery"
+    ]
   },
   {
     "title": "The Devil in the White City",
@@ -68,7 +82,10 @@
     "status": "read",
     "started": "2021-10-13",
     "completed": "2021-10-24",
-    "tags": ["crime", "historical"]
+    "tags": [
+      "crime",
+      "historical"
+    ]
   },
   {
     "title": "Lirael",
@@ -80,7 +97,9 @@
     "status": "read",
     "started": "2021-07-11",
     "completed": "2021-10-13",
-    "tags": ["fantasy"]
+    "tags": [
+      "fantasy"
+    ]
   },
   {
     "title": "Sabriel",
@@ -92,7 +111,9 @@
     "status": "read",
     "started": "2021-07-10",
     "completed": "2021-07-11",
-    "tags": ["fantasy"]
+    "tags": [
+      "fantasy"
+    ]
   },
   {
     "title": "The Silent Patient",
@@ -104,19 +125,23 @@
     "status": "read",
     "started": "2021-07-09",
     "completed": "2021-07-09",
-    "tags": ["thriller"]
+    "tags": [
+      "thriller"
+    ]
   },
   {
-   "title": "Parable of the Sower",
-   "author": "Octavia Butler",
-   "date": "1993",
-   "publisher": "Four Walls Eight Windows",
-   "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1265033068l/543225.jpg",
-   "href": "https://www.goodreads.com/book/show/52397.Parable_of_the_Sower",
-   "status": "read",
-   "started": "2021-06-26",
-   "completed": "2021-07-09",
-   "tags": ["science_fiction"]
+    "title": "Parable of the Sower",
+    "author": "Octavia Butler",
+    "date": "1993",
+    "publisher": "Four Walls Eight Windows",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1265033068l/543225.jpg",
+    "href": "https://www.goodreads.com/book/show/52397.Parable_of_the_Sower",
+    "status": "read",
+    "started": "2021-06-26",
+    "completed": "2021-07-09",
+    "tags": [
+      "science_fiction"
+    ]
   },
   {
     "title": "The Wisteria Society of Lady Scoundrels",
@@ -128,7 +153,10 @@
     "status": "read",
     "started": "2021-06-15",
     "completed": "2021-06-26",
-    "tags": ["romance", "fantasy"]
+    "tags": [
+      "romance",
+      "fantasy"
+    ]
   },
   {
     "title": "The Martian",
@@ -140,7 +168,10 @@
     "status": "read",
     "started": "2021-05-04",
     "completed": "2021-06-13",
-    "tags": ["science_fiction", "survival"]
+    "tags": [
+      "science_fiction",
+      "survival"
+    ]
   },
   {
     "title": "Still Life",
@@ -152,7 +183,9 @@
     "status": "read",
     "started": "2021-04-18",
     "completed": "2021-05-04",
-    "tags": ["mystery"]
+    "tags": [
+      "mystery"
+    ]
   },
   {
     "title": "Devolution",
@@ -165,7 +198,10 @@
     "status": "read",
     "started": "2021-01-01",
     "completed": "2021-04-17",
-    "tags": ["thriller", "horror"]
+    "tags": [
+      "thriller",
+      "horror"
+    ]
   },
   {
     "title": "The Luminous Dead",
@@ -177,7 +213,11 @@
     "status": "read",
     "started": "2020-12-25",
     "completed": "2020-12-27",
-    "tags": ["horror", "science_fiction", "thriller"]
+    "tags": [
+      "horror",
+      "science_fiction",
+      "thriller"
+    ]
   },
   {
     "title": "Bruno, Chief of Police",
@@ -189,7 +229,9 @@
     "status": "read",
     "started": "2020-12-18",
     "completed": "2020-12-18",
-    "tags": ["mystery"]
+    "tags": [
+      "mystery"
+    ]
   },
   {
     "title": "Grotesque",
@@ -202,7 +244,9 @@
     "status": "read",
     "started": "2020-03-28",
     "completed": "2020-05-04",
-    "tags": ["mystery"]
+    "tags": [
+      "mystery"
+    ]
   },
   {
     "title": "The Surgeon",
@@ -214,7 +258,10 @@
     "status": "read",
     "started": "2019-06-06",
     "completed": "2019-06-08",
-    "tags": ["mystery", "thriller"]
+    "tags": [
+      "mystery",
+      "thriller"
+    ]
   },
   {
     "title": "On Democracy",
@@ -226,6 +273,9 @@
     "status": "read",
     "started": "2019-04-26",
     "completed": "2019-06-06",
-    "tags": ["nonfiction", "politics"]
+    "tags": [
+      "nonfiction",
+      "politics"
+    ]
   }
 ]

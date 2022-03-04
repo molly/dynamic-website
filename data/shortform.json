@@ -1,5 +1,196 @@
 [
     {
+        "title": "Shareholders vote for Apple to conduct a civil rights audit, bucking company's recommendation",
+        "author": "Kif Leswing",
+        "href": "https://www.cnbc.com/2022/03/04/apple-shareholders-vote-for-company-to-conduct-a-civil-rights-audit.html",
+        "work": "CNBC",
+        "date": "2022-03-04",
+        "week": "February 28–March 4, 2022",
+        "summary": "Apple shareholders approved a proposal on Friday that said that the company will conduct a third-party civil rights audit. The proposal, which was opposed by Apple, was voted on at Apple's annual shareholder meeting on Friday.",
+        "tags": [
+            "tech_industry",
+            "workers_rights"
+        ],
+        "relatedReading": [
+            {
+                "title": "Apple worker organizations § United States",
+                "href": "https://en.wikipedia.org/wiki/Apple_worker_organizations#United_States"
+            }
+        ],
+        "entryAdded": "2022-03-04T21:39:47.022Z"
+    },
+    {
+        "title": "Washington became the second state to pass the Silenced No More Act",
+        "author": "Issie Lapowsky",
+        "href": "https://www.protocol.com/bulletins/washington-silenced-no-more",
+        "work": "Protocol",
+        "date": "2022-03-04",
+        "week": "February 28–March 4, 2022",
+        "summary": "Washington state became the second in the nation to pass the Silenced No More Act on Thursday. The bill bars employers in the state from using NDAs to prevent workers from talking about instances of illegal harassment and discrimination, retaliation, sexual assault and wage violations.",
+        "tags": [
+            "tech_industry",
+            "workers_rights"
+        ],
+        "relatedReading": [
+            {
+                "title": "Ifeoma Ozoma § Silenced No More Act",
+                "href": "https://en.wikipedia.org/wiki/Ifeoma_Ozoma#Silenced_No_More_Act"
+            }
+        ],
+        "entryAdded": "2022-03-04T21:06:51.474Z"
+    },
+    {
+        "title": "How the Russian Invasion of Ukraine Is Playing Out on English, Ukrainian, and Russian Wikipedia",
+        "author": "Stephen Harrison",
+        "href": "https://slate.com/technology/2022/03/wikipedia-russian-invasion-of-ukraine-edits-kyiv-kiev.html",
+        "date": "2022-03-01",
+        "work": "Slate",
+        "week": "February 28–March 4, 2022",
+        "summary": "Right now, the number of people reading about Ukraine on Wikipedia is at an unprecedented high—spiking to more than 22 million English page views in the past month versus roughly 290,000 in February 2021. Meanwhile, Russia is coupling its lethal military campaign with a Goebbels-like propaganda blitz. The lies from Moscow put pressure on Wikipedia to maintain the site's disinformation countermeasures.",
+        "tags": [
+            "military",
+            "technology"
+        ],
+        "relatedReading": [
+            {
+                "title": "2022 Russian invasion of Ukraine",
+                "href": "https://en.wikipedia.org/wiki/2022_Russian_invasion_of_Ukraine"
+            }
+        ],
+        "entryAdded": "2022-03-04T21:49:11.468Z"
+    },
+    {
+        "title": "My Burnout Isn't Just a Health Issue. It's a Money Issue.",
+        "author": "Laura Amico",
+        "href": "https://hbr.org/2022/02/my-burnout-isnt-just-a-health-issue-its-a-money-issue",
+        "date": "2022-02-22",
+        "work": "Harvard Business Review",
+        "week": "February 21–25, 2022",
+        "summary": "When we think about what causes financial instability, we typically think about a business closing, a person losing their job, or an economic downturn. We don't typically think about burnout as a threat to our finances — but we should.",
+        "tags": [
+            "burnout",
+            "class"
+        ],
+        "entryAdded": "2022-03-04T21:52:25.094Z"
+    },
+    {
+        "title": "Many working parents with young children say finding backup care would be very difficult",
+        "author": "Ruth Igielnik",
+        "date": "2022-02-23",
+        "work": "Pew Research Center",
+        "href": "https://www.pewresearch.org/fact-tank/2022/02/23/many-working-parents-with-young-children-say-finding-backup-care-would-be-very-difficult/",
+        "summary": "Nearly two years since the coronavirus pandemic hit the United States, the emergence of the highly transmissible omicron variant late last year upended things yet again, leaving many parents of young children scrambling to figure out care.",
+        "week": "February 21–25, 2022",
+        "tags": [
+            "covid19",
+            "family"
+        ],
+        "entryAdded": "2022-03-04T22:22:39.000Z"
+    },
+    {
+        "title": "The Overlooked History of Black Disabled People",
+        "author": "Vilissa Thompson",
+        "href": "https://rewirenewsgroup.com/article/2018/03/16/overlooked-history-black-disabled-people/",
+        "date": "2018-03-16",
+        "work": "Rewire News Group",
+        "summary": "What do Harriet Tubman, Fannie Lou Hamer, and Mary Davidson have in common? They were all important Black historical figures who made incredible strides in our nation's ongoing struggle for human and civil rights, and they were all disabled. If you were surprised to learn that these women were disabled, you are not alone. Many Black historical figures, innovators, and activists have had their disabilities erased when their stories are taught in schools and covered during Black history and women's history observances—by educators and advocates alike.",
+        "week": "February 14–18, 2022",
+        "tags": [
+            "ability",
+            "antiblack_racism",
+            "race"
+        ],
+        "entryAdded": "2022-03-04T21:48:57.487Z"
+    },
+    {
+        "title": "What an NFL Coaching Scandal Can Teach Tech about Diversity",
+        "author": "Nilay Patel and Bärí A. Williams",
+        "href": "https://www.theverge.com/22933148/tech-diversity-nfl-coach-scandal-podcast-inclusion-bari-williams-interview-decoder",
+        "date": "February 15, 2022",
+        "work": "The Verge",
+        "week": "February 14–18, 2022",
+        "summary": "The Rooney Rule is often held up as an example of a worthwhile diversity initiative — something that other companies should try and emulate. But here, it seems to have failed in catastrophic fashion. I wanted to understand why, and we used that conversation to launch into the diversity problem that tech is having.",
+        "tags": [
+            "antiblack_racism",
+            "tech_industry"
+        ],
+        "relatedReading": [
+            {
+                "title": "Brian Flores § Lawsuit against NFL and teams",
+                "href": "https://en.wikipedia.org/wiki/Brian_Flores#Lawsuit_against_NFL_and_teams"
+            }
+        ],
+        "entryAdded": "2022-03-04T22:32:21.371Z"
+    },
+    {
+        "title": "20% of White Employees Have Sponsors. Only 5% of Black Employees Do.",
+        "author": "Sylvia Ann Hewlett and Kennedy Ihezie",
+        "date": "2022-02-10",
+        "work": "Harvard Business Review",
+        "href": "https://hbr.org/2022/02/20-of-white-employees-have-sponsors-only-5-of-black-employees-do",
+        "week": "February 7–11, 2022",
+        "summary": "Executive sponsorship is by far the most effective intervention a company can make to advance Black talent, but only 5% of up-and-coming Black employees succeed in winning sponsorship. Black managers cannot look to senior Black colleagues for sponsorship, and white executives don't tend to advocate for them either. Creating more access to sponsorship is not going to happen organically. Significant progress depends on companies giving urgent priority to well-financed interventions that create access to senior level advocacy for Black managers and executives.",
+        "tags": [
+            "antiblack_racism",
+            "race",
+            "whiteness"
+        ],
+        "entryAdded": "2022-03-04T22:37:12.526Z"
+    },
+    {
+        "title": "Use of Controversial Phone-Cracking Tool Is Spreading Across Federal Government",
+        "author": "Mara Hvistendahl and Sam Biddle",
+        "href": "https://theintercept.com/2022/02/08/cellebrite-phone-hacking-government-agencies/",
+        "work": "The Intercept",
+        "date": "2022-02-08",
+        "week": "February 7–11, 2022",
+        "summary": "Cellebrite's extensive federal sales come as another Israeli phone-spying firm, NSO Group, falls under federal sanctions.",
+        "tags": [
+            "policing",
+            "technology",
+            "surveillance"
+        ],
+        "relatedReading": [
+            {
+                "title": "Cellebrite",
+                "href": "https://en.wikipedia.org/wiki/Cellebrite"
+            },
+            {
+                "title": "Cellebrite UFED",
+                "href": "https://en.wikipedia.org/wiki/Cellebrite_UFED"
+            }
+        ],
+        "entryAdded": "2022-03-04T21:00:15.808Z"
+    },
+    {
+        "title": "Why Big Tech Companies Have Been Quiet on Texas' Abortion Law",
+        "author": "Caitlin Harrington",
+        "href": "https://www.wired.com/story/why-big-tech-quiet-texas-abortion-law/",
+        "work": "Wired",
+        "date": "2022-01-20",
+        "summary": "As the anniversary of Roe v. Wade nears, pressure is building from advocacy groups and workers themselves.",
+        "week": "January 31–February 4, 2022",
+        "tags": [
+            "reproductive_justice",
+            "tech_industry"
+        ],
+        "entryAdded": "2022-03-04T21:59:45.866Z"
+    },
+    {
+        "title": "Anti-Trans Bills Are Moving Through State Legislatures With Remarkable Speed",
+        "author": "Natasha Lennard",
+        "href": "https://theintercept.com/2022/02/03/anti-trans-bills-south-dakota-sports-youth-health-care/",
+        "work": "The Intercept",
+        "summary": "South Dakota's anti-trans sports ban is the first bill to pass among a record number targeting trans children this year.",
+        "date": "2022-02-03",
+        "week": "January 31–February 4, 2022",
+        "tags": [
+            "childrens_rights",
+            "trans_issues"
+        ],
+        "entryAdded": "2022-03-04T20:50:11.208Z"
+    },
+    {
         "title": "Line Goes Up - The Problem With NFTs",
         "parenthetical": "Video",
         "author": "Dan Olson",
@@ -114,7 +305,7 @@
         "author": "Tara Parker-Pope, Christina Caron and Mónica Cordero Sancho",
         "href": "https://www.nytimes.com/interactive/2021/12/16/well/mental-health-crisis-america-covid.html",
         "work": "The New York Times",
-        "summary": "As Americans head into a third year of pandemic living, therapists around the country are finding themselves on the front lines of a mental health crisis. Social workers, psychologists and counselors from every state say they can’t keep up with an unrelenting demand for their services, and many must turn away patients — including children — who are desperate for support.",
+        "summary": "As Americans head into a third year of pandemic living, therapists around the country are finding themselves on the front lines of a mental health crisis. Social workers, psychologists and counselors from every state say they can't keep up with an unrelenting demand for their services, and many must turn away patients — including children — who are desperate for support.",
         "date": "2021-12-17",
         "week": "January 3–7, 2022",
         "tags": [
@@ -129,7 +320,7 @@
         "href": "https://thoughtbot.com/blog/tailwind-and-the-femininity-of-css",
         "work": "the Thoughtbot blog",
         "workItalics": false,
-        "summary": "When it comes down to the root of the problem, perhaps it isn’t CSS itself but our unwillingness to examine our sexist ideas of what is worthy in web development.",
+        "summary": "When it comes down to the root of the problem, perhaps it isn't CSS itself but our unwillingness to examine our sexist ideas of what is worthy in web development.",
         "date": "2021-12-15",
         "week": "January 3–7, 2022",
         "tags": [
@@ -208,7 +399,7 @@
         "author": "Stephen Diehl",
         "href": "https://www.stephendiehl.com/blog/web3-bullshit.html",
         "work": "their blog",
-        "summary": "Diehl gives their (negative) opinion on crypto and web3. \"Web3 is a deeply polarizing topic for technologists because it’s designed to be that way. It’s a rhetorical trick to set up a false dichotomy between the legacy internet world of popup ads and Zuckerbergs—which legitimately does suck—and a fantasy world built on technologically incoherent pipe dreams and phoney crypto-populism.\"",
+        "summary": "Diehl gives their (negative) opinion on crypto and web3. \"Web3 is a deeply polarizing topic for technologists because it's designed to be that way. It's a rhetorical trick to set up a false dichotomy between the legacy internet world of popup ads and Zuckerbergs—which legitimately does suck—and a fantasy world built on technologically incoherent pipe dreams and phoney crypto-populism.\"",
         "workItalics": false,
         "date": "December 4, 2021",
         "week": "December 6–10, 2021",
@@ -289,7 +480,7 @@
         "href": "https://www.stephendiehl.com/blog/nothing-burger.html",
         "date": "November 24, 2021",
         "week": "November 22–26, 2021",
-        "summary": "Crypto skepticism has to go hand in hand with a deeper understanding of why the technology doesn’t work as its advocates claim, in addition to the legal and regulatory arguments against its existence.",
+        "summary": "Crypto skepticism has to go hand in hand with a deeper understanding of why the technology doesn't work as its advocates claim, in addition to the legal and regulatory arguments against its existence.",
         "tags": [
             "technology",
             "crypto",
@@ -345,7 +536,7 @@
         "entryAdded": "2021-12-05T04:38:57.671Z"
     },
     {
-        "title": "Diversity’s Fault Lines",
+        "title": "Diversity's Fault Lines",
         "author": "Lawrence Goodman",
         "href": "https://www.brandeis.edu/magazine/2021/fall/featured-stories/mayorga.html",
         "work": "Brandeis Magazine",
