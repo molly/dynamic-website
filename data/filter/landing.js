@@ -105,9 +105,17 @@ const getLandingPageSummary = async () => {
   );
 
   const reference = await getLocalJson('../books/reference.json');
-  const currentlyReadingReference = getAllBooksSortedByStartDate(
-    reference
-  ).map((book) => processTags(book, BOOK_DEFAULTS.tagText));
+  let currentlyReadingReference = getAllBooksSortedByStartDate(reference);
+  if (
+    currentlyReadingReference.some((book) => book.status === 'currentlyReading')
+  ) {
+    currentlyReadingReference = currentlyReadingReference.filter(
+      (book) => book.status === 'currentlyReading'
+    );
+  }
+  currentlyReadingReference = currentlyReadingReference.map((book) =>
+    processTags(book, BOOK_DEFAULTS.tagText)
+  );
 
   const work = await getLocalJson('../books/work.json');
   const currentlyReadingWork = getBooksToShow(work).map((book) =>
