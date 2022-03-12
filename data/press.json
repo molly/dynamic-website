@@ -1,5 +1,18 @@
 [
     {
+        "title": "Web3 Sucks (w/ Molly White)",
+        "author": "Matt Binder",
+        "date": "2022-03-10",
+        "work": "Scam Economy",
+        "parenthetical": "Video podcast",
+        "href": "https://scameconomy.com/e/vn510r6n-6-web3-sucks-w-molly-white",
+        "tags": [
+            "crypto",
+            "technology",
+            "wikipedia"
+        ]
+    },
+    {
         "title": "Web3 and the Trap of 'For Good'",
         "author": "Scott Smith and Lina Srivastava",
         "date": "2022-03-08",
@@ -50,7 +63,7 @@
         "author": "Jason Calacanis and Molly Wood",
         "date": "2022-02-28",
         "work": "This Week in Startups",
-        "parenthetical": "Video",
+        "parenthetical": "Video podcast",
         "href": "https://www.youtube.com/watch?v=WB_luMPwiXo",
         "tags": [
             "crypto",
