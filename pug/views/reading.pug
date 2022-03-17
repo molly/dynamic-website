@@ -42,6 +42,42 @@ block body
             |.
         else 
           |.
+    
+    .reading-section
+      h3
+        a(href="/reading/blockchain") Blockchain reading list 
+
+      .reading-section-body  
+        | I most recently  
+        if mostRecentBlockchain.parenthetical && mostRecentBlockchain.parenthetical === 'Video'
+          |  watched 
+        else if mostRecentBlockchain.parenthetical && mostRecentBlockchain.parenthetical.indexOf("odcast") > -1
+          |  listened to 
+        else
+          |  read 
+        if mostRecentBlockchain.parenthetical && mostRecentBlockchain.parenthetical === "Book" 
+          a(href=mostRecentBlockchain.href)
+            i #{mostRecentBlockchain.title}
+        else
+          | "
+          a(href=mostRecentBlockchain.href) #{mostRecentBlockchain.title}
+          | "
+        if mostRecentBlockchain.author
+          |  by #{mostRecentBlockchain.author} #{mostRecentBlockchain.preposition}  
+
+          if mostRecentBlockchain.work
+            if !mostRecentBlockchain.workItalics
+              | #{mostRecentBlockchain.work}.
+            else
+              i #{mostRecentBlockchain.work}.
+
+          if mostRecentBlockchain.publisher
+            |  #{mostRecentBlockchain.publisher}.
+
+          if !mostRecentBlockchain.work && !mostRecentBlockchain.publisher
+            |.
+        else 
+          |.
           
     .reading-section
       h3

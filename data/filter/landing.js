@@ -5,6 +5,7 @@ const { makeSortByWeek } = require('../utils/weekUtils');
 const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
 
 const SHORTFORM_DEFAULTS = require('../shortformDefaults');
+const BLOCKCHAIN_DEFAULTS = require('../blockchainDefaults');
 const BOOK_DEFAULTS = require('../books/bookDefaults');
 
 const processTags = (item, tagText) => {
@@ -99,6 +100,12 @@ const getLandingPageSummary = async () => {
     ...shortform.sort(makeSortByWeek())[0],
   };
 
+  const blockchain = await getLocalJson('../blockchain.json');
+  const mostRecentBlockchain = {
+    ...BLOCKCHAIN_DEFAULTS.defaultArticle,
+    ...blockchain.sort(makeSortBySimpleDateKey('started'))[0],
+  };
+
   const pleasure = await getLocalJson('../books/pleasure.json');
   const currentlyReadingPleasure = getBooksToShow(pleasure).map((book) =>
     processTags(book, BOOK_DEFAULTS.tagText)
@@ -124,6 +131,7 @@ const getLandingPageSummary = async () => {
 
   return {
     mostRecentShortform,
+    mostRecentBlockchain,
     currentlyReadingPleasure,
     currentlyReadingReference,
     currentlyReadingWork,

@@ -1,0 +1,70 @@
+mixin article(article, rss=false)
+  .article
+    if rss
+      if article.image 
+        img(src=article.image.src, class="webfeedsFeaturedVisual", alt=article.image.alt, style="max-width: 300px;")
+      else 
+        img(src='https://www.mollywhite.net/images/mollyandmax.png', class="webfeedsFeaturedVisual", alt='Illustration of Molly White holding her cat Max.', style="max-width: 300px;")
+
+    if !rss
+      .title
+        if article.parenthetical === "Book"
+          a(href=article.href)
+            i #{article.title}
+        else
+          |"
+          a(href=article.href) #{article.title}
+          |"
+
+        if article.parenthetical
+          |  (#{article.parenthetical})
+
+        if article.parenthetical || !article.title.match(/[.?!]$/m)
+          |.
+
+    .byline
+      if article.author
+        | #{article.author}
+      
+      if article.work || article.publisher 
+        |  #{article.preposition} 
+
+      if article.work
+        if !article.workItalics
+          | #{article.work}.
+        else
+          i #{article.work}.
+
+      if article.publisher
+        |  #{article.publisher}.
+
+    .date-block
+      if article.formattedDate
+        | Published #{article.formattedDate}.
+      if article.parenthetical && article.parenthetical === "Video"
+        |  Watched 
+      if article.parenthetical && article.parenthetical.indexOf("odcast") > -1
+        |  Listened
+      else if article.status === 'currentlyReading' || article.completed
+        |  Started 
+      else
+        |  Read
+      |  on #{article.formattedStarted}
+      if article.completed 
+        | ; completed #{article.formattedCompleted}
+      |.
+
+    if article.relatedReading.length 
+      .related-reading
+        if !rss
+          i.fab.fa-wikipedia-w
+        span.header Related reading: 
+
+        each rr, index in article.relatedReading
+          a(href=rr.href) #{rr.title}
+          if index !== article.relatedReading.length - 1
+            | , 
+
+    if !rss && article.tags
+      .tags 
+        span.tags= article.tags.map(function(t) { return t.text }).join(', ')

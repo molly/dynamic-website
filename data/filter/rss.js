@@ -2,7 +2,6 @@ const moment = require('moment');
 const path = require('path');
 const pug = require('pug');
 
-const getLocalJson = require('../utils/getLocalJson');
 const preprocess = require('./preprocess');
 const { getMomentFromWeek } = require('../utils/weekUtils');
 const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
@@ -42,18 +41,20 @@ const makeSummary = (article) => {
   } else if (article.author || article.work || article.publisher) {
     summary += '.';
   }
-  const textOnlySummary = article.summary.replace(/(<([^>]+)>)/gi, '');
-  const trimmedSummary = getSummaryExcerpt(textOnlySummary, 200);
-  return summary + ' ' + trimmedSummary;
+  if (article.summary) {
+    const textOnlySummary = article.summary.replace(/(<([^>]+)>)/gi, '');
+    const trimmedSummary = getSummaryExcerpt(textOnlySummary, 200);
+    return summary + ' ' + trimmedSummary;
+  }
+  return summary;
 };
 
-const getRssResults = async () => {
+const getRssResults = (data, template) => {
   const shortformPugTemplate = pug.compileFile(
-    path.join(__dirname, '../../pug/etc/rssArticle.pug')
+    path.join(__dirname, `../../pug/etc/${template}.pug`)
   );
 
-  const shortform = await getLocalJson('../shortform.json');
-  const preprocessed = preprocess(shortform, SHORTFORM_DEFAULTS).results;
+  const preprocessed = preprocess(data, SHORTFORM_DEFAULTS).results;
   const withRssValues = preprocessed.map((article) => {
     article.entryHtml = shortformPugTemplate({
       article,
@@ -61,7 +62,11 @@ const getRssResults = async () => {
 
     article.rssSummary = makeSummary(article);
     if (!article.entryAdded) {
-      article.entryAdded = getMomentFromWeek(article.week).toISOString();
+      if (article.week) {
+        article.entryAdded = getMomentFromWeek(article.week).toISOString();
+      } else if (article.started) {
+        article.entryAdded = moment(article.started).toISOString();
+      }
     } else {
       article.entryAdded = moment(article.entryAdded).toISOString();
     }

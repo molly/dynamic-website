@@ -22,7 +22,7 @@ const preprocess = (data, { defaultArticle, tagText, defaultKey }) => {
 
     // Dates
     updatedArticle.formattedDate = formatDate(m, updatedArticle.date);
-    if (defaultKey === 'BOOK') {
+    if (defaultKey === 'BOOK' || defaultKey === 'BLOCKCHAIN') {
       if (article.started) {
         const startedMoment = moment(updatedArticle.started, [
           'YYYY-MM-DD',

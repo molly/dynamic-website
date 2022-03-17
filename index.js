@@ -12,6 +12,7 @@ const getPaginatedAndFiltered = require('./data/filter/getPaginatedAndFiltered')
 const getLandingPageSummary = require('./data/filter/landing');
 const getWikipediaWriting = require('./data/filter/wikipediaWritingFilter');
 const getRssResults = require('./data/filter/rss');
+const getLocalJson = require('./data/utils/getLocalJson');
 
 const {
   READING_STATUSES_MAP,
@@ -19,6 +20,7 @@ const {
 } = require('./data/constants/readingStatuses');
 const PRESS_DEFAULTS = require('./data/pressDefaults');
 const SHORTFORM_DEFAULTS = require('./data/shortformDefaults');
+const BLOCKCHAIN_DEFAULTS = require('./data/blockchainDefaults');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
 
 const PORT = 5000;
@@ -67,6 +69,19 @@ app.get('/reading/shortform', async (req, res) => {
   );
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   res.render('shortform.pug', {
+    query: { ...req.query, tags: selectedTags },
+    ...results,
+  });
+});
+
+app.get('/reading/blockchain', async (req, res) => {
+  const results = await getPaginatedAndFiltered(
+    '../blockchain.json',
+    BLOCKCHAIN_DEFAULTS,
+    req
+  );
+  const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
+  res.render('blockchain.pug', {
     query: { ...req.query, tags: selectedTags },
     ...results,
   });
@@ -132,20 +147,25 @@ app.get('/wikipedia-work', async (req, res) => {
   });
 });
 
-app.get('/reading/shortform/feed.xml', async (req, res) => {
-  const results = await getRssResults();
-  res.set('Content-Type', 'text/xml');
-  res.render('feed.pug', {
-    prefix: 'shortform',
-    results,
-  });
-});
+app.get(
+  ['/reading/shortform/feed.xml', '/reading/dib/feed.xml'],
+  async (req, res) => {
+    const shortform = await getLocalJson('../shortform.json');
+    const results = await getRssResults(shortform, 'rssArticle');
+    res.set('Content-Type', 'text/xml');
+    res.render('feed.pug', {
+      prefix: 'shortform',
+      results,
+    });
+  }
+);
 
-app.get('/reading/dib/feed.xml', async (req, res) => {
-  const results = await getRssResults();
+app.get('/reading/blockchain/feed.xml', async (req, res) => {
+  const blockchain = await getLocalJson('../blockchain.json');
+  const results = await getRssResults(blockchain, 'rssBlockchainArticle');
   res.set('Content-Type', 'text/xml');
   res.render('feed.pug', {
-    prefix: 'dib',
+    prefix: 'blockchain',
     results,
   });
 });
