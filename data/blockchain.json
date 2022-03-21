@@ -1,5 +1,35 @@
 [
   {
+    "title": "Episode 44 – Poker’s Black Friday (Feat. Jason Bral)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "date": "2022-01-20",
+    "started": "2022-03-19",
+    "work": "Crypto Critics' Corner",
+    "parenthetical": "Podcast",
+    "href": "https://cryptocriticscorner.com/2022/01/20/episode-44-pokers-black-friday-feat-jason-bral/",
+    "entryAdded": "2022-03-21T01:06:41.285Z"
+  },
+  {
+    "title": "Web3.0: A Libertarian Dystopia",
+    "author": "münecat",
+    "date": "2022-03-19",
+    "started": "2022-03-19",
+    "parenthetical": "Video",
+    "publisher": "her YouTube channel",
+    "preposition": "on",
+    "entryAdded": "2022-03-21T01:04:27.727Z"
+  },
+  {
+    "title": "Episode 60: The Foul Financials of Cryptocurrency (Feat. Francine McKenna)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "date": "2022-03-18",
+    "started": "2022-03-18",
+    "work": "Crypto Critics' Corner",
+    "parenthetical": "Podcast",
+    "href": "https://cryptocriticscorner.com/2022/03/18/episode-60-the-foul-financials-of-cryptocurrency-feat-francine-mckenna/",
+    "entryAdded": "2022-03-21T01:02:21.125Z"
+  },
+  {
     "title": "Cyberlibertarianism: The Extremist Foundations of 'Digital Freedom'",
     "author": "David Golumbia",
     "date": "2013-09",
@@ -17,7 +47,7 @@
     "title": "Episode 45: Bitcoin's Black Swans (Feat. Doomberg)",
     "author": "Bennett Tomlin and Cas Piancey",
     "date": "2022-01-24",
-    "started": "2022-03-13",
+    "started": "2022-03-15",
     "work": "Crypto Critics' Corner",
     "parenthetical": "Podcast",
     "href": "https://cryptocriticscorner.com/2022/01/24/episode-45-bitcoins-black-swans-featuring-doomberg/",
@@ -80,16 +110,5 @@
     "workItalics": false,
     "href": "https://lukeplant.me.uk/blog/posts/the-technological-case-against-bitcoin-and-blockchain/",
     "entryAdded": "2022-03-17T00:40:21.520Z"
-  },
-  {
-    "title": "Attack of the 50-Foot Blockchain",
-    "subtitle": "Bitcoin, Blockchain, Ethereum & Smart Contracts",
-    "author": "David Gerard",
-    "date": "2017",
-    "parenthetical": "Book",
-    "href": "https://www.goodreads.com/book/show/35525995-attack-of-the-50-foot-blockchain",
-    "status": "currentlyReading",
-    "started": "2022-02-15",
-    "entryAdded": "2022-03-17T00:40:21.519Z"
   }
 ]
