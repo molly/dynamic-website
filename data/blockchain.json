@@ -1,5 +1,90 @@
 [
   {
+    "title": "Episode 12: Interview with crypto and Web3 skeptic Stephen Diehl",
+    "author": "Jon Henshaw",
+    "date": "2022-01-22",
+    "started": "2022-03-27",
+    "work": "Coywolf",
+    "parenthetical": "Podcast",
+    "href": "https://www.coywolf.news/podcast/episode-12-stephen-diehl-interview-crypto-and-web3-skeptic/",
+    "entryAdded": "2022-03-27T19:41:58.348Z"
+  },
+  {
+    "title": "Episode 62 – Should Money Laundering be a Crime? (Feat. Josh Cincinnati)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "date": "2022-03-24",
+    "started": "2022-03-26",
+    "completed": "2022-03-27",
+    "work": "Crypto Critics' Corner",
+    "parenthetical": "Podcast",
+    "href": "https://cryptocriticscorner.com/2022/03/24/episode-62-should-money-laundering-be-a-crime-feat-josh-cincinnati/",
+    "entryAdded": "2022-03-27T19:40:27.864Z"
+  },
+  {
+    "title": "Math in Solidity (Part 2: Overflow)",
+    "author": "Mikhail Vladimirov",
+    "date": "2020-02-21",
+    "started": "2022-03-26",
+    "work": "Medium",
+    "preposition": "on",
+    "workItalics": false,
+    "href": "https://medium.com/coinmonks/math-in-solidity-part-2-overflow-3cd7283714b4",
+    "entryAdded": "2022-03-27T19:46:10.658Z"
+  },
+  {
+    "title": "Math in Solidity (Part 1: Numbers)",
+    "author": "Mikhail Vladimirov",
+    "date": "2020-02-17",
+    "started": "2022-03-25",
+    "work": "Medium",
+    "preposition": "on",
+    "workItalics": false,
+    "href": "https://medium.com/coinmonks/math-in-solidity-part-1-numbers-384c8377f26d",
+    "entryAdded": "2022-03-27T19:44:33.793Z"
+  },
+  {
+    "title": "The New York Times Has a Crypto Blindspot",
+    "author": "Stephen Diehl",
+    "date": "2022-03-25",
+    "started": "2022-03-25",
+    "work": "Medium",
+    "preposition": "on",
+    "workItalics": false,
+    "href": "https://medium.com/@Stephen.Diehl/the-new-york-times-has-a-crypto-blindspot-d5de2a889665",
+    "entryAdded": "2022-03-28T01:25:21.030Z"
+  },
+  {
+    "title": "The Latecomer's Guide to Crypto: A Few Thoughts",
+    "author": "Neil Turkewitz",
+    "date": "2022-03-23",
+    "started": "2022-03-24",
+    "work": "his Medium",
+    "workItalics": false,
+    "href": "https://medium.com/@nturkewitz_56674/the-latecomers-guide-to-crypto-a-few-thoughts-6f5d7b87b0b2",
+    "entryAdded": "2022-03-28T01:23:59.454Z"
+  },
+  {
+    "title": "Can 'the media' stop crypto?",
+    "author": "Max Read",
+    "date": "2022-03-23",
+    "started": "2022-03-23",
+    "work": "his Substack",
+    "workItalics": false,
+    "href": "https://maxread.substack.com/p/can-the-media-stop-crypto",
+    "entryAdded": "2022-03-28T01:19:57.218Z"
+  },
+  {
+    "title": "The Emperor's New Blockchain",
+    "author": "Ed Zitron",
+    "date": "2022-03-23",
+    "started": "2022-03-23",
+    "preposition": "on",
+    "work": "his Substack",
+    "workItalics": false,
+    "href": "https://ez.substack.com/p/the-emperors-new-blockchain",
+    "entryAdded": "2022-03-28T01:21:46.506Z"
+  },
+  {
     "title": "Episode 61 – Trying to Think Like the SEC (Feat. John Reed Stark)",
     "author": "Bennett Tomlin and Cas Piancey",
     "date": "2022-03-22",
