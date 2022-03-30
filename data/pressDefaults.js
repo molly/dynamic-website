@@ -13,6 +13,7 @@ const PRESS_DEFAULTS = {
 };
 
 const PRESS_TAGS = {
+  nfts: 'NFTs',
   twitter: 'Twitter',
   w3igg: 'Web3 is going just great',
   wikimedia_timeline: 'Wikimedia timeline',

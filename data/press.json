@@ -1,5 +1,39 @@
 [
     {
+        "title": "New York Times crypto explainer was a biased puff piece, skeptics claim",
+        "author": "Annie Rauwerda",
+        "work": "Input",
+        "date": "2022-03-28",
+        "href": "https://www.inputmag.com/culture/the-new-york-times-crypto-explainer-was-a-biased-puff-piece-skeptics-say",
+        "tags": [
+            "crypto",
+            "journalism"
+        ]
+    },
+    {
+        "title": "Crypto evangelists promise Web3 will be a truly free and democratic internet — but it's failing to live up to that hype",
+        "author": "Paris Marx",
+        "work": "Business Insider",
+        "date": "2022-03-24",
+        "href": "https://www.businessinsider.com/web3-blockchain-crypto-internet-doomed-fail-doesnt-live-up-hype-2022-3",
+        "tags": [
+            "crypto",
+            "technology",
+            "web3"
+        ]
+    },
+    {
+        "title": "The Department of Justice is cracking down on NFT rug pulls",
+        "author": "Annie Rauwerda",
+        "work": "Input",
+        "date": "2022-03-24",
+        "href": "https://www.inputmag.com/culture/us-department-justice-cracking-down-nft-rug-pulls",
+        "tags": [
+            "crypto",
+            "nfts"
+        ]
+    },
+    {
         "title": "How a Wikipedia editor became one of the loudest Web3 skeptics",
         "author": "Mark Sullivan",
         "date": "2022-03-23",
@@ -7,7 +41,8 @@
         "href": "https://www.fastcompany.com/90733574/how-a-wikipedia-engineer-became-one-of-the-loudest-web3-skeptics",
         "tags": [
             "crypto",
-            "technology"
+            "technology",
+            "web3"
         ]
     },
     {
@@ -18,7 +53,8 @@
         "href": "https://www.cbsnews.com/news/cryptocurrency-nft-scams/",
         "tags": [
             "crypto",
-            "technology"
+            "nfts",
+            "web3"
         ]
     },
     {
@@ -29,7 +65,9 @@
         "href": "https://www.wired.com/story/nfts-dont-work-the-way-you-think-they-do/",
         "tags": [
             "crypto",
-            "technology"
+            "technology",
+            "nfts",
+            "web3"
         ]
     },
     {
@@ -41,8 +79,10 @@
         "href": "https://scameconomy.com/e/vn510r6n-6-web3-sucks-w-molly-white",
         "tags": [
             "crypto",
+            "journalism",
             "technology",
-            "wikipedia"
+            "wikipedia",
+            "web3"
         ]
     },
     {
@@ -54,7 +94,8 @@
         "tags": [
             "crypto",
             "technology",
-            "harassment"
+            "harassment",
+            "web3"
         ]
     },
     {
@@ -77,7 +118,8 @@
         "parenthetical": "Podcast",
         "tags": [
             "crypto",
-            "technology"
+            "technology",
+            "web3"
         ]
     },
     {
@@ -88,7 +130,8 @@
         "href": "https://www.newscientist.com/article/mg25333760-200-web3-is-an-empty-buzzword-but-beware-it-can-still-hurt-you/",
         "tags": [
             "crypto",
-            "technology"
+            "technology",
+            "web3"
         ]
     },
     {
@@ -100,7 +143,8 @@
         "href": "https://www.youtube.com/watch?v=WB_luMPwiXo",
         "tags": [
             "crypto",
-            "technology"
+            "technology",
+            "web3"
         ]
     },
     {
@@ -110,8 +154,8 @@
         "work": "Slate",
         "href": "https://slate.com/technology/2022/02/covid-nft-airdrop-bayneko-aids-history.html",
         "tags": [
-            "crypto",
-            "technology"
+            "nfts",
+            "web3"
         ]
     },
     {
@@ -123,7 +167,8 @@
         "href": "https://podcasts.apple.com/us/podcast/crypto-critics-corner/id1557045965?i=1000552325994",
         "tags": [
             "crypto",
-            "technology"
+            "technology",
+            "web3"
         ]
     },
     {
@@ -134,7 +179,8 @@
         "href": "https://newsletters.theatlantic.com/galaxy-brain/620d5303dc551a0020870079/i-found-the-tech-angle-on-the-vibe-shift/",
         "tags": [
             "crypto",
-            "technology"
+            "technology",
+            "web3"
         ]
     },
     {
@@ -147,7 +193,8 @@
         "tags": [
             "crypto",
             "technology",
-            "wikipedia"
+            "wikipedia",
+            "web3"
         ]
     },
     {
@@ -160,7 +207,8 @@
         "tags": [
             "crypto",
             "technology",
-            "wikipedia"
+            "wikipedia",
+            "web3"
         ]
     },
     {
@@ -171,7 +219,10 @@
         "href": "https://www.vice.com/en/article/akvn5a/bored-apes-buzzfeed-and-the-battle-for-the-future-of-the-internet",
         "tags": [
             "crypto",
-            "technology"
+            "journalism",
+            "technology",
+            "nfts",
+            "web3"
         ]
     },
     {
@@ -194,8 +245,8 @@
         "work": "Hyperallergic",
         "href": "https://hyperallergic.com/708792/auction-house-sells-glass-negatives-as-nfts-tells-buyers-to-smash-the-originals/",
         "tags": [
-            "crypto",
-            "technology"
+            "nfts",
+            "web3"
         ]
     },
     {
@@ -208,7 +259,8 @@
         "tags": [
             "crypto",
             "harassment",
-            "technology"
+            "technology",
+            "web3"
         ]
     },
     {
@@ -219,7 +271,8 @@
         "href": "https://www.infoworld.com/article/3648071/so-you-want-to-be-a-web3-developer.html",
         "tags": [
             "crypto",
-            "technology"
+            "technology",
+            "web3"
         ]
     },
     {
@@ -230,7 +283,6 @@
         "href": "https://www.techrepublic.com/article/mozilla-stops-accepting-cryptocurrency-wikipedia-may-be-next-are-dominos-falling/",
         "tags": [
             "crypto",
-            "technology",
             "wikipedia"
         ]
     },
@@ -242,7 +294,7 @@
         "href": "https://www.dailydot.com/debug/cryptoland-nft/",
         "tags": [
             "crypto",
-            "technology"
+            "nfts"
         ]
     },
     {
@@ -252,8 +304,7 @@
         "work": "Gizmodo Australia",
         "href": "https://www.gizmodo.com.au/2022/01/cryptoland-nft-metaverse/",
         "tags": [
-            "crypto",
-            "technology"
+            "crypto"
         ]
     },
     {
@@ -263,8 +314,7 @@
         "work": "Vice",
         "href": "https://www.vice.com/en/article/wxdxan/crypto-private-island-posting-through-widespread-backlash",
         "tags": [
-            "crypto",
-            "technology"
+            "crypto"
         ]
     },
     {
@@ -274,8 +324,7 @@
         "work": "Financial Times",
         "href": "https://www.ft.com/content/c79ea41b-41c0-4900-90ee-6e6347449610",
         "tags": [
-            "crypto",
-            "technology"
+            "crypto"
         ]
     },
     {
@@ -285,8 +334,7 @@
         "work": "Vice",
         "href": "https://www.vice.com/en/article/z3n38x/cryptocurrency-investors-try-to-turn-private-islands-into-blockchain-utopias",
         "tags": [
-            "crypto",
-            "technology"
+            "crypto"
         ]
     },
     {
@@ -296,8 +344,7 @@
         "work": "The Next Web",
         "href": "https://thenextweb.com/news/welcome-to-cryptoland-real-island-cryptocurrency-fans-analysis",
         "tags": [
-            "crypto",
-            "technology"
+            "crypto"
         ]
     },
     {
@@ -309,7 +356,8 @@
         "href": "https://www.wired.it/article/web3-futuro-internet-blockchain/",
         "tags": [
             "crypto",
-            "technology"
+            "technology",
+            "web3"
         ]
     },
     {

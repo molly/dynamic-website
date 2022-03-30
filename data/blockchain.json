@@ -1,5 +1,45 @@
 [
   {
+    "title": "The Man Behind Ethereum Is Worried About Crypto's Future",
+    "author": "Andrew R. Chow",
+    "href": "https://time.com/6158182/vitalik-buterin-ethereum-profile/",
+    "date": "2022-03-18",
+    "work": "Time",
+    "started": "2022-03-29",
+    "entryAdded": "2022-03-30T03:08:18.064Z"
+  }
+  {
+    "title": "Trying to be fair to web3",
+    "author": "Dale Innis",
+    "href": "https://ceoln.wordpress.com/2022/03/28/trying-to-be-fair-to-web3/",
+    "date": "2022-03-28",
+    "work": "his blog",
+    "preposition": "on",
+    "workItalics": false,
+    "started": "2022-03-29",
+    "entryAdded": "2022-03-30T02:45:14.320Z"
+  },
+  {
+    "title": "Web3 has an Identity Problem",
+    "author": "Daniel Ritchie",
+    "date": "2022-03-22",
+    "work": "his blog",
+    "preposition": "on",
+    "workItalics": false,
+    "href": "https://danielritchie.notion.site/Web3-has-an-Identity-Problem-21d037b3670e4579880d0f8d86f3073c",
+    "started": "2022-03-29",
+    "entryAdded": "2022-03-30T02:41:08.794Z"
+  },
+  {
+    "title": "Crypto evangelists promise Web3 will be a truly free and democratic internet — but it's failing to live up to that hype",
+    "author": "Paris Marx",
+    "work": "Business Insider",
+    "date": "2022-03-24",
+    "href": "https://www.businessinsider.com/web3-blockchain-crypto-internet-doomed-fail-doesnt-live-up-hype-2022-3",
+    "started": "2022-03-29",
+    "entryAdded": "2022-03-30T01:29:28.221Z"
+  },
+  {
     "title": "The Politics of Bitcoin",
     "subtitle": "Software as Right-Wing Extremism",
     "author": "David Golumbia",
@@ -8,6 +48,15 @@
     "started": "2022-03-28",
     "entryAdded": "2022-03-29T02:18:00.820Z",
     "status": "currentlyReading"
+  },
+  {
+    "title": "Web3 is a Scam, Not a Revolution w/ Stephen Diehl",
+    "author": "Paris Marx",
+    "date": "2021-12-09",
+    "work": "Tech Won't Save Us",
+    "parenthetical": "Podcast",
+    "started": "2022-03-28",
+    "entryAdded": "2022-03-30T01:30:35.574Z"
   },
   {
     "title": "Episode 12: Interview with crypto and Web3 skeptic Stephen Diehl",
