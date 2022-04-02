@@ -1,5 +1,65 @@
 [
     {
+        "title": "Web3 is Not Going Great",
+        "author": "Paris Marx",
+        "work": "Tech Won't Save Us",
+        "parenthetical": "Podcast",
+        "date": "2022-04-01",
+        "href": "https://techwontsave.us/episode/108_web3_is_not_going_great_w_molly_white",
+        "tags": [
+            "technology",
+            "crypto",
+            "web3",
+            "wikipedia",
+            "journalism",
+            "harassment"
+        ]
+    },
+    {
+        "title": "Web3 skeptic Molly White and her mission to pop the blockchain bubble",
+        "author": "Declan Harty",
+        "work": "Fortune",
+        "date": "2022-03-31",
+        "href": "https://fortune.com/2022/03/31/cryptocurrency-web3-skepticism-molly-white",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
+        "title": "Ben McKenzie Would Like a Word With the Crypto Bros",
+        "author": "David Yaffe-Bellany",
+        "work": "The New York Times",
+        "date": "2022-03-31",
+        "href": "https://www.nytimes.com/2022/03/31/style/ben-mckenzie-crypto.html",
+        "tags": [
+            "crypto",
+            "harassment"
+        ]
+    },
+    {
+        "title": "War in Ukraine is the latest platform moderation challenge",
+        "author": "Mathew Ingram",
+        "work": "Columbia Journalism Review",
+        "date": "2022-03-31",
+        "href": "https://www.cjr.org/the_media_today/war-in-ukraine-is-the-latest-platform-moderation-challenge.php",
+        "tags": [
+            "crypto",
+            "journalism"
+        ]
+    },
+    {
+        "title": "Inside the $625 Million Axie Hack and What It Means for Crypto Gaming",
+        "author": "Daren Fonda",
+        "work": "Barron's",
+        "date": "2022-03-30",
+        "href": "https://www.barrons.com/articles/axie-infinity-hack-cryptocurrency-defi-gaming-51648671214",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
         "title": "New York Times crypto explainer was a biased puff piece, skeptics claim",
         "author": "Annie Rauwerda",
         "work": "Input",

@@ -1,12 +1,71 @@
 [
   {
+    "title": "Why users are pushing back against the world’s largest crypto exchange",
+    "author": "Ben McKenzie and Jacob Silverman",
+    "href": "https://www.washingtonpost.com/outlook/2022/04/01/binance-may-19-lawsuit-cryptocurrency/",
+    "work": "The Washington Post",
+    "date": "2022-04-01",
+    "started": "2022-04-01",
+    "entryAdded": "2022-04-02T00:50:31.134Z"
+  },
+  {
+    "title": "We Need to talk about El Salvador (Feat. Mario Gómez and Oscar Salguero)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "date": "2022-03-29",
+    "started": "2022-04-01",
+    "work": "Crypto Critics' Corner",
+    "parenthetical": "Podcast",
+    "href": "https://cryptocriticscorner.com/2022/03/29/episode-63-we-need-to-talk-about-el-salvador-feat-mario-gomez-and-oscar-salguero/",
+    "entryAdded": "2022-04-02T00:52:39.416Z",
+    "tags": [
+      "bitcoin",
+      "el_salvador"
+    ]
+  },
+  {
+    "title": "Crypto vs gold: the search for an investment bolt hole",
+    "author": "John Plender",
+    "work": "Financial Times",
+    "preposition": "in the",
+    "started": "2022-04-01",
+    "date": "2022-04-01",
+    "href": "https://www.ft.com/content/d497772f-7422-4372-b72d-f74f96884466",
+    "entryAdded": "2022-04-01T17:15:35.101Z"
+  },
+  {
+    "title": "In Defense of Bitcoin Maximalism",
+    "author": "Vitalik Buterin",
+    "work": "his blog",
+    "href": "https://vitalik.ca/general/2022/04/01/maximalist.html",
+    "preposition": "on",
+    "workItalics": false,
+    "started": "2022-04-01",
+    "date": "2022-04-01",
+    "entryAdded": "2022-04-01T16:15:25.744Z",
+    "tags": [
+      "bitcoin"
+    ]
+  },
+  {
+    "title": "'The casino beckons': my journey inside the cryptosphere",
+    "author": "Sarah Resnick",
+    "date": "2022-03-22",
+    "work": "The Guardian",
+    "href": "https://www.theguardian.com/technology/2022/mar/22/the-casino-beckons-my-journey-inside-the-cryptosphere",
+    "started": "2022-03-31",
+    "entryAdded": "2022-04-01T16:15:14.413Z"
+  },
+  {
     "title": "The Man Behind Ethereum Is Worried About Crypto's Future",
     "author": "Andrew R. Chow",
     "href": "https://time.com/6158182/vitalik-buterin-ethereum-profile/",
     "date": "2022-03-18",
     "work": "Time",
     "started": "2022-03-29",
-    "entryAdded": "2022-03-30T03:08:18.064Z"
+    "entryAdded": "2022-03-30T03:08:18.064Z",
+    "tags": [
+      "ethereum"
+    ]
   },
   {
     "title": "Trying to be fair to web3",
@@ -17,7 +76,10 @@
     "preposition": "on",
     "workItalics": false,
     "started": "2022-03-29",
-    "entryAdded": "2022-03-30T02:45:14.320Z"
+    "entryAdded": "2022-03-30T02:45:14.320Z",
+    "tags": [
+      "web3"
+    ]
   },
   {
     "title": "Web3 has an Identity Problem",
@@ -28,7 +90,10 @@
     "workItalics": false,
     "href": "https://danielritchie.notion.site/Web3-has-an-Identity-Problem-21d037b3670e4579880d0f8d86f3073c",
     "started": "2022-03-29",
-    "entryAdded": "2022-03-30T02:41:08.794Z"
+    "entryAdded": "2022-03-30T02:41:08.794Z",
+    "tags": [
+      "web3"
+    ]
   },
   {
     "title": "Crypto evangelists promise Web3 will be a truly free and democratic internet — but it's failing to live up to that hype",
@@ -37,26 +102,38 @@
     "date": "2022-03-24",
     "href": "https://www.businessinsider.com/web3-blockchain-crypto-internet-doomed-fail-doesnt-live-up-hype-2022-3",
     "started": "2022-03-29",
-    "entryAdded": "2022-03-30T01:29:28.221Z"
+    "entryAdded": "2022-03-30T01:29:28.221Z",
+    "tags": [
+      "web3"
+    ]
   },
   {
     "title": "The Politics of Bitcoin",
     "subtitle": "Software as Right-Wing Extremism",
     "author": "David Golumbia",
     "date": "2016",
+    "href": "https://www.upress.umn.edu/book-division/books/the-politics-of-bitcoin",
     "publisher": "University of Minnesota Press",
     "started": "2022-03-28",
     "entryAdded": "2022-03-29T02:18:00.820Z",
-    "status": "currentlyReading"
+    "status": "currentlyReading",
+    "tags": [
+      "bitcoin",
+      "politics"
+    ]
   },
   {
     "title": "Web3 is a Scam, Not a Revolution w/ Stephen Diehl",
     "author": "Paris Marx",
     "date": "2021-12-09",
+    "href": "https://techwontsave.us/episode/93_web3_is_a_scam_not_a_revolution_w_stephen_diehl",
     "work": "Tech Won't Save Us",
     "parenthetical": "Podcast",
     "started": "2022-03-28",
-    "entryAdded": "2022-03-30T01:30:35.574Z"
+    "entryAdded": "2022-03-30T01:30:35.574Z",
+    "tags": [
+      "web3"
+    ]
   },
   {
     "title": "Episode 12: Interview with crypto and Web3 skeptic Stephen Diehl",
@@ -66,7 +143,10 @@
     "work": "Coywolf",
     "parenthetical": "Podcast",
     "href": "https://www.coywolf.news/podcast/episode-12-stephen-diehl-interview-crypto-and-web3-skeptic/",
-    "entryAdded": "2022-03-27T19:41:58.348Z"
+    "entryAdded": "2022-03-27T19:41:58.348Z",
+    "tags": [
+      "web3"
+    ]
   },
   {
     "title": "Episode 62 – Should Money Laundering be a Crime? (Feat. Josh Cincinnati)",
@@ -77,7 +157,10 @@
     "work": "Crypto Critics' Corner",
     "parenthetical": "Podcast",
     "href": "https://cryptocriticscorner.com/2022/03/24/episode-62-should-money-laundering-be-a-crime-feat-josh-cincinnati/",
-    "entryAdded": "2022-03-27T19:40:27.864Z"
+    "entryAdded": "2022-03-27T19:40:27.864Z",
+    "tags": [
+      "regulation"
+    ]
   },
   {
     "title": "Math in Solidity (Part 2: Overflow)",
@@ -88,7 +171,10 @@
     "preposition": "on",
     "workItalics": false,
     "href": "https://medium.com/coinmonks/math-in-solidity-part-2-overflow-3cd7283714b4",
-    "entryAdded": "2022-03-27T19:46:10.658Z"
+    "entryAdded": "2022-03-27T19:46:10.658Z",
+    "tags": [
+      "programming_languages"
+    ]
   },
   {
     "title": "Math in Solidity (Part 1: Numbers)",
@@ -99,7 +185,10 @@
     "preposition": "on",
     "workItalics": false,
     "href": "https://medium.com/coinmonks/math-in-solidity-part-1-numbers-384c8377f26d",
-    "entryAdded": "2022-03-27T19:44:33.793Z"
+    "entryAdded": "2022-03-27T19:44:33.793Z",
+    "tags": [
+      "programming_languages"
+    ]
   },
   {
     "title": "The New York Times Has a Crypto Blindspot",
@@ -110,7 +199,10 @@
     "preposition": "on",
     "workItalics": false,
     "href": "https://medium.com/@Stephen.Diehl/the-new-york-times-has-a-crypto-blindspot-d5de2a889665",
-    "entryAdded": "2022-03-28T01:25:21.030Z"
+    "entryAdded": "2022-03-28T01:25:21.030Z",
+    "tags": [
+      "journalism"
+    ]
   },
   {
     "title": "The Latecomer's Guide to Crypto: A Few Thoughts",
@@ -120,7 +212,10 @@
     "work": "his Medium",
     "workItalics": false,
     "href": "https://medium.com/@nturkewitz_56674/the-latecomers-guide-to-crypto-a-few-thoughts-6f5d7b87b0b2",
-    "entryAdded": "2022-03-28T01:23:59.454Z"
+    "entryAdded": "2022-03-28T01:23:59.454Z",
+    "tags": [
+      "journalism"
+    ]
   },
   {
     "title": "Can 'the media' stop crypto?",
@@ -130,7 +225,10 @@
     "work": "his Substack",
     "workItalics": false,
     "href": "https://maxread.substack.com/p/can-the-media-stop-crypto",
-    "entryAdded": "2022-03-28T01:19:57.218Z"
+    "entryAdded": "2022-03-28T01:19:57.218Z",
+    "tags": [
+      "journalism"
+    ]
   },
   {
     "title": "The Emperor's New Blockchain",
@@ -141,7 +239,10 @@
     "work": "his Substack",
     "workItalics": false,
     "href": "https://ez.substack.com/p/the-emperors-new-blockchain",
-    "entryAdded": "2022-03-28T01:21:46.506Z"
+    "entryAdded": "2022-03-28T01:21:46.506Z",
+    "tags": [
+      "journalism"
+    ]
   },
   {
     "title": "Episode 61 – Trying to Think Like the SEC (Feat. John Reed Stark)",
@@ -151,7 +252,10 @@
     "work": "Crypto Critics' Corner",
     "parenthetical": "Podcast",
     "href": "https://cryptocriticscorner.com/2022/03/22/episode-61-trying-to-think-like-the-sec-feat-john-reed-stark/",
-    "entryAdded": "2022-03-23T18:37:53.242Z"
+    "entryAdded": "2022-03-23T18:37:53.242Z",
+    "tags": [
+      "regulation"
+    ]
   },
   {
     "title": "Blockchain and Trust",
@@ -160,15 +264,23 @@
     "started": "2022-02-22",
     "href": "https://www.schneier.com/blog/archives/2019/02/blockchain_and_.html",
     "publisher": "Schneier on Security",
-    "entryAdded": "2022-03-23T18:35:46.921Z"
+    "entryAdded": "2022-03-23T18:35:46.921Z",
+    "tags": [
+      "decentralization"
+    ]
   },
   {
     "title": "Bitcoin's Third Rail: The Code is Controlled",
     "author": "Peter Ryan",
+    "href": "https://www.ryanresearch.co/post/bitcoin-s-third-rail-the-code-is-controlled",
+    "work": "Ryan Research",
     "date": "2021-05-21",
     "started": "2022-03-22",
     "publisher": "Ryan Research",
-    "entryAdded": "2022-03-23T18:34:19.713Z"
+    "entryAdded": "2022-03-23T18:34:19.713Z",
+    "tags": [
+      "decentralization"
+    ]
   },
   {
     "title": "Episode 44 – Poker’s Black Friday (Feat. Jason Bral)",
@@ -189,7 +301,10 @@
     "parenthetical": "Video",
     "publisher": "her YouTube channel",
     "preposition": "on",
-    "entryAdded": "2022-03-21T01:04:27.727Z"
+    "entryAdded": "2022-03-21T01:04:27.727Z",
+    "tags": [
+      "web3"
+    ]
   },
   {
     "title": "Episode 60: The Foul Financials of Cryptocurrency (Feat. Francine McKenna)",
@@ -199,6 +314,10 @@
     "work": "Crypto Critics' Corner",
     "parenthetical": "Podcast",
     "href": "https://cryptocriticscorner.com/2022/03/18/episode-60-the-foul-financials-of-cryptocurrency-feat-francine-mckenna/",
+    "tags": [
+      "finance",
+      "regulation"
+    ],
     "entryAdded": "2022-03-21T01:02:21.125Z"
   },
   {
@@ -224,7 +343,7 @@
     "parenthetical": "Podcast",
     "href": "https://cryptocriticscorner.com/2022/01/24/episode-45-bitcoins-black-swans-featuring-doomberg/",
     "tags": [
-      "Bitcoin"
+      "bitcoin"
     ],
     "entryAdded": "2022-03-17T00:40:21.525Z"
   },

@@ -22,6 +22,8 @@ const BLOCKCHAIN_DEFAULTS = {
 const BLOCKCHAIN_TAGS = {
   bitcoin: 'Bitcoin',
   blockchain_cities: 'blockchain cities',
+  ethereum: 'Ethereum',
+  el_salvador: 'El Salvador',
 };
 
 module.exports = {

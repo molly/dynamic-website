@@ -1,5 +1,37 @@
 [
     {
+        "title": "Amazon Workers on Staten Island Vote to Unionize in Landmark Win for Labor",
+        "author": "Karen Weise and Noam Scheiber",
+        "href": "https://www.nytimes.com/2022/04/01/technology/amazon-union-staten-island.html",
+        "work": "The New York Times",
+        "date": "2022-04-01",
+        "week": "March 28–April 1, 2022",
+        "summary": "Despite heavy lobbying by the company, workers at the facility voted by a wide margin for a union. It was seen as a rebuke of the company’s treatment of its employees.",
+        "tags": [
+            "workers_rights"
+        ],
+        "relatedReading": [
+            {
+                "title": "Amazon worker organization",
+                "href": "https://en.wikipedia.org/wiki/Amazon_worker_organization"
+            }
+        ],
+        "entryAdded": "2022-04-02T00:55:30.764Z"
+    },
+    {
+        "title": "This Company Tapped AI for Its Website—and Landed in Court",
+        "author": "Tom Simonite",
+        "date": "2021-11-11",
+        "week": "March 28–April 1, 2022",
+        "work": "Wired",
+        "summary": "Under pressure to make their sites accessible to visually impaired users, firms turn to software. But advocates say the tech isn't always up to the task.",
+        "href": "https://www.wired.com/story/company-tapped-ai-website-landed-court/",
+        "tags": [
+            "ability"
+        ],
+        "entryAdded": "2022-04-02T01:19:57.208Z"
+    },
+    {
         "title": "Black Tesla employees describe a culture of racism: ‘I was at my breaking point’",
         "author": "Margot Roosevelt and Russ Mitchell",
         "href": "https://www.latimes.com/business/story/2022-03-25/black-tesla-employees-fremont-plant-racism-california-lawsuit",
