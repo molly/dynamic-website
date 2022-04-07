@@ -1,5 +1,58 @@
 [
     {
+        "title": "NFTs Are a Privacy and Security Nightmare",
+        "author": "Eric Ravenscraft",
+        "work": "Wired",
+        "date": "2022-04-05",
+        "href": "https://www.wired.com/story/nfts-privacy-security-nightmare/",
+        "tags": [
+            "crypto",
+            "harassment",
+            "nfts",
+            "technology",
+            "web3"
+        ]
+    },
+    {
+        "title": "There’s a Casino in My Trojan Horse feat. Molly White",
+        "author": "TRASHFUTURE",
+        "work": "TRASHFUTURE",
+        "parenthetical": "Podcast",
+        "date": "2022-04-05",
+        "href": "https://trashfuturepodcast.podbean.com/e/there-s-a-casino-in-my-trojan-horse-feat-molly-white/",
+        "tags": [
+            "crypto",
+            "technology",
+            "web3"
+        ]
+    },
+    {
+        "title": "After a $625 million hack, the party must go on",
+        "author": "Jon Sarlin",
+        "work": "CNN",
+        "href": "https://edition.cnn.com/2022/04/03/tech/axie-infinity-hack-party-nft-la/index.html",
+        "date": "2022-04-04",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
+        "title": "150. The Cynics of Web3 (ft. Molly White)",
+        "author": "Jathan Sadowski and Edward Ongweso Jr.",
+        "work": "This Machine Kills",
+        "parenthetical": "Podcast",
+        "date": "2022-04-04",
+        "href": "https://soundcloud.com/thismachinekillspod/150-the-cynics-of-web3-ft-molly-white",
+        "tags": [
+            "crypto",
+            "web3",
+            "technology",
+            "journalism",
+            "wikipedia"
+        ]
+    },
+    {
         "title": "Web3 is Not Going Great",
         "author": "Paris Marx",
         "work": "Tech Won't Save Us",
