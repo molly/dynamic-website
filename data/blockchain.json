@@ -1,5 +1,93 @@
 [
   {
+    "title": "Inside the Bitcoin Bust That Took Down the Web’s Biggest Child Abuse Site",
+    "author": "Andy Greenberg",
+    "date": "2022-04-08",
+    "started": "2022-04-08",
+    "work": "Wired",
+    "href": "https://www.wired.com/story/tracers-in-the-dark-welcome-to-video-crypto-anonymity-myth/",
+    "entryAdded": "2022-04-09T02:15:21.679Z"
+  },
+  {
+    "title": "Morozov Watch! (ft. Evgeny Morozov)",
+    "author": "Jathan Sadowski and Edward Ongweso Jr.",
+    "date": "2022-02-01",
+    "started": "2022-04-08",
+    "work": "This Machine Kills",
+    "parenthetical": "Podcast",
+    "href": "https://www.patreon.com/posts/134-morozov-ft-61979105/",
+    "entryAdded": "2022-04-09T02:15:21.679Z"
+  },
+  {
+    "title": "Episode 28 – Liberty Reserve: The First Stablecoin",
+    "href": "https://cryptocriticscorner.com/2021/10/04/episode-28-liberty-reserve-the-first-stablecoin/",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "date": "2022-10-04",
+    "started": "2022-04-08",
+    "work": "Crypto Critics' Corner",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-04-09T02:10:31.426Z"
+  },
+  {
+    "title": "The Value Is Coming From Inside the House feat. Trevor Strunk",
+    "author": "TRASHFUTURE",
+    "date": "2022-12-13",
+    "started": "2022-04-08",
+    "work": "TRASHFUTURE",
+    "parenthetical": "Podcast",
+    "href": "https://trashfuturepodcast.podbean.com/e/the-value-is-coming-from-inside-the-house-feat-trevor-strunk/",
+    "entryAdded": "2022-04-09T02:11:50.672Z"
+  },
+  {
+    "title": "Episode 65 – The ECASH Act (Feat. Rohan Grey)",
+    "href": "https://cryptocriticscorner.com/2022/04/05/episode-65-the-ecash-act-feat-rohan-grey/",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "date": "2022-04-05",
+    "started": "2022-04-08",
+    "work": "Crypto Critics' Corner",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-04-09T01:57:09.532Z"
+  },
+  {
+    "title": "H.R. 7231 - The Electronic Currency and Secure Hardware (ECASH) Act",
+    "href": "https://lynch.house.gov/_cache/files/1/7/17e47e5a-2bff-42c1-b509-eb8a50931fa6/BDDFF183213326821B5C88B7F326EABB.ecashact-lynch.pdf",
+    "author": "Stephen Lynch",
+    "date": "2022-03-28",
+    "started": "2022-04-08",
+    "publisher": "House of Representatives",
+    "entryAdded": "2022-04-09T01:54:28.849Z"
+  },
+  {
+    "title": "The Future of Digital Cash Is Not on the Blockchain",
+    "href": "https://www.wired.com/story/digital-cash-ecash-act",
+    "author": "Gilad Edelman",
+    "date": "2022-03-28",
+    "started": "2022-04-08",
+    "work": "Wired",
+    "entryAdded": "2022-04-09T01:51:53.788Z"
+  },
+  {
+    "title": "The Most Thorough Case Against Crypto I've Heard",
+    "href": "https://www.podchaser.com/podcasts/the-ezra-klein-show-1582975/episodes/the-most-thorough-case-against-132906154",
+    "author": "Ezra Klein and Dan Olson",
+    "date": "2022-04-05",
+    "started": "2022-04-07",
+    "completed": "2022-04-08",
+    "work": "The Ezra Klein Show",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-04-09T02:13:11.582Z"
+  },
+  {
+    "title": "Episode 66 – The Career Criminal Conspiracies of Cas Piancey",
+    "href": "https://cryptocriticscorner.com/2022/04/08/episode-66-the-career-criminal-conspiracies-of-cas-piancey/",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "date": "2022-04-07",
+    "started": "2022-04-07",
+    "work": "Crypto Critics' Corner",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-04-09T02:08:24.384Z"
+  },
+  {
     "title": "The Road to Apedom feat. This Machine Kills",
     "author": "TRASHFUTURE",
     "date": "2022-01-11",
