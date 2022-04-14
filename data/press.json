@@ -1,5 +1,49 @@
 [
     {
+        "title": "Web3 Ain't All Its Cracked up to Be Molly White",
+        "author": "Cory Quinn",
+        "work": "Screaming in the Cloud",
+        "date": "2022-04-14",
+        "href": "https://www.lastweekinaws.com/podcast/screaming-in-the-cloud/web3-ain-t-all-its-cracked-up-to-be-molly-white/",
+        "tags": [
+            "crypto",
+            "technology",
+            "web3"
+        ]
+    },
+    {
+        "title": "Wikipedia Editors Don’t Want Your Bitcoin",
+        "author": "Emily Nicolle",
+        "work": "Bloomberg",
+        "date": "2022-04-14",
+        "href": "https://www.bloomberg.com/news/newsletters/2022-04-14/wikipedia-editors-don-t-want-your-bitcoin-btc-bloomberg-crypto",
+        "tags": [
+            "crypto",
+            "wikipedia"
+        ]
+    },
+    {
+        "title": "Meet the Blockchain Detectives Who Track Crypto's Hackers and Scammers",
+        "author": "Lorenzo Franceschi-Bicchierai",
+        "work": "Vice",
+        "date": "2022-04-14",
+        "href": "https://www.vice.com/en/article/xgd9zw/meet-the-blockchain-detectives-who-track-cryptos-hackers-and-scammers",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
+        "title": "Wikipedia Editors Tell Cryptobros Their Donations Aren't Welcome",
+        "author": "Lauren Leffer",
+        "work": "Gizmodo",
+        "date": "2022-04-14",
+        "href": "https://gizmodo.com/wikipedia-editors-molly-white-end-crypto-donations-at-w-1848793067",
+        "tags": [
+            "crypto",
+            "wikipedia"
+        ]
+    },
+    {
         "title": "Wikipedia community votes to stop accepting cryptocurrency donations",
         "author": "Timothy B. Lee",
         "work": "Ars Technica",
@@ -47,7 +91,7 @@
         ]
     },
     {
-        "title": "There’s a Casino in My Trojan Horse feat. Molly White",
+        "title": "There's a Casino in My Trojan Horse feat. Molly White",
         "author": "TRASHFUTURE",
         "work": "TRASHFUTURE",
         "parenthetical": "Podcast",
@@ -245,7 +289,7 @@
         ]
     },
     {
-        "title": "Crypto Twitter has some new voices — here’s a few worth following",
+        "title": "Crypto Twitter has some new voices — here's a few worth following",
         "author": "Ailsa Sherrington",
         "date": "2022-03-08",
         "work": "Protos",
