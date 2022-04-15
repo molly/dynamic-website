@@ -11,15 +11,18 @@ mixin article(article, rss=false)
         if article.parenthetical === "Book"
           a(href=article.href)
             i #{article.title}
+          if article.subtitle
+            .subtitle
+              i #{article.subtitle}
         else
           |"
           a(href=article.href) #{article.title}
           |"
 
-        if article.parenthetical
+        if article.parenthetical && article.parenthetical !== "Book"
           |  (#{article.parenthetical})
 
-        if article.parenthetical || !article.title.match(/[.?!]$/m)
+        if (article.parenthetical && article.parenthetical !== "Book") || (!article.parenthetical && !article.title.match(/[.?!]$/m))
           |.
 
     .byline

@@ -2,11 +2,16 @@
   {
     "title": "Digital Gold",
     "subtitle": "Bitcoin and the Inside Story of the Misfits and Millionaires Trying to Reinvent Money",
+    "parenthetical": "Book",
     "author": "Nathaniel Popper",
     "date": "2015",
     "started": "2022-04-15",
     "publisher": "Penguin Books Limited",
-    "entryAdded": "2022-04-15T16:10:18.896Z"
+    "entryAdded": "2022-04-15T16:10:18.896Z",
+    "tags": [
+      "bitcoin",
+      "politics"
+    ]
   },
   {
     "title": "Ethereum Has Issues",
@@ -15,7 +20,10 @@
     "started": "2022-04-14",
     "work": "his blog",
     "workItalics": false,
-    "entryAdded": "2022-04-14T17:21:32.818Z"
+    "entryAdded": "2022-04-14T17:21:32.818Z",
+    "tags": [
+      "ethereum"
+    ]
   },
   {
     "title": "9: The Play to Earn Pyramid: Axie Infinity & the Dystopia That Crypto Wants (w/ Ed Zitron)",
@@ -44,7 +52,10 @@
     "started": "2022-04-08",
     "work": "Wired",
     "href": "https://www.wired.com/story/tracers-in-the-dark-welcome-to-video-crypto-anonymity-myth/",
-    "entryAdded": "2022-04-09T02:15:21.679Z"
+    "entryAdded": "2022-04-09T02:15:21.679Z",
+    "tags": [
+      "bitcoin"
+    ]
   },
   {
     "title": "Morozov Watch! (ft. Evgeny Morozov)",
@@ -295,12 +306,13 @@
     "subtitle": "Software as Right-Wing Extremism",
     "author": "David Golumbia",
     "date": "2016",
+    "parenthetical": "Book",
     "href": "https://www.upress.umn.edu/book-division/books/the-politics-of-bitcoin",
     "publisher": "University of Minnesota Press",
     "started": "2022-03-28",
     "completed": "2022-04-15",
     "entryAdded": "2022-03-29T02:18:00.820Z",
-    "status": "currentlyReading",
+    "status": "read",
     "tags": [
       "bitcoin",
       "politics"
