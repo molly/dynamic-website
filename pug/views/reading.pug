@@ -53,6 +53,8 @@ block body
           |  watched 
         else if mostRecentBlockchain.parenthetical && mostRecentBlockchain.parenthetical.indexOf("odcast") > -1
           |  listened to 
+        else if mostRecentBlockchain.status === 'currentlyReading'
+          |  started reading 
         else
           |  read 
         if mostRecentBlockchain.parenthetical && mostRecentBlockchain.parenthetical === "Book" 
