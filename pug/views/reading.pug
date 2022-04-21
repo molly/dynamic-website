@@ -65,16 +65,17 @@ block body
           a(href=mostRecentBlockchain.href) #{mostRecentBlockchain.title}
           | "
         if mostRecentBlockchain.author
-          |  by #{mostRecentBlockchain.author} #{mostRecentBlockchain.preposition}  
+          |  by #{mostRecentBlockchain.author}
 
           if mostRecentBlockchain.work
+            |  #{mostRecentBlockchain.preposition}
             if !mostRecentBlockchain.workItalics
               | #{mostRecentBlockchain.work}.
             else
               i #{mostRecentBlockchain.work}.
 
           if mostRecentBlockchain.publisher
-            |  #{mostRecentBlockchain.publisher}.
+            | . #{mostRecentBlockchain.publisher}.
 
           if !mostRecentBlockchain.work && !mostRecentBlockchain.publisher
             |.

@@ -1,5 +1,33 @@
 [
     {
+        "title": "Critique of Techno-Feudal Reason",
+        "author": "Evgeny Morozov",
+        "work": "New Left Review",
+        "date": "2022-04",
+        "week": "April 18–22, 2022",
+        "href": "https://newleftreview.org/issues/ii133/articles/evgeny-morozov-critique-of-techno-feudal-reason",
+        "tags": [
+            "class",
+            "tech_industry",
+            "technology"
+        ]
+    },
+    {
+        "title": "Envisioning Platform Socialism w/ James Muldoon",
+        "author": "Paris Marx",
+        "work": "Tech Won't Save Us",
+        "parenthetical": "Podcast",
+        "date": "2022-01-13",
+        "week": "April 18–22, 2022",
+        "href": "https://techwontsave.us/episode/97_envisioning_platform_socialism_w_james_muldoon",
+        "tags": [
+            "tech_industry",
+            "technology",
+            "workers_rights",
+            "class"
+        ]
+    },
+    {
         "title": "Amazon Workers on Staten Island Vote to Unionize in Landmark Win for Labor",
         "author": "Karen Weise and Noam Scheiber",
         "href": "https://www.nytimes.com/2022/04/01/technology/amazon-union-staten-island.html",

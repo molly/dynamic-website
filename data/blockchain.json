@@ -1,18 +1,43 @@
 [
   {
-    "title": "Digital Gold",
-    "subtitle": "Bitcoin and the Inside Story of the Misfits and Millionaires Trying to Reinvent Money",
-    "parenthetical": "Book",
-    "author": "Nathaniel Popper",
-    "date": "2015",
-    "started": "2022-04-15",
-    "status": "currentlyReading",
-    "publisher": "Penguin Books Limited",
-    "entryAdded": "2022-04-15T16:10:18.896Z",
-    "tags": [
-      "bitcoin",
-      "politics"
-    ]
+    "title": "Mr. Worldcoin and the Orb (ft. Richard Nieva)",
+    "author": "Jathan Sadowski and Edward Ongweso Jr.",
+    "date": "2022-04-14",
+    "started": "2022-04-20",
+    "work": "This Machine Kills",
+    "parenthetical": "Podcast",
+    "href": "https://www.patreon.com/posts/152-mr-worldcoin-65150838",
+    "entryAdded": "2022-04-21T20:57:32.019Z"
+  },
+  {
+    "title": "Episode 68 – Evading North Korean Sanctions 101",
+    "href": "https://cryptocriticscorner.com/2022/04/17/episode-68-evading-north-korean-sanctions-101/",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "date": "2022-04-17",
+    "started": "2022-04-20",
+    "work": "Crypto Critics' Corner",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-04-21T21:03:58.525Z"
+  },
+  {
+    "title": "Apes Vs. Crabs",
+    "author": "TRASHFUTURE",
+    "date": "2022-04-11",
+    "started": "2022-04-19",
+    "work": "TRASHFUTURE",
+    "parenthetical": "Podcast",
+    "href": "https://trashfuturepodcast.podbean.com/e/apes-vs-crabs/",
+    "entryAdded": "2022-04-21T21:01:03.835Z"
+  },
+  {
+    "title": "9: The Play to Earn Pyramid: Axie Infinity & the Dystopia That Crypto Wants (w/ Ed Zitron)",
+    "href": "https://podcasts.bcast.fm/e/v85155y8-9-the-play-to-earn-pyramid-axie-infinity-the-dystopia-that-crypto-wants-w-ed-zitron",
+    "author": "Matt Binder",
+    "date": "2022-03-31",
+    "started": "2022-04-13",
+    "work": "Scam Economy",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-04-14T01:47:06.488Z"
   },
   {
     "title": "Ethereum Has Issues",
