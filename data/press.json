@@ -1,5 +1,40 @@
 [
     {
+        "title": "Wikipedia won't take crypto anymore",
+        "author": "Rich Stanton",
+        "href": "https://www.pcgamer.com/wikipedia-wont-take-crypto-anymore",
+        "work": "PC Gamer",
+        "date": "2022-05-03",
+        "tags": [
+            "crypto",
+            "wikipedia"
+        ]
+    },
+    {
+        "title": "'Web 3 Is Going Just Great' Founder on Wikipedia Cutting Off Crypto Donations",
+        "author": "Emily Parker, Lawrence Lewitinn, and Christine Lee",
+        "href": "https://www.coindesk.com/video/recent-videos/web-3-is-going-just-great-founder-on-wikipedia-cutting-off-crypto-donations/",
+        "work": "Coindesk",
+        "parenthetical": "Video",
+        "date": "2022-05-03",
+        "tags": [
+            "crypto",
+            "web3",
+            "wikipedia"
+        ]
+    },
+    {
+        "title": "The Controversy Brewing on Elon Musk's Wikipedia Page",
+        "author": "Stephen Harrison",
+        "href": "https://slate.com/technology/2022/05/elon-musk-wikipedia-page.html",
+        "work": "Slate",
+        "date": "2022-05-03",
+        "tags": [
+            "wikipedia",
+            "twitter"
+        ]
+    },
+    {
         "title": "Yuga Labs apologises after sale of virtual land crashes Ethereum",
         "author": "Alex Hern",
         "href": "https://www.theguardian.com/technology/2022/may/02/yuga-labs-apologises-after-sale-of-virtual-land-crashes-ethereum",
