@@ -1,5 +1,41 @@
 [
     {
+        "title": "What Is Happening to the People Falling for Crypto and NFTs",
+        "author": "Farhad Manjoo",
+        "href": "https://www.nytimes.com/2022/05/05/opinion/crypto-nfts-web3.html",
+        "work": "The New York Times",
+        "date": "2022-05-05",
+        "tags": [
+            "crypto",
+            "nfts",
+            "web3"
+        ]
+    },
+    {
+        "title": "Crypto Bad Ideas: Abortions on the Blockchain!? + Bored Apes Break Ethereum (w/ Molly White)",
+        "author": "Matt Binder",
+        "href": "https://www.youtube.com/watch?v=gcdJR5C-44s",
+        "work": "Scam Economy",
+        "parenthetical": "Podcast",
+        "date": "2022-05-05",
+        "tags": [
+            "crypto",
+            "nfts",
+            "web3"
+        ]
+    },
+    {
+        "title": "Wikimedia has officially stopped cryptocurrency donations. Here's how a 28-year-old Wikipedia editor started the debate from the inside.",
+        "author": "Emily Quiles",
+        "href": "https://www.businessinsider.com/wikimedia-stopped-accepting-crypto-donations-unethical-2022-5",
+        "work": "Business Insider",
+        "date": "2022-05-05",
+        "tags": [
+            "crypto",
+            "wikipedia"
+        ]
+    },
+    {
         "title": "Wikipedia won't take crypto anymore",
         "author": "Rich Stanton",
         "href": "https://www.pcgamer.com/wikipedia-wont-take-crypto-anymore",
@@ -32,6 +68,18 @@
         "tags": [
             "wikipedia",
             "twitter"
+        ]
+    },
+    {
+        "title": "Bitte keine Bitcoins mehr für Wikipedia",
+        "author": "Torsten Kleinz",
+        "href": "https://www.spiegel.de/netzwelt/web/wikipedia-darum-sind-keine-bitcoin-spenden-mehr-moeglich-a-a15f8f23-5c03-46f7-a9bd-425d5ca59864",
+        "work": "Der Spiegel",
+        "parenthetical": "in German",
+        "date": "2022-05-02",
+        "tags": [
+            "crypto",
+            "wikipedia"
         ]
     },
     {
