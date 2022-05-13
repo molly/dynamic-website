@@ -1,5 +1,37 @@
 [
     {
+        "title": "To Be Clear, Web3 Is Not Going Great",
+        "author": "Nitish Pahwa",
+        "href": "https://slate.com/technology/2022/05/crypto-crash-molly-white-web3-going-just-great.html",
+        "work": "Slate",
+        "date": "2022-05-12",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
+        "title": "Binance billionaire CZ urges crypto community to ‘go back to building real products that people use’",
+        "author": "Christiaan Hetzner",
+        "href": "https://fortune.com/2022/05/12/binance-cz-luna-stablecoin-bitcoin-crypto-crash/",
+        "work": "Fortune",
+        "date": "2022-05-12",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
+        "title": "Why the Powerful Forces That Run Faltering NFT Markets Won’t Let Prices Crash Just Yet",
+        "author": "Amy Castor",
+        "href": "https://news.artnet.com/market/powerful-forces-run-faltering-nft-markets-wont-let-prices-crash-just-yet-2113751",
+        "work": "Artnet News",
+        "date": "2022-05-12",
+        "tags": [
+            "crypto",
+            "nfts",
+            "web3"
+        ]
+    },
+    {
         "title": "Cautionary Tales from Cryptoland",
         "author": "Thomas Stackpole",
         "href": "https://hbr.org/2022/05/cautionary-tales-from-cryptoland",
