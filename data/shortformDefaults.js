@@ -24,6 +24,7 @@ const SHORTFORM_TAGS = {
   covid19: 'COVID-19',
   india: 'India',
   indigenous_rights: 'Indigenous rights',
+  israel_palestine_conflict: 'Israeli–Palestinian conflict',
   lgbt: 'LGBT',
   massachusetts: 'Massachusetts',
   workers_rights: "workers' rights",

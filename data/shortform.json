@@ -1,5 +1,32 @@
 [
     {
+        "title": "Jordan Peterson's 'Postmodern Neomarxism' Is Pure Hokum",
+        "author": "Luke Savage",
+        "work": "Jacobin",
+        "date": "2022-03-16",
+        "week": "May 8–14, 2022",
+        "href": "https://www.jacobinmag.com/2022/03/jordan-peterson-postmodernism-marxism-philosophy-zizek",
+        "tags": [
+            "class",
+            "socioeconomics",
+            "philosophy"
+        ],
+        "entryAdded": "2022-05-14T16:35:04.773Z"
+    },
+    {
+        "title": "Israeli police beat mourners at funeral of slain Palestinian journalist",
+        "author": "Maayan Lubell, Rami Amichay, et al.",
+        "work": "Reuters",
+        "date": "2022-05-14",
+        "week": "May 8–14, 2022",
+        "href": "https://www.reuters.com/world/middle-east/israel-resumes-raids-west-bank-area-where-journalist-was-killed-2022-05-13/",
+        "tags": [
+            "israel_palestine_conflict",
+            "policing"
+        ],
+        "entryAdded": "2022-05-14T16:36:57.399Z"
+    },
+    {
         "title": "Critique of Techno-Feudal Reason",
         "author": "Evgeny Morozov",
         "work": "New Left Review",
@@ -10,7 +37,8 @@
             "class",
             "tech_industry",
             "technology"
-        ]
+        ],
+        "entryAdded": "2022-04-21T16:35:04.773Z"
     },
     {
         "title": "Envisioning Platform Socialism w/ James Muldoon",
@@ -24,8 +52,11 @@
             "tech_industry",
             "technology",
             "workers_rights",
-            "class"
-        ]
+            "class",
+            "socioeconomics",
+            "philosophy"
+        ],
+        "entryAdded": "2022-04-21T16:36:04.773Z"
     },
     {
         "title": "Amazon Workers on Staten Island Vote to Unionize in Landmark Win for Labor",
