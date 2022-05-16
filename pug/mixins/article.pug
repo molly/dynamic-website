@@ -29,8 +29,13 @@ mixin article(article, rss=false)
       if article.author
         | #{article.author}
       
-      if article.work || article.publisher 
-        |  #{article.preposition} 
+      if (article.work || article.publisher)
+        if article.preposition 
+          |  #{article.preposition} 
+        else if article.work
+          |  in 
+        else 
+          |  for 
 
       if article.work
         if !article.workItalics

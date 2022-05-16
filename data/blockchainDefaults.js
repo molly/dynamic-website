@@ -11,7 +11,7 @@ const BLOCKCHAIN_DEFAULTS = {
   work: null,
   publisher: null,
   workItalics: true,
-  preposition: 'in',
+  preposition: null,
   parenthetical: null,
   href: null,
   tags: [],
