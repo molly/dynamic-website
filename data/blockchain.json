@@ -1,5 +1,33 @@
 [
   {
+    "title": "Metastablecoins",
+    "author": "David S. H. Rosenthal",
+    "href": "https://blog.dshr.org/2022/05/metastablecoins.html",
+    "work": "his blog",
+    "workItalics": false,
+    "date": "2022-05-19",
+    "started": "2022-05-19",
+    "entryAdded": "2022-05-19T21:15:58.992Z"
+  },
+  {
+    "title": "'Extortion': Why Web3 is making a lot of software developers angry",
+    "author": "Dominic Powell",
+    "work": "The Sydney Morning Herald",
+    "href": "https://www.smh.com.au/business/companies/extortion-why-web3-is-pissing-off-a-lot-of-software-developers-20220516-p5alqd.html",
+    "started": "2022-05-19",
+    "date": "2022-05-19",
+    "entryAdded": "2022-05-19T21:15:01.437Z"
+  },
+  {
+    "title": "(Un)Stablecoins and the Crypto Crash w/ Bennett Tomlin",
+    "author": "Paris Marx",
+    "work": "Tech Won't Save Us",
+    "started": "2022-05-19",
+    "date": "2022-05-19",
+    "parenthetical": "Podcast",
+    "href": "https://techwontsave.us/episode/115_unstablecoins_and_the_crypto_crash_w_bennett_tomlin"
+  },
+  {
     "title": "Miami's Bitcoin Conference Left a Trail of Harassment",
     "author": "Arielle Pardes",
     "work": "Wired",
