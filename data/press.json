@@ -1,5 +1,18 @@
 [
     {
+        "title": "How Wikipedia Cancelled Crypto (w/ Molly White)",
+        "author": "Matt Binder",
+        "href": "https://www.youtube.com/watch?v=epSGSlXlbtU",
+        "work": "Scam Economy",
+        "parenthetical": "Podcast",
+        "date": "2022-05-19",
+        "tags": [
+            "crypto",
+            "wikipedia",
+            "web3"
+        ]
+    },
+    {
         "title": "Crypto, white power, and fundraising",
         "author": "Doug Henwood",
         "work": "Behind the News",
@@ -9,6 +22,17 @@
         "parenthetical": "Radio show",
         "tags": [
             "crypto"
+        ]
+    },
+    {
+        "title": "Major Web3 Backer a16z Sees 'Winter,' 'Dark Days' Ahead for Crypto",
+        "author": "Edward Ongweso Jr",
+        "href": "https://www.vice.com/en/article/y3vynw/major-web3-backer-a16z-sees-winter-dark-days-ahead-for-crypto",
+        "date": "2022-05-17",
+        "work": "Vice",
+        "tags": [
+            "crypto",
+            "web3"
         ]
     },
     {
