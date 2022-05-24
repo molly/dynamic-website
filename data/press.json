@@ -1,10 +1,32 @@
 [
     {
+        "title": "Tales From the Crypto with Atsuko Okatsuka & Molly White (EP 138)",
+        "author": "Francesca Fiorentini",
+        "work": "The Bitchuation Room",
+        "parenthetical": "Video podcast",
+        "date": "2022-05-22",
+        "href": "https://www.youtube.com/watch?v=03npwcRYdBk",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
+        "title": "'Enormously risky': How NFTs lost their lustre",
+        "author": "AFP",
+        "work": "The Economic Times",
+        "date": "2022-05-22",
+        "href": "https://economictimes.indiatimes.com/markets/cryptocurrency/enormously-risky-how-nfts-lost-their-lustre/articleshow/91737504.cms",
+        "tags": [
+            "nfts"
+        ]
+    },
+    {
         "title": "How Wikipedia Cancelled Crypto (w/ Molly White)",
         "author": "Matt Binder",
         "href": "https://www.youtube.com/watch?v=epSGSlXlbtU",
         "work": "Scam Economy",
-        "parenthetical": "Podcast",
+        "parenthetical": "Video podcast",
         "date": "2022-05-19",
         "tags": [
             "crypto",
@@ -148,7 +170,7 @@
         "author": "Matt Binder",
         "href": "https://www.youtube.com/watch?v=gcdJR5C-44s",
         "work": "Scam Economy",
-        "parenthetical": "Podcast",
+        "parenthetical": "Video podcast",
         "date": "2022-05-05",
         "tags": [
             "crypto",
