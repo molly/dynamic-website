@@ -1,5 +1,47 @@
 [
   {
+    "title": "Should Web3 Be Destroyed",
+    "author": "Marilyn Wilkinson",
+    "date": "2022-05-25",
+    "started": "2022-05-25",
+    "work": "Unchained",
+    "publisher": "The Blockpit Magazine",
+    "href": "https://open.spotify.com/episode/1LgtqNPmpVTK0ZCxZGgqxZ?si=cf1135ba791146b3&nd=1",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-05-26T00:13:26.612Z"
+  },
+  {
+    "title": "Episode 224: Krypto Kulturkampf",
+    "author": "Liz Franczak and Brace Belden",
+    "work": "TrueAnon",
+    "href": "https://www.youtube.com/watch?v=m5vp_NKaQ6M",
+    "date": "2022-04-29",
+    "parenthetical": "Podcast",
+    "started": "2022-05-25"
+  },
+  {
+    "title": "157. In the Shadow Banks of Wall Street (part 1)",
+    "author": "Jathan Sadowski and Edward Ongweso Jr.",
+    "date": "2022-05-05",
+    "started": "2022-05-08",
+    "completed": "2022-05-24",
+    "work": "This Machine Kills",
+    "href": "https://www.patreon.com/posts/157-in-shadow-of-66032078",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-05-26T00:16:38.591Z"
+  },
+  {
+    "title": "Stephen Diehl on Web3, Bitcoin & Neometalism",
+    "author": "Rufus Pollock",
+    "date": "2022-02-24",
+    "started": "2022-05-18",
+    "completed": "2022-05-24",
+    "work": "Life Itself",
+    "href": "https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy83OWIzOTkzNC9wb2RjYXN0L3Jzcw/episode/NDI1ZWE4NTItMzEwZi00ODliLWEzM2UtNmZlMDMzMzBhMzJi?sa=X&ved=0CAUQkfYCahcKEwjw-NjL8Pv3AhUAAAAAHQAAAAAQQw",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-05-26T00:21:05.376Z"
+  },
+  {
     "title": "Decentralized Society: Finding Web3's Soul",
     "author": "E. Glen Weyl, Puja Ohlhaver, and Vitalik Buterin",
     "date": "2022-05-10",
@@ -15,6 +57,7 @@
     "work": "TRASHFUTURE",
     "date": "2022-05-17",
     "started": "2022-05-22",
+    "parenthetical": "Podcast",
     "entryAdded": "2022-05-23T22:04:54.779Z"
   },
   {
@@ -25,6 +68,7 @@
     "date": "2021-08-03",
     "started": "2022-05-02",
     "completed": "2022-05-22",
+    "parenthetical": "Podcast",
     "entryAdded": "2022-05-23T22:08:57.856Z"
   },
   {
@@ -32,6 +76,7 @@
     "author": "Chapo Trap House",
     "href": "https://www.youtube.com/watch?v=T9yvWNkM13s",
     "work": "Chapo Trap House",
+    "parenthetical": "Podcast",
     "date": "2022-05-10",
     "started": "2022-05-22",
     "entryAdded": "2022-05-23T22:06:56.809Z"
