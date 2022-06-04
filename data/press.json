@@ -49,6 +49,51 @@
         ]
     },
     {
+        "title": "Their cryptocurrencies crashed the market. Now they're back at it.",
+        "author": "Pranshu Verma",
+        "work": "The Washington Post",
+        "date": "2022-06-01",
+        "href": "https://www.washingtonpost.com/technology/2022/06/01/terraform-labs-crypto-luna/",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
+        "title": "Engineer Molly White explains why Web3 isn't going great",
+        "author": "Peter Kafka",
+        "work": "Recode Media",
+        "publisher": "Vox",
+        "parenthetical": "Podcast",
+        "date": "2022-06-01",
+        "href": "https://podcasts.apple.com/us/podcast/recode-media/id1080467174?i=1000564918091",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
+        "title": "Crypto Has a New Foe in Washington: Techies",
+        "author": "Joe Light",
+        "work": "Barron's",
+        "date": "2022-06-01",
+        "href": "https://www.barrons.com/articles/crypto-regulation-web3-51654118636",
+        "tags": [
+            "crypto",
+            "policy"
+        ]
+    },
+    {
+        "title": "Tech experts to Congress: Resist the crypto hype",
+        "author": "Ryan Deffenbaugh",
+        "work": "Protocol",
+        "date": "2022-06-01",
+        "href": "https://www.protocol.com/bulletins/tech-experts-lobby-against-crypto",
+        "tags": [
+            "crypto",
+            "policy"
+        ]
+    },
+    {
         "title": "Crypto Mania: Behind the hype of cryptocurrencies",
         "author": "Stephen Long",
         "work": "Four Corners",
@@ -61,7 +106,7 @@
         ]
     },
     {
-        "title": "First she documented the alt-right. Now she’s coming for crypto.",
+        "title": "First she documented the alt-right. Now she's coming for crypto.",
         "author": "Gerrit De Vynck",
         "work": "The Washington Post",
         "href": "https://wapo.st/3N4KkrB",
