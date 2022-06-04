@@ -1,13 +1,28 @@
 [
   {
+    "title": "The Library at Mount Char",
+    "author": "Scott Hawkins",
+    "date": "2015",
+    "publisher": "Crown Books",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1453225113i/26892110.jpg",
+    "href": "https://www.goodreads.com/book/show/26892110-the-library-at-mount-char?from_search=true&from_srp=true&qid=yzUTIq7MJI&rank=1",
+    "status": "currentlyReading",
+    "started": "2022-06-04",
+    "tags": [
+      "horror",
+      "fantasy"
+    ]
+  },
+  {
     "title": "The Terror",
     "author": "Dan Simmons",
     "date": "2007",
     "publisher": "Little, Brown and Company",
     "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442713631l/3974._SY475_.jpg",
     "href": "https://www.goodreads.com/book/show/3974.The_Terror",
-    "status": "currentlyReading",
+    "status": "read",
     "started": "2021-12-25",
+    "completed": "2022-06-04",
     "tags": [
       "horror",
       "survival"

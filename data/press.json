@@ -1,5 +1,54 @@
 [
     {
+        "title": "Adam Neumann's 'Goddess Nature Token' Is the Future of Crypto—for Better or Worse",
+        "author": "Christopher Mims",
+        "date": "2022-06-04",
+        "work": "Wall Street Journal",
+        "href": "https://www.wsj.com/articles/adam-neumanns-goddess-nature-token-is-the-future-of-cryptofor-better-or-worse-11654315241",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
+        "title": "https://www.derstandard.at/story/2000136249552/molly-white-die-vielleicht-prominenteste-krypto-kritikerin",
+        "date": "2022-06-04",
+        "work": "Der Standard",
+        "parenthetical": "in German",
+        "href": "https://www.derstandard.at/story/2000136249552/molly-white-die-vielleicht-prominenteste-krypto-kritikerin",
+        "tags": [
+            "crypto",
+            "profile",
+            "web3",
+            "wikipedia"
+        ]
+    },
+    {
+        "title": "'Gem of Northeastern,' Molly White takes on crypto",
+        "author": "Ian Thomsen",
+        "date": "2022-06-03",
+        "work": "News @ Northeastern",
+        "publisher": "Northeastern University",
+        "href": "https://news.northeastern.edu/2022/06/03/molly-white-crypto/",
+        "tags": [
+            "crypto",
+            "profile",
+            "wikipedia",
+            "web3"
+        ]
+    },
+    {
+        "title": "The crypto-skeptics' voices are getting louder",
+        "author": "Steven Zeitchik",
+        "date": "2022-06-03",
+        "work": "The Washington Post",
+        "href": "https://www.washingtonpost.com/business/2022/06/03/crypto-skeptics-growing/",
+        "tags": [
+            "crypto",
+            "policy"
+        ]
+    },
+    {
         "title": "Crypto Mania: Behind the hype of cryptocurrencies",
         "author": "Stephen Long",
         "work": "Four Corners",
@@ -19,6 +68,7 @@
         "date": "2022-05-29",
         "tags": [
             "crypto",
+            "profile",
             "web3"
         ]
     },
@@ -199,6 +249,7 @@
         "date": "2022-05-10",
         "tags": [
             "crypto",
+            "profile",
             "web3"
         ]
     },
@@ -361,6 +412,7 @@
             "crypto",
             "harassment",
             "journalism",
+            "profile",
             "web3",
             "wikipedia"
         ]
@@ -540,6 +592,7 @@
         "href": "https://fortune.com/2022/03/31/cryptocurrency-web3-skepticism-molly-white",
         "tags": [
             "crypto",
+            "profile",
             "web3"
         ]
     },
@@ -618,6 +671,7 @@
         "href": "https://www.fastcompany.com/90733574/how-a-wikipedia-engineer-became-one-of-the-loudest-web3-skeptics",
         "tags": [
             "crypto",
+            "profile",
             "technology",
             "web3"
         ]
