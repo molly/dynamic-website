@@ -1,10 +1,100 @@
 [
   {
+    "title": "Socialism? On My Blockchain? It’s More Common Than You Think!",
+    "author": "Matt Condon and Jonathan Mann",
+    "work": "Digitally Rare",
+    "href": "https://anchor.fm/digitallyrare/episodes/Socialism--On-My-Blockchain--Its-More-Common-Than-You-Think-e1bed58",
+    "date": "2021-12-08",
+    "started": "2022-06-13",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-06-13T22:03:37.736Z"
+  },
+  {
+    "title": "The myth of trustlessness",
+    "author": "Primavera De Filippi, Wessel Reijers, and Morshed Mannan",
+    "work": "New Public",
+    "date": "2022-06-09",
+    "started": "2022-06-13",
+    "href": "https://newpublic.org/article/1933/why-blockchain-is-not-trustless",
+    "entryAdded": "2022-06-13T18:41:27.396Z"
+  },
+  {
+    "title": "Episode 78 – Pre-Philanthropic Billionaires and Bitcoin (Feat. Mario Gibney)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "work": "Crypto Critics' Corner",
+    "href": "https://cryptocriticscorner.com/2022/06/08/episode-78-pre-philanthropic-billionaires-and-bitcoin-feat-mario-gibney/",
+    "date": "2022-06-08",
+    "started": "2022-06-12",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-06-13T22:02:07.875Z"
+  },
+  {
+    "title": "18: They Lost Everything: How the Terra Crypto Crash Ruined Lives Around the World (w/ Leo Schwartz)",
+    "author": "Matt Binder",
+    "work": "Scam Economy",
+    "date": "2022-06-10",
+    "started": "2022-06-12",
+    "parenthetical": "Podcast",
+    "href": "https://scameconomy.com/e/pnmy0zrn-18-they-lost-everything-how-the-terra-crypto-crash-ruined-lives-around-the-world-w-leo-schwartz",
+    "entryAdded": "2022-06-13T22:01:25.401Z"
+  },
+  {
+    "title": "Soulbound: On or off Chain? | Vitalik Buterin and Evin McMullen",
+    "author": "David Hoffman",
+    "work": "Bankless",
+    "date": "2022-06-08",
+    "started": "2022-06-10",
+    "parenthetical": "Video podcast",
+    "href": "2022-06-13T21:59:52.203Z",
+    "entryAdded": "2022-06-13T18:41:27.396Z"
+  },
+  {
+    "title": "Episode 76 – El Salvador Revisted: Chivo, KYC/AML, and Nayib Bukele (Featuring. Domingo Flores)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "work": "Crypto Critics' Corner",
+    "href": "https://cryptocriticscorner.com/2022/06/01/episode-76-el-salvador-domingo-flores/",
+    "date": "2022-06-06",
+    "started": "2022-06-09",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-06-13T21:53:32.934Z"
+  },
+  {
+    "title": "Episode 77 – Disclosures, Conflicts of Interest, and Diplomacy",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "work": "Crypto Critics' Corner",
+    "href": "https://cryptocriticscorner.com/2022/06/06/episode-77-disclosures-conflicts-of-interest-and-diplomacy/",
+    "date": "2022-06-06",
+    "started": "2022-06-09",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-06-13T21:52:13.020Z"
+  },
+  {
+    "title": "Untethered, Unleashed (feat. Crypto Critics Corner)",
+    "author": "Jathan Sadowski and Edward Ongweso Jr.",
+    "work": "This Machine Kills",
+    "href": "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5zb3VuZGNsb3VkLmNvbS91c2Vycy9zb3VuZGNsb3VkOnVzZXJzOjg2MTA2Njk3Ni9zb3VuZHMucnNz/episode/dGFnOnNvdW5kY2xvdWQsMjAxMDp0cmFja3MvMTI4MDE3ODMzNA?sa=X&ved=0CAUQkfYCahgKEwjA7vm5sqv4AhUAAAAAHQAAAAAQtQE",
+    "date": "2022-06-02",
+    "started": "2022-06-09",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-06-13T21:43:15.351Z"
+  },
+  {
+    "title": "Tech Media Needs to Do Better on Crypto and Elon Musk",
+    "author": "Jathan Sadowski and Edward Ongweso Jr.",
+    "work": "This Machine Kills",
+    "href": "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5zb3VuZGNsb3VkLmNvbS91c2Vycy9zb3VuZGNsb3VkOnVzZXJzOjg2MTA2Njk3Ni9zb3VuZHMucnNz/episode/dGFnOnNvdW5kY2xvdWQsMjAxMDp0cmFja3MvMTI4MDE3ODMzNA?sa=X&ved=0CAUQkfYCahgKEwjA7vm5sqv4AhUAAAAAHQAAAAAQtQE",
+    "date": "2022-06-02",
+    "started": "2022-06-03",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-06-13T21:46:30.726Z"
+  },
+  {
     "title": "Denial by Potentiality",
     "author": "Tante",
     "work": "his blog",
     "workItalics": false,
     "date": "2022-06-01",
+    "started": "2022-06-02",
     "href": "https://tante.cc/2022/05/30/denial-by-potentiality/",
     "entryAdded": "2022-06-02T21:58:44.136Z"
   },
@@ -19,6 +109,16 @@
     "entryAdded": "2022-06-02T15:56:50.513Z"
   },
   {
+    "title": "Episode 69 – An Unscripted Chat With The Richest Man in The World* (Feat. Colin Platt)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "work": "Crypto Critics' Corner",
+    "href": "https://cryptocriticscorner.com/2022/06/01/episode-76-el-salvador-domingo-flores/",
+    "date": "2022-04-22",
+    "started": "2022-06-01",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-06-13T21:55:12.486Z"
+  },
+  {
     "title": "This Week In Doom Ep. 6 - Bennett Tomlin & George Noble",
     "author": "Grant Williams and Doomberg",
     "work": "The Grant Williams Podcast",
@@ -29,7 +129,7 @@
     "entryAdded": "2022-05-29T21:02:54.648Z"
   },
   {
-    "title": "Cryptocurrency, Coinbase, and Contagion (Feat. Jim Chanos) - Episode 75",
+    "title": "Episode 75 – Cryptocurrency, Coinbase, and Contagion (Feat. Jim Chanos)",
     "author": "Bennett Tomlin and Cas Piancey",
     "work": "Crypto Critics' Corner",
     "date": "2022-05-28",
@@ -195,6 +295,15 @@
     "date": "2022-05-19",
     "parenthetical": "Podcast",
     "href": "https://techwontsave.us/episode/115_unstablecoins_and_the_crypto_crash_w_bennett_tomlin"
+  },
+  {
+    "title": "Disco: A Digital Backpack For the LARP That Is Your Life",
+    "author": "Matt Condon and Jonathan Mann",
+    "work": "Digitally Rare",
+    "href": "https://anchor.fm/digitallyrare/episodes/Disco-A-Digital-Backpack-For-the-LARP-That-Is-Your-Life-e1gcqff",
+    "parenthetical": "Podcast",
+    "started": "2022-05-16",
+    "entryAdded": "2022-06-13T21:57:44.429Z"
   },
   {
     "title": "Miami's Bitcoin Conference Left a Trail of Harassment",

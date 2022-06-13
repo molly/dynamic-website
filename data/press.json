@@ -1,5 +1,28 @@
 [
     {
+        "title": "The biggest crypto scams of 2022 (so far)",
+        "author": "Matt Binder",
+        "date": "2022-06-13",
+        "work": "Mashable",
+        "href": "https://mashable.com/article/biggest-crypto-scams-2022",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    }
+    {
+        "title": "Popping the Web3 Balloon",
+        "author": "Tim Stenovec and Katie Greifeld",
+        "date": "2022-06-09",
+        "work": "Bloomberg Quicktake",
+        "parenthetical": "Television program",
+        "href": "https://www.bloomberg.com/news/videos/2022-06-09/popping-the-web3-balloon-video",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
         "title": "A First Step To Crypto Regulation, Or A Step Backwards?",
         "author": "Ailsa Chang",
         "date": "2022-06-08",
