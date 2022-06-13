@@ -1,0 +1,30 @@
+- var shortForm = true
+mixin currentlyReadingArticleSummary(mostRecent)
+  | I most recently  
+  include ./verb.pug
+  +verb(mostRecent)
+  |  "
+  a(href=mostRecent.href) #{mostRecent.title} 
+  | "
+  if mostRecent.author
+    |  by #{mostRecent.author} 
+
+    if mostRecent.work
+      if mostRecent.preposition
+        | #{mostRecent.preposition}
+      else 
+        | in 
+      if !mostRecent.workItalics
+        | #{mostRecent.work}.
+      else
+        i #{mostRecent.work}.
+    else 
+      | .
+
+    if mostRecent.publisher
+      |  #{mostRecent.publisher}.
+
+    if !mostRecent.work && !mostRecent.publisher
+      |.
+  else 
+    |.

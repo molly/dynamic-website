@@ -1,0 +1,9 @@
+mixin verb(article)
+  if article.parenthetical && article.parenthetical === 'Video'
+    |  watched 
+  else if article.parenthetical && article.parenthetical.indexOf("odcast") > -1
+    |  listened to 
+  else if article.status === 'currentlyReading'
+    |  started reading 
+  else
+    |  read 

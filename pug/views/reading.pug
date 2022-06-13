@@ -19,68 +19,16 @@ block body
     .reading-section
       h3
         a(href="/reading/shortform") Shortform reading list 
-
       .reading-section-body  
-        | I most recently  
-        =mostRecentShortform.parenthetical === 'Video' ? 'watched' : 'read'
-        |  "
-        a(href=mostRecentShortform.href) #{mostRecentShortform.title} 
-        | "
-        if mostRecentShortform.author
-          |  by #{mostRecentShortform.author} #{mostRecentShortform.preposition}  
-
-          if mostRecentShortform.work
-            if !mostRecentShortform.workItalics
-              | #{mostRecentShortform.work}.
-            else
-              i #{mostRecentShortform.work}.
-
-          if mostRecentShortform.publisher
-            |  #{mostRecentShortform.publisher}.
-
-          if !mostRecentShortform.work && !mostRecentShortform.publisher
-            |.
-        else 
-          |.
+        include ../mixins/currentlyReadingArticleSummary.pug
+        +currentlyReadingArticleSummary(mostRecentShortform)
+        
     
     .reading-section
       h3
         a(href="/reading/blockchain") Blockchain reading list 
-
       .reading-section-body  
-        | I most recently  
-        if mostRecentBlockchain.parenthetical && mostRecentBlockchain.parenthetical === 'Video'
-          |  watched 
-        else if mostRecentBlockchain.parenthetical && mostRecentBlockchain.parenthetical.indexOf("odcast") > -1
-          |  listened to 
-        else if mostRecentBlockchain.status === 'currentlyReading'
-          |  started reading 
-        else
-          |  read 
-        if mostRecentBlockchain.parenthetical && mostRecentBlockchain.parenthetical === "Book" 
-          a(href=mostRecentBlockchain.href)
-            i #{mostRecentBlockchain.title}
-        else
-          | "
-          a(href=mostRecentBlockchain.href) #{mostRecentBlockchain.title}
-          | "
-        if mostRecentBlockchain.author
-          |  by #{mostRecentBlockchain.author}
-
-          if mostRecentBlockchain.work
-            |  #{mostRecentBlockchain.preposition} 
-            if !mostRecentBlockchain.workItalics
-              | #{mostRecentBlockchain.work}.
-            else
-              i #{mostRecentBlockchain.work}.
-
-          if mostRecentBlockchain.publisher
-            | . #{mostRecentBlockchain.publisher}.
-
-          if !mostRecentBlockchain.work && !mostRecentBlockchain.publisher
-            |.
-        else 
-          |.
+        +currentlyReadingArticleSummary(mostRecentBlockchain)
           
     .reading-section
       h3
