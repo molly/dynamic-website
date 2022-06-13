@@ -37,7 +37,8 @@ mixin shortformArticle(article, rss=false)
 
     .details
       span.weekOf
-      =article.parenthetical === "Video" ? 'Watched' : 'Read'
+      include ./verb.pug
+      +verb(article)
       |  during the week of #{article.week}
 
       .summary
