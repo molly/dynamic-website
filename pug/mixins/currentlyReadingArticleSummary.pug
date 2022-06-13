@@ -2,7 +2,7 @@
 mixin currentlyReadingArticleSummary(mostRecent)
   | I most recently  
   include ./verb.pug
-  +verb(mostRecent)
+  +verb(mostRecent, to=true)
   |  "
   a(href=mostRecent.href) #{mostRecent.title} 
   | "

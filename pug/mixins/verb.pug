@@ -1,9 +1,9 @@
-mixin verb(article)
+mixin verb(article, to=false, capitalize=false)
   if article.parenthetical && article.parenthetical === 'Video'
-    |  watched 
+    |  #{capitalize ? "W" : "w"}atched 
   else if article.parenthetical && article.parenthetical.indexOf("odcast") > -1
-    |  listened to 
+    |  #{capitalize ? "L" : "l"}istened #{to ? "to " : ""}
   else if article.status === 'currentlyReading'
-    |  started reading 
+    |  #{capitalize ? "S" : "s"}tarted reading 
   else
-    |  read 
+    |  #{capitalize ? "R" : "r"}ead 
