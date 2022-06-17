@@ -71,8 +71,7 @@ const preprocess = (data, { defaultArticle, tagText, defaultKey }) => {
   allTags.sort((a, b) =>
     a.text.toLowerCase().localeCompare(b.text.toLowerCase())
   );
-
   return { results: processed, allTags };
 };
 
-module.exports = preprocess;
+module.exports = { preprocess };
