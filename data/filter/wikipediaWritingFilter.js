@@ -1,7 +1,7 @@
 const getLocalJson = require('../utils/getLocalJson');
 const WIKIPEDIA_DEFAULTS = require('../wikipediaDefaults');
 const { matches } = require('./filter');
-const paginate = require('./paginate');
+const { paginate } = require('./paginate');
 const moment = require('moment');
 
 const { defaultArticle, topicText } = WIKIPEDIA_DEFAULTS;

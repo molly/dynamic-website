@@ -1,4 +1,4 @@
-const getLimit = (queryLimit, defaults) => {
+const getLimit = (queryLimit, defaults = {}) => {
   let limit;
   if (typeof queryLimit === 'string') {
     limit = parseInt(queryLimit, 10);
@@ -26,4 +26,4 @@ const paginate = ({ results }, req, defaults = {}) => {
   };
 };
 
-module.exports = paginate;
+module.exports = { getLimit, paginate };

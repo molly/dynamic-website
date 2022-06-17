@@ -8,6 +8,8 @@ if (process.argv[2] === 'prod') {
   config = require('./config');
 }
 
+const { getPaginatedAndFilteredFromDb } = require('./api/client');
+
 const getPaginatedAndFiltered = require('./data/filter/getPaginatedAndFiltered');
 const getLandingPageSummary = require('./data/filter/landing');
 const getWikipediaWriting = require('./data/filter/wikipediaWritingFilter');
@@ -23,7 +25,7 @@ const SHORTFORM_DEFAULTS = require('./data/shortformDefaults');
 const BLOCKCHAIN_DEFAULTS = require('./data/blockchainDefaults');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
 
-const PORT = 5000;
+const PORT = 5001;
 
 const app = express();
 app.use('/static', express.static(path.join(__dirname, 'js')));
@@ -75,8 +77,8 @@ app.get('/reading/shortform', async (req, res) => {
 });
 
 app.get('/reading/blockchain', async (req, res) => {
-  const results = await getPaginatedAndFiltered(
-    '../blockchain.json',
+  const results = await getPaginatedAndFilteredFromDb(
+    'blockchain',
     BLOCKCHAIN_DEFAULTS,
     req
   );

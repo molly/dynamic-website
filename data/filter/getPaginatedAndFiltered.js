@@ -1,7 +1,7 @@
 const getLocalJson = require('../utils/getLocalJson');
-const paginate = require('./paginate');
-const preprocess = require('./preprocess');
-const filter = require('./filter');
+const { paginate } = require('./paginate');
+const { preprocess } = require('./preprocess');
+const { filter } = require('./filter');
 
 const getPaginatedAndFiltered = async (
   relativePath,

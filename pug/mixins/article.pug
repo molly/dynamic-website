@@ -62,7 +62,7 @@ mixin article(article, rss=false)
         | ; completed #{article.formattedCompleted}
       |.
 
-    if article.relatedReading.length 
+    if article.relatedReading && article.relatedReading.length 
       .related-reading
         if !rss
           i.fab.fa-wikipedia-w

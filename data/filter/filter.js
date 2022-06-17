@@ -88,4 +88,4 @@ const filter = ({ results }, req, { defaultKey }) => {
   return { results: filteredResults };
 };
 
-module.exports = filter;
+module.exports = { filter, matches };
