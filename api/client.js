@@ -15,6 +15,16 @@ const makeQuery = (req) => {
     const tags = req.query.tags.split('-');
     query.tags = { $in: tags };
   }
+  if (req.query.search) {
+    const escapedSearchQuery = req.query.search.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      '\\$&'
+    );
+    const fields = ['title', 'author', 'work', 'publisher', 'summary'];
+    query.$or = fields.map((field) => ({
+      [field]: { $regex: escapedSearchQuery, $options: 'i' },
+    }));
+  }
   return query;
 };
 
@@ -27,8 +37,6 @@ const formatResults = (results, defaultArticle, tagText) =>
       tags: getTags(result, tagText),
     };
   });
-
-const searchedResults = () => {};
 
 const getPaginatedAndFilteredFromDb = async (
   collection,
@@ -62,12 +70,6 @@ const getPaginatedAndFilteredFromDb = async (
 
     const cursor = documentsCollection.find(query);
 
-    if (req.query.search) {
-      // Hand off to search helper
-      const results = await cursor.toArray();
-      return searchedResults(results);
-    }
-
     // Sort, paginate
     cursor.sort({ [dateKey]: sortOrder });
     if (start) {
@@ -77,23 +79,19 @@ const getPaginatedAndFilteredFromDb = async (
 
     const results = await cursor.toArray();
 
-    if (req.query.search) {
-      return searchedResults(results);
-    } else {
-      const totalFilteredResults = await documentsCollection.countDocuments(
-        query
-      );
-      const totalUnfilteredResults = await documentsCollection.countDocuments();
-      return {
-        currentPage: page,
-        pageSize: limit,
-        results: formatResults(results, defaults.defaultArticle, tagText),
-        totalPages: Math.ceil(totalFilteredResults / limit),
-        totalResults: totalFilteredResults,
-        totalUnfilteredResults,
-        allTags,
-      };
-    }
+    const totalFilteredResults = await documentsCollection.countDocuments(
+      query
+    );
+    const totalUnfilteredResults = await documentsCollection.countDocuments();
+    return {
+      currentPage: page,
+      pageSize: limit,
+      results: formatResults(results, defaults.defaultArticle, tagText),
+      totalPages: Math.ceil(totalFilteredResults / limit),
+      totalResults: totalFilteredResults,
+      totalUnfilteredResults,
+      allTags,
+    };
   } catch (err) {
     console.log(err);
   } finally {
