@@ -39,7 +39,7 @@ mixin shortformArticle(article, rss=false)
       span.weekOf
       include ./verb.pug
       +verb(article, to=false, capitalize=true)
-      |  during the week of #{article.week}
+      | on #{article.formattedStarted}
 
       .summary
         != article.summary

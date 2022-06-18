@@ -25,7 +25,7 @@ const SHORTFORM_DEFAULTS = require('./data/shortformDefaults');
 const BLOCKCHAIN_DEFAULTS = require('./data/blockchainDefaults');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
 
-const PORT = 5001;
+const PORT = 5000;
 
 const app = express();
 app.use('/static', express.static(path.join(__dirname, 'js')));
@@ -33,8 +33,8 @@ app.set('views', path.join(__dirname, 'pug/views'));
 app.set('view engine', 'pug');
 
 app.get('/press', async (req, res) => {
-  const results = await getPaginatedAndFiltered(
-    '../press.json',
+  const results = await getPaginatedAndFilteredFromDb(
+    'press',
     PRESS_DEFAULTS,
     req
   );
@@ -46,8 +46,8 @@ app.get('/press', async (req, res) => {
 });
 
 app.get('/projects-press', async (req, res) => {
-  const results = await getPaginatedAndFiltered(
-    '../projectPress.json',
+  const results = await getPaginatedAndFilteredFromDb(
+    'projectPress',
     PRESS_DEFAULTS,
     req
   );
@@ -64,8 +64,8 @@ app.get('/reading', async (req, res) => {
 });
 
 app.get('/reading/shortform', async (req, res) => {
-  const results = await getPaginatedAndFiltered(
-    '../shortform.json',
+  const results = await getPaginatedAndFilteredFromDb(
+    'shortform',
     SHORTFORM_DEFAULTS,
     req
   );

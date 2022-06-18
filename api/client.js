@@ -1,5 +1,6 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { getLimit } = require('../data/filter/paginate');
+const { formatArticleDate, getTags } = require('../data/filter/preprocess');
 
 const uri = `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -17,6 +18,16 @@ const makeQuery = (req) => {
   return query;
 };
 
+const formatResults = (results, defaultArticle, tagText) =>
+  results.map((result) => {
+    return {
+      ...defaultArticle,
+      ...result,
+      ...formatArticleDate(result),
+      tags: getTags(result, tagText),
+    };
+  });
+
 const searchedResults = () => {};
 
 const getPaginatedAndFilteredFromDb = async (
@@ -28,8 +39,10 @@ const getPaginatedAndFilteredFromDb = async (
   const limit = getLimit(req.query.limit, paginationDefaults);
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const start = (page - 1) * limit;
-  const dateKey = collection === 'blockchain' ? 'started' : 'date';
-  const sortOrder = req.query.order && req.query.order === 'reverse' ? -1 : 1;
+  const dateKey = ['blockchain', 'shortform'].includes(collection)
+    ? 'started'
+    : 'date';
+  const sortOrder = req.query.order && req.query.order === 'reverse' ? 1 : -1;
   const query = makeQuery(req);
 
   try {
@@ -42,6 +55,10 @@ const getPaginatedAndFilteredFromDb = async (
     allTags.sort((a, b) =>
       a.text.toLowerCase().localeCompare(b.text.toLowerCase())
     );
+    const tagText = allTags.reduce((acc, tag) => {
+      acc[tag.value] = tag.text;
+      return acc;
+    }, {});
 
     const cursor = documentsCollection.find(query);
 
@@ -67,11 +84,10 @@ const getPaginatedAndFilteredFromDb = async (
         query
       );
       const totalUnfilteredResults = await documentsCollection.countDocuments();
-
       return {
         currentPage: page,
         pageSize: limit,
-        results,
+        results: formatResults(results, defaults.defaultArticle, tagText),
         totalPages: Math.ceil(totalFilteredResults / limit),
         totalResults: totalFilteredResults,
         totalUnfilteredResults,

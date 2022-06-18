@@ -13,50 +13,58 @@ const formatDate = (dateMoment, rawDate) => {
   }
 };
 
-const preprocess = (data, { defaultArticle, tagText, defaultKey }) => {
+const formatArticleDate = (article) => {
+  const dates = {};
+  if (article.date) {
+    const m = moment(article.date, ['YYYY-MM-DD', 'YYYY-MM', 'YYYY']);
+    dates.formattedDate = formatDate(m, article.date);
+  }
+  if (article.started) {
+    const startedMoment = moment(article.started, [
+      'YYYY-MM-DD',
+      'YYYY-MM',
+      'YYYY',
+    ]);
+    dates.formattedStarted = formatDate(startedMoment, article.started);
+  }
+  if (article.completed) {
+    const completedMoment = moment(article.completed, [
+      'YYYY-MM-DD',
+      'YYYY-MM',
+      'YYYY',
+    ]);
+    dates.formattedCompleted = formatDate(completedMoment, article.completed);
+  }
+  return dates;
+};
+
+const getTags = (article, tagText) => {
+  if (!article.tags || !article.tags.length) {
+    return [];
+  }
+  const tags = article.tags.map((tag) => ({
+    text: Object.prototype.hasOwnProperty.call(tagText, tag)
+      ? tagText[tag]
+      : tag.replace(/_/g, ' '),
+    value: tag,
+  }));
+  tags.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()));
+  return tags;
+};
+
+const preprocess = (data, { defaultArticle, tagText }) => {
   const processed = [];
   const tagsMap = {};
   for (let article of data) {
-    const updatedArticle = { ...defaultArticle, ...article };
-    const m = moment(updatedArticle.date, ['YYYY-MM-DD', 'YYYY-MM', 'YYYY']);
+    let updatedArticle = { ...defaultArticle, ...article };
 
     // Dates
-    updatedArticle.formattedDate = formatDate(m, updatedArticle.date);
-    if (defaultKey === 'BOOK' || defaultKey === 'BLOCKCHAIN') {
-      if (article.started) {
-        const startedMoment = moment(updatedArticle.started, [
-          'YYYY-MM-DD',
-          'YYYY-MM',
-          'YYYY',
-        ]);
-        updatedArticle.formattedStarted = formatDate(
-          startedMoment,
-          updatedArticle.started
-        );
-      }
-      if (updatedArticle.completed) {
-        const completedMoment = moment(updatedArticle.completed, [
-          'YYYY-MM-DD',
-          'YYYY-MM',
-          'YYYY',
-        ]);
-        updatedArticle.formattedCompleted = formatDate(
-          completedMoment,
-          updatedArticle.completed
-        );
-      }
-    }
+    const formattedDates = formatArticleDate(updatedArticle);
+    Object.assign(updatedArticle, formattedDates);
 
     // Tags
-    updatedArticle.tags = updatedArticle.tags.map((tag) => ({
-      text: Object.prototype.hasOwnProperty.call(tagText, tag)
-        ? tagText[tag]
-        : tag.replace(/_/g, ' '),
-      value: tag,
-    }));
-    updatedArticle.tags.sort((a, b) =>
-      a.text.toLowerCase().localeCompare(b.text.toLowerCase())
-    );
+    updatedArticle.tags = getTags(updatedArticle, tagText);
+
     processed.push(updatedArticle);
     for (let tag of updatedArticle.tags) {
       if (Object.prototype.hasOwnProperty.call(tagsMap, tag.value)) {
@@ -71,7 +79,8 @@ const preprocess = (data, { defaultArticle, tagText, defaultKey }) => {
   allTags.sort((a, b) =>
     a.text.toLowerCase().localeCompare(b.text.toLowerCase())
   );
+
   return { results: processed, allTags };
 };
 
-module.exports = { preprocess };
+module.exports = { preprocess, formatArticleDate, getTags };
