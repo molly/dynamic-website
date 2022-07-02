@@ -2,7 +2,11 @@ const SHORTFORM_DEFAULTS = {
   title: null,
   author: null,
   date: '1970-01-01',
+  started: '1970-01-01',
+  completed: null,
   formattedDate: null,
+  formattedStarted: null,
+  formattedCompleted: null,
   work: null,
   publisher: null,
   workItalics: true,
@@ -12,7 +16,6 @@ const SHORTFORM_DEFAULTS = {
   tags: [],
   summary: null,
   relatedReading: [],
-  week: null,
   entryAdded: null,
 };
 
