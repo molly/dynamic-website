@@ -1,5 +1,114 @@
 [
   {
+    "title": "170. Seasons in the Crypto Abyss (ft. David Gerard)",
+    "author": "Jathan Sadowski and Edward Ongweso Jr.",
+    "work": "This Machine Kills",
+    "href": "https://www.patreon.com/posts/170-seasons-in-68175205",
+    "date": "2022-06-23",
+    "started": "2022-06-30",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:08:20.182Z"
+  },
+  {
+    "title": "Episode 81 – Bitcoin ETFs, Regulatory Clarity, and the SEC (Feat. James Seyffart)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "work": "Crypto Critics' Corner",
+    "href": "https://cryptocriticscorner.com/2022/06/19/episode-81-bitcoin-etfs-regulatory-clarity-and-the-sec-feat-james-seyffart/",
+    "date": "2022-06-19",
+    "started": "2022-06-29",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:15:32.500Z"
+  },
+  {
+    "title": "Episode 82 – NFTs, Frauds, and Algorithmic Stablecoins (Feat. Mark Cuban)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "work": "Crypto Critics' Corner",
+    "href": "https://cryptocriticscorner.com/2022/06/23/episode-82-nfts-frauds-and-algorithmic-stablecoins-feat-mark-cuban/",
+    "date": "2022-06-23",
+    "started": "2022-06-28",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:16:37.530Z"
+  },
+  {
+    "title": "Debunking DeFi (w/ Bennett Tomlin of Crypto Critics' Corner)",
+    "author": "Jackson Palmer",
+    "work": "GRIFTONOMICS",
+    "href": "https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy85N2M3ZWMwNC9wb2RjYXN0L3Jzcw/episode/ZGVmYzcxNDgtZjJhMi00ZjNiLWJkYWUtMDNlOWJkZWVjZjNl?sa=X&ved=0CAUQkfYCahcKEwjQy8ysoNn4AhUAAAAAHQAAAAAQAQ",
+    "date": "2022-06-13",
+    "started": "2022-06-26",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:24:10.470Z"
+  },
+  {
+    "title": "Cryptocurrency 1929-2008 Speedrun (Framecount in Video)",
+    "author": "TRASHFUTURE",
+    "href": "https://www.patreon.com/posts/cryptocurrency-68032867",
+    "work": "TRASHFUTURE",
+    "date": "2022-06-20",
+    "started": "2022-06-23",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:27:06.543Z"
+  },
+  {
+    "title": "168. Blockchain Imperialism and the Pacific Ideology (ft. Olivier Jutel)",
+    "author": "Jathan Sadowski and Edward Ongweso Jr.",
+    "work": "This Machine Kills",
+    "href": "https://www.patreon.com/posts/168-blockchain-67840291",
+    "date": "2022-06-16",
+    "started": "2022-06-21",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:22:12.478Z"
+  },
+  {
+    "title": "XP Grinding at the Spreadsheet Factory",
+    "author": "TRASHFUTURE",
+    "href": "https://www.patreon.com/posts/xp-grinding-at-67238389",
+    "work": "TRASHFUTURE",
+    "date": "2022-06-02",
+    "started": "2022-06-19",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:10:58.787Z"
+  },
+  {
+    "title": "Nate Will Be Synonymous With Failure",
+    "author": "TRASHFUTURE",
+    "href": "https://www.patreon.com/posts/nate-will-be-67739403",
+    "work": "TRASHFUTURE",
+    "date": "2022-06-13",
+    "started": "2022-06-19",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:20:59.402Z"
+  },
+  {
+    "title": "Episode 79 – Celsius Collapse: Causes, Concern, and Catastrophe (Feat. Dirty Bubble Media)",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "work": "Crypto Critics' Corner",
+    "href": "https://cryptocriticscorner.com/2022/06/13/episode-79-celsius-collapse-causes-concern-and-catastrophe-feat-dirty-bubble-media/",
+    "date": "2022-06-13",
+    "started": "2022-06-16",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:28:26.436Z",
+  },
+  {
+    "title": "It’s Time for Regulators to Put Crypto Down",
+    "author": "David Gerard",
+    "work": "Foreign Policy",
+    "href": "https://foreignpolicy.com/2022/06/21/crypto-regulation-ust-luna-celsius-collapse/",
+    "date": "2022-06-21",
+    "started": "2022-06-21",
+    "entryAdded": "2022-07-02T03:06:47.484Z"
+  },
+  {
+    "title": "Episode 80 – New NFT Usecase Discovered, and it’s Insider Trading",
+    "author": "Bennett Tomlin and Cas Piancey",
+    "work": "Crypto Critics' Corner",
+    "href": "https://cryptocriticscorner.com/2022/06/16/episode-80-new-nft-usecase-discovered-and-its-insider-trading/",
+    "date": "2022-06-16",
+    "started": "2022-06-19",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-02T03:14:11.003Z"
+  },
+  {
     "title": "Socialism? On My Blockchain? It’s More Common Than You Think!",
     "author": "Matt Condon and Jonathan Mann",
     "work": "Digitally Rare",

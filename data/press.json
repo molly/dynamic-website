@@ -1,10 +1,62 @@
 [
     {
+        "title": "'Web3 is going just great' chronicles the many ways it is not",
+        "author": "Jeff Elder",
+        "work": "San Francisco Examiner",
+        "date": "2022-07-01",
+        "href": "https://www.sfexaminer.com/news/web3-is-going-just-great-chronicles-the-many-ways-it-is-not/article_5b8755b0-f97a-11ec-a778-df95c90f837f.html",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
+        "title": "Crypto’s biggest critics won’t back down",
+        "author": "Ashwin Rodrigues",
+        "date": "2022-06-24",
+        "work": "The Morning Brew",
+        "href": "https://www.morningbrew.com/daily/stories/2022/06/23/meet-crypto-s-biggest-skeptics",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
+        "title": "'There's Very Little There': Technologists, Including at Harvard, Urge Lawmakers to Resist Crypto's Siren Song",
+        "author": "Isabella B. Cho",
+        "work": "The Harvard Crimson",
+        "date": "2022-06-23",
+        "href": "https://www.thecrimson.com/article/2022/6/23/crypto-lawmakers/",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
+        "title": "To infinity and back: Inside Axie’s disastrous year",
+        "author": "Darren Loucaides",
+        "work": "Rest of World",
+        "date": "2022-06-22",
+        "href": "https://restofworld.org/2022/axie-infinity-hack/",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
         "title": "The crypto industry has had a terrible week. Here’s what local experts have to say.",
         "author": "Anissa Gardizy",
         "work": "The Boston Globe",
         "date": "2022-06-17",
         "href": "https://www.bostonglobe.com/2022/06/17/business/crypto-industry-has-had-terrible-week-heres-what-local-experts-have-do/",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
+        "title": "If you don’t trust banks, why should you trust cryptocurrency?",
+        "author": "Ethan Zuckerman",
+        "work": "Prospect",
+        "date": "2022-06-16",
+        "href": "https://www.prospectmagazine.co.uk/magazine/if-you-dont-trust-banks-why-should-you-trust-cryptocurrency-bitcoin-blockchain",
         "tags": [
             "crypto"
         ]

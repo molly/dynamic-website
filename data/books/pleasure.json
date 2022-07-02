@@ -1,5 +1,33 @@
 [
   {
+    "title": "Indelible",
+    "author": "Karin Slaughter",
+    "date": "2004",
+    "publisher": "HarperTorch",
+    "href": "https://www.goodreads.com/book/show/182012.Indelible",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1299703450i/182012.jpg",
+    "started": "2022-06-26",
+    "status": "currentlyReading",
+    "tags": [
+      "mystery",
+      "thriller"
+    ]
+  },
+  {
+    "title": "The Hitchhiker's Guide to the Galaxy",
+    "author": "Douglas Adams",
+    "date": "1979",
+    "publisher": "Pan Books",
+    "href": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1531891848i/11.jpg",
+    "status": "read",
+    "started": "2022-06-26",
+    "completed": "2022-06-26",
+    "tags": [
+      "science_fiction",
+      "comedy"
+    ]
+  },
+  {
     "title": "A Faint Cold Fear",
     "author": "Karin Slaughter",
     "date": "2003",
@@ -41,7 +69,7 @@
     "completed": "2021-12-24",
     "tags": [
       "post-apocalyptic",
-      "science fiction"
+      "science_fiction"
     ]
   },
   {

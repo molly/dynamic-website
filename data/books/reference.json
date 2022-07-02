@@ -1,8 +1,51 @@
 [
     {
+        "title": "23/7",
+        "subtitle": "Pelican Bay Prison and the Rise of Long-Term Solitary Confinement",
+        "author": "Keramet Reiter",
+        "date": "2016",
+        "started": "2022-06-25",
+        "status": "reference",
+        "publisher": "Yale University Press",
+        "href": "https://www.goodreads.com/book/show/29563689-23-7",
+        "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1470695474i/29563689.jpg",
+        "entryAdded": "2022-07-02T03:04:55.513Z",
+        "tags": [
+            "social_justice",
+            "prison_reform"
+        ],
+        "targetArticles": [
+            {
+                "href": "https://en.wikipedia.org/wiki/Pelican_Bay_State_Prison",
+                "title": "Pelican Bay State Prison"
+            }
+        ]
+    },
+    {
+        "title": "Hell Is a Very Small Place",
+        "subtitle": "Voices from Solitary Confinement",
+        "author": "Jean Casella, James Ridgeway, and Sarah Shourd",
+        "date": "2016",
+        "started": "2022-06-25",
+        "status": "reference",
+        "publisher": "The New Press",
+        "href": "https://www.goodreads.com/book/show/25159286-hell-is-a-very-small-place?ref=nav_sb_ss_3_10",
+        "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1438047697i/25159286.jpg",
+        "entryAdded": "2022-07-02T03:02:01.342Z",
+        "tags": [
+            "social_justice",
+            "prison_reform"
+        ],
+        "targetArticles": [
+            {
+                "href": "https://en.wikipedia.org/wiki/Pelican_Bay_State_Prison",
+                "title": "Pelican Bay State Prison"
+            }
+        ]
+    },
+    {
         "title": "Platform Socialism",
         "subtitle": "How to Reclaim our Digital Future from Big Tech",
-        "parenthetical": "Book",
         "author": "James Muldoon",
         "date": "2022-01",
         "started": "2022-04-22",
