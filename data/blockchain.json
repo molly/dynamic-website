@@ -1,11 +1,22 @@
 [
   {
+    "title": "The sinking of Voyager",
+    "author": "Frances Coppola",
+    "work": "her blog",
+    "workItalics": false,
+    "href": "https://www.coppolacomment.com/2022/07/the-sinking-of-voyager.html",
+    "date": "2022-07-03",
+    "started": "2022-07-03",
+    "entryAdded": "2022-07-03T15:21:07.911Z"
+  },
+  {
     "title": "170. Seasons in the Crypto Abyss (ft. David Gerard)",
     "author": "Jathan Sadowski and Edward Ongweso Jr.",
     "work": "This Machine Kills",
     "href": "https://www.patreon.com/posts/170-seasons-in-68175205",
     "date": "2022-06-23",
     "started": "2022-06-30",
+    "completed": "2022-07-02",
     "parenthetical": "Podcast",
     "entryAdded": "2022-07-02T03:08:20.182Z"
   },
