@@ -1,5 +1,26 @@
 [
     {
+        "title": "The Last Fad of the Crypto Bubble",
+        "author": "Kevin T. Dugan",
+        "work": "Intelligencer",
+        "publisher": "New York Magazine",
+        "href": "https://nymag.com/intelligencer/2022/07/move-to-earn-the-last-fad-of-the-crypto-bubble.html",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
+        "title": "Failed 'Captain Tsubasa' NFT offers window into the risks of crypto",
+        "author": "Dan Orlowitz",
+        "work": "Japan Times",
+        "date": "2022-07-06",
+        "href": "https://www.japantimes.co.jp/news/2022/07/06/business/tech/captain-tsubasa-nft/",
+        "tags": [
+            "nfts"
+        ]
+    },
+    {
         "title": "Crypto-sceptic Molly White could be the new JK Galbraith... just much tougher",
         "author": "John Naughton",
         "work": "The Guardian",
