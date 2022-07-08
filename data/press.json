@@ -1,5 +1,41 @@
 [
     {
+        "title": "The crypto market meltdown: Could it pave the way to new regulations?",
+        "author": "John Ringer and Meghna Chakrabarti",
+        "href": "https://www.wbur.org/onpoint/2022/07/08/will-the-crypto-market-meltdown-pave-the-way-for-rapid-regulation",
+        "date": "2022-07-08",
+        "work": "On Point",
+        "publisher": "WBUR",
+        "tags": [
+            "crypto",
+            "policy"
+        ]
+    },
+    {
+        "title": "Can 'chief vibes officers' and NFT influencers keep things positive amid the crypto collapse?",
+        "author": "Wilfred Chan",
+        "work": "The Guardian",
+        "date": "2022-07-08",
+        "href": "https://www.theguardian.com/technology/2022/jul/08/nft-vibes-managers",
+        "tags": [
+            "crypto",
+            "nfts",
+            "web3"
+        ]
+    },
+    {
+        "title": "\"Als ob die Rentenkasse einen Haufen Lotterielose kauft\"",
+        "author": "Patrick Beuth and Janne Knödler",
+        "date": "2022-07-08",
+        "work": "Der Spiegel",
+        "parenthetical": "in German",
+        "href": "https://www.spiegel.de/netzwelt/web/krypto-kritikerin-molly-white-als-ob-die-rentenkasse-einen-haufen-lotterielose-kauft-a-91ab1e87-d094-4de7-866c-0ea9de719bf3",
+        "tags": [
+            "crypto",
+            "profile"
+        ]
+    },
+    {
         "title": "Why Web3 Is Going Just Great (w/ Molly White)",
         "author": "Nathan J. Robinson",
         "work": "Current Affairs",
@@ -19,6 +55,7 @@
         "href": "https://www.ilpost.it/2022/07/07/media-ruolo-hype-web3/",
         "tags": [
             "crypto",
+            "journalism",
             "web3"
         ]
     },
