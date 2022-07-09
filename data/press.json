@@ -1,10 +1,22 @@
 [
     {
+        "title": "Cryptocurrency Criticism in a Down Market (feat. Molly White)",
+        "author": "Bennett Tomlin and Cas Piancey",
+        "date": "2022-07-08",
+        "parenthetical": "Podcast",
+        "work": "Crypto Critics' Corner",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
         "title": "The crypto market meltdown: Could it pave the way to new regulations?",
         "author": "John Ringer and Meghna Chakrabarti",
         "href": "https://www.wbur.org/onpoint/2022/07/08/will-the-crypto-market-meltdown-pave-the-way-for-rapid-regulation",
         "date": "2022-07-08",
         "work": "On Point",
+        "parenthetical": "Radio show",
         "publisher": "WBUR",
         "tags": [
             "crypto",
