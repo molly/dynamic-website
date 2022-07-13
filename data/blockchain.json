@@ -1,5 +1,35 @@
 [
   {
+    "title": "Governance and societal impact of blockchain-based self-sovereign identities",
+    "author": "Rachel Benchaya Gans, Jolien Ubacht, and Marijn Janssen",
+    "work": "Policy and Society",
+    "date": "2022-06-13",
+    "started": "2022-07-12",
+    "href": "https://academic.oup.com/policyandsociety/advance-article/doi/10.1093/polsoc/puac018/6607711?login=false",
+    "entryAdded": "2022-07-13T01:15:28.494Z"
+  },
+  {
+    "title": "22: Bon Voyager! Your Crypto Loan Cash is Gone (w/ Ed Zitron)",
+    "author": "Matt Binder",
+    "work": "Scam Economy",
+    "date": "2022-07-07",
+    "started": "2022-07-12",
+    "parenthetical": "Video podcast",
+    "href": "https://www.youtube.com/watch?v=x0XahIm6pn0",
+    "entryAdded": "2022-07-13T01:13:26.480Z"
+  },
+  {
+    "title": "Matt Levine, Meme Stocks, Crypto Crash and Terrible Attempts at Crime",
+    "author": "Logan Bartlett, Zach Weinberg, and Packy McCormick",
+    "work": "Cartoon Avatars",
+    "date": "2022-06-04",
+    "started": "2022-07-10",
+    "completed": "2022-07-12",
+    "href": "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5zaW1wbGVjYXN0LmNvbS9zb0hJZkhWbg/episode/NGY5MDhkZTktYzEwMy00YmU4LTg2NDktM2FkMzI1ZGQ1NTQw?sa=X&ved=0CAUQkfYCahcKEwjIg8uP1_T4AhUAAAAAHQAAAAAQQw",
+    "parenthetical": "Podcast",
+    "entryAdded": "2022-07-13T01:11:33.737Z"
+  },
+  {
     "title": "Bruce Schneier: Security, Trust, and Blockchain",
     "author": "Benjamin Felix and Cameron Passmore",
     "work": "Rational Reminder",
