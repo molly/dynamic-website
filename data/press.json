@@ -1,5 +1,68 @@
 [
     {
+        "title": "How fraudulent DMCA takedowns censored a prominent cryptocurrency critic on Substack",
+        "author": "Matt Binder",
+        "date": "2022-08-04",
+        "work": "Mashable",
+        "href": "https://mashable.com/article/dmca-copyright-cryptocurrency-substack",
+        "tags": [
+            "crypto",
+            "journalism"
+        ]
+    },
+    {
+        "title": "The crypto crackdown begins",
+        "author": "Sara Morrison",
+        "date": "2022-08-03",
+        "work": "Recode",
+        "publisher": "Vox",
+        "href": "https://www.vox.com/recode/2022/8/3/23290388/crypto-illegal-scams-lawsuit-sec",
+        "tags": [
+            "crypto",
+            "policy"
+        ]
+    },
+    {
+        "title": "Australian investors left with nothing as cryptocurrency giant Celsius goes bankrupt",
+        "author": "Ariel Bogle",
+        "date": "2022-08-03",
+        "href": "https://www.abc.net.au/news/science/2022-08-04/cryptocurrency-celsius-network-bankruptcy-australian-investors/101293028",
+        "work": "ABC News",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
+        "title": "The Metaverse Is Not a Place",
+        "author": "Tim O'Reilly",
+        "date": "2022-08-02",
+        "work": "O'Reilly Media",
+        "href": "https://www.oreilly.com/radar/the-metaverse-is-not-a-place/",
+        "tags": [
+            "identity"
+        ]
+    },
+    {
+        "title": "What is web3, and why are people talking about it?",
+        "author": "Hiawatha Bray",
+        "date": "2022-08-01",
+        "work": "The Boston Globe",
+        "href": "https://www.bostonglobe.com/2022/08/01/business/what-is-web3-why-are-people-talking-about-it/",
+        "tags": [
+            "web3"
+        ]
+    },
+    {
+        "title": "The dark side of the crypto market",
+        "author": "Richard Cooke",
+        "date": "2022-07-30",
+        "work": "The Saturday Paper",
+        "href": "https://www.thesaturdaypaper.com.au/life/technology/2022/07/30/the-dark-side-the-crypto-market",
+        "tags": [
+            "crypto"
+        ]
+    },
+    {
         "title": "She Sent Crypto Firm Her Baby Ultrasound—and Still Couldn't Get Her Money Back",
         "author": "Emily Shugerman",
         "date": "2022-07-22",
@@ -38,6 +101,17 @@
         "date": "2022-07-14",
         "href": "https://www.ft.com/content/bb53f8d8-a4bc-4ab0-8a81-e8befe7e31d1",
         "work": "Financial Times",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
+        "title": "Are Web3 and Crypto Just a 'Grift Pouring Lighter Fluid on Our Already-Smoldering Planet'?",
+        "author": "Nathan J. Robinson",
+        "href": "https://www.currentaffairs.org/2022/07/are-web3-and-crypto-just-a-grift-pouring-lighter-fluid-on-our-already-smoldering-planet",
+        "date": "2022-07-13",
+        "work": "Current Affairs",
         "tags": [
             "crypto",
             "web3"
