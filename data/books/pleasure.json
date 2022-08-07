@@ -1,5 +1,19 @@
 [
   {
+    "title": "Faithless",
+    "author": "Karin Slaughter",
+    "date": "2005",
+    "publisher": "Dell Publishing Company",
+    "href": "https://www.goodreads.com/book/show/21722.Faithless",
+    "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1167323214l/21722._SY475_.jpg",
+    "started": "2022-08-06",
+    "status": "currentlyReading",
+    "tags": [
+      "mystery",
+      "thriller"
+    ]
+  },
+  {
     "title": "Indelible",
     "author": "Karin Slaughter",
     "date": "2004",
@@ -7,7 +21,8 @@
     "href": "https://www.goodreads.com/book/show/182012.Indelible",
     "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1299703450i/182012.jpg",
     "started": "2022-06-26",
-    "status": "currentlyReading",
+    "finished": "2022-08-06",
+    "status": "read",
     "tags": [
       "mystery",
       "thriller"
