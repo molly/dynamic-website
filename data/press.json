@@ -1,5 +1,29 @@
 [
     {
+        "title": "A sceptic]s guide to crypto: the 'smart' money",
+        "author": "Jemima Kelly",
+        "date": "2022-08-23",
+        "href": "https://www.ft.com/content/2b3f6e68-0014-4039-a144-e1cf46d68557",
+        "work": "Tech Tonic",
+        "publisher": "Financial Times",
+        "parenthetical": "Podcast",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
+        "title": "Andreessen Horowitz bets on crypto to break up Big Tech power",
+        "author": "Cristina Criddle, Josh Gabert-Doyon, and John Thornhill",
+        "date": "2022-08-23",
+        "work": "Australian Financial Review",
+        "href": "https://www.afr.com/technology/andreessen-horowitz-bets-on-crypto-to-break-up-big-tech-power-20220823-p5bc6f",
+        "tags": [
+            "crypto",
+            "web3"
+        ]
+    },
+    {
         "title": "Crypto skeptics have been debating online for years. Now they'e organizing.",
         "author": "David Ingram",
         "date": "2022-08-15",
