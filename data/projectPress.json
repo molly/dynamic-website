@@ -1,9 +1,20 @@
 [
   {
+    "title": "TWiT 890: Jail or Olympics - Twitter whistleblower, LastPass hack, Ethereum merge, Artemis 1, Zuck meets Rogan",
+    "author": "Leo Laporte",
+    "date": "2022-08-31",
+    "work": "This Week in Tech",
+    "href": "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy50d2l0LnR2L3R3aXQueG1s/episode/aHR0cHM6Ly9wZHN0LmZtL2UvY2RuLnR3aXQudHYvYXVkaW8vdHdpdC90d2l0MDg5MC90d2l0MDg5MC5tcDM?sa=X&ved=0CAgQuIEEahcKEwiA59yhm_L5AhUAAAAAHQAAAAAQNQ",
+    "tags": [
+      "w3igg"
+    ]
+  },
+  {
     "title": "Why Is Web3 Security Such a Garbage Fire? Let Us Count the Ways",
     "author": "Rob Pegoraro",
     "date": "2022-08-12",
     "work": "PC Mag",
+    "href": "https://www.pcmag.com/news/why-is-web3-security-such-a-garbage-fire-let-us-count-the-ways",
     "tags": [
       "w3igg"
     ]
