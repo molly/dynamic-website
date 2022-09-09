@@ -1,5 +1,42 @@
 [
     {
+        "title": "Why Molly White is trying to protect the web from crypto's 'hyper-capitalism'",
+        "author": "Dominic Powell",
+        "date": "2022-09-08",
+        "work": "The Sydney Morning Herald",
+        "href": "https://www.smh.com.au/business/entrepreneurship/why-molly-white-is-trying-to-protect-the-web-from-crypto-s-hyper-capitalism-20220908-p5bgbx.html",
+        "tags": [
+            "crypto",
+            "profile",
+            "web3"
+        ]
+    },
+    {
+        "title": "Inside the World's First No-Coiner Conference",
+        "author": "Ben Munster",
+        "date": "2022-09-08",
+        "work": "Decrypt",
+        "href": "https://decrypt.co/109218/inside-the-worlds-first-no-coiner-conference",
+        "tags": [
+            "crypto",
+            "policy",
+            "web3"
+        ]
+    },
+    {
+        "title": "Au Crypto Policy Symposium, les sceptiques de la cryptoéconomie entrent en résistance",
+        "author": "Nastasia Hadjadji",
+        "date": "2022-09-07",
+        "work": "Le Monde",
+        "href": "https://www.lemonde.fr/pixels/article/2022/09/07/au-crypto-policy-symposium-les-sceptiques-de-la-cryptoeconomie-entrent-en-resistance_6140539_4408996.html",
+        "parenthetical": "in French",
+        "tags": [
+            "crypto",
+            "policy",
+            "web3"
+        ]
+    },
+    {
         "title": "The future's relentless positivity",
         "author": "Amanda Hoover",
         "date": "2022-09-02",
