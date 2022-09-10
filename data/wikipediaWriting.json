@@ -460,6 +460,22 @@
         }
     },
     {
+        "title": "Peter Eckersley (computer scientist)",
+        "sortKey": "Eckersley, Peter",
+        "date": "2022-09-03",
+        "biography": true,
+        "topics": [
+            "activism",
+            "technology"
+        ],
+        "description": "1978/1979–2022; Australian computer scientist, computer security researcher and activist",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Peter_Eckersley_in_San_Francisco_%28March_2022%29.jpg/900px-Peter_Eckersley_in_San_Francisco_%28March_2022%29.jpg?20220904211316",
+            "href": "https://commons.wikimedia.org/wiki/File:Peter_Eckersley_in_San_Francisco_(March_2022).jpg",
+            "caption": "Peter Eckersley"
+        }
+    },
+    {
         "title": "Epik (company)",
         "date": "2019-05-05",
         "created": true,
