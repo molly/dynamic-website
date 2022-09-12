@@ -11,6 +11,9 @@ const client = new MongoClient(uri, {
 
 const makeQuery = (req) => {
   const query = {};
+  if (!req || !req.query) {
+    return query;
+  }
   if (req.query.tags) {
     const tags = req.query.tags.split('-');
     query.tags = { $in: tags };
@@ -38,6 +41,13 @@ const formatResults = (results, defaultArticle, tagText) =>
     };
   });
 
+const getTagsMap = (allTagsArray) => {
+  return allTagsArray.reduce((acc, tag) => {
+    acc[tag.value] = tag.text;
+    return acc;
+  }, {});
+};
+
 const getPaginatedAndFilteredFromDb = async (
   collection,
   req,
@@ -62,10 +72,7 @@ const getPaginatedAndFilteredFromDb = async (
     allTags.sort((a, b) =>
       a.text.toLowerCase().localeCompare(b.text.toLowerCase())
     );
-    const tagText = allTags.reduce((acc, tag) => {
-      acc[tag.value] = tag.text;
-      return acc;
-    }, {});
+    const tagText = getTagsMap(allTags);
 
     const cursor = documentsCollection.find(query);
 
@@ -121,4 +128,48 @@ const getLandingPageEntriesFromDb = async () => {
   }
 };
 
-module.exports = { getPaginatedAndFilteredFromDb, getLandingPageEntriesFromDb };
+const getRssEntriesFromDb = async (collection) => {
+  const limit = 20;
+  try {
+    await client.connect();
+    const db = client.db('reading-list');
+
+    // Get entries
+    const documentsCollection = db.collection(collection);
+    const cursor = documentsCollection
+      .find({})
+      .sort({ entryAdded: -1 })
+      .limit(limit);
+    const results = await cursor.toArray();
+
+    // Get tags
+    const tagsCollection = db.collection(`${collection}Tags`);
+    const allTags = await tagsCollection.find().toArray();
+    const tagsMap = getTagsMap(allTags);
+
+    // Hydrate tags
+    for (const article of results) {
+      if ('tags' in article && article.tags.length) {
+        for (const ind in article.tags) {
+          const tagDetails = tagsMap[article.tags[ind]];
+          article.tags[ind] = {
+            value: article.tags[ind],
+            text: tagDetails ? tagDetails.text : article.tags[ind],
+          };
+        }
+      }
+    }
+
+    return results;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    await client.close();
+  }
+};
+
+module.exports = {
+  getPaginatedAndFilteredFromDb,
+  getLandingPageEntriesFromDb,
+  getRssEntriesFromDb,
+};

@@ -2,12 +2,6 @@ const moment = require('moment');
 const path = require('path');
 const pug = require('pug');
 
-const preprocess = require('./preprocess');
-const { getMomentFromWeek } = require('../utils/weekUtils');
-const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
-
-const SHORTFORM_DEFAULTS = require('../shortformDefaults');
-
 // Trim the summary to length characters without splitting words, then append ellipses
 const getSummaryExcerpt = (summary, length) => {
   if (summary.length <= length) {
@@ -54,17 +48,14 @@ const getRssResults = (data, template) => {
     path.join(__dirname, `../../pug/etc/${template}.pug`)
   );
 
-  const preprocessed = preprocess(data, SHORTFORM_DEFAULTS).results;
-  const withRssValues = preprocessed.map((article) => {
+  const withRssValues = data.map((article) => {
     article.entryHtml = shortformPugTemplate({
       article,
     });
 
     article.rssSummary = makeSummary(article);
     if (!article.entryAdded) {
-      if (article.week) {
-        article.entryAdded = getMomentFromWeek(article.week).toISOString();
-      } else if (article.started) {
+      if (article.started) {
         article.entryAdded = moment(article.started).toISOString();
       }
     } else {
@@ -73,9 +64,7 @@ const getRssResults = (data, template) => {
 
     return article;
   });
-  withRssValues.sort(makeSortBySimpleDateKey('entryAdded'));
-  const results = withRssValues.slice(0, 20);
-  return results;
+  return withRssValues;
 };
 
 module.exports = getRssResults;

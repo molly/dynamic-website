@@ -20,4 +20,5 @@ module.exports = {
     ],
     'require-await': ['error'],
   },
+  ignorePatterns: ['**/js/*-polyfill.js'],
 };

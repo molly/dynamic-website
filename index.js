@@ -8,13 +8,15 @@ if (process.argv[2] === 'prod') {
   config = require('./config');
 }
 
-const { getPaginatedAndFilteredFromDb } = require('./api/client');
+const {
+  getPaginatedAndFilteredFromDb,
+  getRssEntriesFromDb,
+} = require('./api/client');
 
 const getPaginatedAndFiltered = require('./data/filter/getPaginatedAndFiltered');
 const getLandingPageSummary = require('./data/filter/landing');
 const getWikipediaWriting = require('./data/filter/wikipediaWritingFilter');
 const getRssResults = require('./data/filter/rss');
-const getLocalJson = require('./data/utils/getLocalJson');
 
 const {
   READING_STATUSES_MAP,
@@ -22,7 +24,7 @@ const {
 } = require('./data/constants/readingStatuses');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
 
-const PORT = 5001;
+const PORT = 5000;
 
 const app = express();
 app.use('/static', express.static(path.join(__dirname, 'js')));
@@ -124,7 +126,7 @@ app.get('/wikipedia-work', async (req, res) => {
 app.get(
   ['/reading/shortform/feed.xml', '/reading/dib/feed.xml'],
   async (req, res) => {
-    const shortform = await getLocalJson('../shortform.json');
+    const shortform = await getRssEntriesFromDb('shortform');
     const results = await getRssResults(shortform, 'rssArticle');
     res.set('Content-Type', 'text/xml');
     res.render('feed.pug', {
@@ -135,8 +137,11 @@ app.get(
 );
 
 app.get('/reading/blockchain/feed.xml', async (req, res) => {
-  const blockchain = await getLocalJson('../blockchain.json');
-  const results = await getRssResults(blockchain, 'rssBlockchainArticle');
+  const blockchain = await getRssEntriesFromDb('blockchain');
+  const results = await getRssResults(
+    blockchain.results,
+    'rssBlockchainArticle'
+  );
   res.set('Content-Type', 'text/xml');
   res.render('feed.pug', {
     prefix: 'blockchain',

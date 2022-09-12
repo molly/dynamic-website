@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node index.js dev",
     "watch": "nodemon --watch",
-    "prod": "node index.js prod"
+    "prod": "node index.js prod",
+    "lint": "eslint . --fix"
   },
   "dependencies": {
     "axios": "^0.27.2",
