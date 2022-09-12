@@ -40,7 +40,6 @@ const formatResults = (results, defaultArticle, tagText) =>
 
 const getPaginatedAndFilteredFromDb = async (
   collection,
-  defaults,
   req,
   paginationDefaults
 ) => {
@@ -86,7 +85,7 @@ const getPaginatedAndFilteredFromDb = async (
     return {
       currentPage: page,
       pageSize: limit,
-      results: formatResults(results, defaults.defaultArticle, tagText),
+      results: formatResults(results, {}, tagText),
       totalPages: Math.ceil(totalFilteredResults / limit),
       totalResults: totalFilteredResults,
       totalUnfilteredResults,

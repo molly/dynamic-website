@@ -33,11 +33,7 @@ app.set('views', path.join(__dirname, 'pug/views'));
 app.set('view engine', 'pug');
 
 app.get('/press', async (req, res) => {
-  const results = await getPaginatedAndFilteredFromDb(
-    'press',
-    PRESS_DEFAULTS,
-    req
-  );
+  const results = await getPaginatedAndFilteredFromDb('press', req);
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   res.render('press.pug', {
     query: { ...req.query, tags: selectedTags },
@@ -51,11 +47,7 @@ app.get('/reading', async (req, res) => {
 });
 
 app.get('/reading/shortform', async (req, res) => {
-  const results = await getPaginatedAndFilteredFromDb(
-    'shortform',
-    SHORTFORM_DEFAULTS,
-    req
-  );
+  const results = await getPaginatedAndFilteredFromDb('shortform', req);
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   res.render('shortform.pug', {
     query: { ...req.query, tags: selectedTags },
@@ -64,11 +56,7 @@ app.get('/reading/shortform', async (req, res) => {
 });
 
 app.get('/reading/blockchain', async (req, res) => {
-  const results = await getPaginatedAndFilteredFromDb(
-    'blockchain',
-    BLOCKCHAIN_DEFAULTS,
-    req
-  );
+  const results = await getPaginatedAndFilteredFromDb('blockchain', req);
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   res.render('blockchain.pug', {
     query: { ...req.query, tags: selectedTags },
