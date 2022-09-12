@@ -1,12 +1,10 @@
 const moment = require('moment');
 const MOMENT_FORMATS = require('../constants/momentFormats');
 const getLocalJson = require('../utils/getLocalJson');
-const { makeSortByWeek } = require('../utils/weekUtils');
 const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
 
-const SHORTFORM_DEFAULTS = require('../shortformDefaults');
-const BLOCKCHAIN_DEFAULTS = require('../blockchainDefaults');
 const BOOK_DEFAULTS = require('../books/bookDefaults');
+const { getLandingPageEntriesFromDb } = require('../../api/client');
 
 const processTags = (item, tagText) => {
   item.tags = item.tags.map((tag) => ({
@@ -94,17 +92,10 @@ const getBooksToShow = (books) => {
 };
 
 const getLandingPageSummary = async () => {
-  const shortform = await getLocalJson('../shortform.json');
-  const mostRecentShortform = {
-    ...SHORTFORM_DEFAULTS.defaultArticle,
-    ...shortform.sort(makeSortByWeek())[0],
-  };
-
-  const blockchain = await getLocalJson('../blockchain.json');
-  const mostRecentBlockchain = {
-    ...BLOCKCHAIN_DEFAULTS.defaultArticle,
-    ...blockchain.sort(makeSortBySimpleDateKey('started'))[0],
-  };
+  const {
+    mostRecentBlockchain,
+    mostRecentShortform,
+  } = await getLandingPageEntriesFromDb();
 
   const pleasure = await getLocalJson('../books/pleasure.json');
   const currentlyReadingPleasure = getBooksToShow(pleasure).map((book) =>
@@ -130,8 +121,8 @@ const getLandingPageSummary = async () => {
   );
 
   return {
-    mostRecentShortform,
     mostRecentBlockchain,
+    mostRecentShortform,
     currentlyReadingPleasure,
     currentlyReadingReference,
     currentlyReadingWork,

@@ -98,4 +98,27 @@ const getPaginatedAndFilteredFromDb = async (
   }
 };
 
-module.exports = { getPaginatedAndFilteredFromDb };
+const getLandingPageEntriesFromDb = async () => {
+  try {
+    await client.connect();
+    const db = client.db('reading-list');
+    const shortformCollection = db.collection('shortform');
+    const blockchainCollection = db.collection('blockchain');
+
+    const mostRecentShortform = await shortformCollection.findOne(
+      {},
+      { sort: { started: -1 } }
+    );
+    const mostRecentBlockchain = await blockchainCollection.findOne(
+      {},
+      { sort: { started: -1 } }
+    );
+    return { mostRecentBlockchain, mostRecentShortform };
+  } catch (err) {
+    console.log(err);
+  } finally {
+    await client.close();
+  }
+};
+
+module.exports = { getPaginatedAndFilteredFromDb, getLandingPageEntriesFromDb };

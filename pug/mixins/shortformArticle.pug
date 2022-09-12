@@ -21,10 +21,17 @@ mixin shortformArticle(article, rss=false)
         | #{article.author}
       
       if article.work || article.publisher 
-        |  #{article.preposition} 
+        if article.preposition != null 
+          |  #{article.preposition} 
+        else if article.work
+          |  in 
+        else 
+          |  for 
+      else
+        |.
 
       if article.work
-        if !article.workItalics
+        if article.workItalics === false
           | #{article.work}.
         else
           i #{article.work}.
@@ -55,6 +62,6 @@ mixin shortformArticle(article, rss=false)
           if index !== article.relatedReading.length - 1
             | , 
 
-    if !rss && article.tags
+    if !rss && article.tags && article.tags.length
       .tags 
         span.tags= article.tags.map(function(t) { return t.text }).join(', ')

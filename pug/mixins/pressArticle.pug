@@ -11,10 +11,20 @@ mixin pressArticle(article)
 
     .byline
       if article.author
-        | #{article.author} #{article.preposition} 
+        | #{article.author}
+
+      if (article.work || article.publisher)
+        if article.preposition != null 
+          |  #{article.preposition} 
+        else if article.work
+          |  in 
+        else 
+          |  for
+      else 
+        |.
 
       if article.work
-        if !article.workItalics
+        if article.workItalics === false
           | #{article.work}.
         else
           i #{article.work}.
@@ -24,9 +34,7 @@ mixin pressArticle(article)
 
       if article.formattedDate
         |  #{article.formattedDate}.
-      else
-        |
 
-    if article.tags
+    if article.tags && article.tags.length
       .tags
         span.tags= article.tags.map(function(t) { return t.text }).join(', ')

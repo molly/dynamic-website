@@ -20,12 +20,9 @@ const {
   READING_STATUSES_MAP,
   READING_STATUSES_LISTS,
 } = require('./data/constants/readingStatuses');
-const PRESS_DEFAULTS = require('./data/pressDefaults');
-const SHORTFORM_DEFAULTS = require('./data/shortformDefaults');
-const BLOCKCHAIN_DEFAULTS = require('./data/blockchainDefaults');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
 
-const PORT = 5000;
+const PORT = 5001;
 
 const app = express();
 app.use('/static', express.static(path.join(__dirname, 'js')));

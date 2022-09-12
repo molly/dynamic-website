@@ -78,6 +78,6 @@ mixin book(book)
                 if index !== book.targetArticles.length - 1
                   span , 
 
-      if book.tags
+      if book.tags && book.tags.length
         .tags
           span.tags= book.tags.map(function(t) { return t.text }).join(', ')

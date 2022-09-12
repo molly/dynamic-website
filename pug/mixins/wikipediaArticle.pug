@@ -60,7 +60,7 @@ mixin wikipediaArticle(article)
                 )
                 .sr-only `${article.dyk.year} good article`
 
-        if article.topics
+        if article.topics && article.topics.length
           .tags
             span.tags= article.topics.map(function(t) { return t.text }).join(', ')
 

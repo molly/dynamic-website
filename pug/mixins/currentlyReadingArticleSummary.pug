@@ -9,22 +9,21 @@ mixin currentlyReadingArticleSummary(mostRecent)
   if mostRecent.author
     |  by #{mostRecent.author} 
 
-    if mostRecent.work
-      if mostRecent.preposition
-        | #{mostRecent.preposition}
-      else 
-        | in 
-      if !mostRecent.workItalics
-        | #{mostRecent.work}.
-      else
-        i #{mostRecent.work}.
+  if (mostRecent.work || mostRecent.publisher)
+    if mostRecent.preposition != null 
+      |  #{mostRecent.preposition} 
+    else if mostRecent.work
+      |  in 
     else 
-      | .
-
-    if mostRecent.publisher
-      |  #{mostRecent.publisher}.
-
-    if !mostRecent.work && !mostRecent.publisher
-      |.
-  else 
+      |  for
+  else
     |.
+
+  if mostRecent.work
+    if mostRecent.workItalics === false
+      | #{mostRecent.work}.
+    else
+      i #{mostRecent.work}.
+
+  if mostRecent.publisher
+    |  #{mostRecent.publisher}.
