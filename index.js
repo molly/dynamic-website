@@ -45,19 +45,6 @@ app.get('/press', async (req, res) => {
   });
 });
 
-app.get('/projects-press', async (req, res) => {
-  const results = await getPaginatedAndFilteredFromDb(
-    'projectPress',
-    PRESS_DEFAULTS,
-    req
-  );
-  const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
-  res.render('projectPress.pug', {
-    query: { ...req.query, tags: selectedTags },
-    ...results,
-  });
-});
-
 app.get('/reading', async (req, res) => {
   const results = await getLandingPageSummary();
   res.render('reading.pug', { READING_STATUSES_MAP, ...results });
