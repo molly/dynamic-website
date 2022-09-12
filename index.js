@@ -24,7 +24,9 @@ const {
 } = require('./data/constants/readingStatuses');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
 
-const PORT = 5000;
+const backendRouter = require('./backend/routes/router');
+
+const PORT = process.env.PORT || 5001;
 
 const app = express();
 app.use('/static', express.static(path.join(__dirname, 'js')));
@@ -145,6 +147,8 @@ app.get('/reading/blockchain/feed.xml', async (req, res) => {
     results,
   });
 });
+
+app.use('/dynamic-api', backendRouter);
 
 if (process.argv[2] === 'prod') {
   https
