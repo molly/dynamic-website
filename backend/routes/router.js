@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const { ServerApiVersion } = require('mongodb');
@@ -10,11 +9,6 @@ const authRouter = require('./auth');
 const readingListRouter = require('./reading-list');
 
 const app = express.Router();
-app.use(
-  cors({
-    origin: 'http://localhost:3000/',
-  })
-);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
