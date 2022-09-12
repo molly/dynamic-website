@@ -138,10 +138,7 @@ app.get(
 
 app.get('/reading/blockchain/feed.xml', async (req, res) => {
   const blockchain = await getRssEntriesFromDb('blockchain');
-  const results = await getRssResults(
-    blockchain.results,
-    'rssBlockchainArticle'
-  );
+  const results = await getRssResults(blockchain, 'rssBlockchainArticle');
   res.set('Content-Type', 'text/xml');
   res.render('feed.pug', {
     prefix: 'blockchain',

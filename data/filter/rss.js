@@ -27,7 +27,22 @@ const makeSummary = (article) => {
     summary += article.author;
   }
   if (article.work || article.publisher) {
-    summary += ` ${article.preposition} ${article.work || article.publisher}`;
+    if (article.preposition != null) {
+      summary += ` ${article.preposition}`;
+    } else if (article.work) {
+      summary += ' in';
+    } else {
+      summary += ' for';
+    }
+  }
+  if (article.work) {
+    summary += ` ${article.work}`;
+  }
+  if (article.publisher) {
+    if (article.work) {
+      summary += ' for';
+    }
+    summary += ` ${article.publisher}`;
   }
 
   if (article.formattedDate) {

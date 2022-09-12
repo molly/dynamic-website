@@ -43,10 +43,10 @@ mixin shortformArticle(article, rss=false)
         |  #{article.formattedDate}.
 
     .details
-      span.weekOf
-      include ./verb.pug
-      +verb(article, to=false, capitalize=true)
-      | on #{article.formattedStarted}
+      span.read-date
+        include ./verb.pug
+        +verb(article, to=false, capitalize=true)
+        | on #{article.formattedStarted}
 
       .summary
         != article.summary

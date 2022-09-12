@@ -147,8 +147,11 @@ const getRssEntriesFromDb = async (collection) => {
     const allTags = await tagsCollection.find().toArray();
     const tagsMap = getTagsMap(allTags);
 
-    // Hydrate tags
+    // Preprocess
     for (const article of results) {
+      const formattedDates = formatArticleDate(article);
+      Object.assign(article, formattedDates);
+
       if ('tags' in article && article.tags.length) {
         for (const ind in article.tags) {
           const tagDetails = tagsMap[article.tags[ind]];
