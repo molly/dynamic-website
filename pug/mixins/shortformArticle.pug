@@ -39,11 +39,11 @@ mixin shortformArticle(article, rss=false)
       if article.publisher
         |  #{article.publisher}.
 
-      if article.formattedDate
-        |  #{article.formattedDate}.
-
     .details
       span.read-date
+        if article.formattedDate
+          | Published #{article.formattedDate}.
+
         include ./verb.pug
         +verb(article, to=false, capitalize=true)
         | on #{article.formattedStarted}
