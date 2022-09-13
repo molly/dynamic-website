@@ -1,6 +1,6 @@
 const EntrySchema = {
   title: { type: String, required: true },
-  author: { type: String, required: true },
+  author: String,
   date: { type: String, required: true, match: /^\d{4}(-\d{2}){0,2}$/ },
   work: String,
   publisher: String,
