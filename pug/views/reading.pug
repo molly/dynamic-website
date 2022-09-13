@@ -19,14 +19,21 @@ block body
     .reading-section
       h3
         a(href="/reading/shortform") Shortform reading list 
+      div.rss-link
+        i.fas.fa-rss(aria-hidden="true") 
+        |  
+        a(href="https://mollywhite.net/reading/shortform/feed.xml", target="_blank") RSS 
       .reading-section-body  
         include ../mixins/currentlyReadingArticleSummary.pug
         +currentlyReadingArticleSummary(mostRecentShortform)
-        
-    
+
     .reading-section
       h3
         a(href="/reading/blockchain") Blockchain reading list 
+      div.rss-link
+        i.fas.fa-rss(aria-hidden="true") 
+        |  
+        a(href="https://mollywhite.net/reading/blockchain/feed.xml", target="_blank") RSS
       .reading-section-body  
         +currentlyReadingArticleSummary(mostRecentBlockchain)
           
