@@ -66,12 +66,7 @@ const getBooksToShow = (books) => {
     if (read.length > 1) {
       read.sort(makeSortBySimpleDateKey('completed'));
     }
-    const mostRecentlyRead = read[0];
-    if (
-      moment(mostRecentlyRead.completed).isAfter(moment().subtract(1, 'month'))
-    ) {
-      return [mostRecentlyRead];
-    }
+    return read.slice(1);
   }
 
   // Show a random "to read" book
