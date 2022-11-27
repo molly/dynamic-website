@@ -9,7 +9,7 @@ mixin currentlyReadingSummary(books)
         
       include ./book.pug
       +book(books[0])
-      if books[0].status !== 'read'
+      if books[0].status === 'currentlyReading'
         if books.length === 2
           span.others ... and one other book.
         else if books.length > 2
