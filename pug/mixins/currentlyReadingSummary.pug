@@ -2,10 +2,10 @@
 mixin currentlyReadingSummary(books)
   if books.length
     .currently-reading
-      .status
-        b
-          != READING_STATUSES_MAP[books[0].status][0].toUpperCase() + READING_STATUSES_MAP[books[0].status].substr(1)
-          
+      if books[0].status === 'read'
+        span I mostly recently read
+      else if books[0].status === 'currentlyReading'
+        span I'm currently reading
         
       include ./book.pug
       +book(books[0])
@@ -15,4 +15,4 @@ mixin currentlyReadingSummary(books)
         else if books.length > 2
           span.others ... and #{books.length - 1} other books.
   else 
-    div I haven't recently read any reference books.
+    div I haven't recently read any books.
