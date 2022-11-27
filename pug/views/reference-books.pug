@@ -10,12 +10,12 @@ block vars
 block head
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
   include ../symlinks/mixins/titleAndDescription.pug
-  +titleAndDescription('Reference reading', 'Molly White\'s reference reading list.')
+  +titleAndDescription('Non-fiction reading', 'Molly White\'s non-fiction reading list.')
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 
 block body
   .content-box
-    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Reference reading
+    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Non-fiction reading
 
     include ../includes/filters.pug
 
