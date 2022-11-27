@@ -10,11 +10,11 @@ block vars
 block head
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
   include ../symlinks/mixins/titleAndDescription.pug
-  +titleAndDescription('Pleasure reading', 'Molly White\'s pleasure reading list.')
+  +titleAndDescription('Fiction reading', 'Molly White\'s fiction reading list.')
 
 block body
   .content-box
-    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Pleasure reading
+    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Fiction reading
 
     include ../includes/filters.pug
 

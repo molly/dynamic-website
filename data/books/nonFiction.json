@@ -199,5 +199,19 @@
         "tags": [
             "social_justice"
         ]
+    },
+    {
+        "title": "On Democracy",
+        "author": "E.B. White",
+        "date": "2019-05",
+        "publisher": "Harper",
+        "imageSrc": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553539386l/41154341.jpg",
+        "href": "https://www.goodreads.com/book/show/41154341-on-democracy",
+        "status": "read",
+        "started": "2019-04-26",
+        "completed": "2019-06-06",
+        "tags": [
+            "politics"
+        ]
     }
 ]

@@ -65,9 +65,9 @@ app.get('/reading/blockchain', async (req, res) => {
   });
 });
 
-app.get('/reading/reference', async (req, res) => {
+app.get('/reading/nonfiction', async (req, res) => {
   const results = await getPaginatedAndFiltered(
-    '../books/reference.json',
+    '../books/nonFiction.json',
     BOOK_DEFAULTS,
     req,
     { default: 5 }
@@ -82,26 +82,9 @@ app.get('/reading/reference', async (req, res) => {
   });
 });
 
-app.get('/reading/work', async (req, res) => {
+app.get('/reading/fiction', async (req, res) => {
   const results = await getPaginatedAndFiltered(
-    '../books/work.json',
-    BOOK_DEFAULTS,
-    req,
-    { default: 5 }
-  );
-  const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
-  const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
-  res.render('work-books.pug', {
-    query: { ...req.query, tags: selectedTags, statuses: selectedStatuses },
-    READING_STATUSES_LIST: READING_STATUSES_LISTS.work,
-    READING_STATUSES_MAP,
-    ...results,
-  });
-});
-
-app.get('/reading/pleasure', async (req, res) => {
-  const results = await getPaginatedAndFiltered(
-    '../books/pleasure.json',
+    '../books/fiction.json',
     BOOK_DEFAULTS,
     req,
     { default: 5 }

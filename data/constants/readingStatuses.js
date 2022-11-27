@@ -18,10 +18,8 @@ const READING_LIST_WITHOUT_REFERENCE = BASE_READING_STATUSES_LIST.filter(
   (status) => status.value !== 'reference'
 );
 
-// Only want to include "reference" for the references list, since I don't really read books in this
-// way for pleasure or work
+// Only want to include "reference" for the non-fiction list
 const READING_STATUSES_LISTS = {
-  work: READING_LIST_WITHOUT_REFERENCE,
   pleasure: READING_LIST_WITHOUT_REFERENCE,
   reference: BASE_READING_STATUSES_LIST,
 };

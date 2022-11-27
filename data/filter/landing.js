@@ -97,12 +97,12 @@ const getLandingPageSummary = async () => {
     mostRecentShortform,
   } = await getLandingPageEntriesFromDb();
 
-  const pleasure = await getLocalJson('../books/pleasure.json');
+  const pleasure = await getLocalJson('../books/fiction.json');
   const currentlyReadingPleasure = getBooksToShow(pleasure).map((book) =>
     processTags(book, BOOK_DEFAULTS.tagText)
   );
 
-  const reference = await getLocalJson('../books/reference.json');
+  const reference = await getLocalJson('../books/nonFiction.json');
   let currentlyReadingReference = getAllBooksSortedByStartDate(reference);
   if (
     currentlyReadingReference.some((book) => book.status === 'currentlyReading')
@@ -115,17 +115,11 @@ const getLandingPageSummary = async () => {
     processTags(book, BOOK_DEFAULTS.tagText)
   );
 
-  const work = await getLocalJson('../books/work.json');
-  const currentlyReadingWork = getBooksToShow(work).map((book) =>
-    processTags(book, BOOK_DEFAULTS.tagText)
-  );
-
   return {
     mostRecentBlockchain,
     mostRecentShortform,
     currentlyReadingPleasure,
     currentlyReadingReference,
-    currentlyReadingWork,
   };
 };
 
