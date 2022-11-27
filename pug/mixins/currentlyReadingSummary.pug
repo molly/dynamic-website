@@ -2,10 +2,10 @@
 mixin currentlyReadingSummary(books)
   if books.length
     .currently-reading
-      if books[0].status === 'read'
-        span I mostly recently read
+      if books[0].status === 'read' || books[0].status === 'reference' 
+        span I mostly recently read:
       else if books[0].status === 'currentlyReading'
-        span I'm currently reading
+        span I'm currently reading:
         
       include ./book.pug
       +book(books[0])
