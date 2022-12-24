@@ -1,9 +1,35 @@
 if totalPages
   label(for="paginator") Page
     fieldset#paginator
-      - for (var pageNumber = 1; pageNumber <= totalPages; pageNumber++)
-        button(
-          onClick='onPageChangeClick(' + pageNumber + ')',
-          aria-pressed=pageNumber === currentPage
-          type="button"
-        ) #{pageNumber}
+      if totalPages > 20
+        - var startPage = Math.max(1, currentPage - 10)
+        - var endPage = Math.min(totalPages, startPage + 20)
+        
+        if startPage !== 1
+          button(
+            onClick='onPageChangeClick(1)',
+            aria-pressed=false
+            type="button"
+          ) <<
+          span ...
+        - for (var pageNumber = startPage; pageNumber <= endPage; pageNumber++)
+          button(
+            onClick='onPageChangeClick(' + pageNumber + ')',
+            aria-pressed=pageNumber === currentPage
+            type="button"
+          ) #{pageNumber}
+        if endPage !== totalPages
+          span ...
+          button(
+            onClick='onPageChangeClick(' + totalPages + ')',
+            aria-pressed=false
+            type="button"
+          ) >>
+
+      else
+        - for (var pageNumber = 1; pageNumber <= totalPages; pageNumber++)
+          button(
+            onClick='onPageChangeClick(' + pageNumber + ')',
+            aria-pressed=pageNumber === currentPage
+            type="button"
+          ) #{pageNumber}
