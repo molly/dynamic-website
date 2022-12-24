@@ -24,6 +24,7 @@ const {
 } = require('./data/constants/readingStatuses');
 const BOOK_DEFAULTS = require('./data/books/bookDefaults');
 
+const db = require('./backend/models');
 const backendRouter = require('./backend/routes/router');
 
 const PORT = process.env.PORT || 5001;
@@ -147,3 +148,5 @@ if (process.argv[2] === 'prod') {
 } else {
   app.listen(PORT);
 }
+
+process.on('SIGINT', db.gracefulClose).on('SIGTERM', db.gracefulClose);
