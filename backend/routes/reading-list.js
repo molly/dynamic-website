@@ -36,7 +36,7 @@ const updateTags = async (type, entry) => {
       } else {
         tagRecord = new TagModel({
           value: tag,
-          text: tag.toLowerCase().replace(/_/g, ' '),
+          text: tag.replace(/_/g, ' '),
           frequency: 1,
         });
       }
