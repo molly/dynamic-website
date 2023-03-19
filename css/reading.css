@@ -104,6 +104,7 @@
 .reading .filter-box .search-form button[type='submit'],
 .wikipedia-writing .filter-box .search-form button[type='submit'] {
   background-color: var(--button-color);
+  color: var(--main-text-color);
   border: 1px solid var(--table-border-color);
   border-radius: 0;
 }
