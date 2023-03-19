@@ -73,7 +73,7 @@
 .wikipedia-writing .filter-box button.tag[aria-pressed='true'] {
   background-color: var(--accent-color-purple-background-hover);
 }
-.reading fieldset {
+.reading fieldset, .wikipedia-writing fieldset {
   border: 0;
   padding: 0;
 }
@@ -381,6 +381,10 @@
 .wikipedia-writing .icons .icon-image {
   width: 1rem;
   height: 1rem;
+}
+.wikipedia-writing .icons .icon-image img {
+  max-width: 100%;
+  max-width: 100%;
 }
 .wikipedia-writing .icons .icon-image,
 .wikipedia-writing .icons .icon-image a {

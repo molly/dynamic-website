@@ -21,22 +21,34 @@ mixin wikipediaArticle(article)
       .bottom
         .icons
           if article.created
-            .icon 
-              i.fas.fa-plus(title="Created", aria-hidden="true")
+            .icon-image
+              img.bw-icon(
+                src=`${importPrefix}/storage/plus.svg`
+                aria-hidden="true"
+                title="Created"
+              )
               .sr-only Created
           if article.biography 
-            .icon 
-              i.fas.fa-user(title="Biography", aria-hidden="true")
+            .icon-image
+              img.bw-icon(
+                src=`${importPrefix}/storage/person.svg`
+                aria-hidden="true"
+                title="Biography"
+              )
               .sr-only Biography
           if article.translation
-            .icon 
-              i.fas.fa-language(title="Translation", aria-hidden="true")
-              .sr-only Translation
+            .icon-image
+              img.bw-icon(
+                src=`${importPrefix}/storage/translation.svg`
+                aria-hidden="true"
+                title="Translation"
+              )
+              .sr-only Translation 
           if article.WIR 
             .icon-image
               a(href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Women_in_Red")
-                img(
-                  src=`${importPrefix}/images/wir.png`
+                img.bw-icon(
+                  src=`${importPrefix}/storage/wir.svg`
                   aria-hidden="true"
                   title="Under the purview of WikiProject Women in Red"
                 )
@@ -44,8 +56,8 @@ mixin wikipediaArticle(article)
           if article.ga
             .icon-image
               a(href="https://en.wikipedia.org/wiki/Wikipedia:Good_articles")
-                img(
-                  src=`${importPrefix}/images/ga.png`
+                img.bw-icon(
+                  src=`${importPrefix}/storage/ga.svg`
                   aria-hidden="true"
                   title=`${article.ga} good article`
                 )
@@ -53,8 +65,8 @@ mixin wikipediaArticle(article)
           if article.dyk
             .icon-image
               a(href=article.dyk.href)
-                img(
-                  src=`${importPrefix}/images/dyk.png`
+                img.bw-icon(
+                  src=`${importPrefix}/storage/dyk.svg`
                   aria-hidden="true"
                   title=`${article.dyk.year} did you know article`
                 )
