@@ -1,0 +1,414 @@
+@charset "UTF-8";
+.reading .content-box {
+  max-width: 700px;
+  max-width: 35rem;
+  max-width: 70ch;
+}
+.reading h3,
+.reading h4,
+.wikipedia-writing h3,
+.wikipedia-writing h4 {
+  margin-bottom: 0.375rem;
+}
+.reading h3 a,
+.reading h4 a,
+.wikipedia-writing h3 a,
+.wikipedia-writing h4 a {
+  color: var(--main-text-color);
+}
+.reading h3 a:hover,
+.reading h4 a:hover,
+.wikipedia-writing h3 a:hover,
+.wikipedia-writing h4 a:hover {
+  color: var(--link-text-hover-color);
+}
+.reading label,
+.wikipedia-writing label {
+  display: block;
+  font-weight: normal;
+}
+.reading .filters,
+.wikipedia-writing .filters {
+  margin: 1.25rem 0;
+}
+.reading .filter-box,
+.wikipedia-writing .filter-box {
+  border: 1px solid var(--table-border-color);
+  padding: 0.625rem;
+  position: relative;
+  font-size: 1rem;
+}
+.reading .filter-box .title,
+.wikipedia-writing .filter-box .title {
+  padding: 0 0.375rem;
+  background-color: var(--bg-color);
+  position: absolute;
+  top: -0.625rem;
+  left: 0.375rem;
+  font-weight: bold;
+}
+.reading .filter-box .button-group,
+.wikipedia-writing .filter-box .button-group {
+  display: inline-block;
+  margin: 0 0.5rem 0.375rem 0;
+}
+.reading .filter-box button.tag,
+.wikipedia-writing .filter-box button.tag {
+  background-color: var(--accent-color-purple-background);
+  padding: 3px;
+  margin-right: 2px;
+  border-radius: 2px;
+  border: 0;
+}
+.reading .filter-box button.tag:active,
+.reading .filter-box button.tag:focus,
+.reading .filter-box button.tag:hover,
+.wikipedia-writing .filter-box button.tag:active,
+.wikipedia-writing .filter-box button.tag:focus,
+.wikipedia-writing .filter-box button.tag:hover {
+  cursor: pointer;
+  background-color: var(--accent-color-purple-background-hover);
+}
+.reading .filter-box button.tag[aria-pressed='true'],
+.wikipedia-writing .filter-box button.tag[aria-pressed='true'] {
+  background-color: var(--accent-color-purple-background-hover);
+}
+.reading fieldset {
+  border: 0;
+  padding: 0;
+}
+.reading .filter-box fieldset {
+  border: 1px solid var(--table-border-color);
+  padding: 0.5rem;
+  max-height: 10rem;
+  overflow-y: scroll;
+}
+.reading .filter-box .search-form,
+.wikipedia-writing .filter-box .search-form {
+  margin: 5px 0;
+  max-width: 31.25rem;
+}
+.reading .filter-box .search-form .search-group,
+.wikipedia-writing .filter-box .search-form .search-group {
+  display: flex;
+  justify-content: space-between;
+}
+.reading .filter-box .search-form input[type='search'],
+.wikipedia-writing .filter-box .search-form input[type='search'] {
+  flex-grow: 1;
+  margin-right: 5px;
+  border-radius: 0;
+  border: 1px solid var(--table-border-color);
+  background-color: var(--bg-color);
+}
+.reading .filter-box .search-form button[type='submit'],
+.wikipedia-writing .filter-box .search-form button[type='submit'] {
+  background-color: var(--button-color);
+  border: 1px solid var(--table-border-color);
+  border-radius: 0;
+}
+.reading .filter-box .search-form button[type='submit']:hover,
+.wikipedia-writing .filter-box .search-form button[type='submit']:hover {
+  background-color: var(--button-color-hover);
+  cursor: pointer;
+}
+.reading .filter-subtext,
+.wikipedia-writing .filter-subtext {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-style: italic;
+  margin-top: 5px;
+}
+.reading button.link-styled,
+.wikipedia-writing button.link-styled {
+  background-color: transparent;
+  border: none;
+  color: var(--main-text-color);
+  text-decoration: underline;
+  padding: 0 0.375rem;
+  font-weight: normal;
+  font-style: italic;
+}
+.reading button.link-styled:hover,
+.reading button.link-styled:focus,
+.reading button.link-styled:active,
+.wikipedia-writing button.link-styled:hover,
+.wikipedia-writing button.link-styled:focus,
+.wikipedia-writing button.link-styled:active {
+  cursor: pointer;
+  background-color: var(--accent-color-purple-background);
+}
+.reading .article,
+.wikipedia-writing .article {
+  padding-left: 0.625rem;
+  border-left: 2px solid var(--accent-color-purple);
+  margin-bottom: 1.25rem;
+}
+.reading .article.flex,
+.wikipedia-writing .article.flex {
+  display: flex;
+}
+.reading .article.flex .left,
+.wikipedia-writing .article.flex .left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+.reading .article.flex .right,
+.wikipedia-writing .article.flex .right {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  width: 9.5rem;
+  margin-left: 1.25rem;
+}
+.reading .article.flex .right .image,
+.wikipedia-writing .article.flex .right .image {
+  max-width: 10rem;
+  max-height: 10rem;
+}
+.reading .article.flex .right .image img,
+.wikipedia-writing .article.flex .right .image img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.reading .article.flex .right .caption,
+.wikipedia-writing .article.flex .right .caption {
+  font-size: 1rem; 
+  text-align: right;
+}
+.reading .article .tags,
+.reading .book .tags,
+.wikipedia-writing .article .tags,
+.wikipedia-writing .book .tags {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--note-text-color);
+}
+.reading .article.hidden,
+.reading .book.hidden,
+.wikipedia-writing .article.hidden,
+.wikipedia-writing .book.hidden {
+  display: none;
+}
+.reading blockquote,
+.wikipedia-writing blockquote {
+  font-size: 1rem;
+  font-style: italic;
+  margin-left: 1.25rem;
+}
+.reading blockquote:before,
+.wikipedia-writing blockquote:before {
+  color: var(--blockquote-quote-color)
+  content: '“';
+  font-size: 3rem;
+  line-height: 0.1rem;
+  margin-right: 0.25rem;
+  vertical-align: -0.4rem;
+}
+.reading .subtitle,
+.wikipedia-writing .subtitle {
+  font-size: 1rem;
+}
+.reading #articlesContainer > .book,
+.wikipedia-writing #articlesContainer > .book {
+  margin-bottom: 1.25rem;
+}
+.reading .book,
+.wikipedia-writing .book {
+  display: flex;
+}
+.reading .book .book-cover,
+.wikipedia-writing .book .book-cover {
+  max-width: 10rem;
+  margin-right: 1.25rem;
+}
+.reading .book .book-cover.bordered,
+.wikipedia-writing .book .book-cover.bordered {
+  border: 1px solid var(--table-border-color);
+}
+.reading .book a:focus,
+.wikipedia-writing .book a:focus {
+  background-color: transparent;
+}
+.reading .book .byline,
+.reading .book .reading-info,
+.wikipedia-writing .book .byline,
+.wikipedia-writing .book .reading-info {
+  font-size: 1.1rem;
+}
+.reading .book .reading-dates,
+.wikipedia-writing .book .reading-dates {
+  display: inline-block;
+}
+.reading .status,
+.wikipedia-writing .status {
+  display: inline-block;
+  padding: 0 0.375rem;
+  margin-right: 0.375rem;
+  font-size: 1rem;
+  background-color: var(--note-background-color);
+}
+.reading #paginator button,
+.wikipedia-writing #paginator button {
+  background-color: transparent;
+  font-size: 1rem;
+  color: var(--main-text-color);
+  border: none;
+}
+.reading #paginator button:hover,
+.reading #paginator button:focus,
+.reading #paginator button:active,
+.wikipedia-writing #paginator button:hover,
+.wikipedia-writing #paginator button:focus,
+.wikipedia-writing #paginator button:active {
+  cursor: pointer;
+  background-color: var(--accent-color-purple-background);
+}
+.reading #paginator button[aria-pressed],
+.wikipedia-writing #paginator button[aria-pressed] {
+  background-color: var(--accent-color-purple-background-hover);
+}
+.reading .summary,
+.wikipedia-writing .summary {
+  padding-left: 0.625rem;
+}
+.reading .read-date,
+.wikipedia-writing .read-date {
+  font-style: italic;
+}
+.reading .reading-section,
+.wikipedia-writing .reading-section {
+  margin-bottom: 2.5rem;
+}
+.reading .reading-section .reading-section-body,
+.wikipedia-writing .reading-section .reading-section-body {
+  margin-left: 1.25rem;
+}
+.reading .reading-section .currently-reading,
+.wikipedia-writing .reading-section .currently-reading {
+  margin-top: 1.25rem;
+}
+.reading .reading-section .currently-reading .status,
+.wikipedia-writing .reading-section .currently-reading .status {
+  font-size: 1rem;
+}
+.reading .reading-section .currently-reading .others,
+.wikipedia-writing .reading-section .currently-reading .others {
+  font-size: 1rem;
+  font-style: italic;
+}
+.reading .reading-section .book,
+.wikipedia-writing .reading-section .book {
+  margin-top: 0.625rem;
+}
+.reading .reading-section .book-cover,
+.wikipedia-writing .reading-section .book-cover {
+  max-width: 6.25rem;
+}
+.reading .details,
+.reading .related-reading,
+.wikipedia-writing .details,
+.wikipedia-writing .related-reading {
+  padding-left: 0.625rem;
+}
+.reading .details,
+.reading .related-reading,
+.reading .target-articles,
+.reading .date-block,
+.wikipedia-writing .details,
+.wikipedia-writing .related-reading,
+.wikipedia-writing .target-articles,
+.wikipedia-writing .date-block {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.reading .related-reading,
+.wikipedia-writing .related-reading {
+  margin-top: 0.375rem;
+}
+.reading .related-reading ul,
+.reading .target-articles ul,
+.wikipedia-writing .related-reading ul,
+.wikipedia-writing .target-articles ul {
+  display: inline;
+  padding: 0;
+}
+.reading .rss-link,
+.wikipedia-writing .rss-link {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+.reading .rss-link .rss-icon,
+.wikipedia-writing .rss-link .rss-icon {
+  max-height: 0.9rem;
+  margin-right: 0.375rem;
+}
+.reading i.fa-wikipedia-w,
+.wikipedia-writing i.fa-wikipedia-w {
+  margin-right: 0.375rem;
+}
+@media screen and (max-width: 600px) {
+  .reading .details,
+  .reading .related-reading,
+  .wikipedia-writing .details,
+  .wikipedia-writing .related-reading {
+    padding-left: 0;
+  }
+  .reading .reading-section .reading-section-body,
+  .wikipedia-writing .reading-section .reading-section-body {
+    margin-left: 0;
+  }
+}
+
+.wikipedia-writing .details {
+  padding-left: 0 !important;
+}
+.wikipedia-writing .icons {
+  display: flex;
+  align-items: center;
+  color: var(--note-text-color);
+  margin-bottom: 0.375rem;
+}
+.wikipedia-writing .icons .icon,
+.wikipedia-writing .icons .icon-image {
+  margin-right: 0.375rem;
+}
+.wikipedia-writing .icons .icon-image {
+  width: 1rem;
+  height: 1rem;
+}
+.wikipedia-writing .icons .icon-image,
+.wikipedia-writing .icons .icon-image a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wikipedia-writing .icons .icon-image a,
+.wikipedia-writing .icons .icon-image img,
+.wikipedia-writing .icons .icon-image a a,
+.wikipedia-writing .icons .icon-image a img {
+  max-height: 100%;
+}
+.wikipedia-writing .checkboxes-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.wikipedia-writing .checkboxes-wrapper .checkboxes {
+  display: flex;
+}
+.wikipedia-writing .checkboxes-wrapper .checkboxes .checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-right: 0.375rem;
+}
+.wikipedia-writing .checkboxes-wrapper .checkboxes .checkbox-group input {
+  margin-right: 0.375rem;
+}
+.wikipedia-writing .checkboxes-wrapper .checkboxes .checkbox-group label {
+  display: inline;
+}

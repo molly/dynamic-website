@@ -1,4 +1,4 @@
-extends ../symlinks/templates/base.pug
+extends ../templates/base.pug
 
 block vars
   - var htmlClass = 'reading';
@@ -6,7 +6,7 @@ block vars
   - var showTagCount = true
 
 block head
-  include ../symlinks/mixins/titleAndDescription.pug
+  include ../templates/titleAndDescription.pug
   +titleAndDescription('Press coverage of my projects', 'Press mentions of projects by Molly White.')
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 

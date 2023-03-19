@@ -1,0 +1,12 @@
+mixin titleAndDescription(title, description, path)
+  - var titleWithFallback = title || "Molly White";
+  title= titleWithFallback
+  meta(property='og:title', content=titleWithFallback)
+  meta(name="twitter:title" content=titleWithFallback)
+  if description
+    meta(property='og:description', content=description)
+    meta(name='description', content=description)
+    meta(name='twitter:description' content=description)
+  if path
+    meta(property='og:url', content=`https://www.mollywhite.net${path}`)
+    link(rel="canonical", href=`https://www.mollywhite.net${path}`)

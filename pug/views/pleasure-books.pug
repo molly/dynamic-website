@@ -1,4 +1,4 @@
-extends ../symlinks/templates/base.pug
+extends ../templates/base.pug
 
 block vars
   - var htmlClass = 'reading';
@@ -9,7 +9,7 @@ block vars
 
 block head
   link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
-  include ../symlinks/mixins/titleAndDescription.pug
+  include ../templates/titleAndDescription.pug
   +titleAndDescription('Fiction reading', 'Molly White\'s fiction reading list.')
 
 block body

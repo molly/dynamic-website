@@ -1,0 +1,44 @@
+nav(role='nav')
+  .logo-image
+    img(src=`${importPrefix || ''}/assets/images/molly.jpeg` alt="A photograph of Molly White sitting at a table in a video studio. She's\
+    a white woman with long brown hair that's shaved on one side, she has brown eyes, and she's wearing a black and\
+    white striped shirt and black blazer. There is a colorful cartoon background behind her. She's smiling and looking\
+    at someone out of frame.")
+  button#menu-toggle.menu-toggle Menu
+  #nav-links.nav-links.collapsed
+    a(href='/') Home
+    ul
+      li.nav-header Work
+      li
+        a(href='https://newsletter.mollywhite.net/') Newsletter
+      li
+        a(href='https://web3isgoinggreat.com/')
+          i Web3 is Going Just Great
+      li
+        a(href='https://blog.mollywhite.net/blockchain/') Essays
+      li
+        a(href='/speaking') Speaking
+      li
+        a(href='/press') Press
+    ul
+      li.nav-header Other interests
+      li
+        a(href='/reading') Reading lists
+      li
+        a(href='/wikipedia-work') Wikipedia writing
+      li
+        a(href='/projects') Software
+    ul
+      li.nav-header About
+      li
+        a(href='/resume') Resume
+      li
+        a(href='/contact') Contact
+    ul
+      li.nav-header Social
+      li
+        a(href='https://twitter.com/molly0xFFF') Twitter
+      li
+        a(href='https://hachyderm.io/@molly0xfff') Mastodon
+      li
+        a(href='/social') Everything else

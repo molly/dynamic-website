@@ -1,4 +1,4 @@
-extends ../symlinks/templates/base.pug
+extends ../templates/base.pug
 
 block vars
   - var htmlClass = 'reading';
@@ -7,10 +7,8 @@ block vars
   - var showTagCount = true
 
 block head
-  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
-  include ../symlinks/mixins/titleAndDescription.pug
-  +titleAndDescription('Reading', 'Interested in what I\'m reading these days? Check out my reading lists.')
-  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
+  include ../templates/titleAndDescription.pug
+  +titleAndDescription('Reading', 'Interested in what I\'m reading these days? Check out my reading lists.', '/reading')
 
 block body
   .content-box
@@ -20,8 +18,7 @@ block body
       h3
         a(href="/reading/shortform") Shortform reading list 
       div.rss-link
-        i.fas.fa-rss(aria-hidden="true") 
-        |  
+        img.rss-icon(src="https://mollywhite.net/storage/rss.svg")
         a(href="https://mollywhite.net/reading/shortform/feed.xml", target="_blank") RSS 
       .reading-section-body  
         include ../mixins/currentlyReadingArticleSummary.pug
@@ -31,8 +28,7 @@ block body
       h3
         a(href="/reading/blockchain") Blockchain reading list 
       div.rss-link
-        i.fas.fa-rss(aria-hidden="true") 
-        |  
+        img.rss-icon(src="https://mollywhite.net/storage/rss.svg")
         a(href="https://mollywhite.net/reading/blockchain/feed.xml", target="_blank") RSS
       .reading-section-body  
         +currentlyReadingArticleSummary(mostRecentBlockchain)

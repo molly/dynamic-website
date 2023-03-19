@@ -31,6 +31,7 @@ const PORT = process.env.PORT || 5001;
 
 const app = express();
 app.use('/static', express.static(path.join(__dirname, 'js')));
+app.use('/static-css', express.static(path.join(__dirname, 'css')));
 app.set('views', path.join(__dirname, 'pug/views'));
 app.set('view engine', 'pug');
 
