@@ -4,6 +4,9 @@
   max-width: 35rem;
   max-width: 70ch;
 }
+.reading p, .wikipedia-writing p {
+  margin-top: 0
+}
 .reading h3,
 .reading h4,
 .wikipedia-writing h3,
