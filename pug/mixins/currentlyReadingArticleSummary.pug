@@ -4,7 +4,7 @@ mixin currentlyReadingArticleSummary(mostRecent)
   include ./verb.pug
   +verb(mostRecent, to=true)
   |  "
-  a(href=mostRecent.href) #{mostRecent.title} 
+  a(href=mostRecent.href) #{mostRecent.title}
   | "
   if mostRecent.author
     |  by #{mostRecent.author} 
