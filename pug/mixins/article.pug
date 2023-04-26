@@ -53,7 +53,7 @@ mixin article(article, rss=false)
         | Published #{article.formattedDate}.
       if article.parenthetical && article.parenthetical === "Video"
         |  Watched 
-      if article.parenthetical && article.parenthetical.indexOf("odcast") > -1
+      else if article.parenthetical && article.parenthetical.indexOf("odcast") > -1
         |  Listened
       else if article.status === 'currentlyReading' || article.completed
         |  Started 
