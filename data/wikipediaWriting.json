@@ -10,17 +10,9 @@
         "description": "2021 data breach targeting the domain registrar and web services company Epik"
     },
     {
-        "title": "2021 United States Capitol attack",
-        "date": "2021-01-06",
-        "topics": [
-            "right_wing"
-        ],
-        "description": "violent attack on the United States Capitol by a mob of supporters of President Donald Trump",
-        "image": {
-            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/2021_storming_of_the_United_States_Capitol_DSC09254-2_%2850820534063%29_%28retouched%29.jpg/1600px-2021_storming_of_the_United_States_Capitol_DSC09254-2_%2850820534063%29_%28retouched%29.jpg",
-            "href": "https://commons.wikimedia.org/wiki/File:2021_storming_of_the_United_States_Capitol_DSC09254-2_(50820534063)_(retouched).jpg",
-            "caption": "Crowd at the Capitol during the attack"
-        }
+        "title": "2023 Titan submersible incident",
+        "date": "2023-06-21",
+        "description": "2023 submersible implosion in the Atlantic",
     },
     {
         "title": "Actual play",
@@ -731,6 +723,19 @@
             "women_in_stem"
         ],
         "description": "b. 1988 or 1989; American activist and brand safety consultant"
+    },
+    {
+        "title": "January 6 United States Capitol attack",
+        "date": "2021-01-06",
+        "topics": [
+            "right_wing"
+        ],
+        "description": "2021 mob attempt to prevent Presidential electoral vote count",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/2021_storming_of_the_United_States_Capitol_DSC09254-2_%2850820534063%29_%28retouched%29.jpg/1600px-2021_storming_of_the_United_States_Capitol_DSC09254-2_%2850820534063%29_%28retouched%29.jpg",
+            "href": "https://commons.wikimedia.org/wiki/File:2021_storming_of_the_United_States_Capitol_DSC09254-2_(50820534063)_(retouched).jpg",
+            "caption": "Crowd at the Capitol during the attack"
+        }
     },
     {
         "title": "Margaret Killjoy",

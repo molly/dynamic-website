@@ -1,5 +1,21 @@
 [
   {
+    "title": "Red Team Blues",
+    "author": "Cory Doctorow",
+    "date": "2023",
+    "started": "2023-02-04",
+    "completed": "2023-02-04",
+    "status": "read",
+    "publisher": "Tor Books",
+    "href": "https://www.goodreads.com/book/show/60784417-red-team-blues",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1681104878i/60784417.jpg",
+    "tags": [
+      "mystery",
+      "thriller",
+      "crime"
+    ]
+  },
+  {
     "title": "Faithless",
     "author": "Karin Slaughter",
     "date": "2005",
