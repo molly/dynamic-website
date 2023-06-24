@@ -66,7 +66,7 @@ const getBooksToShow = (books) => {
     if (read.length > 1) {
       read.sort(makeSortBySimpleDateKey('completed'));
     }
-    return read.slice(1);
+    return read.slice(0, 1);
   }
 
   // Show a random "to read" book
