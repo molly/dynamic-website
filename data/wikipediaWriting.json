@@ -1037,7 +1037,12 @@
         "topics": [
             "music"
         ],
-        "description": "b. 1993 or 1994; American deathcore vocalist"
+        "description": "b. 1993 or 1994; American deathcore vocalist",
+        "image": {
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Will_Ramos.jpg/798px-Will_Ramos.jpg?20221117175239",
+            "href": "https://commons.wikimedia.org/wiki/File:Will_Ramos.jpg",
+            "caption": "Will Ramos"
+        }
     },
     {
         "title": "Reverse search warrant",
