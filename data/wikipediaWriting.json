@@ -824,6 +824,15 @@
         }
     },
     {
+        "title": "Left to Suffer",
+        "date": "2023-08-16",
+        "created": true,
+        "topics": [
+            "music"
+        ],
+        "description": "American deathcore band"
+    },
+    {
         "title": "Michelle Malkin",
         "sortKey": "Malkin, Michelle",
         "date": "2021-03-07",
@@ -1018,6 +1027,17 @@
             "women_in_stem"
         ],
         "description": "1923 or 1924 – 2010; Indian physician and community worker"
+    },
+    {
+        "title": "Will Ramos",
+        "sortKey": "Ramos, Will",
+        "date": "2023-04-08",
+        "created": true,
+        "biography": true,
+        "topics": [
+            "music"
+        ],
+        "description": "b. 1993 or 1994; American deathcore vocalist"
     },
     {
         "title": "Reverse search warrant",
