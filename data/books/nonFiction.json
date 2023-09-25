@@ -1,12 +1,33 @@
 [
     {
+        "title": "Blood in the Machine",
+        "subtitle": "The Origins of the Rebellion Against Big Tech",
+        "author": "Brian Merchant",
+        "date": "2023-09-26",
+        "started": "2023-09-18",
+        "status": "currentlyReading",
+        "publisher": "Little, Brown and Company",
+        "href": "https://www.goodreads.com/book/show/59801798-blood-in-the-machine",
+        "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1639949844i/59801798.jpg",
+        "entryAdded": "2023-09-25T18:24:32.022Z",
+        "tags": [
+            "class",
+            "economics",
+            "history",
+            "labor",
+            "politics",
+            "technology"
+        ]
+    },
+    {
         "title": "Easy Money",
         "subtitle": "Cryptocurrency, Casino Capitalism, and the Golden Age of Fraud",
         "author": "Jacob Silverman and Ben McKenzie",
         "date": "2023-07-18",
         "started": "2023-07-27",
+        "completed": "2023-09-18",
         "publisher": "Abrams Press",
-        "status": "currentlyReading",
+        "status": "read",
         "href": "https://www.goodreads.com/book/show/61783837-easy-money",
         "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1686090161i/61783837.jpg",
         "entryAdded": "2023-08-01T01:17:39.701Z",
