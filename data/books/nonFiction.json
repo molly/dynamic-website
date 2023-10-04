@@ -1,5 +1,23 @@
 [
     {
+        "title": "Going Infinite",
+        "subtitle": "The Rise and Fall of a New Tycoon",
+        "author": "Michael Lewis",
+        "date": "2023-10-03",
+        "started": "2023-10-03",
+        "completed": "2023-10-03",
+        "status": "read",
+        "publisher": "W. W. Norton & Company",
+        "href": "https://www.goodreads.com/book/show/149105520-going-infinite",
+        "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1684247487i/149105520.jpg",
+        "border": true,
+        "entryAdded": "2023-10-04T01:56:25.699Z",
+        "tags": [
+            "cryptocurrency",
+            "technology"
+        ]
+    },
+    {
         "title": "Blood in the Machine",
         "subtitle": "The Origins of the Rebellion Against Big Tech",
         "author": "Brian Merchant",
