@@ -1,5 +1,22 @@
 [
     {
+        "title": "Number Go Up",
+        "subtitle": "Inside Crypto's Wild Rise and Staggering Fall",
+        "author": "Zeke Faux",
+        "date": "2023-09-12",
+        "started": "2023-10-12",
+        "completed": "2023-10-14",
+        "status": "read",
+        "publisher": "Crown Currency",
+        "href": "https://www.goodreads.com/book/show/123276708-number-go-up",
+        "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1687140968i/123276708.jpg",
+        "entryAdded": "2023-12-26T16:08:18.055Z",
+        "tags": [
+            "cryptocurrency",
+            "technology"
+        ]
+    },
+    {
         "title": "Going Infinite",
         "subtitle": "The Rise and Fall of a New Tycoon",
         "author": "Michael Lewis",
@@ -23,7 +40,8 @@
         "author": "Brian Merchant",
         "date": "2023-09-26",
         "started": "2023-09-18",
-        "status": "currentlyReading",
+        "completed": "2023-09-22",
+        "status": "read",
         "publisher": "Little, Brown and Company",
         "href": "https://www.goodreads.com/book/show/59801798-blood-in-the-machine",
         "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1639949844i/59801798.jpg",
