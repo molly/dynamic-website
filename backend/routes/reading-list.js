@@ -35,7 +35,7 @@ const updateTags = async (type, entry) => {
         tagRecord.frequency += 1;
       } else {
         tagRecord = new TagModel({
-          value: tag,
+          value: tag.replace(/[- ]/g, '_'),
           text: tag.replace(/_/g, ' '),
           frequency: 1,
         });
