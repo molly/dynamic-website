@@ -1,5 +1,22 @@
 [
     {
+        "title": "Read Write Own",
+        "subtitle": "Building the Next Era of the Internet",
+        "author": "Chris Dixon",
+        "date": "2024-01-30",
+        "started": "2024-01-30",
+        "status": "currentlyReading",
+        "publisher": "Penguin Random House",
+        "href": "https://www.goodreads.com/book/show/178628338-read-write-own",
+        "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1687141213i/178628338.jpg",
+        "border": true,
+        "entryAdded": "2024-02-05T15:47:24.798Z",
+        "tags": [
+            "cryptocurrency",
+            "technology"
+        ]
+    },
+    {
         "title": "Number Go Up",
         "subtitle": "Inside Crypto's Wild Rise and Staggering Fall",
         "author": "Zeke Faux",
