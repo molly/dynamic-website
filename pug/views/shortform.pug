@@ -7,10 +7,8 @@ block vars
 
 block head
   link(rel="alternate", type="application/rss+xml", title="Molly White's Shortform Reading List", href="https://mollywhite.net/reading/shortform/feed.xml")
-  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
   include ../templates/titleAndDescription.pug
   +titleAndDescription('Shortform reading', 'Molly White\'s shortform reading list.')
-  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 
 block body
   .content-box

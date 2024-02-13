@@ -8,10 +8,8 @@ block vars
   - var showStatusFilter = true;
 
 block head
-  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
   include ../templates/titleAndDescription.pug
   +titleAndDescription('Non-fiction reading', 'Molly White\'s non-fiction reading list.')
-  link(rel="stylesheet", href=`${importPrefix}/css/reading.css`)
 
 block body
   .content-box
