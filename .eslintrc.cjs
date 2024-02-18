@@ -21,5 +21,4 @@ module.exports = {
     'require-await': ['error'],
     'comma-dangle': 0,
   },
-  ignorePatterns: ['**/js/*-polyfill.js'],
 };

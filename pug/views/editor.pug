@@ -1,0 +1,12 @@
+extends ../templates/base.pug
+
+block vars
+  - var htmlClass = 'feed';
+  - var importPrefix = 'https://www.mollywhite.net'
+
+block body
+  .content-box 
+    .editorjs
+
+block post-javascript 
+  script(src="/static/editor.js")
