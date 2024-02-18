@@ -4,6 +4,14 @@ const db = {};
 db.mongoose = mongoose;
 db.User = require('./user.model');
 db.RefreshToken = require('./refreshToken.model');
+
+db.ShortformEntry = require('./shortformEntry.model');
+db.BlockchainEntry = require('./blockchainEntry.model');
+db.PressEntry = require('./pressEntry.model');
+db.BlockchainTag = require('./tag.model').BlockchainTag;
+db.PressTag = require('./tag.model').PressTag;
+db.ShortformTag = require('./tag.model').ShortformTag;
+
 db.gracefulClose = function () {
   db.mongoose.connection.close(function () {
     console.log('db connection closed');

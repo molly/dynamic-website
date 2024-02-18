@@ -13,7 +13,7 @@ mixin shortformArticle(article, rss=false)
         if article.parenthetical
           |  (#{article.parenthetical})
 
-        if article.parenthetical || !article.title.match(/[.?!]$/m)
+        if article.parenthetical || article.title && !article.title.match(/[.?!]$/m)
           |.
 
     .byline

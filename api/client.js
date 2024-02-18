@@ -1,13 +1,32 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
 const { getLimit } = require('../data/filter/paginate');
 const { formatArticleDate, getTags } = require('../data/filter/preprocess');
+const db = require('../backend/models');
 
-const uri = `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
+const getDocumentsCollection = (collection) => {
+  switch (collection) {
+    case 'shortform':
+      return db.ShortformEntry;
+    case 'blockchain':
+      return db.BlockchainEntry;
+    case 'press':
+      return db.PressEntry;
+    default:
+      return null;
+  }
+};
+
+const getTagsCollection = (collection) => {
+  switch (collection) {
+    case 'shortform':
+      return db.ShortformTag;
+    case 'blockchain':
+      return db.BlockchainTag;
+    case 'press':
+      return db.PressTag;
+    default:
+      return null;
+  }
+};
 
 const makeQuery = (req) => {
   const query = {};
@@ -63,12 +82,10 @@ const getPaginatedAndFilteredFromDb = async (
   const query = makeQuery(req);
 
   try {
-    await client.connect();
-    const db = client.db('reading-list');
-    const documentsCollection = db.collection(collection);
-    const tagsCollection = db.collection(`${collection}Tags`);
+    const documentsCollection = getDocumentsCollection(collection);
+    const tagsCollection = getTagsCollection(collection);
 
-    const allTags = await tagsCollection.find().toArray();
+    const allTags = await tagsCollection.find().lean();
     allTags.sort((a, b) =>
       a.text.toLowerCase().localeCompare(b.text.toLowerCase())
     );
@@ -83,7 +100,7 @@ const getPaginatedAndFilteredFromDb = async (
     }
     cursor.limit(limit);
 
-    const results = await cursor.toArray();
+    const results = await cursor.lean();
 
     const totalFilteredResults = await documentsCollection.countDocuments(
       query
@@ -100,42 +117,28 @@ const getPaginatedAndFilteredFromDb = async (
     };
   } catch (err) {
     console.log(err);
-  } finally {
-    await client.close();
   }
 };
 
 const getLandingPageEntriesFromDb = async () => {
   try {
-    await client.connect();
-    const db = client.db('reading-list');
-    const shortformCollection = db.collection('shortform');
-    const blockchainCollection = db.collection('blockchain');
-
-    const mostRecentShortform = await shortformCollection.findOne(
-      {},
-      { sort: { started: -1 } }
-    );
-    const mostRecentBlockchain = await blockchainCollection.findOne(
-      {},
-      { sort: { started: -1 } }
-    );
+    const mostRecentShortform = await db.ShortformEntry.findOne({}).sort({
+      started: -1,
+    });
+    const mostRecentBlockchain = await db.BlockchainEntry.findOne({}).sort({
+      started: -1,
+    });
     return { mostRecentBlockchain, mostRecentShortform };
   } catch (err) {
     console.log(err);
-  } finally {
-    await client.close();
   }
 };
 
 const getRssEntriesFromDb = async (collection) => {
   const limit = 20;
   try {
-    await client.connect();
-    const db = client.db('reading-list');
-
     // Get entries
-    const documentsCollection = db.collection(collection);
+    const documentsCollection = getDocumentsCollection(collection);
     const cursor = documentsCollection
       .find({})
       .sort({ entryAdded: -1 })
@@ -166,8 +169,6 @@ const getRssEntriesFromDb = async (collection) => {
     return results;
   } catch (err) {
     console.log(err);
-  } finally {
-    await client.close();
   }
 };
 
