@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const config = require('../config/auth.config');
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import config from '../config/auth.config.js';
 
 const RefreshTokenSchema = new mongoose.Schema({
   token: String,
@@ -44,4 +44,4 @@ const RefreshToken = mongoose.model(
   RefreshTokenSchema,
   'refreshTokens',
 );
-module.exports = RefreshToken;
+export default RefreshToken;

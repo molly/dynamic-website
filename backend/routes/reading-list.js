@@ -1,17 +1,10 @@
-const {
-  BlockchainTag,
-  PressTag,
-  ShortformTag,
-} = require('../models/tag.model');
-const BlockchainEntry = require('../models/blockchainEntry.model');
-const PressEntry = require('../models/pressEntry.model');
-const ShortformEntry = require('../models/shortformEntry.model');
-
-const sortBy = require('lodash.sortby');
-
-const { verifyJwt } = require('../middlewares/jwt');
-
-const express = require('express');
+import { BlockchainTag, PressTag, ShortformTag } from '../models/tag.model.js';
+import BlockchainEntry from '../models/blockchainEntry.model.js';
+import PressEntry from '../models/pressEntry.model.js';
+import ShortformEntry from '../models/shortformEntry.model.js';
+import sortBy from 'lodash.sortby';
+import { verifyJwt } from '../middlewares/jwt.js';
+import express from 'express';
 const router = express.Router();
 
 const models = {
@@ -71,4 +64,4 @@ router.post('/entry', verifyJwt, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

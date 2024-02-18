@@ -1,6 +1,5 @@
-const moment = require('moment');
-const path = require('path');
-const pug = require('pug');
+import moment from 'moment';
+import pug from 'pug';
 
 // Trim the summary to length characters without splitting words, then append ellipses
 const getSummaryExcerpt = (summary, length) => {
@@ -59,8 +58,10 @@ const makeSummary = (article) => {
 };
 
 const getRssResults = (data, template) => {
+  console.log(new URL(`../../pug/etc/${template}.pug`, import.meta.url));
   const shortformPugTemplate = pug.compileFile(
-    path.join(__dirname, `../../pug/etc/${template}.pug`),
+    new URL(`../../pug/etc/${template}.pug`, import.meta.url),
+    { basedir: new URL(`../../pug`, import.meta.url).pathname },
   );
 
   const withRssValues = data.map((article) => {
@@ -82,4 +83,4 @@ const getRssResults = (data, template) => {
   return withRssValues;
 };
 
-module.exports = getRssResults;
+export default getRssResults;

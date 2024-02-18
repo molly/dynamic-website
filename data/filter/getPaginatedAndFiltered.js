@@ -1,7 +1,7 @@
-const getLocalJson = require('../utils/getLocalJson');
-const { paginate } = require('./paginate');
-const { preprocess } = require('./preprocess');
-const { filter } = require('./filter');
+import getLocalJson from '../utils/getLocalJson.js';
+import { paginate } from './paginate.js';
+import { preprocess } from './preprocess.js';
+import { filter } from './filter.js';
 
 const getPaginatedAndFiltered = async (
   relativePath,
@@ -16,4 +16,4 @@ const getPaginatedAndFiltered = async (
   return { ...resp, totalUnfilteredResults: data.length };
 };
 
-module.exports = getPaginatedAndFiltered;
+export default getPaginatedAndFiltered;

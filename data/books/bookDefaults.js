@@ -18,7 +18,7 @@ const BOOK_DEFAULTS = {
 
 const BOOK_TAGS = {};
 
-module.exports = {
+export default {
   defaultArticle: BOOK_DEFAULTS,
   tagText: BOOK_TAGS,
   defaultKey: 'BOOK',

@@ -1,9 +1,9 @@
-const moment = require('moment');
-const { makeSortByWeek } = require('../utils/weekUtils');
-const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
-const MOMENT_FORMATS = require('../constants/momentFormats');
+import moment from 'moment';
+import { makeSortByWeek } from '../utils/weekUtils.js';
+import { makeSortBySimpleDateKey } from '../utils/dateUtils.js';
+import MOMENT_FORMATS from '../constants/momentFormats.js';
 
-const matches = (maybeValue, search) => {
+export const matches = (maybeValue, search) => {
   if (!maybeValue) {
     return false;
   }
@@ -17,7 +17,7 @@ const matches = (maybeValue, search) => {
   return false;
 };
 
-const filter = ({ results }, req, { defaultKey }) => {
+export const filter = ({ results }, req, { defaultKey }) => {
   let filteredResults = results.slice();
 
   // DATES
@@ -87,5 +87,3 @@ const filter = ({ results }, req, { defaultKey }) => {
 
   return { results: filteredResults };
 };
-
-module.exports = { filter, matches };

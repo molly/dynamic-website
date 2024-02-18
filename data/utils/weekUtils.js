@@ -1,12 +1,12 @@
-const moment = require('moment');
-const MOMENT_FORMATS = require('../constants/momentFormats');
+import moment from 'moment';
+import MOMENT_FORMATS from '../constants/momentFormats.js';
 
 const SAME_MONTH_REGEX = new RegExp(/([A-Za-z]+ \d{1,2})[-–]\d{1,2}(, \d{4})/);
 const DIFFERENT_MONTHS_REGEX = new RegExp(
   /([A-Za-z]+ \d{1,2})[-–][A-Za-z]+ \d{1,2}(, \d{4})/,
 );
 
-function getMomentFromWeek(week) {
+export function getMomentFromWeek(week) {
   const sameMatch = week.match(SAME_MONTH_REGEX);
   if (sameMatch) {
     return moment(sameMatch[1] + sameMatch[2], 'MMMM D, YYYY');
@@ -18,7 +18,7 @@ function getMomentFromWeek(week) {
   return moment('1970-01-01', MOMENT_FORMATS);
 }
 
-function makeSortByWeek(order) {
+export function makeSortByWeek(order) {
   return function (a, b) {
     const sortValA = getMomentFromWeek(a.week);
     const sortValB = getMomentFromWeek(b.week);
@@ -28,8 +28,3 @@ function makeSortByWeek(order) {
     return sortValB - sortValA;
   };
 }
-
-module.exports = {
-  makeSortByWeek,
-  getMomentFromWeek,
-};

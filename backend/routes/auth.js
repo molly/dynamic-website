@@ -1,12 +1,10 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-
-const db = require('../models');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import db from '../models/db.js';
 const User = db.User;
-const config = require('../config/auth.config');
-const { RefreshToken } = require('../models');
-const { verifyJwt } = require('../middlewares/jwt');
+import config from '../config/auth.config.js';
+import { verifyJwt } from '../middlewares/jwt.js';
 
 const router = express.Router();
 
@@ -44,7 +42,7 @@ router.post('/signin', (req, res) => {
     const accessToken = jwt.sign({ id: user._id }, config.secret, {
       expiresIn: config.tokenExpiry,
     });
-    const refreshToken = await RefreshToken.createToken(user);
+    const refreshToken = await db.RefreshToken.createToken(user);
 
     res.status(200).send({
       id: user._id,
@@ -100,4 +98,4 @@ router.post('/signout', (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

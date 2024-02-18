@@ -1,7 +1,6 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const fs = require('fs');
-const path = require('path');
-const { DateTime } = require('luxon');
+import fs from 'fs';
+import { DateTime } from 'luxon';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const uri = `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -33,7 +32,10 @@ async function write(collectionName) {
     await client.db('reading-list').collection(collectionName).drop();
     const collection = client.db('reading-list').collection(collectionName);
     const rawData = fs.readFileSync(
-      path.join(__dirname, `../../dynamic-website/data/${collectionName}.json`),
+      new URL(
+        `../../dynamic-website/data/${collectionName}.json`,
+        import.meta.url,
+      ),
     );
     const data = JSON.parse(rawData);
     for (const ind in data) {

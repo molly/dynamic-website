@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config/auth.config.js');
+import jwt from 'jsonwebtoken';
+import config from '../config/auth.config.js';
 
-const verifyJwt = (req, res, next) => {
+export const verifyJwt = (req, res, next) => {
   const bearerHeader = req.headers['authorization'];
   if (!bearerHeader) {
     return res.status(403).send({ message: 'Token missing from request' });
@@ -24,5 +24,3 @@ const verifyJwt = (req, res, next) => {
     next();
   });
 };
-
-module.exports = { verifyJwt };

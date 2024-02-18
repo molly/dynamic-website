@@ -1,8 +1,8 @@
-const getLocalJson = require('../utils/getLocalJson');
-const WIKIPEDIA_DEFAULTS = require('../wikipediaDefaults');
-const { matches } = require('./filter');
-const { paginate } = require('./paginate');
-const moment = require('moment');
+import getLocalJson from '../utils/getLocalJson.js';
+import WIKIPEDIA_DEFAULTS from '../wikipediaDefaults.js';
+import { matches } from './filter.js';
+import { paginate } from './paginate.js';
+import moment from 'moment';
 
 const { defaultArticle, topicText } = WIKIPEDIA_DEFAULTS;
 
@@ -103,4 +103,4 @@ const getWikipediaWriting = async (req, paginationDefaults) => {
   return { ...resp, totalUnfilteredResults: data.length };
 };
 
-module.exports = getWikipediaWriting;
+export default getWikipediaWriting;

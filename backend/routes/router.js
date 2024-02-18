@@ -1,12 +1,10 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const cookieSession = require('cookie-session');
-const { ServerApiVersion } = require('mongodb');
-
-const db = require('../models');
-
-const authRouter = require('./auth');
-const readingListRouter = require('./reading-list');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import cookieSession from 'cookie-session';
+import { ServerApiVersion } from 'mongodb';
+import db from '../models/db.js';
+import authRouter from './auth.js';
+import readingListRouter from './reading-list.js';
 
 db.mongoose
   .connect(
@@ -38,4 +36,4 @@ app.use(cookieParser());
 app.use('/', readingListRouter);
 app.use('/auth', authRouter);
 
-module.exports = app;
+export default app;

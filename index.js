@@ -1,38 +1,30 @@
-const express = require('express');
-const path = require('path');
-const https = require('https');
-const fs = require('fs');
+import express from 'express';
+import fs from 'fs';
+import https from 'https';
+import config from './backend/config/auth.config.js';
 
-let config;
-if (process.argv[2] === 'prod') {
-  config = require('./config');
-}
-
-const {
+import {
   getPaginatedAndFilteredFromDb,
   getRssEntriesFromDb,
-} = require('./api/client');
-
-const getPaginatedAndFiltered = require('./data/filter/getPaginatedAndFiltered');
-const getLandingPageSummary = require('./data/filter/landing');
-const getWikipediaWriting = require('./data/filter/wikipediaWritingFilter');
-const getRssResults = require('./data/filter/rss');
-
-const {
-  READING_STATUSES_MAP,
+} from './api/client.js';
+import db from './backend/models/db.js';
+import backendRouter from './backend/routes/router.js';
+import BOOK_DEFAULTS from './data/books/bookDefaults.js';
+import {
   READING_STATUSES_LISTS,
-} = require('./data/constants/readingStatuses');
-const BOOK_DEFAULTS = require('./data/books/bookDefaults');
-
-const db = require('./backend/models');
-const backendRouter = require('./backend/routes/router');
+  READING_STATUSES_MAP,
+} from './data/constants/readingStatuses.js';
+import getPaginatedAndFiltered from './data/filter/getPaginatedAndFiltered.js';
+import getLandingPageSummary from './data/filter/landing.js';
+import getRssResults from './data/filter/rss.js';
+import getWikipediaWriting from './data/filter/wikipediaWritingFilter.js';
 
 const PORT = process.env.PORT || 5001;
 
 const app = express();
-app.use('/static', express.static(path.join(__dirname, 'js')));
-app.use('/static-css', express.static(path.join(__dirname, 'css')));
-app.set('views', path.join(__dirname, 'pug/views'));
+app.use('/static', express.static('js'));
+app.use('/static', express.static('css'));
+app.set('views', 'pug/views');
 app.set('view engine', 'pug');
 
 app.get('/press', async (req, res) => {
@@ -139,9 +131,15 @@ if (process.argv[2] === 'prod') {
   https
     .createServer(
       {
-        key: fs.readFileSync(`${config.certPath}/privkey.pem`),
-        cert: fs.readFileSync(`${config.certPath}/cert.pem`),
-        ca: fs.readFileSync(`${config.certPath}/chain.pem`),
+        key: fs.readFileSync(
+          new URL(`${config.certPath}/privkey.pem`, import.meta.url),
+        ),
+        cert: fs.readFileSync(
+          new URL(`${config.certPath}/cert.pem`, import.meta.url),
+        ),
+        ca: fs.readFileSync(
+          new URL(`${config.certPath}/chain.pem`, import.meta.url),
+        ),
       },
       app,
     )

@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { ShortformSchema } = require('./entry.model');
+import mongoose from 'mongoose';
+import { ShortformSchema } from './entry.model.js';
 
 const ShortformEntry = mongoose.model(
   'ShortformEntry',
@@ -7,4 +7,4 @@ const ShortformEntry = mongoose.model(
   'shortform',
 );
 
-module.exports = ShortformEntry;
+export default ShortformEntry;

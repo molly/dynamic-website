@@ -1,4 +1,4 @@
-const moment = require('moment');
+import moment from 'moment';
 
 const formatDate = (dateMoment, rawDate) => {
   if (dateMoment.year() !== 1970) {
@@ -13,7 +13,7 @@ const formatDate = (dateMoment, rawDate) => {
   }
 };
 
-const formatArticleDate = (article) => {
+export const formatArticleDate = (article) => {
   const dates = {};
   if (article.date) {
     const m = moment(article.date, ['YYYY-MM-DD', 'YYYY-MM', 'YYYY']);
@@ -38,7 +38,7 @@ const formatArticleDate = (article) => {
   return dates;
 };
 
-const getTags = (article, tagText) => {
+export const getTags = (article, tagText) => {
   if (!article.tags || !article.tags.length) {
     return [];
   }
@@ -52,7 +52,7 @@ const getTags = (article, tagText) => {
   return tags;
 };
 
-const preprocess = (data, { defaultArticle, tagText }) => {
+export const preprocess = (data, { defaultArticle, tagText }) => {
   const processed = [];
   const tagsMap = {};
   for (let article of data) {
@@ -82,5 +82,3 @@ const preprocess = (data, { defaultArticle, tagText }) => {
 
   return { results: processed, allTags };
 };
-
-module.exports = { preprocess, formatArticleDate, getTags };

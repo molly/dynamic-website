@@ -1,6 +1,6 @@
-const { getLimit } = require('../data/filter/paginate');
-const { formatArticleDate, getTags } = require('../data/filter/preprocess');
-const db = require('../backend/models');
+import { getLimit } from '../data/filter/paginate.js';
+import { formatArticleDate, getTags } from '../data/filter/preprocess.js';
+import db from '../backend/models/db.js';
 
 const getDocumentsCollection = (collection) => {
   switch (collection) {
@@ -67,7 +67,7 @@ const getTagsMap = (allTagsArray) => {
   }, {});
 };
 
-const getPaginatedAndFilteredFromDb = async (
+export const getPaginatedAndFilteredFromDb = async (
   collection,
   req,
   paginationDefaults,
@@ -119,7 +119,7 @@ const getPaginatedAndFilteredFromDb = async (
   }
 };
 
-const getLandingPageEntriesFromDb = async () => {
+export const getLandingPageEntriesFromDb = async () => {
   try {
     const mostRecentShortform = await db.ShortformEntry.findOne({}).sort({
       started: -1,
@@ -133,7 +133,7 @@ const getLandingPageEntriesFromDb = async () => {
   }
 };
 
-const getRssEntriesFromDb = async (collection) => {
+export const getRssEntriesFromDb = async (collection) => {
   const limit = 20;
   try {
     // Get entries
@@ -142,11 +142,11 @@ const getRssEntriesFromDb = async (collection) => {
       .find({})
       .sort({ entryAdded: -1 })
       .limit(limit);
-    const results = await cursor.toArray();
+    const results = await cursor.lean();
 
     // Get tags
-    const tagsCollection = db.collection(`${collection}Tags`);
-    const allTags = await tagsCollection.find().toArray();
+    const tagsCollection = getTagsCollection(collection);
+    const allTags = await tagsCollection.find().lean();
     const tagsMap = getTagsMap(allTags);
 
     // Preprocess
@@ -169,10 +169,4 @@ const getRssEntriesFromDb = async (collection) => {
   } catch (err) {
     console.log(err);
   }
-};
-
-module.exports = {
-  getPaginatedAndFilteredFromDb,
-  getLandingPageEntriesFromDb,
-  getRssEntriesFromDb,
 };

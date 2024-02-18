@@ -24,7 +24,7 @@ const WIKIPEDIA_TOPICS = {
   women_in_stem: 'women in STEM',
 };
 
-module.exports = {
+export default {
   defaultArticle: WIKIPEDIA_DEFAULTS,
   topicText: WIKIPEDIA_TOPICS,
   defaultKey: 'WIKIPEDIA',

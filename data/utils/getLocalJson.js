@@ -1,9 +1,11 @@
-const fs = require('fs').promises;
-const path = require('path');
+import { promises as fs } from 'fs';
 
 const getLocalJson = async (relativePath) => {
-  const data = await fs.readFile(path.join(__dirname, relativePath), 'utf8');
+  const data = await fs.readFile(
+    new URL(relativePath, import.meta.url),
+    'utf8',
+  );
   return JSON.parse(data);
 };
 
-module.exports = getLocalJson;
+export default getLocalJson;

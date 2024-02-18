@@ -1,10 +1,9 @@
-const moment = require('moment');
-const MOMENT_FORMATS = require('../constants/momentFormats');
-const getLocalJson = require('../utils/getLocalJson');
-const { makeSortBySimpleDateKey } = require('../utils/dateUtils');
-
-const BOOK_DEFAULTS = require('../books/bookDefaults');
-const { getLandingPageEntriesFromDb } = require('../../api/client');
+import moment from 'moment';
+import MOMENT_FORMATS from '../constants/momentFormats.js';
+import getLocalJson from '../utils/getLocalJson.js';
+import { makeSortBySimpleDateKey } from '../utils/dateUtils.js';
+import BOOK_DEFAULTS from '../books/bookDefaults.js';
+import { getLandingPageEntriesFromDb } from '../../api/client.js';
 
 const processTags = (item, tagText) => {
   item.tags = item.tags.map((tag) => ({
@@ -116,4 +115,4 @@ const getLandingPageSummary = async () => {
   };
 };
 
-module.exports = getLandingPageSummary;
+export default getLandingPageSummary;

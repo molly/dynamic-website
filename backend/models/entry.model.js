@@ -1,4 +1,4 @@
-const EntrySchema = {
+export const EntrySchema = {
   title: { type: String, required: true },
   author: String,
   date: { type: String, required: true, match: /^\d{4}(-\d{2}){0,2}$/ },
@@ -12,7 +12,7 @@ const EntrySchema = {
   entryAdded: Date,
 };
 
-const ShortformSchema = {
+export const ShortformSchema = {
   ...EntrySchema,
   started: { type: String, required: true, match: /^\d{4}(-\d{2}){0,2}$/ },
   completed: { type: String, required: false, match: /^\d{4}(-\d{2}){0,2}$/ },
@@ -22,5 +22,3 @@ const ShortformSchema = {
   },
   relatedReading: [String],
 };
-
-module.exports = { EntrySchema, ShortformSchema };

@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { EntrySchema } = require('./entry.model');
+import mongoose from 'mongoose';
+import { EntrySchema } from './entry.model.js';
 
 const PressEntry = mongoose.model(
   'PressEntry',
@@ -9,4 +9,4 @@ const PressEntry = mongoose.model(
   'press',
 );
 
-module.exports = PressEntry;
+export default PressEntry;

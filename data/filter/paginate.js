@@ -1,4 +1,4 @@
-const getLimit = (queryLimit, defaults = {}) => {
+export const getLimit = (queryLimit, defaults = {}) => {
   let limit;
   if (typeof queryLimit === 'string') {
     limit = parseInt(queryLimit, 10);
@@ -13,7 +13,7 @@ const getLimit = (queryLimit, defaults = {}) => {
   return limit;
 };
 
-const paginate = ({ results }, req, defaults = {}) => {
+export const paginate = ({ results }, req, defaults = {}) => {
   const limit = getLimit(req.query.limit, defaults);
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const start = (page - 1) * limit;
@@ -25,5 +25,3 @@ const paginate = ({ results }, req, defaults = {}) => {
     totalResults: results.length,
   };
 };
-
-module.exports = { getLimit, paginate };

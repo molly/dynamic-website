@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { ShortformSchema } = require('./entry.model');
+import mongoose from 'mongoose';
+import { ShortformSchema } from './entry.model.js';
 
 const BlockchainEntry = mongoose.model(
   'BlockchainEntry',
@@ -7,4 +7,4 @@ const BlockchainEntry = mongoose.model(
   'blockchain',
 );
 
-module.exports = BlockchainEntry;
+export default BlockchainEntry;

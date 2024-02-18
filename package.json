@@ -6,6 +6,7 @@
     "node": "18.x"
   },
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js dev",
     "watch": "nodemon --watch",
