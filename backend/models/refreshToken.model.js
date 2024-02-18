@@ -18,7 +18,7 @@ RefreshTokenSchema.statics.createToken = async function (user) {
 
   const _token = jwt.sign(
     { id: user._id, exp: expiredAtTime },
-    config.refreshSecret
+    config.refreshSecret,
   );
   const _object = new this({
     token: _token,
@@ -42,6 +42,6 @@ RefreshTokenSchema.statics.isExpiredOrInvalid = (token) => {
 const RefreshToken = mongoose.model(
   'RefreshToken',
   RefreshTokenSchema,
-  'refreshTokens'
+  'refreshTokens',
 );
 module.exports = RefreshToken;

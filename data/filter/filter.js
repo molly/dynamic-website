@@ -49,13 +49,13 @@ const filter = ({ results }, req, { defaultKey }) => {
   if (req.query.tags) {
     const tags = req.query.tags.split('-');
     filteredResults = filteredResults.filter((article) =>
-      article.tags.some((tag) => tags.includes(tag.value))
+      article.tags.some((tag) => tags.includes(tag.value)),
     );
   }
   if (req.query.status) {
     const statuses = req.query.status.split('-');
     filteredResults = filteredResults.filter(
-      (article) => article.status && statuses.includes(article.status)
+      (article) => article.status && statuses.includes(article.status),
     );
   }
 
@@ -70,9 +70,9 @@ const filter = ({ results }, req, { defaultKey }) => {
         matches(article.publisher, search) ||
         matches(
           article.tags.map((t) => t.text),
-          search
+          search,
         ) ||
-        matches(article.summary, search)
+        matches(article.summary, search),
     );
   }
 

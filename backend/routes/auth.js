@@ -34,7 +34,7 @@ router.post('/signin', (req, res) => {
 
     const isValidPassword = bcrypt.compareSync(
       req.body.password,
-      user.password
+      user.password,
     );
 
     if (!isValidPassword) {

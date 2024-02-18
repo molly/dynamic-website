@@ -6,7 +6,7 @@ const PressEntry = mongoose.model(
   new mongoose.Schema({
     ...EntrySchema,
   }),
-  'press'
+  'press',
 );
 
 module.exports = PressEntry;

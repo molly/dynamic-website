@@ -5,14 +5,12 @@ const { DateTime } = require('luxon');
 
 const uri = `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
 
 const SAME_MONTH_REGEX = new RegExp(/([A-Za-z]+ \d{1,2})[-–]\d{1,2}(, \d{4})/);
 const DIFFERENT_MONTHS_REGEX = new RegExp(
-  /([A-Za-z]+ \d{1,2})[-–][A-Za-z]+ \d{1,2}(, \d{4})/
+  /([A-Za-z]+ \d{1,2})[-–][A-Za-z]+ \d{1,2}(, \d{4})/,
 );
 function getDateFromWeek(week) {
   const sameMatch = week.match(SAME_MONTH_REGEX);
@@ -23,7 +21,7 @@ function getDateFromWeek(week) {
   if (differentMatch) {
     return DateTime.fromFormat(
       differentMatch[1] + differentMatch[2],
-      'LLLL d, yyyy'
+      'LLLL d, yyyy',
     );
   }
   return DateTime.fromISO('1970-01-01');
@@ -35,7 +33,7 @@ async function write(collectionName) {
     await client.db('reading-list').collection(collectionName).drop();
     const collection = client.db('reading-list').collection(collectionName);
     const rawData = fs.readFileSync(
-      path.join(__dirname, `../../dynamic-website/data/${collectionName}.json`)
+      path.join(__dirname, `../../dynamic-website/data/${collectionName}.json`),
     );
     const data = JSON.parse(rawData);
     for (const ind in data) {

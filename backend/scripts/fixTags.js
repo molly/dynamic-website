@@ -2,8 +2,6 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const uri = `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
 
@@ -34,13 +32,13 @@ async function fixTags() {
           const frequency = tags[0].frequency + tags[1].frequency;
           await collection.updateOne(
             { _id: tags[primaryIndex]._id },
-            { $set: { frequency: frequency } }
+            { $set: { frequency: frequency } },
           );
           await collection.deleteOne({ _id: tags[toDeleteIndex]._id });
         } else if (tags[0].value.includes(' ') || tags[0].value.includes('-')) {
           await collection.updateOne(
             { _id: tags[0]._id },
-            { $set: { value: tags[0].value.replace(/[- ]/g, '_') } }
+            { $set: { value: tags[0].value.replace(/[- ]/g, '_') } },
           );
         }
       }

@@ -12,11 +12,10 @@ db.BlockchainTag = require('./tag.model').BlockchainTag;
 db.PressTag = require('./tag.model').PressTag;
 db.ShortformTag = require('./tag.model').ShortformTag;
 
-db.gracefulClose = function () {
-  db.mongoose.connection.close(function () {
-    console.log('db connection closed');
-    process.exit(0);
-  });
+db.gracefulClose = async function () {
+  await db.mongoose.connection.close();
+  console.log('db connection closed');
+  process.exit(0);
 };
 
 module.exports = db;

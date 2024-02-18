@@ -40,7 +40,7 @@ const makeQuery = (req) => {
   if (req.query.search) {
     const escapedSearchQuery = req.query.search.replace(
       /[.*+?^${}()|[\]\\]/g,
-      '\\$&'
+      '\\$&',
     );
     const fields = ['title', 'author', 'work', 'publisher', 'summary'];
     query.$or = fields.map((field) => ({
@@ -70,7 +70,7 @@ const getTagsMap = (allTagsArray) => {
 const getPaginatedAndFilteredFromDb = async (
   collection,
   req,
-  paginationDefaults
+  paginationDefaults,
 ) => {
   const limit = getLimit(req.query.limit, paginationDefaults);
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
@@ -87,7 +87,7 @@ const getPaginatedAndFilteredFromDb = async (
 
     const allTags = await tagsCollection.find().lean();
     allTags.sort((a, b) =>
-      a.text.toLowerCase().localeCompare(b.text.toLowerCase())
+      a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
     );
     const tagText = getTagsMap(allTags);
 
@@ -102,9 +102,8 @@ const getPaginatedAndFilteredFromDb = async (
 
     const results = await cursor.lean();
 
-    const totalFilteredResults = await documentsCollection.countDocuments(
-      query
-    );
+    const totalFilteredResults =
+      await documentsCollection.countDocuments(query);
     const totalUnfilteredResults = await documentsCollection.countDocuments();
     return {
       currentPage: page,

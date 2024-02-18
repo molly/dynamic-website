@@ -72,7 +72,7 @@ app.get('/reading/nonfiction', async (req, res) => {
     '../books/nonFiction.json',
     BOOK_DEFAULTS,
     req,
-    { default: 5 }
+    { default: 5 },
   );
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
@@ -89,7 +89,7 @@ app.get('/reading/fiction', async (req, res) => {
     '../books/fiction.json',
     BOOK_DEFAULTS,
     req,
-    { default: 5 }
+    { default: 5 },
   );
   const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
   const selectedStatuses = req.query.status ? req.query.status.split('-') : [];
@@ -120,7 +120,7 @@ app.get(
       prefix: 'shortform',
       results,
     });
-  }
+  },
 );
 
 app.get('/reading/blockchain/feed.xml', async (req, res) => {
@@ -143,7 +143,7 @@ if (process.argv[2] === 'prod') {
         cert: fs.readFileSync(`${config.certPath}/cert.pem`),
         ca: fs.readFileSync(`${config.certPath}/chain.pem`),
       },
-      app
+      app,
     )
     .listen(PORT);
 } else {

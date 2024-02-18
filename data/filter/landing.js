@@ -14,7 +14,7 @@ const processTags = (item, tagText) => {
     value: tag,
   }));
   item.tags.sort((a, b) =>
-    a.text.toLowerCase().localeCompare(b.text.toLowerCase())
+    a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
   );
   return item;
 };
@@ -25,7 +25,7 @@ const getAllBooksSortedByStartDate = (books) =>
 const getBooksOfStatusSortedByStartDate = (
   books,
   status,
-  recentOnly = false
+  recentOnly = false,
 ) => {
   // Get all books with this status and sort by start date
   const booksOfStatus = books.filter((book) => book.status === status);
@@ -36,7 +36,7 @@ const getBooksOfStatusSortedByStartDate = (
     if (recentOnly) {
       const monthAgo = moment().subtract(1, 'month');
       return booksOfStatus.filter((book) =>
-        moment(book.started, MOMENT_FORMATS).isAfter(monthAgo)
+        moment(book.started, MOMENT_FORMATS).isAfter(monthAgo),
       );
     }
     return booksOfStatus;
@@ -48,7 +48,7 @@ const getBooksToShow = (books) => {
   // Show most recent currently reading books
   const currentlyReading = getBooksOfStatusSortedByStartDate(
     books,
-    'currentlyReading'
+    'currentlyReading',
   );
   if (currentlyReading.length) {
     return currentlyReading;
@@ -87,14 +87,12 @@ const getBooksToShow = (books) => {
 };
 
 const getLandingPageSummary = async () => {
-  const {
-    mostRecentBlockchain,
-    mostRecentShortform,
-  } = await getLandingPageEntriesFromDb();
+  const { mostRecentBlockchain, mostRecentShortform } =
+    await getLandingPageEntriesFromDb();
 
   const pleasure = await getLocalJson('../books/fiction.json');
   const currentlyReadingPleasure = getBooksToShow(pleasure).map((book) =>
-    processTags(book, BOOK_DEFAULTS.tagText)
+    processTags(book, BOOK_DEFAULTS.tagText),
   );
 
   const reference = await getLocalJson('../books/nonFiction.json');
@@ -103,11 +101,11 @@ const getLandingPageSummary = async () => {
     currentlyReadingReference.some((book) => book.status === 'currentlyReading')
   ) {
     currentlyReadingReference = currentlyReadingReference.filter(
-      (book) => book.status === 'currentlyReading'
+      (book) => book.status === 'currentlyReading',
     );
   }
   currentlyReadingReference = currentlyReadingReference.map((book) =>
-    processTags(book, BOOK_DEFAULTS.tagText)
+    processTags(book, BOOK_DEFAULTS.tagText),
   );
 
   return {

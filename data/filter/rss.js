@@ -60,7 +60,7 @@ const makeSummary = (article) => {
 
 const getRssResults = (data, template) => {
   const shortformPugTemplate = pug.compileFile(
-    path.join(__dirname, `../../pug/etc/${template}.pug`)
+    path.join(__dirname, `../../pug/etc/${template}.pug`),
   );
 
   const withRssValues = data.map((article) => {

@@ -4,8 +4,6 @@ const path = require('path');
 
 const uri = `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
 
@@ -21,7 +19,7 @@ async function write(collectionName) {
     const tags = {};
 
     const rawData = fs.readFileSync(
-      path.join(__dirname, `../../dynamic-website/data/${collectionName}.json`)
+      path.join(__dirname, `../../dynamic-website/data/${collectionName}.json`),
     );
     const data = JSON.parse(rawData);
     for (const ind in data) {

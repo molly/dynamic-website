@@ -77,7 +77,7 @@ const preprocess = (data, { defaultArticle, tagText }) => {
 
   const allTags = Object.values(tagsMap);
   allTags.sort((a, b) =>
-    a.text.toLowerCase().localeCompare(b.text.toLowerCase())
+    a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
   );
 
   return { results: processed, allTags };

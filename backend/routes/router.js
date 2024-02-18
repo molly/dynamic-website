@@ -12,10 +12,8 @@ db.mongoose
   .connect(
     `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/reading-list?retryWrites=true&w=majority`,
     {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       serverApi: ServerApiVersion.v1,
-    }
+    },
   )
   .then(() => {
     console.log('db connected');
@@ -33,7 +31,7 @@ app.use(
   cookieSession({
     name: 'reading-list-extension',
     secret: process.env.COOKIE_SESSION_SECRET,
-  })
+  }),
 );
 app.use(cookieParser());
 

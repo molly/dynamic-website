@@ -24,7 +24,7 @@ const preprocess = (data, query) => {
       value: topic,
     }));
     updatedArticle.topics.sort((a, b) =>
-      a.text.toLowerCase().localeCompare(b.text.toLowerCase())
+      a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
     );
     processed.push(updatedArticle);
     for (let topic of updatedArticle.topics) {
@@ -52,7 +52,7 @@ const preprocess = (data, query) => {
 
   const allTopics = Object.values(topicsMap);
   allTopics.sort((a, b) =>
-    a.text.toLowerCase().localeCompare(b.text.toLowerCase())
+    a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
   );
 
   return { results: processed, allTopics };
@@ -63,7 +63,7 @@ const filter = ({ results }, req) => {
   if (req.query.tags) {
     const topics = req.query.tags.split('-');
     filteredResults = filteredResults.filter((article) =>
-      article.topics.some((topic) => topics.includes(topic.value))
+      article.topics.some((topic) => topics.includes(topic.value)),
     );
   }
   if (req.query.created) {
@@ -88,7 +88,7 @@ const filter = ({ results }, req) => {
   if (req.query.search) {
     const search = req.query.search.toLowerCase();
     filteredResults = filteredResults.filter((article) =>
-      matches(article.title, search)
+      matches(article.title, search),
     );
   }
 
