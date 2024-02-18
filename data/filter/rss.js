@@ -58,7 +58,6 @@ const makeSummary = (article) => {
 };
 
 const getRssResults = (data, template) => {
-  console.log(new URL(`../../pug/etc/${template}.pug`, import.meta.url));
   const shortformPugTemplate = pug.compileFile(
     new URL(`../../pug/etc/${template}.pug`, import.meta.url),
     { basedir: new URL(`../../pug`, import.meta.url).pathname },

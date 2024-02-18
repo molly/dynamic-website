@@ -22,10 +22,10 @@ import getWikipediaWriting from './data/filter/wikipediaWritingFilter.js';
 const PORT = process.env.PORT || 5001;
 
 const app = express();
-app.use('/static', express.static('js'));
-app.use('/static', express.static('css'));
-app.set('views', 'pug/views');
-app.set('view engine', 'pug');
+app.use('/static', express.static(new URL('js', import.meta.url).pathname));
+app.use('/static', express.static(new URL('css', import.meta.url).pathname));
+app.set('views', new URL('pug/views', import.meta.url).pathname);
+app.set('view engine', new URL('pug', import.meta.url).pathname);
 
 app.get('/press', async (req, res) => {
   const results = await getPaginatedAndFilteredFromDb('press', req);
