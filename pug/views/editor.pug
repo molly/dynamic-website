@@ -1,12 +1,41 @@
-extends ../templates/base.pug
+- var importPrefix = 'https://www.mollywhite.net'
 
-block vars
-  - var htmlClass = 'feed';
-  - var importPrefix = 'https://www.mollywhite.net'
+html(class='feed-editor', lang='en')
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(rel='icon' href=`${importPrefix || ''}/assets/images/icons/favicon.ico`)
+    link(rel='icon' href=`${importPrefix || ''}/assets/images/icons/favicon-16x16.png` sizes='16x16' type='image/png')
+    link(rel='icon' href=`${importPrefix || ''}/assets/images/icons/favicon-32x32.png` sizes='32x32' type='image/png')
+    link(rel='apple-touch-icon' href=`${importPrefix || ''}/assets/images/icons/apple-touch-icon.png` sizes='180x180')
+    link(rel='manifest', href=`${importPrefix || ''}/site.webmanifest`)
+    link(rel='stylesheet', href=`${importPrefix || ''}/assets/styles/base-styles.css`)
+    link(rel='stylesheet', href="/static/editor.css")
+    meta(name='theme-color', content='#191919')
+    block head
 
-block body
-  .content-box 
-    .editorjs
+  body
+    .editor-container
+      main
+        .content-box 
+          .content-container
+            input#title(type="text", placeholder="Post title")
+          #editorjs
+          
+          .content-container
+            hr
+            .input-group
+              label(for="slug") Slug
+              input#slug(type="text", placeholder="post-title")
 
-block post-javascript 
-  script(src="/static/editor.js")
+            .input-group
+              label(for="tags") Tags
+              input#tags
+
+            .input-group 
+              label(for="related") Related posts
+              input#related(type="text", placeholder="Post IDs")
+
+            .input-group
+              button#saveButton Save
+    script(src="/static/editor.js")

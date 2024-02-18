@@ -1,4 +1,5 @@
 import 'core-js/actual/url-search-params/index.js';
+import '../../css/reading.css';
 
 (function () {
   document.getElementById('filters').addEventListener('submit', function (e) {
