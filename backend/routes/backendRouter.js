@@ -1,10 +1,10 @@
-import express from 'express';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
+import express from 'express';
 import { ServerApiVersion } from 'mongodb';
 import db from '../models/db.js';
 import authRouter from './auth.js';
-import readingListRouter from './reading-list.js';
+import readingListRouter from './readingList.js';
 
 db.mongoose
   .connect(

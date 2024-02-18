@@ -1,7 +1,6 @@
 module.exports = {
   env: {
     node: true,
-    commonjs: true,
     es6: true,
   },
   extends: ['eslint:recommended', 'prettier'],
@@ -11,7 +10,8 @@ module.exports = {
     SharedArrayBuffer: 'readonly',
   },
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
+    sourceType: 'module',
   },
   rules: {
     'prettier/prettier': [
@@ -19,6 +19,7 @@ module.exports = {
       { singleQuote: true, tabWidth: 2, useTabs: false },
     ],
     'require-await': ['error'],
+    'comma-dangle': 0,
   },
   ignorePatterns: ['**/js/*-polyfill.js'],
 };

@@ -6,4 +6,4 @@ Small app to power the dynamic portions of my website:
 - [press page](https://www.mollywhite.net/press)
 - [wikipedia articles](https://www.mollywhite.net/wikipedia-work)
 
-The static site files can be found at [website-v2](https://github.com/molly/website-v2).
+The static site files can be found at [website-v3](https://github.com/molly/website-v3).
