@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
+import passportLocalMongoose from 'passport-local-mongoose';
+import db from './db.js';
 
-const User = mongoose.model(
-  'User',
-  new mongoose.Schema({
-    username: String,
-    password: String,
-  }),
-);
+const UserSchema = new mongoose.Schema({
+  username: { type: String, unique: true, required: true },
+});
 
-export default User;
+UserSchema.plugin(passportLocalMongoose);
+
+export default db.authConnection.model('User', UserSchema);

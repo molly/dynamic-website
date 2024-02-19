@@ -10,3 +10,4 @@ npm-debug.log
 # Symlinks
 pug/symlinks
 backend/config/
+frontend/config/

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import db from './db.js';
 
 const TagSchema = new mongoose.Schema({
   text: String,
@@ -6,13 +7,17 @@ const TagSchema = new mongoose.Schema({
   frequency: Number,
 });
 
-export const BlockchainTag = mongoose.model(
+export const BlockchainTag = db.readingListConnection.model(
   'BlockchainTag',
   TagSchema,
   'blockchainTags',
 );
-export const PressTag = mongoose.model('PressTag', TagSchema, 'pressTags');
-export const ShortformTag = mongoose.model(
+export const PressTag = db.readingListConnection.model(
+  'PressTag',
+  TagSchema,
+  'pressTags',
+);
+export const ShortformTag = db.readingListConnection.model(
   'ShortformTag',
   TagSchema,
   'shortformTags',

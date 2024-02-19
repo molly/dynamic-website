@@ -1,0 +1,23 @@
+extends ../../templates/base.pug
+
+block vars
+  - var htmlClass = 'micro';
+  - var importPrefix = 'https://www.mollywhite.net'
+
+block head
+  include ../../templates/titleAndDescription.pug
+  +titleAndDescription('Microblog login', 'Molly White microblog login')
+
+block body
+  .content-box
+    h1 Log in
+    form(action="/dynamic-api/auth/login", method="POST")
+      section
+        label(for="username") Username
+        input(type="text", id="username", name="username", autocomplete="username", required=true, autofocus=true)
+      section
+        label(for="password") Password
+        input(type="password", id="password", name="password", autocomplete="current-password", required=true)
+      section
+        input(type="hidden", id="redirect", name="redirect", value="/micro/editor")
+        button(type="submit") Log in

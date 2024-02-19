@@ -38,4 +38,8 @@ html(class='feed-editor', lang='en')
 
             .input-group
               button#saveButton Save
+
+            .input-group 
+              form(action="/micro/logout", method="POST")
+                button#signOut(type="submit") Sign out
     script(src="/static/editor.js")

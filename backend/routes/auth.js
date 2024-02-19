@@ -1,101 +1,55 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import db from '../models/db.js';
-const User = db.User;
-import config from '../config/auth.config.js';
-import { verifyJwt } from '../middlewares/jwt.js';
+import passport from 'passport';
 
 const router = express.Router();
 
+export function authenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).send({ message: 'Not authenticated' });
+}
+
 // router.post('/signup', (req, res) => {
-//   const user = new User({
-//     username: req.body.username,
-//     password: bcrypt.hashSync(req.body.password, 8),
-//   });
-//   user.save((err) => {
-//     if (err) {
-//       return res.status(500).send({ message: err });
-//     }
-//     return res.send({ message: 'Registration successful' });
-//   });
+//   User.register(
+//     new User({
+//       username: req.body.username,
+//     }),
+//     req.body.password,
+//     (err) => {
+//       if (err) {
+//         return res.status(500).send({ message: err });
+//       }
+//       return res.send({ message: 'Registration successful' });
+//     },
+//   );
 // });
 
-router.post('/signin', (req, res) => {
-  User.findOne({ username: req.body.username }).exec(async (err, user) => {
+router.post(
+  '/login',
+  passport.authenticate('local', {
+    failureRedirect: '/login?status=failed',
+  }),
+  function (req, res) {
+    if (req.body.redirect) {
+      return res.redirect(req.body.redirect);
+    }
+    return res.status(200).json({ username: req.body.username });
+  },
+);
+
+router.post('/isSignedIn', function (req, res) {
+  const isAuthenticated = req.isAuthenticated();
+  res.status(200).send({ isAuthenticated });
+});
+
+router.post('/logout', function (req, res, next) {
+  req.logout(function (err) {
     if (err) {
-      return res.status(500).send({ message: err });
+      return next(err);
     }
-    if (!user) {
-      return res.status(400).send({ message: 'User not found' });
-    }
-
-    const isValidPassword = bcrypt.compareSync(
-      req.body.password,
-      user.password,
-    );
-
-    if (!isValidPassword) {
-      return res.status(401).send({ message: 'Invalid password' });
-    }
-
-    const accessToken = jwt.sign({ id: user._id }, config.secret, {
-      expiresIn: config.tokenExpiry,
-    });
-    const refreshToken = await db.RefreshToken.createToken(user);
-
-    res.status(200).send({
-      id: user._id,
-      username: user.username,
-      accessToken,
-      refreshToken,
-    });
+    res.sendStatus(200);
   });
-});
-
-router.post('/refresh', async (req, res) => {
-  const requestToken = req.body.refreshToken;
-  if (!requestToken) {
-    return res.status(403).send({ message: 'Refresh token missing' });
-  }
-  try {
-    const refreshToken = await RefreshToken.findOne({
-      token: requestToken,
-    });
-    if (!refreshToken) {
-      return res
-        .status(403)
-        .send({ message: 'Refresh token not found in database' });
-    }
-    if (RefreshToken.isExpiredOrInvalid(refreshToken.token)) {
-      RefreshToken.findByIdAndRemove(refreshToken._id, {
-        useFindAndModify: false,
-      }).exec();
-      return res.status(403).message({
-        message: 'Refresh token expired or invalid. Please sign in again.',
-      });
-    }
-    const accessToken = jwt.sign({ id: refreshToken.user }, config.secret, {
-      expiresIn: config.tokenExpiry,
-    });
-    return res.send({ accessToken, refreshToken: refreshToken.token });
-  } catch (err) {
-    return res.status(500).send({ message: err });
-  }
-});
-
-router.post('/isSignedIn', verifyJwt, (req, res) => {
-  // verifyJwt will break if there's an error
-  return res.status(204).send();
-});
-
-router.post('/signout', (req, res, next) => {
-  try {
-    req.session = null;
-    return res.status(200).send({ message: 'Signed out' });
-  } catch (err) {
-    next(err);
-  }
 });
 
 export default router;

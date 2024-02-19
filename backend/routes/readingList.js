@@ -1,10 +1,12 @@
 import express from 'express';
 import sortBy from 'lodash.sortby';
-import { verifyJwt } from '../middlewares/jwt.js';
-import BlockchainEntry from '../models/blockchainEntry.model.js';
-import PressEntry from '../models/pressEntry.model.js';
-import ShortformEntry from '../models/shortformEntry.model.js';
+import {
+  BlockchainEntry,
+  PressEntry,
+  ShortformEntry,
+} from '../models/entry.model.js';
 import { BlockchainTag, PressTag, ShortformTag } from '../models/tag.model.js';
+import { authenticated } from './auth.js';
 
 const router = express.Router();
 
@@ -46,14 +48,14 @@ const getCollectionTags = async (model) => {
 
 router.get('/tags', async (_, res) => {
   const tags = {
-    blockchain: await getCollectionTags(BlockchainTag),
-    press: await getCollectionTags(PressTag),
-    shortform: await getCollectionTags(ShortformTag),
+    blockchain: await getCollectionTags(tagModels.blockchain),
+    press: await getCollectionTags(tagModels.press),
+    shortform: await getCollectionTags(tagModels.shortform),
   };
   res.send(tags);
 });
 
-router.post('/entry', verifyJwt, async (req, res) => {
+router.post('/entry', authenticated, async (req, res) => {
   const { type, entry } = req.body;
   const model = new models[type](entry);
   try {

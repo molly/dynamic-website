@@ -1,15 +1,24 @@
+import {
+  BlockchainEntry,
+  PressEntry,
+  ShortformEntry,
+} from '../backend/models/entry.model.js';
+import {
+  BlockchainTag,
+  PressTag,
+  ShortformTag,
+} from '../backend/models/tag.model.js';
 import { getLimit } from '../data/filter/paginate.js';
 import { formatArticleDate, getTags } from '../data/filter/preprocess.js';
-import db from '../backend/models/db.js';
 
 const getDocumentsCollection = (collection) => {
   switch (collection) {
     case 'shortform':
-      return db.ShortformEntry;
+      return ShortformEntry;
     case 'blockchain':
-      return db.BlockchainEntry;
+      return BlockchainEntry;
     case 'press':
-      return db.PressEntry;
+      return PressEntry;
     default:
       return null;
   }
@@ -18,11 +27,11 @@ const getDocumentsCollection = (collection) => {
 const getTagsCollection = (collection) => {
   switch (collection) {
     case 'shortform':
-      return db.ShortformTag;
+      return ShortformTag;
     case 'blockchain':
-      return db.BlockchainTag;
+      return BlockchainTag;
     case 'press':
-      return db.PressTag;
+      return PressTag;
     default:
       return null;
   }
@@ -121,10 +130,10 @@ export const getPaginatedAndFilteredFromDb = async (
 
 export const getLandingPageEntriesFromDb = async () => {
   try {
-    const mostRecentShortform = await db.ShortformEntry.findOne({}).sort({
+    const mostRecentShortform = await ShortformEntry.findOne({}).sort({
       started: -1,
     });
-    const mostRecentBlockchain = await db.BlockchainEntry.findOne({}).sort({
+    const mostRecentBlockchain = await BlockchainEntry.findOne({}).sort({
       started: -1,
     });
     return { mostRecentBlockchain, mostRecentShortform };
