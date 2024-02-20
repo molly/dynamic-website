@@ -11,24 +11,25 @@ block head
   +titleAndDescription('Wikipedia writing', 'My content contributions to Wikipedia')
 
 block body
-  .content-box
-    p If you are looking to get in touch with me regarding something Wikipedia-related, see my 
-      a(href="/wikipedia-contact") Wikipedia contact
-      |  information. For conversations I've had with media organizations about Wikipedia, see the 
-      a(href="/press?tags=wikipedia") "Wikipedia" tag at my press page
-      | .
+  main
+    .content-box
+      p If you are looking to get in touch with me regarding something Wikipedia-related, see my 
+        a(href="/wikipedia-contact") Wikipedia contact
+        |  information. For conversations I've had with media organizations about Wikipedia, see the 
+        a(href="/press?tags=wikipedia") "Wikipedia" tag at my press page
+        | .
 
-    h2 An incomplete list of my content contributions to Wikipedia
+      h2 An incomplete list of my content contributions to Wikipedia
 
-    include ../includes/wikipedia-filters.pug
+      include ../includes/wikipedia-filters.pug
 
-    .articles 
-      #articlesContainer 
-        include ../mixins/wikipediaArticle.pug
-        each article in results
-          +wikipediaArticle(article)
-          
-    include ../includes/paginator.pug
+      .articles 
+        #articlesContainer 
+          include ../mixins/wikipediaArticle.pug
+          each article in results
+            +wikipediaArticle(article)
+            
+      include ../includes/paginator.pug
 
 block post-javascript
   script(src="/static/reading.js")

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { DateTime } from 'luxon';
 import '../../css/feed-editor.css';
 import { getSlugFromTitle } from './helpers/editorHelpers.js';
 
@@ -16,11 +17,14 @@ import TomSelect from 'tom-select';
 
 const postMeta = {
   title: '',
-  slug: '',
+  slug: new Date().toISOString().slice(0, 16).replace(/\D/g, ''),
   tags: [],
   relatedFeedPostIds: [],
+  id: null,
 };
+let savedPost = {};
 
+// Change handlers
 function onTitleChange() {
   const slugElement = document.getElementById('slug');
   if (postMeta.slug === getSlugFromTitle(postMeta.title)) {
@@ -36,39 +40,96 @@ function onSlugChange() {
 }
 const debouncedOnSlugChange = debounce(onSlugChange, 250);
 
-const editor = new EditorJS({
-  holder: 'editorjs',
-  autofocus: true,
-  tools: {
-    header: Header,
-    image: ImageTool,
-    inlineCode: InlineCode,
-    linkTool: LinkTool,
-    list: {
-      class: List,
-      inlineToolbar: true,
-      config: { defaultStyle: 'unordered' },
+async function onFirstLoad() {
+  // Load data
+  const slug = window.location.pathname.split('/').slice(3);
+  if (slug.length) {
+    try {
+      const resp = await axios.get(`/dynamic-api/micro/entry/${slug}`);
+      if (resp) {
+        const data = resp.data;
+        savedPost = data;
+        postMeta.title = data.title;
+        postMeta.slug = data.slug;
+        postMeta.tags = data.tags;
+        postMeta.relatedFeedPostIds = data.relatedFeedPostIds;
+        postMeta.id = data.id;
+      }
+    } catch (err) {
+      if (err.response.status === 404) {
+        document.querySelector('#error-overlay .error-message').textContent =
+          `No post with the slug "${slug}" was found.`;
+        document.getElementById('loading-overlay').classList.add('hidden');
+        document.getElementById('error-overlay').classList.remove('hidden');
+        return;
+      }
+    }
+  }
+
+  // Load editor
+  const editor = new EditorJS({
+    holder: 'editorjs',
+    autofocus: true,
+    tools: {
+      header: Header,
+      image: ImageTool,
+      inlineCode: InlineCode,
+      linkTool: LinkTool,
+      list: {
+        class: List,
+        inlineToolbar: true,
+        config: { defaultStyle: 'unordered' },
+      },
+      quote: Quote,
+      raw: RawTool,
     },
-    quote: Quote,
-    raw: RawTool,
-  },
-});
-
-new TomSelect('#tags', {
-  create: true,
-});
-
-document
-  .getElementById('title')
-  .addEventListener('keydown', debouncedOnTitleChange);
-
-document
-  .getElementById('slug')
-  .addEventListener('keydown', debouncedOnSlugChange);
-
-const saveButton = document.getElementById('saveButton');
-saveButton.addEventListener('click', function () {
-  editor.save().then((savedData) => {
-    axios.post('/dynamic-api/micro/entry', { ...postMeta, post: savedData });
+    data: savedPost.post || {},
   });
-});
+
+  // Load TomSelect for tags editor
+  new TomSelect('#tags', {
+    create: true,
+  });
+
+  // Selectors
+  const titleEl = document.getElementById('title');
+  const slugEl = document.getElementById('slug');
+  // const tagsEl = document.getElementById('tags');
+  // const relatedEl = document.getElementById('related');
+  const lastEdited = document.getElementById('last-edited');
+  const saveButton = document.getElementById('save-button');
+
+  // Set initial values
+  titleEl.value = postMeta.title;
+  slugEl.value = postMeta.slug;
+  if (savedPost.updatedAt) {
+    slugEl.setAttribute('disabled', true);
+    lastEdited.textContent = `Last edited: ${DateTime.fromISO(savedPost.updatedAt).toLocaleString(DateTime.DATETIME_FULL)}`;
+  }
+
+  // Attach handlers
+  titleEl.addEventListener('keydown', debouncedOnTitleChange);
+  slugEl.addEventListener('keydown', debouncedOnSlugChange);
+  saveButton.addEventListener('click', function () {
+    editor.save().then((savedData) => {
+      if (savedPost._id) {
+        // Update
+        axios.post(`/dynamic-api/micro/entry/${savedPost._id}`, {
+          ...postMeta,
+          post: savedData,
+        });
+      } else {
+        // Create
+        axios.post('/dynamic-api/micro/entry', {
+          ...postMeta,
+          post: savedData,
+        });
+      }
+    });
+  });
+
+  // Ready
+  document.getElementById('loading-overlay').classList.add('hidden');
+}
+
+document.addEventListener('DOMContentLoaded', onFirstLoad);

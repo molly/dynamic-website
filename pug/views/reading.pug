@@ -11,38 +11,39 @@ block head
   +titleAndDescription('Reading', 'Interested in what I\'m reading these days? Check out my reading lists.', '/reading')
 
 block body
-  .content-box
-    p Interested in what I'm reading these days? Check out my reading lists.
+  main
+    .content-box
+      p Interested in what I'm reading these days? Check out my reading lists.
 
-    .reading-section
-      h3
-        a(href="/reading/shortform") Shortform reading list 
-      div.rss-link
-        img.rss-icon.bw-icon(src="https://mollywhite.net/storage/rss.svg")
-        a(href="https://mollywhite.net/reading/shortform/feed.xml", target="_blank") RSS 
-      .reading-section-body  
-        include ../mixins/currentlyReadingArticleSummary.pug
-        +currentlyReadingArticleSummary(mostRecentShortform)
+      .reading-section
+        h3
+          a(href="/reading/shortform") Shortform reading list 
+        div.rss-link
+          img.rss-icon.bw-icon(src="https://mollywhite.net/storage/rss.svg")
+          a(href="https://mollywhite.net/reading/shortform/feed.xml", target="_blank") RSS 
+        .reading-section-body  
+          include ../mixins/currentlyReadingArticleSummary.pug
+          +currentlyReadingArticleSummary(mostRecentShortform)
 
-    .reading-section
-      h3
-        a(href="/reading/blockchain") Blockchain reading list 
-      div.rss-link
-        img.rss-icon.bw-icon(src="https://mollywhite.net/storage/rss.svg")
-        a(href="https://mollywhite.net/reading/blockchain/feed.xml", target="_blank") RSS
-      .reading-section-body  
-        +currentlyReadingArticleSummary(mostRecentBlockchain)
+      .reading-section
+        h3
+          a(href="/reading/blockchain") Blockchain reading list 
+        div.rss-link
+          img.rss-icon.bw-icon(src="https://mollywhite.net/storage/rss.svg")
+          a(href="https://mollywhite.net/reading/blockchain/feed.xml", target="_blank") RSS
+        .reading-section-body  
+          +currentlyReadingArticleSummary(mostRecentBlockchain)
+            
+      .reading-section
+        h3
+          a(href="/reading/fiction") Fiction
+        .reading-section-body  
+          include ../mixins/currentlyReadingSummary.pug
+          +currentlyReadingSummary(currentlyReadingPleasure)
           
-    .reading-section
-      h3
-        a(href="/reading/fiction") Fiction
-      .reading-section-body  
-        include ../mixins/currentlyReadingSummary.pug
-        +currentlyReadingSummary(currentlyReadingPleasure)
-        
-    .reading-section
-      h3
-        a(href="/reading/nonfiction") Non-fiction
-      .reading-section-body  
-        include ../mixins/currentlyReadingSummary.pug
-        +currentlyReadingSummary(currentlyReadingReference)
+      .reading-section
+        h3
+          a(href="/reading/nonfiction") Non-fiction
+        .reading-section-body  
+          include ../mixins/currentlyReadingSummary.pug
+          +currentlyReadingSummary(currentlyReadingReference)

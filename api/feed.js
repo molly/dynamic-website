@@ -1,22 +1,21 @@
 import EditorJSHtml from 'editorjs-html';
+import { DateTime } from 'luxon';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 
 const edjsParser = EditorJSHtml();
-const ONE_DAY = 1000 * 60 * 60 * 24;
-const ONE_WEEK = ONE_DAY * 7;
-const ONE_MONTH = ONE_DAY * 30;
-
-const dateTimeFormatter = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'long',
-  timeStyle: 'short',
-  timeZone: 'EST',
-});
+const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
 
 const hydrateEntry = (entry) => {
   entry.html = edjsParser.parse(entry.post);
-  entry.absoluteTime = dateTimeFormatter.format(entry.createdAt);
-  const relativeTime = Date.now() - entry.createdAt;
+  const createdAtDt = DateTime.fromJSDate(entry.createdAt);
+  entry.absoluteTime = createdAtDt.toLocaleString(DateTime.DATETIME_FULL);
+  const relativeTime = DateTime.now() - createdAtDt;
+  if (relativeTime < ONE_MONTH) {
+    entry.humanTime = createdAtDt.toRelative();
+  } else {
+    entry.humanTime = entry.absoluteTime;
+  }
   return entry;
 };
 
@@ -37,6 +36,5 @@ export const getFeedEntries = async () => {
 
 export const getEntry = async (slug) => {
   const entry = await MicroEntry.findOne({ slug }).lean();
-  console.log(entry);
   return hydrateEntry(entry);
 };

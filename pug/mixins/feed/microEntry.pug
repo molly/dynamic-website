@@ -1,16 +1,21 @@
 mixin microEntry(entry, standalone=false)
-  .entry
+  .entry.h-entry
     header 
       .post-icon
-        include ../../icons/lightbulb.svg
-      h2
+        if standalone 
+          include ../../icons/lightbulb.svg
+        else
+          a(href=`/micro/entry/${entry.slug}`, target="_blank")
+            include ../../icons/lightbulb.svg
+      h2.p-name
         if standalone 
           | #{entry.title}
         else
-          a(href=`/micro/entry/${entry.slug}`, target="_blank") #{entry.title}
+          a.u-url(href=`/micro/entry/${entry.slug}`, target="_blank") #{entry.title}
     section.post-meta
-      | by Molly White on 
-      time(datetime=entry.createdAt.toISOString()) #{entry.datetime}
-    .post-content
+      time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
+      |  by 
+      span.h-card.p-author Molly White
+    .p-content
       each block in entry.html
         != block

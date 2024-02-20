@@ -16,8 +16,14 @@ html(class='feed-editor', lang='en')
 
   body
     .editor-container
+      #loading-overlay.overlay
+        include ../../includes/loadingSpinner
+      #error-overlay.overlay.hidden
+        .flex-column
+          h1 Error
+          p.error-message
       main
-        .content-box 
+        .content-box
           .content-container
             input#title(type="text", placeholder="Post title")
           #editorjs
@@ -36,10 +42,12 @@ html(class='feed-editor', lang='en')
               label(for="related") Related posts
               input#related(type="text", placeholder="Post IDs")
 
-            .input-group
-              button#saveButton Save
+    footer
+      .footer-controls
+        .left-group
+          button#save-button Save
+          #last-edited
 
-            .input-group 
-              form(action="/micro/logout", method="POST")
-                button#signOut(type="submit") Sign out
+        .right-group
+          button#signOut Sign out
     script(src="/static/editor.js")

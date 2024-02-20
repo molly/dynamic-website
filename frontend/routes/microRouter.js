@@ -16,6 +16,14 @@ router.get(
   },
 );
 
+router.get(
+  '/editor/:slug',
+  authenticated({ redirectTo: '/micro/login' }),
+  (req, res) => {
+    res.render('micro/editor.pug');
+  },
+);
+
 router.get('/entry/:slug', async (req, res) => {
   const entry = await getEntry(req.params.slug);
   res.render('micro/entry.pug', { entry });

@@ -12,20 +12,21 @@ block head
   +titleAndDescription('Fiction reading', 'Molly White\'s fiction reading list.')
 
 block body
-  .content-box
-    a(href="/reading") < All reading lists
-    h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Fiction reading
+  main
+    .content-box
+      a(href="/reading") < All reading lists
+      h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Fiction reading
 
-    include ../includes/filters.pug
+      include ../includes/filters.pug
 
-    .articles
-      #articlesContainer
-        include ../mixins/book.pug
-        each book in results
-          +book(book)
+      .articles
+        #articlesContainer
+          include ../mixins/book.pug
+          each book in results
+            +book(book)
 
 
-    include ../includes/paginator.pug
+      include ../includes/paginator.pug
 
 block post-javascript
   script(src="/static/reading.js")

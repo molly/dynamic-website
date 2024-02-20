@@ -28,8 +28,7 @@ html(class=`no-js ${htmlClass}`, lang='en')
   body
     .page-container
       include ./includes/navigation.pug
-      main 
-        block body
+      block body
 
     block pre-javascript
     script(src=`${importPrefix || ''}/assets/js/main.js`)

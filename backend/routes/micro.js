@@ -24,4 +24,31 @@ router.post(
   },
 );
 
+router.post(
+  '/entry/:id',
+  authenticated({ redirectTo: '/micro/login' }),
+  async function (req, res) {
+    try {
+      const result = await MicroEntry.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+      );
+      console.log(result);
+      res.sendStatus(200);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send({ error: err });
+    }
+  },
+);
+
+router.get('/entry/:slug', async (req, res) => {
+  const entry = await MicroEntry.findOne({ slug: req.params.slug });
+  if (entry) {
+    res.json(entry);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
 export default router;

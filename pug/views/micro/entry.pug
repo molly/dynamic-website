@@ -10,8 +10,9 @@ block head
   link(rel='stylesheet', href="/static/feed.css")
 
 block body
-  .content-box
-    .entries
-      #entryContainer
-        include ../../mixins/feed/microEntry.pug
-        +microEntry(entry, standalone=true)
+  main
+    .content-box
+      .entries
+        #entryContainer
+          include ../../mixins/feed/microEntry.pug
+          +microEntry(entry, standalone=true)
