@@ -1,8 +1,8 @@
+import { DateTime } from 'luxon';
 import getLocalJson from '../utils/getLocalJson.js';
 import WIKIPEDIA_DEFAULTS from '../wikipediaDefaults.js';
 import { matches } from './filter.js';
 import { paginate } from './paginate.js';
-import moment from 'moment';
 
 const { defaultArticle, topicText } = WIKIPEDIA_DEFAULTS;
 
@@ -13,8 +13,8 @@ const preprocess = (data, query) => {
     const updatedArticle = { ...defaultArticle, ...article };
 
     // Date
-    updatedArticle.date = moment(article.date, 'YYYY-MM-DD');
-    updatedArticle.formattedDate = updatedArticle.date.format('MMMM YYYY');
+    updatedArticle.date = DateTime.fromISO(article.date);
+    updatedArticle.formattedDate = updatedArticle.date.toFormat('LLLL yyyy');
 
     // Topics
     updatedArticle.topics = updatedArticle.topics.map((topic) => ({
@@ -37,12 +37,12 @@ const preprocess = (data, query) => {
   }
 
   processed.sort((a, b) => {
-    if (a.date.isSame(b.date)) {
+    if (a.date == b.date) {
       const sortA = a.sortKey || a.title;
       const sortB = b.sortKey || b.title;
       return sortA.toLowerCase().localeCompare(sortB.toLowerCase());
     }
-    if (a.date.isBefore(b.date)) {
+    if (a.date < b.date) {
       return query.order === 'reverse' ? -1 : 1;
     }
     return query.order === 'reverse' ? 1 : -1;

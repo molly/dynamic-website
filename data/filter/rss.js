@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import pug from 'pug';
 
 // Trim the summary to length characters without splitting words, then append ellipses
@@ -71,10 +71,10 @@ const getRssResults = (data, template) => {
     article.rssSummary = makeSummary(article);
     if (!article.entryAdded) {
       if (article.started) {
-        article.entryAdded = moment(article.started).toISOString();
+        article.entryAdded = DateTime.fromISO(article.started).toISO();
       }
     } else {
-      article.entryAdded = moment(article.entryAdded).toISOString();
+      article.entryAdded = DateTime.fromISO(article.entryAdded).toISO();
     }
 
     return article;

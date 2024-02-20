@@ -1,13 +1,13 @@
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
-const formatDate = (dateMoment, rawDate) => {
-  if (dateMoment.year() !== 1970) {
+const formatDate = (dt, rawDate) => {
+  if (dt.year !== 1970) {
     if (rawDate.match(/^\d{4}-\d{1,2}-\d{1,2}$/m)) {
-      return dateMoment.format('MMMM D, YYYY');
+      return dt.toLocaleString(DateTime.DATE_FULL);
     } else if (rawDate.match(/^\d{4}-\d{1,2}$/m)) {
-      return dateMoment.format('MMMM YYYY');
+      return dt.toFormat('LLLL yyyy');
     } else if (rawDate.match(/^\d{4}$/m)) {
-      return dateMoment.year().toString();
+      return dt.year.toString();
     }
     return null;
   }
@@ -16,24 +16,16 @@ const formatDate = (dateMoment, rawDate) => {
 export const formatArticleDate = (article) => {
   const dates = {};
   if (article.date) {
-    const m = moment(article.date, ['YYYY-MM-DD', 'YYYY-MM', 'YYYY']);
-    dates.formattedDate = formatDate(m, article.date);
+    const dt = DateTime.fromISO(article.date);
+    dates.formattedDate = formatDate(dt, article.date);
   }
   if (article.started) {
-    const startedMoment = moment(article.started, [
-      'YYYY-MM-DD',
-      'YYYY-MM',
-      'YYYY',
-    ]);
-    dates.formattedStarted = formatDate(startedMoment, article.started);
+    const startedDt = DateTime.fromISO(article.started);
+    dates.formattedStarted = formatDate(startedDt, article.started);
   }
   if (article.completed) {
-    const completedMoment = moment(article.completed, [
-      'YYYY-MM-DD',
-      'YYYY-MM',
-      'YYYY',
-    ]);
-    dates.formattedCompleted = formatDate(completedMoment, article.completed);
+    const completedDt = DateTime.fromISO(article.completed);
+    dates.formattedCompleted = formatDate(completedDt, article.completed);
   }
   return dates;
 };

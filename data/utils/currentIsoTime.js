@@ -1,3 +1,3 @@
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
-console.log(moment().toISOString());
+console.log(DateTime.now().toISO());

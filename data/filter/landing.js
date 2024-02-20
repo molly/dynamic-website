@@ -1,9 +1,8 @@
-import moment from 'moment';
-import MOMENT_FORMATS from '../constants/momentFormats.js';
-import getLocalJson from '../utils/getLocalJson.js';
-import { makeSortBySimpleDateKey } from '../utils/dateUtils.js';
-import BOOK_DEFAULTS from '../books/bookDefaults.js';
+import { DateTime } from 'luxon';
 import { getLandingPageEntriesFromDb } from '../../api/client.js';
+import BOOK_DEFAULTS from '../books/bookDefaults.js';
+import { makeSortBySimpleDateKey } from '../utils/dateUtils.js';
+import getLocalJson from '../utils/getLocalJson.js';
 
 const processTags = (item, tagText) => {
   item.tags = item.tags.map((tag) => ({
@@ -33,9 +32,9 @@ const getBooksOfStatusSortedByStartDate = (
       booksOfStatus.sort(makeSortBySimpleDateKey('started'));
     }
     if (recentOnly) {
-      const monthAgo = moment().subtract(1, 'month');
-      return booksOfStatus.filter((book) =>
-        moment(book.started, MOMENT_FORMATS).isAfter(monthAgo),
+      const monthAgo = DateTime.now().minus({ months: 1 });
+      return booksOfStatus.filter(
+        (book) => DateTime.fromISO(book.started) > monthAgo,
       );
     }
     return booksOfStatus;
