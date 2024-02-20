@@ -1,0 +1,26 @@
+.entries {
+  margin-left: 40px;
+}
+
+.entry:not(:last-child) {
+  border-bottom: 1px solid var(--hr-color);
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+}
+
+.entry header {
+  position: relative;
+}
+
+.entry section.post-meta {
+  color: var(--timestamp-color);
+  font-size: 0.8em;
+}
+
+.post-icon {
+  position: absolute;
+  left: -30px;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+}

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import '../../css/feed-editor.css';
 import { getSlugFromTitle } from './helpers/editorHelpers.js';
 
@@ -17,7 +18,7 @@ const postMeta = {
   title: '',
   slug: '',
   tags: [],
-  relatedPosts: [],
+  relatedFeedPostIds: [],
 };
 
 function onTitleChange() {
@@ -68,6 +69,6 @@ document
 const saveButton = document.getElementById('saveButton');
 saveButton.addEventListener('click', function () {
   editor.save().then((savedData) => {
-    console.log(savedData);
+    axios.post('/dynamic-api/micro/entry', { ...postMeta, post: savedData });
   });
 });

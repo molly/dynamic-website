@@ -3,11 +3,15 @@ import passport from 'passport';
 
 const router = express.Router();
 
-export function authenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(401).send({ message: 'Not authenticated' });
+export function authenticated({ redirectTo }) {
+  return (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return next();
+    } else if (redirectTo) {
+      return res.redirect(redirectTo);
+    }
+    res.status(401).send({ message: 'Not authenticated' });
+  };
 }
 
 // router.post('/signup', (req, res) => {

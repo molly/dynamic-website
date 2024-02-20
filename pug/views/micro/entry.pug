@@ -1,0 +1,17 @@
+extends ../../templates/base.pug
+
+block vars
+  - var htmlClass = 'micro';
+  - var importPrefix = 'https://www.mollywhite.net'
+
+block head
+  include ../../templates/titleAndDescription.pug
+  +titleAndDescription(entry.title, "Entry in Molly White's microblog")
+  link(rel='stylesheet', href="/static/feed.css")
+
+block body
+  .content-box
+    .entries
+      #entryContainer
+        include ../../mixins/feed/microEntry.pug
+        +microEntry(entry, standalone=true)

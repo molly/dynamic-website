@@ -1,4 +1,5 @@
 import express from 'express';
+import feedRouter from './feedRouter.js';
 import microRouter from './microRouter.js';
 import pressRouter from './pressRouter.js';
 import readingListRouter from './readingList.js';
@@ -10,5 +11,6 @@ app.use('/reading', readingListRouter);
 app.use('/press', pressRouter);
 app.use('/wikipedia-work', wikipediaRouter);
 app.use('/micro', microRouter);
+app.use('/feed', feedRouter);
 
 export default app;
