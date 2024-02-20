@@ -1,7 +1,6 @@
-import moment from 'moment';
-import { makeSortByWeek } from '../utils/weekUtils.js';
+import { DateTime } from 'luxon';
 import { makeSortBySimpleDateKey } from '../utils/dateUtils.js';
-import MOMENT_FORMATS from '../constants/momentFormats.js';
+import { makeSortByWeek } from '../utils/weekUtils.js';
 
 export const matches = (maybeValue, search) => {
   if (!maybeValue) {
@@ -22,26 +21,18 @@ export const filter = ({ results }, req, { defaultKey }) => {
 
   // DATES
   if (req.query.startDate) {
-    const startMoment = moment(req.query.startDate, [
-      'YYYY-MM-DD',
-      'YYYY-MM',
-      'YYYY',
-    ]);
+    const startDt = DateTime.fromISO(req.query.startDate);
     filteredResults = filteredResults.filter((article) => {
-      const m = moment(article.date, MOMENT_FORMATS);
-      return m.isSameOrAfter(startMoment);
+      const dt = DateTime.fromISO(article.date);
+      return dt >= startDt;
     });
   }
 
   if (req.query.endDate) {
-    const endMoment = moment(req.query.endDate, [
-      'YYYY-MM-DD',
-      'YYYY-MM',
-      'YYYY',
-    ]);
+    const endDt = DateTime.fromISO(req.query.endDate);
     filteredResults = filteredResults.filter((article) => {
-      const m = moment(article.date, MOMENT_FORMATS);
-      return m.isSameOrBefore(endMoment);
+      const dt = DateTime.fromISO(article.date);
+      return dt <= endDt;
     });
   }
 

@@ -21,4 +21,12 @@ module.exports = {
     'require-await': ['error'],
     'comma-dangle': 0,
   },
+  overrides: [
+    {
+      files: ['**/*.test.js'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 };
