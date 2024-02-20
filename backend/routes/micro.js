@@ -11,12 +11,12 @@ router.post(
   async function (req, res) {
     try {
       const microEntryId = new mongoose.Types.ObjectId();
-      await new MicroEntry({
+      const result = await new MicroEntry({
         ...req.body,
         _id: microEntryId,
       }).save();
       await new FeedEntryMicro({ type: 'micro', micro: microEntryId }).save();
-      res.sendStatus(200);
+      res.json(result);
     } catch (err) {
       console.log(err);
       res.status(500).send({ error: err });
@@ -29,12 +29,22 @@ router.post(
   authenticated({ redirectTo: '/micro/login' }),
   async function (req, res) {
     try {
-      const result = await MicroEntry.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-      );
-      console.log(result);
-      res.sendStatus(200);
+      const entry = await MicroEntry.findById(req.params.id);
+      if (!entry) {
+        res.sendStatus(404);
+        return;
+      }
+      Object.keys(req.body)
+        .filter(
+          (key) => !['_id', 'createdAt', 'updatedAt', '__v'].includes(key),
+        )
+        .forEach((key) => {
+          if (entry[key] !== req.body[key]) {
+            entry[key] = req.body[key];
+          }
+        });
+      const result = await entry.save();
+      res.json(result);
     } catch (err) {
       console.log(err);
       res.status(500).send({ error: err });

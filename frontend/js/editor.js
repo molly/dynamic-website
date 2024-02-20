@@ -40,6 +40,28 @@ function onSlugChange() {
 }
 const debouncedOnSlugChange = debounce(onSlugChange, 250);
 
+function updateModelFromDb(data) {
+  savedPost = data;
+  postMeta.title = data.title;
+  postMeta.slug = data.slug;
+  postMeta.tags = data.tags;
+  postMeta.relatedFeedPostIds = data.relatedFeedPostIds;
+  postMeta.id = data.id;
+}
+
+function setInputValues() {
+  const titleEl = document.getElementById('title');
+  const slugEl = document.getElementById('slug');
+  const lastEdited = document.getElementById('last-edited');
+
+  titleEl.value = postMeta.title;
+  slugEl.value = postMeta.slug;
+  if (savedPost.updatedAt) {
+    slugEl.setAttribute('disabled', true);
+    lastEdited.textContent = `Last edited: ${DateTime.fromISO(savedPost.updatedAt).toLocaleString(DateTime.DATETIME_FULL)}`;
+  }
+}
+
 async function onFirstLoad() {
   // Load data
   const slug = window.location.pathname.split('/').slice(3);
@@ -47,13 +69,9 @@ async function onFirstLoad() {
     try {
       const resp = await axios.get(`/dynamic-api/micro/entry/${slug}`);
       if (resp) {
-        const data = resp.data;
-        savedPost = data;
-        postMeta.title = data.title;
-        postMeta.slug = data.slug;
-        postMeta.tags = data.tags;
-        postMeta.relatedFeedPostIds = data.relatedFeedPostIds;
-        postMeta.id = data.id;
+        updateModelFromDb(resp.data);
+      } else {
+        throw new Error('No post found');
       }
     } catch (err) {
       if (err.response.status === 404) {
@@ -96,35 +114,31 @@ async function onFirstLoad() {
   const slugEl = document.getElementById('slug');
   // const tagsEl = document.getElementById('tags');
   // const relatedEl = document.getElementById('related');
-  const lastEdited = document.getElementById('last-edited');
   const saveButton = document.getElementById('save-button');
 
   // Set initial values
-  titleEl.value = postMeta.title;
-  slugEl.value = postMeta.slug;
-  if (savedPost.updatedAt) {
-    slugEl.setAttribute('disabled', true);
-    lastEdited.textContent = `Last edited: ${DateTime.fromISO(savedPost.updatedAt).toLocaleString(DateTime.DATETIME_FULL)}`;
-  }
+  setInputValues();
 
   // Attach handlers
   titleEl.addEventListener('keydown', debouncedOnTitleChange);
   slugEl.addEventListener('keydown', debouncedOnSlugChange);
   saveButton.addEventListener('click', function () {
+    saveButton.setAttribute('disabled', true);
     editor.save().then((savedData) => {
-      if (savedPost._id) {
-        // Update
-        axios.post(`/dynamic-api/micro/entry/${savedPost._id}`, {
+      // Update or create
+      const endpoint = savedPost._id
+        ? `/dynamic-api/micro/entry/${savedPost._id}`
+        : '/dynamic-api/micro/entry';
+      axios
+        .post(endpoint, {
           ...postMeta,
           post: savedData,
+        })
+        .then((resp) => {
+          updateModelFromDb(resp.data);
+          setInputValues();
+          saveButton.removeAttribute('disabled');
         });
-      } else {
-        // Create
-        axios.post('/dynamic-api/micro/entry', {
-          ...postMeta,
-          post: savedData,
-        });
-      }
     });
   });
 
