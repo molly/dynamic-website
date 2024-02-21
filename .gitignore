@@ -7,7 +7,9 @@ npm-debug.log
 *.dev
 .DS_Store
 
-# Symlinks
-pug/symlinks
+dist/
 backend/config/
 frontend/config/
+
+# Symlinks
+pug/symlinks
