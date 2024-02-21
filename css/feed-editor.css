@@ -20,7 +20,13 @@
   margin-bottom: 1rem;
 }
 
-input[type='text'] {
+label {
+  display: block;
+}
+
+input#title,
+input#slug,
+input#related {
   border: none;
   width: 100%;
 }
@@ -42,7 +48,7 @@ footer {
   bottom: 0;
   width: 100%;
   background-color: var(--note-background-color);
-  padding: 1em 0;
+  padding: 1em;
 }
 
 .footer-controls {

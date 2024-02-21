@@ -29,7 +29,7 @@ export const getFeedEntries = async () => {
   const entries = await FeedEntry.find()
     .sort({ createdAt: -1 })
     .limit(20)
-    .populate({ path: 'micro', model: MicroEntry })
+    .populate({ path: 'micro', model: MicroEntry, populate: { path: 'tags' } })
     .lean();
   return hydrateFeedEntries(entries);
 };

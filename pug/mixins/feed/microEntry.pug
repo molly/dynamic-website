@@ -7,11 +7,12 @@ mixin microEntry(entry, standalone=false)
         else
           a(href=`/micro/entry/${entry.slug}`, target="_blank")
             include ../../icons/lightbulb.svg
-      h2.p-name
-        if standalone 
-          | #{entry.title}
-        else
-          a.u-url(href=`/micro/entry/${entry.slug}`, target="_blank") #{entry.title}
+      if entry.title
+        h2.p-name
+          if standalone 
+            | #{entry.title}
+          else
+            a.u-url(href=`/micro/entry/${entry.slug}`, target="_blank") #{entry.title}
     section.post-meta
       time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
       |  by 
@@ -19,3 +20,8 @@ mixin microEntry(entry, standalone=false)
     .p-content
       each block in entry.html
         != block
+
+    if entry.tags && entry.tags.length
+      .tags
+        each tag in entry.tags 
+          a.tag(href=`/micro/tag/${tag.value}`) #{tag.text}

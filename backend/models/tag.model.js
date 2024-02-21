@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import db from './db.js';
 
-const TagSchema = new mongoose.Schema({
+export const TagSchema = new mongoose.Schema({
   text: String,
   value: String,
   frequency: Number,

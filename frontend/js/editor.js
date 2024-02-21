@@ -23,6 +23,7 @@ const postMeta = {
   id: null,
 };
 let savedPost = {};
+let tagSelect;
 
 // Change handlers
 function onTitleChange() {
@@ -56,6 +57,7 @@ function setInputValues() {
 
   titleEl.value = postMeta.title;
   slugEl.value = postMeta.slug;
+  tagSelect.setValue(postMeta.tags);
   if (savedPost.updatedAt) {
     slugEl.setAttribute('disabled', true);
     lastEdited.textContent = `Last edited: ${DateTime.fromISO(savedPost.updatedAt).toLocaleString(DateTime.DATETIME_FULL)}`;
@@ -74,13 +76,14 @@ async function onFirstLoad() {
         throw new Error('No post found');
       }
     } catch (err) {
-      if (err.response.status === 404) {
+      if (err && err.response && err.response.status === 404) {
         document.querySelector('#error-overlay .error-message').textContent =
           `No post with the slug "${slug}" was found.`;
         document.getElementById('loading-overlay').classList.add('hidden');
         document.getElementById('error-overlay').classList.remove('hidden');
         return;
       }
+      throw err;
     }
   }
 
@@ -105,14 +108,17 @@ async function onFirstLoad() {
   });
 
   // Load TomSelect for tags editor
-  new TomSelect('#tags', {
+  const { data: tagOptions } = await axios.get('/dynamic-api/micro/tags');
+  tagSelect = new TomSelect('#tags', {
     create: true,
+    items: postMeta.tags,
+    valueField: '_id',
+    options: tagOptions,
   });
 
   // Selectors
   const titleEl = document.getElementById('title');
   const slugEl = document.getElementById('slug');
-  // const tagsEl = document.getElementById('tags');
   // const relatedEl = document.getElementById('related');
   const saveButton = document.getElementById('save-button');
 
@@ -122,6 +128,16 @@ async function onFirstLoad() {
   // Attach handlers
   titleEl.addEventListener('keydown', debouncedOnTitleChange);
   slugEl.addEventListener('keydown', debouncedOnSlugChange);
+
+  // TomSelect uses .on
+  tagSelect.on('change', function (value) {
+    if (value) {
+      postMeta.tags = value.split(',');
+    } else {
+      postMeta.tags = [];
+    }
+  });
+
   saveButton.addEventListener('click', function () {
     saveButton.setAttribute('disabled', true);
     editor.save().then((savedData) => {
@@ -135,6 +151,14 @@ async function onFirstLoad() {
           post: savedData,
         })
         .then((resp) => {
+          return Promise.all([
+            Promise.resolve(resp),
+            axios.get('/dynamic-api/micro/tags'),
+          ]);
+        })
+        .then(([resp, tags]) => {
+          tagSelect.clearOptions();
+          tagSelect.addOptions(tags.data);
           updateModelFromDb(resp.data);
           setInputValues();
           saveButton.removeAttribute('disabled');

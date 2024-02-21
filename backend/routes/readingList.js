@@ -22,9 +22,8 @@ const tagModels = {
   shortform: ShortformTag,
 };
 
-const updateTags = async (type, entry) => {
+const updateTags = async (TagModel, entry) => {
   if (entry.tags && entry.tags.length) {
-    const TagModel = tagModels[type];
     for (const tag of entry.tags) {
       let tagRecord = await TagModel.findOne({ value: tag });
       if (tagRecord) {
@@ -60,7 +59,7 @@ router.post('/entry', authenticated, async (req, res) => {
   const model = new models[type](entry);
   try {
     await model.save();
-    await updateTags(type, entry);
+    await updateTags(tagModels[type], entry);
     return res.status(204).send();
   } catch (err) {
     return res.status(400).send({ message: err });
