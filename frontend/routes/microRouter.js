@@ -4,8 +4,13 @@ import { authenticated } from '../../backend/routes/auth.js';
 
 const router = express.Router();
 
+// Editing
 router.get('/login', (req, res) => {
-  res.render('micro/login.pug');
+  if (req.isAuthenticated()) {
+    res.redirect('/micro/editor');
+  } else {
+    res.render('micro/login.pug');
+  }
 });
 
 router.get(
@@ -24,6 +29,7 @@ router.get(
   },
 );
 
+// View
 router.get('/entry/:slug', async (req, res) => {
   const entry = await getEntry(req.params.slug);
   res.render('micro/entry.pug', { entry });
