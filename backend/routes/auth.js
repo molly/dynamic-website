@@ -3,7 +3,7 @@ import passport from 'passport';
 
 const router = express.Router();
 
-export function authenticated({ redirectTo }) {
+export function authenticated({ redirectTo } = {}) {
   return (req, res, next) => {
     if (req.isAuthenticated()) {
       return next();

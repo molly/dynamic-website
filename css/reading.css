@@ -226,6 +226,9 @@
 .wikipedia-writing .book {
   display: flex;
 }
+.reading .book a.book-cover-link {
+  background: none;
+}
 .reading .book .book-cover,
 .wikipedia-writing .book .book-cover {
   max-width: 10rem;

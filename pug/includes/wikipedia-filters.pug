@@ -6,8 +6,8 @@
     fieldset#tags.tags
       each topic in allTopics
         .button-group
-          button.tag(
-            onclick='onTagClick("' + topic.value + '")',
+          button.tag.category-tag(
+            data-tag=topic.value,
             aria-pressed=query.topics.includes(topic.value).toString()
             type="button"
           ) #{topic.text}
@@ -19,21 +19,19 @@
         .checkbox-group
           input(
             type="checkbox"
-            name="created"
+            name="wikipedia"
             value="Created" 
             checked=query.created
             id="created"
-            onclick='onCheckboxClick("created")'  
           )
           label(for="created") Created
         .checkbox-group
           input(
             type="checkbox"
-            name="translation"
+            name="wikipedia"
             value="Translation" 
             checked=query.translation
             id="translation"
-            onclick='onCheckboxClick("translation")'
           )
           label(for="translation") Translation
 
@@ -41,21 +39,19 @@
         .checkbox-group
           input(
             type="checkbox"
-            name="biography"
+            name="wikipedia"
             value="Biography" 
             checked=query.bio
             id="biography"
-            onclick='onCheckboxClick("bio")'  
           )
           label(for="biography") Biography
         .checkbox-group
           input(
             type="checkbox"
-            name="wir"
+            name="wikipedia"
             value="Women in Red" 
             checked=query.wir
             id="wir"
-            onclick='onCheckboxClick("wir")'  
           )
           label(for="wir") Women in Red 
         
@@ -63,21 +59,19 @@
         .checkbox-group
           input(
             type="checkbox"
-            name="ga"
+            name="wikipedia"
             value="Good article" 
             checked=query.ga
             id="ga"
-            onclick='onCheckboxClick("ga")'
           )
           label(for="ga") Good article
         .checkbox-group
           input(
             type="checkbox"
-            name="dyk"
+            name="wikipedia"
             value="Did you know" 
             checked=query.dyk
             id="dyk"
-            onclick='onCheckboxClick("dyk")'
           )
           label(for="dyk") Did you know
 
@@ -91,7 +85,7 @@
         )
         button#search-submit(type="submit") Search
 
-    button.link-styled(type="button", onClick='clearFilters()') Clear filters
+    button#clear-filters.link-styled(type="button") Clear filters
 
   .filter-subtext
     span.article-count 
@@ -100,9 +94,9 @@
       else
         | #{totalUnfilteredResults} results
 
-    button.link-styled(
+    button#sort-order.link-styled(
       type="button",
-      onclick='changeSortOrder("' + (query.order === 'reverse' ? 'normal' : 'reverse') + '")'
+      data-order=query.order
     )
       i(
         class=['fas', query.order === 'reverse' ? 'fa-caret-up' : 'fa-caret-down']

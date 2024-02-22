@@ -6,30 +6,29 @@ if totalPages
         - var endPage = Math.min(totalPages, startPage + 20)
         
         if startPage !== 1
-          button(
-            onClick='onPageChangeClick(1)',
+          button#jump-to-start(
             aria-pressed=false
             type="button"
           ) <<
           span ...
         - for (var pageNumber = startPage; pageNumber <= endPage; pageNumber++)
-          button(
-            onClick='onPageChangeClick(' + pageNumber + ')',
+          button.page-number-button(
+            data-page-number=pageNumber,
             aria-pressed=pageNumber === currentPage
             type="button"
           ) #{pageNumber}
         if endPage !== totalPages
           span ...
-          button(
-            onClick='onPageChangeClick(' + totalPages + ')',
+          button#jump-to-end(
+            data-last-page=totalPages,
             aria-pressed=false
             type="button"
           ) >>
 
       else
         - for (var pageNumber = 1; pageNumber <= totalPages; pageNumber++)
-          button(
-            onClick='onPageChangeClick(' + pageNumber + ')',
+          button.page-number-button(
+            data-page-number=pageNumber,
             aria-pressed=pageNumber === currentPage
             type="button"
           ) #{pageNumber}

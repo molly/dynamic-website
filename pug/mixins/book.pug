@@ -2,7 +2,7 @@ mixin book(book)
   .book
     if book.imageSrc 
       if book.href && !shortForm
-        a(href=book.href)
+        a.book-cover-link(href=book.href)
           img(
             class={'book-cover': true, 'bordered': book.border},
             src=book.imageSrc,

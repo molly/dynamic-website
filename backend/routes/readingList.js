@@ -54,7 +54,7 @@ router.get('/tags', async (_, res) => {
   res.send(tags);
 });
 
-router.post('/entry', authenticated, async (req, res) => {
+router.post('/entry', authenticated(), async (req, res) => {
   const { type, entry } = req.body;
   const model = new models[type](entry);
   try {

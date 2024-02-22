@@ -6,8 +6,8 @@
     fieldset#tags.tags
       each tag in allTags
         .button-group
-          button.tag(
-            onclick='onTagClick("' + tag.value + '")',
+          button.tag.category-tag(
+            data-tag=tag.value
             aria-pressed=query.tags.includes(tag.value).toString()
             type="button"
           ) #{tag.text}
@@ -19,8 +19,8 @@
       fieldset#status.tags
         each status in READING_STATUSES_LIST 
           .button-group
-            button.tag(
-              onclick='onStatusClick("' + status.value + '")',
+            button.tag.status-tag(
+              data-tag=status.value
               aria-pressed=query.statuses.includes(status.value).toString()
               type="button"
             ) #{status.text}
@@ -35,7 +35,7 @@
         )
         button#search-submit(type="submit") Search
 
-    button.link-styled(type="button", onClick='clearFilters()') Clear filters
+    button#clear-filters.link-styled(type="button") Clear filters
 
   .filter-subtext
     span.article-count 
@@ -44,9 +44,9 @@
       else
         | #{totalUnfilteredResults} results
 
-    button.link-styled(
+    button#sort-order.link-styled(
       type="button",
-      onclick='changeSortOrder("' + (query.order === 'reverse' ? 'normal' : 'reverse') + '")'
+      data-order=query.order
     )
       i(
         class=['fas', query.order === 'reverse' ? 'fa-caret-up' : 'fa-caret-down']
