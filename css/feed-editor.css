@@ -1,4 +1,6 @@
+@import './feed-shared.css';
 @import 'tom-select/dist/css/tom-select.bootstrap4.css';
+
 .editor-container {
   padding-top: 5rem;
   padding-bottom: 3rem;

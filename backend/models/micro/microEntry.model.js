@@ -3,7 +3,7 @@ import db from '../db.js';
 
 const MicroEntrySchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
+    title: { type: String },
     slug: { type: String, required: true, unique: true },
     post: { type: Object, required: true },
     tags: [

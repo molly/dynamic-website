@@ -6,16 +6,15 @@ block vars
 
 block head
   include ../../templates/titleAndDescription.pug
-  +titleAndDescription('Feed', "Molly White's activity feed")
+  +titleAndDescription('Micro feed', "Feed of Molly White's microblog posts")
   link(rel='stylesheet', href="/static/feed.css")
 
 block body
-  main.content-box.h-feed.hfeed
+  main.content-box.h-feed
     if options.tag
-      h1.p-name.site-title Activity tagged "#{options.tag}"
+      h1.p-name.site-title Thoughts tagged "#{options.tag}"
     else
-      h1.p-name.site-title Activity
-
+      h1.p-name.site-title Thoughts
     include ../../mixins/feed/microEntry.pug
     each entry in entries
-      +microEntry(entry.micro, options)
+      +microEntry(entry, options)

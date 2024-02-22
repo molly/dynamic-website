@@ -5,7 +5,10 @@ const router = express.Router();
 
 router.get('/', async function (req, res) {
   const entries = await getFeedEntries();
-  res.render('feed/index.pug', { entries });
+  res.render('feed/index.pug', {
+    entries,
+    options: { isInFeed: true, isLoggedIn: req.isAuthenticated() },
+  });
 });
 
 export default router;

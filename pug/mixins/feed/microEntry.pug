@@ -1,22 +1,27 @@
-mixin microEntry(entry, standalone=false)
-  .entry.h-entry
-    header 
-      .post-icon
-        if standalone 
-          include ../../icons/lightbulb.svg
-        else
-          a(href=`/micro/entry/${entry.slug}`, target="_blank")
+mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {})
+  article.entry.h-entry
+    header
+      if isInFeed
+        .post-icon.icon
+          if standalone
             include ../../icons/lightbulb.svg
+          else
+            a(href=`/micro/entry/${entry.slug}`, target="_blank")
+              include ../../icons/lightbulb.svg
       if entry.title
         h2.p-name
           if standalone 
             | #{entry.title}
           else
-            a.u-url(href=`/micro/entry/${entry.slug}`, target="_blank") #{entry.title}
+            a.u-url(href=`/micro/entry/${entry.slug}`, target="_blank", rel="bookmark") #{entry.title}
     section.post-meta
       time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
       |  by 
       span.h-card.p-author Molly White
+      if isLoggedIn
+        span.edit-icon.icon
+          a(href=`/micro/editor/${entry.slug}`)
+            include ../../icons/pencil.svg
     .p-content
       each block in entry.html
         != block
@@ -24,4 +29,4 @@ mixin microEntry(entry, standalone=false)
     if entry.tags && entry.tags.length
       .tags
         each tag in entry.tags 
-          a.tag(href=`/micro/tag/${tag.value}`) #{tag.text}
+          a.tag(href=`/micro/tag/${tag.value}`,title=`See all micro posts tagged "${tag.text}"`) #{tag.text}

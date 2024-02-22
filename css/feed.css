@@ -1,3 +1,5 @@
+@import './feed-shared.css';
+
 .content-box {
   margin-left: 40px;
 }
@@ -8,6 +10,7 @@
   margin-bottom: 40px;
 }
 
+/* Header */
 .entry header {
   position: relative;
 }
@@ -21,14 +24,21 @@
   position: absolute;
   left: -30px;
   top: 2px;
-  width: 18px;
-  height: 18px;
 }
 
-.post-icon a {
+.edit-icon {
+  width: 15px;
+  height: 15px;
   background: none;
+  margin-left: 0.2em;
 }
 
+/* Content */
+.p-content p:first-child {
+  margin-top: 0;
+}
+
+/* Footer */
 .tag {
   font-size: 0.7em;
   padding: 0.1em 0.2em;
