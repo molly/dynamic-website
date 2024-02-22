@@ -4,6 +4,11 @@
   margin-left: 40px;
 }
 
+h1.site-title {
+  margin-bottom: 1em;
+}
+
+/* Entry */
 .entry:not(:last-child) {
   border-bottom: 1px solid var(--hr-color);
   padding-bottom: 20px;

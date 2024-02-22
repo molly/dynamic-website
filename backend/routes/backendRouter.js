@@ -10,6 +10,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', readingListRouter);
 app.use('/auth', authRouter);
-app.use('/micro', microRouter);
+
+if (process.argv[2] !== 'prod') {
+  // Feature flag
+  app.use('/micro', microRouter);
+}
 
 export default app;
