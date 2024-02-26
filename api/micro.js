@@ -2,7 +2,15 @@ import EditorJSHtml from 'editorjs-html';
 import { DateTime } from 'luxon';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 
-const edjsParser = EditorJSHtml();
+const edjsParser = EditorJSHtml({
+  image: ({ data }) => {
+    let alt = data.alt ? data.alt : 'Image';
+    return `<img src="${
+      data.file && data.file.url ? data.file.url : data.url
+    }" alt="${alt}" />`;
+  },
+});
+
 const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
 
 export const hydrateEntry = (entry) => {
