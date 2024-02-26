@@ -6,16 +6,13 @@ mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {
           if standalone
             include ../../icons/lightbulb.svg
           else
-            a(href=`/micro/entry/${entry.slug}`, target="_blank")
+            a(href=`/micro/entry/${entry.slug}`)
               include ../../icons/lightbulb.svg
       if entry.title
-        h2.p-name
-          if standalone 
-            | #{entry.title}
-          else
-            a.u-url(href=`/micro/entry/${entry.slug}`, target="_blank", rel="bookmark") #{entry.title}
+        h2.p-name #{entry.title}
     section.post-meta
-      time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
+      a(href=`/micro/entry/${entry.slug}`)
+        time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
       |  by 
       span.h-card.p-author Molly White
       if isLoggedIn

@@ -100,6 +100,7 @@ async function onFirstLoad() {
             byFile: '/dynamic-api/micro/image/byFile',
             byUrl: '/dynamic-api/micro/image/byUrl',
           },
+          types: 'image/*, video/*',
         },
       },
       inlineCode: InlineCode,

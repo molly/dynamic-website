@@ -9,6 +9,10 @@ h1.site-title {
 }
 
 /* Entry */
+.entry {
+  width: 100%;
+}
+
 .entry:not(:last-child) {
   border-bottom: 1px solid var(--hr-color);
   padding-bottom: 20px;
@@ -39,8 +43,35 @@ h1.site-title {
 }
 
 /* Content */
-.p-content p:first-child {
+.entry .p-content p:first-child {
   margin-top: 0;
+}
+
+.entry .p-content img,
+.entry .p-content video {
+  max-width: 40rem;
+}
+
+.entry .p-content img.full-width,
+.entry .p-content video.full-width {
+  max-width: 80rem;
+}
+
+.entry .p-content img.vertical,
+.entry .p-content video.vertical {
+  max-height: 40rem;
+}
+
+.entry .p-content img.bordered,
+.entry .p-content video.bordered {
+  border: 1px solid var(--table-border-color) !important;
+  padding: 1rem;
+}
+
+.entry .p-content img.backgrounded,
+.entry .p-content video.backgrounded {
+  background: var(--note-background-color);
+  padding: 1rem;
 }
 
 /* Footer */

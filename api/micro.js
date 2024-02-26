@@ -2,16 +2,32 @@ import EditorJSHtml from 'editorjs-html';
 import { DateTime } from 'luxon';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 
+const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
+
 const edjsParser = EditorJSHtml({
   image: ({ data }) => {
-    let alt = data.alt ? data.alt : 'Image';
-    return `<img src="${
-      data.file && data.file.url ? data.file.url : data.url
-    }" alt="${alt}" />`;
+    const source = data.file && data.file.url ? data.file.url : data.url;
+    const classes = [];
+    if (data.classes) {
+      classes.push(data.classes);
+    }
+    if (data.withBorder) {
+      classes.push('bordered');
+    }
+    if (data.stretched) {
+      classes.push('full-width');
+    }
+    if (data.withBackground) {
+      classes.push('backgrounded');
+    }
+
+    if (data.file?.contentType?.startsWith('video/')) {
+      return `<video controls class="${classes.join(' ')}" src="${source}" alt="${data.alt || 'Video'}" />`;
+    } else {
+      return `<img class="${classes.join(' ')}" src="${source}" alt="${data.alt || 'Image'}" />`;
+    }
   },
 });
-
-const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
 
 export const hydrateEntry = (entry) => {
   entry.html = edjsParser.parse(entry.post);
