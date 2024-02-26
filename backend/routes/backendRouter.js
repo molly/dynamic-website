@@ -1,5 +1,6 @@
 import express from 'express';
 import authRouter from './auth.js';
+import imageRouter from './images.js';
 import microRouter from './micro.js';
 import readingListRouter from './readingList.js';
 
@@ -14,6 +15,7 @@ app.use('/auth', authRouter);
 if (process.argv[2] !== 'prod') {
   // Feature flag
   app.use('/micro', microRouter);
+  app.use('/micro/image', imageRouter);
 }
 
 export default app;

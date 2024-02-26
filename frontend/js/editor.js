@@ -93,7 +93,15 @@ async function onFirstLoad() {
     autofocus: true,
     tools: {
       header: Header,
-      image: ImageTool,
+      image: {
+        class: ImageTool,
+        config: {
+          endpoints: {
+            byFile: '/dynamic-api/micro/image/byFile',
+            byUrl: '/dynamic-api/micro/image/byUrl',
+          },
+        },
+      },
       inlineCode: InlineCode,
       linkTool: LinkTool,
       list: {
