@@ -4,26 +4,33 @@ mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {
       if isInFeed
         .post-icon.icon
           if standalone
-            include ../../icons/lightbulb.svg
+            include ../../icons/chat.svg
           else
             a(href=`/micro/entry/${entry.slug}`)
-              include ../../icons/lightbulb.svg
+              include ../../icons/chat.svg
       if entry.title
         h2.p-name #{entry.title}
-    section.post-meta
-      a(href=`/micro/entry/${entry.slug}`)
-        time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
-      |  by 
-      span.h-card.p-author Molly White
-      if isLoggedIn
-        span.edit-icon.icon
-          a(href=`/micro/editor/${entry.slug}`)
-            include ../../icons/pencil.svg
     .p-content
       each block in entry.html
         != block
 
-    if entry.tags && entry.tags.length
+    .footer
+      .flex-row.post-meta
+        .timestamp
+          a(href=`/micro/entry/${entry.slug}`)
+            time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
+          if isLoggedIn
+            span.edit-icon.icon
+              a(href=`/micro/editor/${entry.slug}`)
+                include ../../icons/pencil.svg
+        .social-links 
+          if entry.socialLinks && entry.socialLinks.length 
+            span Also posted to:
+            each socialLink in entry.socialLinks
+              a(class=`social-link ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1))
+                include ./socialIcon.pug
+                +socialIcon(socialLink.type)
       .tags
-        each tag in entry.tags 
-          a.tag(href=`/micro/tag/${tag.value}`,title=`See all micro posts tagged "${tag.text}"`) #{tag.text}
+        if entry.tags && entry.tags.length
+          each tag in entry.tags 
+            a.tag(href=`/micro/tag/${tag.value}`, title=`See all micro posts tagged "${tag.text}"`) #{tag.text}

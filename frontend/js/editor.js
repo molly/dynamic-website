@@ -17,9 +17,8 @@ import TomSelect from 'tom-select';
 
 const postMeta = {
   title: '',
-  slug: new Date().toISOString().slice(0, 16).replace(/\D/g, ''),
+  slug: DateTime.now().toFormat('yyyyMMddHHmm'),
   tags: [],
-  relatedFeedPostIds: [],
   id: null,
 };
 let savedPost = {};
@@ -46,7 +45,6 @@ function updateModelFromDb(data) {
   postMeta.title = data.title;
   postMeta.slug = data.slug;
   postMeta.tags = data.tags;
-  postMeta.relatedFeedPostIds = data.relatedFeedPostIds;
   postMeta.id = data.id;
 }
 
@@ -171,6 +169,7 @@ async function onFirstLoad() {
           updateModelFromDb(resp.data);
           setInputValues();
           saveButton.removeAttribute('disabled');
+          window.history.pushState({}, null, `/micro/editor/${resp.data.slug}`);
         });
     });
   });

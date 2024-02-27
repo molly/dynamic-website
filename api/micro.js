@@ -1,33 +1,29 @@
 import EditorJSHtml from 'editorjs-html';
 import { DateTime } from 'luxon';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
+import { formatMedia } from './helpers/media.js';
 
 const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
+const SOCIAL_PREFIXES = {
+  twitter: 'https://twitter.com/molly0xFFF/',
+  mastodon: 'https://hachyderm.io/@molly0xfff/',
+  bluesky: 'https://bsky.app/profile/molly.wiki/post/',
+  tiktok: 'https://www.tiktok.com/@molly0xfff/',
+  youtube: 'https://www.youtube.com/watch?v=',
+};
 
 const edjsParser = EditorJSHtml({
-  image: ({ data }) => {
-    const source = data.file && data.file.url ? data.file.url : data.url;
-    const classes = [];
-    if (data.classes) {
-      classes.push(data.classes);
-    }
-    if (data.withBorder) {
-      classes.push('bordered');
-    }
-    if (data.stretched) {
-      classes.push('full-width');
-    }
-    if (data.withBackground) {
-      classes.push('backgrounded');
-    }
-
-    if (data.file?.contentType?.startsWith('video/')) {
-      return `<video controls class="${classes.join(' ')}" src="${source}" alt="${data.alt || 'Video'}" />`;
-    } else {
-      return `<img class="${classes.join(' ')}" src="${source}" alt="${data.alt || 'Image'}" />`;
-    }
-  },
+  image: formatMedia,
 });
+
+function hydrateAndSortSocialLinks(links) {
+  const order = ['twitter', 'mastodon', 'bluesky', 'tiktok', 'youtube'];
+  links.sort((a, b) => order.indexOf(a.type) - order.indexOf(b.type));
+  for (const link of links) {
+    link.href = `${SOCIAL_PREFIXES[link.type]}${link.postId}`;
+  }
+  return links;
+}
 
 export const hydrateEntry = (entry) => {
   entry.html = edjsParser.parse(entry.post);
@@ -38,6 +34,9 @@ export const hydrateEntry = (entry) => {
     entry.humanTime = createdAtDt.toRelative();
   } else {
     entry.humanTime = entry.absoluteTime;
+  }
+  if (entry.socialLinks?.length) {
+    entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);
   }
   return entry;
 };

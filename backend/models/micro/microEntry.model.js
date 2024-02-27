@@ -12,8 +12,24 @@ const MicroEntrySchema = new mongoose.Schema(
         ref: 'MicroEntryTag',
       },
     ],
-    relatedFeedPostIds: [
-      { type: mongoose.Schema.Types.ObjectId, ref: 'FeedEntry' },
+    readingListReference: {
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        refPath: 'readingListReference.model',
+      },
+      model: {
+        type: String,
+        enum: ['ShortformEntry', 'BlockchainEntry', 'PressEntry'],
+      },
+    },
+    socialLinks: [
+      {
+        type: {
+          type: String,
+          enum: ['twitter', 'mastodon', 'bluesky', 'tiktok', 'youtube'],
+        },
+        postId: { type: String },
+      },
     ],
     _id: { type: mongoose.Schema.Types.ObjectId, required: true },
   },

@@ -6,7 +6,7 @@ const FeedEntrySchema = new mongoose.Schema(
   {
     entryType: {
       type: String,
-      enum: ['micro', 'social', 'blog', 'citationNeeded', 'reading'],
+      enum: ['micro', 'blog', 'citationNeeded', 'reading'],
     },
   },
   { timestamps: true },

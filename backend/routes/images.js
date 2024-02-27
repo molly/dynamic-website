@@ -17,7 +17,10 @@ const uploadHandler = multer({
     keyFilename: new URL('../config/service-account.json', import.meta.url)
       .pathname,
     filename: (req, file, cb) =>
-      cb(null, file.originalname.replace(/[^a-zA-Z0-9_.]/g, '-')),
+      cb(
+        null,
+        `${crypto.randomBytes(10)}_${file.originalname.replace(/[^a-zA-Z0-9_.]/g, '-')}`,
+      ),
     projectId: 'mollywhite',
   }),
 });
@@ -41,7 +44,7 @@ router.post('/byFile', uploadHandler.single('image'), (req, res) => {
 // Upload remote file by URL. Streams the file from the URL to the bucket.
 router.post('/byURL', async (req, res) => {
   const originalFilename = req.body.url.split('/').pop();
-  const targetFilename = `${crypto.randomUUID()}_${originalFilename}`;
+  const targetFilename = `${crypto.randomBytes(10)}_${originalFilename}`;
   const file = bucket.file(`micro/${targetFilename}`);
   const { data } = await axios.get(req.body.url, {
     decompress: false,

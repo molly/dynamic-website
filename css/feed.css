@@ -1,6 +1,10 @@
 @import './feed-shared.css';
 
-.content-box {
+.feed .page-container {
+  max-width: 60rem;
+}
+
+.feed .content-box {
   margin-left: 40px;
 }
 
@@ -8,7 +12,7 @@ h1.site-title {
   margin-bottom: 1em;
 }
 
-/* Entry */
+/* Entry ------------------------------------------------------------- */
 .entry {
   width: 100%;
 }
@@ -19,14 +23,9 @@ h1.site-title {
   margin-bottom: 40px;
 }
 
-/* Header */
+/* Header ------------------------------------------------------------ */
 .entry header {
   position: relative;
-}
-
-.entry section.post-meta {
-  color: var(--timestamp-color);
-  font-size: 0.8em;
 }
 
 .post-icon {
@@ -35,14 +34,7 @@ h1.site-title {
   top: 2px;
 }
 
-.edit-icon {
-  width: 15px;
-  height: 15px;
-  background: none;
-  margin-left: 0.2em;
-}
-
-/* Content */
+/* Content ------------------------------------------------------------ */
 .entry .p-content p:first-child {
   margin-top: 0;
 }
@@ -54,7 +46,7 @@ h1.site-title {
 
 .entry .p-content img.full-width,
 .entry .p-content video.full-width {
-  max-width: 80rem;
+  max-width: 60rem;
 }
 
 .entry .p-content img.vertical,
@@ -74,14 +66,69 @@ h1.site-title {
   padding: 1rem;
 }
 
-/* Footer */
-.tag {
+/* Footer ------------------------------------------------------------ */
+.footer {
   font-size: 0.7em;
+}
+
+.footer .flex-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.footer .post-meta {
+  color: var(--timestamp-color);
+}
+
+.edit-icon {
+  width: 15px;
+  height: 15px;
+  background: none;
+  margin-left: 0.2em;
+}
+
+/* Social links */
+.footer .social-links {
+  display: flex;
+  position: relative;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.social-link {
+  position: relative;
+  top: 2px;
+}
+
+.social-link,
+.social-link:hover {
+  background: none;
+}
+
+.social-link svg {
+  height: 14px;
+}
+
+.social-link:not(:first-child) {
+  margin-left: 0.3em;
+}
+
+/* Tags */
+.footer .tags {
+  display: flex;
+  flex-wrap: wrap;
+  line-height: 1em;
+}
+
+.tag {
   padding: 0.1em 0.2em;
   background-color: var(--button-color);
   font-style: italic;
   background-image: none;
   text-shadow: none;
+  margin-bottom: 0.5em;
 }
 
 .tag::before {
