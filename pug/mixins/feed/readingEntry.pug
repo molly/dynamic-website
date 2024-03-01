@@ -1,0 +1,15 @@
+mixin readingEntry(entry, readingEntry, type)
+  article.entry.h-entry.hentry
+    header
+      .description #{entry.verb} something new.
+      .post-icon.icon
+        include ./icon.pug
+        +icon(entry.icon)
+    .p-content
+      include ../shortformArticle.pug
+      +shortformArticle(readingEntry)
+    footer.footer
+      .flex-row.post-meta
+        .timestamp
+          a(href=`https://www.citationneeded.news/${entry.slug}`)
+            time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}

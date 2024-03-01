@@ -44,15 +44,13 @@ export const FeedEntryCitationNeeded = FeedEntry.discriminator(
 export const FeedEntryReading = FeedEntry.discriminator(
   'FeedEntryReading',
   new mongoose.Schema({
-    reading: {
+    shortform: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      refPath: 'readingModel',
+      ref: 'ShortformEntry',
     },
-    readingModel: {
-      type: String,
-      required: true,
-      enum: ['ShortformEntry', 'BlockchainEntry'],
+    blockchain: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'BlockchainEntry',
     },
   }),
 );

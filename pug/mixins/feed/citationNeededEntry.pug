@@ -28,5 +28,5 @@ mixin citationNeededEntry(entry)
             span Also posted to:
             each socialLink in entry.socialLinks
               a(class=`social-link u-syndication ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1), rel="syndication")
-                include ./socialIcon.pug
-                +socialIcon(socialLink.type)
+                include ./icon.pug
+                +icon(socialLink.type)

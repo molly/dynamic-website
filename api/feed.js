@@ -1,5 +1,11 @@
+import {
+  BlockchainEntry,
+  ShortformEntry,
+} from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
+import { formatArticleDate } from '../data/filter/preprocess.js';
+import { getReadingDetails } from './helpers/reading.js';
 import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
 import { hydrateTimestamps } from './helpers/timestamps.js';
 import { hydrateMicroEntry } from './micro.js';
@@ -18,6 +24,22 @@ const hydrateFeedEntries = (entries) =>
       if ('socialLinks' in entry && entry.socialLinks.length > 0) {
         entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);
       }
+    } else if (entry.__t === 'FeedEntryReading') {
+      Object.assign(entry, getReadingDetails(entry));
+      if ('shortform' in entry) {
+        entry.entryType = 'readingShortform';
+        entry.shortform = {
+          ...entry.shortform,
+          ...formatArticleDate(entry.shortform),
+        };
+      } else if ('blockchain' in entry) {
+        entry.entryType = 'readingBlockchain';
+        entry.blockchain = {
+          ...entry.blockchain,
+          ...formatArticleDate(entry.blockchain),
+        };
+      }
+      console.log(entry);
     }
     return entry;
   });
@@ -27,6 +49,11 @@ export const getFeedEntries = async () => {
     .sort({ createdAt: -1 })
     .limit(20)
     .populate({ path: 'micro', model: MicroEntry, populate: { path: 'tags' } })
+    .populate({
+      path: 'shortform',
+      model: ShortformEntry,
+    })
+    .populate({ path: 'blockchain', model: BlockchainEntry })
     .lean();
   return hydrateFeedEntries(entries);
 };

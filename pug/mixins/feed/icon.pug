@@ -1,5 +1,5 @@
-mixin socialIcon(network)
-  case network
+mixin icon(name)
+  case name
     when 'twitter'
       include ../../icons/twitter.svg
     when 'mastodon'
@@ -10,3 +10,9 @@ mixin socialIcon(network)
       include ../../icons/tiktok.svg
     when 'youtube'
       include ../../icons/youtube.svg
+    when 'tv'
+      include ../../icons/tv.svg
+    when 'newspaper'
+      include ../../icons/newspaper.svg
+    when 'headphones'
+      include ../../icons/headphones.svg

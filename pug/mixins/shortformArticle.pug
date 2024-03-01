@@ -3,8 +3,6 @@ mixin shortformArticle(article, rss=false)
     if rss
       if article.image 
         img(src=article.image.src, class="webfeedsFeaturedVisual", alt=article.image.alt, style="max-width: 300px;")
-      else 
-        img(src='https://www.mollywhite.net/images/mollyandmax.png', class="webfeedsFeaturedVisual", alt='Illustration of Molly White holding her cat Max.', style="max-width: 300px;")
 
     if !rss
       .title

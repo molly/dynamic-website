@@ -18,9 +18,14 @@ block body
 
     include ../../mixins/feed/microEntry.pug
     include ../../mixins/feed/citationNeededEntry.pug
+    include ../../mixins/feed/readingEntry.pug
     each entry in entries
       case entry.entryType
         when "micro"
           +microEntry(entry.micro, options)
         when "citationNeeded"
           +citationNeededEntry(entry)
+        when "readingShortform"
+          +readingEntry(entry, entry.shortform)
+        when "readingBlockchain"
+          +readingEntry(entry, entry.blockchain)
