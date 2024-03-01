@@ -24,5 +24,6 @@ export const FeedEntryCitationNeeded = FeedEntry.discriminator(
     slug: { type: String, required: true, unique: true },
     excerpt: { type: String },
     image: { type: String },
+    imageAlt: { type: String },
   }),
 );

@@ -17,7 +17,7 @@ if (process.argv[2] !== 'prod') {
   // Feature flag
   app.use('/micro', microRouter);
   app.use('/micro/image', imageRouter);
-  app.use('/feed', feedRouter);
 }
+app.use('/feed', feedRouter);
 
 export default app;

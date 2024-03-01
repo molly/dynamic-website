@@ -1,7 +1,8 @@
 @import './feed-shared.css';
 @import './base.css';
 
-.feed body {
+.feed body,
+.micro body {
   background-color: var(--feed-bg-color);
 }
 
