@@ -1,5 +1,5 @@
 mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {})
-  article.entry.h-entry
+  article.entry.h-entry.hentry
     header
       if isInFeed
         .post-icon.icon
@@ -10,11 +10,11 @@ mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {
               include ../../icons/chat.svg
       if entry.title
         h2.p-name #{entry.title}
-    .p-content
+    .p-content.e-content
       each block in entry.html
         != block
 
-    .footer
+    footer.footer
       .flex-row.post-meta
         .timestamp
           a(href=`/micro/entry/${entry.slug}`)
@@ -27,10 +27,10 @@ mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {
           if entry.socialLinks && entry.socialLinks.length 
             span Also posted to:
             each socialLink in entry.socialLinks
-              a(class=`social-link ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1))
+              a(class=`social-link u-syndication ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1), rel="syndication")
                 include ./socialIcon.pug
                 +socialIcon(socialLink.type)
       .tags
         if entry.tags && entry.tags.length
           each tag in entry.tags 
-            a.tag(href=`/micro/tag/${tag.value}`, title=`See all micro posts tagged "${tag.text}"`) #{tag.text}
+            a.tag.p-category(href=`/micro/tag/${tag.value}`, title=`See all micro posts tagged "${tag.text}"` rel="category tag") #{tag.text}

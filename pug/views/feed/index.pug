@@ -17,5 +17,10 @@ block body
       h1.p-name.site-title Activity
 
     include ../../mixins/feed/microEntry.pug
+    include ../../mixins/feed/citationNeededEntry.pug
     each entry in entries
-      +microEntry(entry.micro, options)
+      case entry.entryType
+        when "micro"
+          +microEntry(entry.micro, options)
+        when "citationNeeded"
+          +citationNeededEntry(entry)

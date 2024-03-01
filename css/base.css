@@ -1,0 +1,35 @@
+:root {
+  --feed-bg-color: rgba(243, 246, 249, 0.6);
+  --card-bg-color: #ffffff;
+  --tag-background-color: #efefef;
+
+  /* Borders */
+  --image-border-color: rgba(0, 0, 0, 0.05);
+
+  /* Shadows */
+  --shadow-1: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px,
+    rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+  --shadow-2: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+
+  --image-underline-grey: url('data:image/gif;base64,R0lGODlhAQABAIABAK2trURERCH+EUNyZWF0ZWQgd2l0aCBHSU1QACwAAAAAAQABAAACAkQBADs=');
+  --image-underline-hover-grey: url('data:image/gif;base64,R0lGODlhAQABAIABAIiIiERERCH+EUNyZWF0ZWQgd2l0aCBHSU1QACwAAAAAAQABAAACAkQBADs=');
+
+  @media (prefers-color-scheme: dark) {
+    --bg-color: #161616;
+    --card-bg-color: #222222;
+    --image-border-color: rgba(255, 255, 255, 0.05);
+    --timestamp-color: #adadad;
+    --timestamp-color-hover: #888888;
+    --tag-background-color: none;
+  }
+}
+
+[data-theme='dark'] {
+  --feed-bg-color: #161616;
+  --card-bg-color: #222222;
+  --image-border-color: rgba(255, 255, 255, 0.05);
+  --timestamp-color: #adadad;
+  --timestamp-color-hover: #888888;
+  --tag-background-color: none;
+}

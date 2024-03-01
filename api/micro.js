@@ -1,9 +1,8 @@
 import EditorJSHtml from 'editorjs-html';
-import { DateTime } from 'luxon';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { formatMedia } from './helpers/media.js';
+import { hydrateTimestamps } from './helpers/timestamps.js';
 
-const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
 const SOCIAL_PREFIXES = {
   twitter: 'https://twitter.com/molly0xFFF/',
   mastodon: 'https://hachyderm.io/@molly0xfff/',
@@ -25,16 +24,9 @@ function hydrateAndSortSocialLinks(links) {
   return links;
 }
 
-export const hydrateEntry = (entry) => {
+export const hydrateMicroEntry = (entry) => {
+  Object.assign(entry, hydrateTimestamps(entry));
   entry.html = edjsParser.parse(entry.post);
-  const createdAtDt = DateTime.fromJSDate(entry.createdAt);
-  entry.absoluteTime = createdAtDt.toLocaleString(DateTime.DATETIME_FULL);
-  const relativeTime = DateTime.now() - createdAtDt;
-  if (relativeTime < ONE_MONTH) {
-    entry.humanTime = createdAtDt.toRelative();
-  } else {
-    entry.humanTime = entry.absoluteTime;
-  }
   if (entry.socialLinks?.length) {
     entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);
   }
@@ -47,7 +39,7 @@ export const getMicroEntries = async () => {
     .limit(10)
     .populate('tags')
     .lean();
-  return entries.map(hydrateEntry);
+  return entries.map(hydrateMicroEntry);
 };
 
 export const getMicroEntriesWithTag = async (tag) => {
@@ -65,10 +57,10 @@ export const getMicroEntriesWithTag = async (tag) => {
     { $limit: 10 },
   ]).exec();
   await MicroEntry.populate(entries, { path: 'tags' });
-  return entries.map(hydrateEntry);
+  return entries.map(hydrateMicroEntry);
 };
 
 export const getMicroEntry = async (slug) => {
   const entry = await MicroEntry.findOne({ slug }).populate('tags').lean();
-  return hydrateEntry(entry);
+  return hydrateMicroEntry(entry);
 };

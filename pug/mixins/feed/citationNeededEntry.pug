@@ -1,0 +1,25 @@
+mixin citationNeededEntry(entry)
+  article.entry.h-entry.hentry
+    header
+      .description Published an issue of 
+        a(href="https://www.citationneeded.news/")
+          i Citation Needed
+        |.
+      .post-icon.icon
+        a(href=`https://www.citationneeded.news/${entry.slug}`)
+          include ../../icons/brackets.svg
+      h2.p-name
+        a.u-syndication(href=`https://www.citationneeded.news/${entry.slug}` rel="syndication") #{entry.title}
+    .p-content
+      if entry.image
+        .media-wrapper
+          a(href=`https://www.citationneeded.news/${entry.slug}`)
+            img(src=entry.image alt=entry.imageAlt)
+      .p-summary
+        != entry.excerpt
+
+    footer.footer
+      .flex-row.post-meta
+        .timestamp
+          a(href=`https://www.citationneeded.news/${entry.slug}`)
+            time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}

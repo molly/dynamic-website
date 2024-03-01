@@ -1,9 +1,6 @@
 const getImageClass = (data) => {
-  const classes = [];
+  const classes = ['media-wrapper'];
 
-  if (data.classes) {
-    classes.push(data.classes);
-  }
   if (data.withBorder) {
     classes.push('bordered');
   }
@@ -13,11 +10,11 @@ const getImageClass = (data) => {
   if (data.withBackground) {
     classes.push('backgrounded');
   }
-
-  if (classes.length) {
-    return `class="${classes.join(' ')}"`;
+  if (data.white) {
+    classes.push('invert-on-dark');
   }
-  return '';
+
+  return `class="${classes.join(' ')}"`;
 };
 
 const getAltText = (alt, fallback) => {
@@ -31,7 +28,7 @@ export const formatMedia = ({ data }) => {
   const source = data.file && data.file.url ? data.file.url : data.url;
   const classes = getImageClass(data);
   if (data.file?.contentType?.startsWith('video/')) {
-    return `<video controls ${classes} src="${source}" alt="${getAltText(data.alt, 'Video')}" />`;
+    return `<div ${classes}><video controls src="${source}" alt="${getAltText(data.alt, 'Video')}" /></div>`;
   }
-  return `<img ${classes} src="${source}" alt="${getAltText(data.alt, 'Image')}" />`;
+  return `<div ${classes}><img src="${source}" alt="${getAltText(data.alt, 'Image')}" /></div>`;
 };

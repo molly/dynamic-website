@@ -1,0 +1,26 @@
+<svg
+   fill="none"
+   viewBox="0 0 9.5 15"
+   stroke-width="1.5"
+   stroke="currentColor"
+   class="w-6 h-6"
+   version="1.1"
+   id="svg2814"
+   width="9.5"
+   height="15"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2818" />
+  <path
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     d="m 7,0.75 h 1.75 v 13.5 H 7"
+     id="path2812" />
+  <path
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     d="M 2.5,0.75 H 0.75 v 13.5 H 2.5"
+     id="path3016"
+     style="display:inline" />
+</svg>
