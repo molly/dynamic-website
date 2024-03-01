@@ -5,6 +5,7 @@ import {
   PressEntry,
   ShortformEntry,
 } from '../models/entry.model.js';
+import { FeedEntryReading } from '../models/feed/feedEntry.model.js';
 import { BlockchainTag, PressTag, ShortformTag } from '../models/tag.model.js';
 import { authenticated } from './auth.js';
 
@@ -58,8 +59,16 @@ router.post('/entry', authenticated(), async (req, res) => {
   const { type, entry } = req.body;
   const model = new models[type](entry);
   try {
-    await model.save();
+    const result = await model.save();
     await updateTags(tagModels[type], entry);
+
+    // Add to activity feed
+    if (type === 'shortform' || type === 'blockchain') {
+      await new FeedEntryReading({
+        reading: result._id,
+        readingModel: models[type].modelName,
+      }).save();
+    }
     return res.status(204).send();
   } catch (err) {
     return res.status(400).send({ message: err });

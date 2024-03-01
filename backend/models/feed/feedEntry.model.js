@@ -13,17 +13,46 @@ export const FeedEntry = db.feedConnection.model(
 export const FeedEntryMicro = FeedEntry.discriminator(
   'FeedEntryMicro',
   new mongoose.Schema({
-    micro: { type: mongoose.Schema.Types.ObjectId, ref: MicroEntry },
+    micro: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: MicroEntry,
+      required: true,
+    },
   }),
 );
 
 export const FeedEntryCitationNeeded = FeedEntry.discriminator(
   'FeedEntryCitationNeeded',
   new mongoose.Schema({
-    title: { type: String },
+    title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     excerpt: { type: String },
     image: { type: String },
     imageAlt: { type: String },
+    socialLinks: [
+      {
+        type: {
+          type: String,
+          enum: ['twitter', 'mastodon', 'bluesky', 'tiktok', 'youtube'],
+        },
+        postId: { type: String },
+      },
+    ],
+  }),
+);
+
+export const FeedEntryReading = FeedEntry.discriminator(
+  'FeedEntryReading',
+  new mongoose.Schema({
+    reading: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      refPath: 'readingModel',
+    },
+    readingModel: {
+      type: String,
+      required: true,
+      enum: ['ShortformEntry', 'BlockchainEntry'],
+    },
   }),
 );

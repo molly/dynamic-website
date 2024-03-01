@@ -1,5 +1,6 @@
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
+import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
 import { hydrateTimestamps } from './helpers/timestamps.js';
 import { hydrateMicroEntry } from './micro.js';
 
@@ -14,6 +15,9 @@ const hydrateFeedEntries = (entries) =>
       entry.micro = hydrateMicroEntry(entry.micro);
     } else if (entry.__t === 'FeedEntryCitationNeeded') {
       entry.entryType = 'citationNeeded';
+      if ('socialLinks' in entry && entry.socialLinks.length > 0) {
+        entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);
+      }
     }
     return entry;
   });
