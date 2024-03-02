@@ -24,13 +24,15 @@ router.get('/tags', async (_, res) => {
 
 router.post('/entry', authenticated(), async (req, res) => {
   const { type, entry } = req.body;
+  const postToFeed = entry.postToFeed;
+  delete entry.postToFeed;
   try {
     const tagIds = await updateTagsOnCreate(entry.tags, type);
     const model = new models[type]({ ...entry, tags: tagIds });
     const result = await model.save();
 
     // Add to activity feed
-    if (type === 'shortform' || type === 'blockchain') {
+    if (postToFeed && (type === 'shortform' || type === 'blockchain')) {
       await new FeedEntryReading({
         [type]: result._id,
         tags: tagIds,
