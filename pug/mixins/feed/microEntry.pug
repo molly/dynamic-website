@@ -8,6 +8,7 @@ mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {
           else
             a(href=`/micro/entry/${entry.slug}`)
               include ../../icons/chat.svg
+          .description Posted:
       if entry.title
         h2.p-name #{entry.title}
     .p-content.e-content

@@ -28,13 +28,14 @@ a.social-link {
 /* Entry ------------------------------------------------------------- */
 .entry {
   width: 100%;
-  padding: 0.5em 1em;
+  padding: 1em 1em 0.5em 1em;
   background-color: var(--card-bg-color);
   box-shadow: var(--shadow-1);
+  margin-top: 3em;
 }
 
-.entry:not(:last-child) {
-  margin-bottom: 40px;
+h1.site-title + .entry {
+  margin-top: 2em;
 }
 
 .entry a {
@@ -57,24 +58,20 @@ a.social-link {
   position: relative;
 }
 
-.entry header .description {
-  font-size: 0.7em;
-  color: var(--timestamp-color);
-  font-style: italic;
-}
-
 .post-icon {
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  top: -0.5em;
-  left: -2.75em;
-  width: 1.5em;
-  height: 1.5em;
-  padding: 4px;
+  top: -2.5em;
+  left: -1em;
+  width: unset;
+  height: unset;
+  padding: 0.1em 0.5em 0 0.5em;
   background-color: var(--card-bg-color);
   box-shadow: var(--shadow-1);
+  z-index: -1;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .post-icon a {
@@ -83,6 +80,13 @@ a.social-link {
 
 .post-icon svg {
   width: 1em;
+}
+
+.entry header .description {
+  font-size: 0.7em;
+  color: var(--timestamp-color);
+  font-style: italic;
+  margin-left: 0.5em;
 }
 
 /* Content ------------------------------------------------------------ */

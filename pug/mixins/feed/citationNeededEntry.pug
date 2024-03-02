@@ -1,13 +1,13 @@
 mixin citationNeededEntry(entry,  {isLoggedIn=false} = {})
   article.entry.h-entry.hentry
     header
-      .description Published an issue of 
-        a(href="https://www.citationneeded.news/")
-          i Citation Needed
-        |.
       .post-icon.icon
         a(href=`https://www.citationneeded.news/${entry.slug}`)
           include ../../icons/brackets.svg
+        .description Published an issue of 
+          a(href="https://www.citationneeded.news/")
+            i Citation Needed
+          |:
       h2.p-name
         a.u-syndication(href=`https://www.citationneeded.news/${entry.slug}` rel="syndication") #{entry.title}
     .p-content

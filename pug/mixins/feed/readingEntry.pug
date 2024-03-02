@@ -1,10 +1,10 @@
 mixin readingEntry(entry, readingEntry, {isLoggedIn=false} = {})
   article.entry.h-entry.hentry
     header
-      .description #{entry.verb} something new.
       .post-icon.icon
         include ./icon.pug
         +icon(entry.icon)
+        .description #{entry.verb}:
     .p-content
       include ../shortformArticle.pug
       +shortformArticle(readingEntry, false, true)
