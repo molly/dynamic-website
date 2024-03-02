@@ -11,7 +11,12 @@ export const EntrySchema = {
   preposition: String,
   parenthetical: String,
   href: { type: String, match: /^https?/ },
-  tags: [String],
+  tags: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Tag',
+    },
+  ],
   entryAdded: Date,
 };
 

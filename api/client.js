@@ -3,13 +3,9 @@ import {
   PressEntry,
   ShortformEntry,
 } from '../backend/models/entry.model.js';
-import {
-  BlockchainTag,
-  PressTag,
-  ShortformTag,
-} from '../backend/models/tag.model.js';
+import { Tag } from '../backend/models/tag.model.js';
 import { getLimit } from '../data/filter/paginate.js';
-import { formatArticleDate, getTags } from '../data/filter/preprocess.js';
+import { formatArticleDate } from '../data/filter/preprocess.js';
 
 const getDocumentsCollection = (collection) => {
   switch (collection) {
@@ -24,27 +20,19 @@ const getDocumentsCollection = (collection) => {
   }
 };
 
-const getTagsCollection = (collection) => {
-  switch (collection) {
-    case 'shortform':
-      return ShortformTag;
-    case 'blockchain':
-      return BlockchainTag;
-    case 'press':
-      return PressTag;
-    default:
-      return null;
-  }
-};
-
-const makeQuery = (req) => {
+const makeQuery = async (req) => {
   const query = {};
   if (!req || !req.query) {
     return query;
   }
   if (req.query.tags) {
-    const tags = req.query.tags.split('-');
-    query.tags = { $in: tags };
+    const tagStrings = req.query.tags.split('-');
+    const tags = await Tag.find({ value: { $in: tagStrings } });
+    const tagIds = [];
+    for (const tag of tags) {
+      tagIds.push(tag._id);
+    }
+    query.tags = { $in: tagIds };
   }
   if (req.query.search) {
     const escapedSearchQuery = req.query.search.replace(
@@ -59,22 +47,14 @@ const makeQuery = (req) => {
   return query;
 };
 
-const formatResults = (results, defaultArticle, tagText) =>
+const formatResults = (results, defaultArticle) =>
   results.map((result) => {
     return {
       ...defaultArticle,
       ...result,
       ...formatArticleDate(result),
-      tags: getTags(result, tagText),
     };
   });
-
-const getTagsMap = (allTagsArray) => {
-  return allTagsArray.reduce((acc, tag) => {
-    acc[tag.value] = tag.text;
-    return acc;
-  }, {});
-};
 
 export const getPaginatedAndFilteredFromDb = async (
   collection,
@@ -88,19 +68,21 @@ export const getPaginatedAndFilteredFromDb = async (
     ? 'started'
     : 'date';
   const sortOrder = req.query.order && req.query.order === 'reverse' ? 1 : -1;
-  const query = makeQuery(req);
+  const query = await makeQuery(req);
 
   try {
     const documentsCollection = getDocumentsCollection(collection);
-    const tagsCollection = getTagsCollection(collection);
 
-    const allTags = await tagsCollection.find().lean();
+    const allTags = await Tag.find({
+      [`frequency.${collection}`]: { $gt: 0 },
+    }).lean();
     allTags.sort((a, b) =>
       a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
     );
-    const tagText = getTagsMap(allTags);
 
-    const cursor = documentsCollection.find(query);
+    const cursor = documentsCollection
+      .find(query)
+      .populate({ path: 'tags', model: Tag });
 
     // Sort, paginate
     cursor.sort({ [dateKey]: sortOrder });
@@ -117,7 +99,7 @@ export const getPaginatedAndFilteredFromDb = async (
     return {
       currentPage: page,
       pageSize: limit,
-      results: formatResults(results, {}, tagText),
+      results: formatResults(results, {}),
       totalPages: Math.ceil(totalFilteredResults / limit),
       totalResults: totalFilteredResults,
       totalUnfilteredResults,
@@ -153,25 +135,10 @@ export const getRssEntriesFromDb = async (collection) => {
       .limit(limit);
     const results = await cursor.lean();
 
-    // Get tags
-    const tagsCollection = getTagsCollection(collection);
-    const allTags = await tagsCollection.find().lean();
-    const tagsMap = getTagsMap(allTags);
-
     // Preprocess
     for (const article of results) {
       const formattedDates = formatArticleDate(article);
       Object.assign(article, formattedDates);
-
-      if ('tags' in article && article.tags.length) {
-        for (const ind in article.tags) {
-          const tagDetails = tagsMap[article.tags[ind]];
-          article.tags[ind] = {
-            value: article.tags[ind],
-            text: tagDetails ? tagDetails.text : article.tags[ind],
-          };
-        }
-      }
     }
 
     return results;

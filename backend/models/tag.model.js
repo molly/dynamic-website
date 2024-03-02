@@ -2,23 +2,13 @@ import mongoose from 'mongoose';
 import db from './db.js';
 
 export const TagSchema = new mongoose.Schema({
-  text: String,
-  value: String,
-  frequency: Number,
+  text: { type: String, required: true },
+  value: { type: String, required: true, unique: true },
+  frequency: {
+    shortform: Number,
+    blockchain: Number,
+    micro: Number,
+    total: Number,
+  },
 });
-
-export const BlockchainTag = db.readingListConnection.model(
-  'BlockchainTag',
-  TagSchema,
-  'blockchainTags',
-);
-export const PressTag = db.readingListConnection.model(
-  'PressTag',
-  TagSchema,
-  'pressTags',
-);
-export const ShortformTag = db.readingListConnection.model(
-  'ShortformTag',
-  TagSchema,
-  'shortformTags',
-);
+export const Tag = db.tagConnection.model('Tag', TagSchema, 'tags');

@@ -128,7 +128,10 @@ async function onFirstLoad() {
     create: true,
     items: postMeta.tags,
     valueField: '_id',
+    searchField: ['text'],
     options: tagOptions,
+    maxOptions: null,
+    closeAfterSelect: true,
   });
 
   // Selectors

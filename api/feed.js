@@ -4,6 +4,7 @@ import {
 } from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
+import { Tag } from '../backend/models/tag.model.js';
 import { formatArticleDate } from '../data/filter/preprocess.js';
 import { getReadingDetails } from './helpers/reading.js';
 import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
@@ -39,7 +40,6 @@ const hydrateFeedEntries = (entries) =>
           ...formatArticleDate(entry.blockchain),
         };
       }
-      console.log(entry);
     }
     return entry;
   });
@@ -48,7 +48,11 @@ export const getFeedEntries = async () => {
   const entries = await FeedEntry.find()
     .sort({ createdAt: -1 })
     .limit(20)
-    .populate({ path: 'micro', model: MicroEntry, populate: { path: 'tags' } })
+    .populate({
+      path: 'micro',
+      model: MicroEntry,
+      populate: { path: 'tags', model: Tag },
+    })
     .populate({
       path: 'shortform',
       model: ShortformEntry,

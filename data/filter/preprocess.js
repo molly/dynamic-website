@@ -30,21 +30,7 @@ export const formatArticleDate = (article) => {
   return dates;
 };
 
-export const getTags = (article, tagText) => {
-  if (!article.tags || !article.tags.length) {
-    return [];
-  }
-  const tags = article.tags.map((tag) => ({
-    text: Object.prototype.hasOwnProperty.call(tagText, tag)
-      ? tagText[tag]
-      : tag.replace(/_/g, ' '),
-    value: tag,
-  }));
-  tags.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()));
-  return tags;
-};
-
-export const preprocess = (data, { defaultArticle, tagText }) => {
+export const preprocess = (data, { defaultArticle }) => {
   const processed = [];
   const tagsMap = {};
   for (let article of data) {
@@ -53,9 +39,6 @@ export const preprocess = (data, { defaultArticle, tagText }) => {
     // Dates
     const formattedDates = formatArticleDate(updatedArticle);
     Object.assign(updatedArticle, formattedDates);
-
-    // Tags
-    updatedArticle.tags = getTags(updatedArticle, tagText);
 
     processed.push(updatedArticle);
     for (let tag of updatedArticle.tags) {
@@ -66,11 +49,5 @@ export const preprocess = (data, { defaultArticle, tagText }) => {
       }
     }
   }
-
-  const allTags = Object.values(tagsMap);
-  allTags.sort((a, b) =>
-    a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
-  );
-
-  return { results: processed, allTags };
+  return { results: processed };
 };
