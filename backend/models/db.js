@@ -27,6 +27,12 @@ const db = {
       serverApi: ServerApiVersion.v1,
     },
   ),
+  tagConnection: mongoose.createConnection(
+    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/tags?retryWrites=true&w=majority`,
+    {
+      serverApi: ServerApiVersion.v1,
+    },
+  ),
 };
 
 db.initialize = async function () {

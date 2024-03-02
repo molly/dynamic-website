@@ -9,7 +9,7 @@ const MicroEntrySchema = new mongoose.Schema(
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'MicroEntryTag',
+        ref: 'Tag',
       },
     ],
     readingListReference: {

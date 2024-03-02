@@ -1,12 +1,12 @@
 import express from 'express';
-import sortBy from 'lodash.sortby';
+import { updateTags } from '../helpers/tags.js';
 import {
   BlockchainEntry,
   PressEntry,
   ShortformEntry,
 } from '../models/entry.model.js';
 import { FeedEntryReading } from '../models/feed/feedEntry.model.js';
-import { BlockchainTag, PressTag, ShortformTag } from '../models/tag.model.js';
+import { Tag } from '../models/tag.model.js';
 import { authenticated } from './auth.js';
 
 const router = express.Router();
@@ -17,41 +17,8 @@ const models = {
   shortform: ShortformEntry,
 };
 
-const tagModels = {
-  blockchain: BlockchainTag,
-  press: PressTag,
-  shortform: ShortformTag,
-};
-
-const updateTags = async (TagModel, entry) => {
-  if (entry.tags && entry.tags.length) {
-    for (const tag of entry.tags) {
-      let tagRecord = await TagModel.findOne({ value: tag });
-      if (tagRecord) {
-        tagRecord.frequency += 1;
-      } else {
-        tagRecord = new TagModel({
-          value: tag.replace(/[- ]/g, '_'),
-          text: tag.replace(/_/g, ' '),
-          frequency: 1,
-        });
-      }
-      await tagRecord.save();
-    }
-  }
-};
-
-const getCollectionTags = async (model) => {
-  const tags = await model.find({}, '-_id');
-  return sortBy(tags, (t) => t.text.toLowerCase());
-};
-
 router.get('/tags', async (_, res) => {
-  const tags = {
-    blockchain: await getCollectionTags(tagModels.blockchain),
-    press: await getCollectionTags(tagModels.press),
-    shortform: await getCollectionTags(tagModels.shortform),
-  };
+  const tags = await Tag.find({}, { __v: 0 }).lean();
   res.send(tags);
 });
 
@@ -60,7 +27,7 @@ router.post('/entry', authenticated(), async (req, res) => {
   const model = new models[type](entry);
   try {
     const result = await model.save();
-    await updateTags(tagModels[type], entry);
+    await updateTags(entry, type);
 
     // Add to activity feed
     if (type === 'shortform' || type === 'blockchain') {

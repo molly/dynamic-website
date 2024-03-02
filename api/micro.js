@@ -1,5 +1,6 @@
 import EditorJSHtml from 'editorjs-html';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
+import { Tag } from '../backend/models/tag.model.js';
 import { formatMedia } from './helpers/media.js';
 import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
 import { hydrateTimestamps } from './helpers/timestamps.js';
@@ -21,7 +22,7 @@ export const getMicroEntries = async () => {
   const entries = await MicroEntry.find()
     .sort({ createdAt: -1 })
     .limit(10)
-    .populate('tags')
+    .populate({ path: 'tags', model: Tag })
     .lean();
   return entries.map(hydrateMicroEntry);
 };
@@ -40,11 +41,13 @@ export const getMicroEntriesWithTag = async (tag) => {
     { $sort: { createdAt: -1 } },
     { $limit: 10 },
   ]).exec();
-  await MicroEntry.populate(entries, { path: 'tags' });
+  await MicroEntry.populate(entries, { path: 'tags', model: Tag });
   return entries.map(hydrateMicroEntry);
 };
 
 export const getMicroEntry = async (slug) => {
-  const entry = await MicroEntry.findOne({ slug }).populate('tags').lean();
+  const entry = await MicroEntry.findOne({ slug })
+    .populate({ path: 'tags', model: Tag })
+    .lean();
   return hydrateMicroEntry(entry);
 };

@@ -11,8 +11,8 @@
             aria-pressed=query.tags.includes(tag.value).toString()
             type="button"
           ) #{tag.text}
-          if showTagCount
-            span.tag-count (#{tag.frequency})
+          if showTagCount && frequencyCategory
+            span.tag-count (#{tag.frequency[frequencyCategory]})
 
     if showStatusFilter 
       label(for="tags") By reading status
