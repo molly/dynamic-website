@@ -1,4 +1,4 @@
-mixin readingEntry(entry, readingEntry, type)
+mixin readingEntry(entry, readingEntry, {isLoggedIn=false} = {})
   article.entry.h-entry.hentry
     header
       .description #{entry.verb} something new.
@@ -7,9 +7,17 @@ mixin readingEntry(entry, readingEntry, type)
         +icon(entry.icon)
     .p-content
       include ../shortformArticle.pug
-      +shortformArticle(readingEntry)
+      +shortformArticle(readingEntry, false, true)
     footer.footer
       .flex-row.post-meta
         .timestamp
           a(href=`https://www.citationneeded.news/${entry.slug}`)
             time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
+          if isLoggedIn
+            span.edit-icon.icon
+              a(href=`/feed/tagger/reading${'shortform' in entry ? 'Shortform' : 'Blockchain'}/${entry._id}`)
+                include ../../icons/pencil.svg
+      .tags
+        if entry.tags && entry.tags.length
+          each tag in entry.tags 
+            a.tag.p-category(href=`/feed/tag/${tag.value}` title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}

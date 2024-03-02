@@ -11,10 +11,14 @@ block head
 
 block body
   main.content-box.h-feed
-    if options.tag
-      h1.p-name.site-title Thoughts tagged "#{options.tag}"
+    if options.tagQuery
+      hi.p-name.site-title Thoughts tagged "#{options.tag ? options.tag.text : options.tagQuery}"
     else
       h1.p-name.site-title Thoughts
+    
+    if options.hasResults === false
+      p No results found. 
+        a(href="/micro") View all thoughts
     include ../../mixins/feed/microEntry.pug
     each entry in entries
       +microEntry(entry, options)

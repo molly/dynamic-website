@@ -13,6 +13,7 @@ export default [
       editor: './frontend/js/editor.js',
       reading: './frontend/js/reading.js',
       feed: './frontend/js/feed.js',
+      tagger: './frontend/js/tagger.js',
     },
     output: {
       path: distPath,

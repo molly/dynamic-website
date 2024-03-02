@@ -11,11 +11,14 @@ block head
 
 block body
   main.content-box.h-feed.hfeed
-    if options.tag
-      h1.p-name.site-title Activity tagged "#{options.tag}"
+    if options.tagQuery
+      h1.p-name.site-title Activity tagged "#{options.tag ? options.tag.text : options.tagQuery}"
     else
       h1.p-name.site-title Activity
 
+    if options.hasResults === false
+      p No results found. 
+        a(href="/feed") View all activity
     include ../../mixins/feed/microEntry.pug
     include ../../mixins/feed/citationNeededEntry.pug
     include ../../mixins/feed/readingEntry.pug
@@ -24,8 +27,8 @@ block body
         when "micro"
           +microEntry(entry.micro, options)
         when "citationNeeded"
-          +citationNeededEntry(entry)
+          +citationNeededEntry(entry, options)
         when "readingShortform"
-          +readingEntry(entry, entry.shortform)
+          +readingEntry(entry, entry.shortform, options)
         when "readingBlockchain"
-          +readingEntry(entry, entry.blockchain)
+          +readingEntry(entry, entry.blockchain, options)

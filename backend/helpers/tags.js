@@ -1,21 +1,60 @@
+import mongoose from 'mongoose';
 import { Tag } from '../models/tag.model.js';
 
-export const updateTags = async (entry, entryType) => {
-  if (entry.tags && entry.tags.length) {
-    for (const tag of entry.tags) {
-      let tagRecord = await Tag.findOne({ value: tag });
-      if (tagRecord) {
-        tagRecord.frequency += 1;
-      } else {
-        const frequency = { shortform: 0, blockchain: 0, micro: 0, total: 1 };
-        frequency[entryType] = 1;
-        tagRecord = new Tag({
-          value: tag.replace(/[- ]/g, '_').toLowerCase(),
-          text: tag.replace(/_/g, ' '),
-          frequency,
-        });
-      }
-      await tagRecord.save();
+const hasTag = (tagArray, tag) => {
+  for (let i = 0; i < tagArray.length; i++) {
+    if (tagArray[i].toString() === tag.toString()) {
+      return true;
     }
   }
+  return false;
+};
+
+export const updateTagsOnCreate = async (tags, category) => {
+  const tagIds = [];
+  if (tags && tags.length) {
+    for (let i = 0; i < tags.length; i++) {
+      const tag = tags[i];
+      let tagRecord;
+      if (mongoose.isValidObjectId(tag)) {
+        tagRecord = await Tag.findById(tag);
+        if (tagRecord) {
+          tagRecord.frequency[category] += 1;
+          tagRecord.frequency.total += 1;
+          const savedTag = await tagRecord.save();
+          tagIds.push(savedTag._id);
+          continue;
+        }
+      }
+      const frequency = {
+        shortform: 0,
+        blockchain: 0,
+        micro: 0,
+        citationNeeded: 0,
+        total: 1,
+      };
+      frequency[category] = 1;
+      tagRecord = new Tag({
+        value: tag.replace(/[- ]/g, '_').toLowerCase(),
+        text: tag.replace(/_/g, ' '),
+        frequency,
+      });
+      const savedTag = await tagRecord.save();
+      tagIds.push(savedTag._id);
+    }
+  }
+  return tagIds;
+};
+
+export const updateTagsOnEdit = async (oldTags, newTags, category) => {
+  const unchangedTags = newTags.filter((t) => hasTag(oldTags, t));
+  const tagsToAdd = newTags.filter((t) => !hasTag(oldTags, t));
+  const tagsToRemove = oldTags.filter((t) => !hasTag(newTags, t));
+  const addPromise = updateTagsOnCreate(tagsToAdd, category);
+  const removePromise = Tag.updateMany(
+    { _id: { $in: tagsToRemove } },
+    { $inc: { [`frequency.${category}`]: -1, 'frequency.total': -1 } },
+  );
+  const [added] = await Promise.all([addPromise, removePromise]);
+  return [...unchangedTags, ...added]; // Don't really care about tag order, we can just mash these together.
 };

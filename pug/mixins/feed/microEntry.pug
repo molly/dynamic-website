@@ -33,4 +33,4 @@ mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {
       .tags
         if entry.tags && entry.tags.length
           each tag in entry.tags 
-            a.tag.p-category(href=`/micro/tag/${tag.value}`, title=`See all micro posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+            a.tag.p-category(href=`/${isInFeed ? 'feed' : 'micro'}/tag/${tag.value}`, title=`See all ${isInFeed ? 'feed' : 'micro'} posts tagged "${tag.text}"` rel="category tag") #{tag.text}

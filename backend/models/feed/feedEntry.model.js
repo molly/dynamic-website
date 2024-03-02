@@ -2,7 +2,17 @@ import mongoose from 'mongoose';
 import db from '../db.js';
 import MicroEntry from '../micro/microEntry.model.js';
 
-const FeedEntrySchema = new mongoose.Schema({}, { timestamps: true });
+const FeedEntrySchema = new mongoose.Schema(
+  {
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tag',
+      },
+    ],
+  },
+  { timestamps: true },
+);
 
 export const FeedEntry = db.feedConnection.model(
   'FeedEntry',

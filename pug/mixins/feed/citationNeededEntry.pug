@@ -1,4 +1,4 @@
-mixin citationNeededEntry(entry)
+mixin citationNeededEntry(entry,  {isLoggedIn=false} = {})
   article.entry.h-entry.hentry
     header
       .description Published an issue of 
@@ -23,6 +23,10 @@ mixin citationNeededEntry(entry)
         .timestamp
           a(href=`https://www.citationneeded.news/${entry.slug}`)
             time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
+          if isLoggedIn
+            span.edit-icon.icon
+              a(href=`/feed/tagger/citationNeeded/${entry._id}`)
+                include ../../icons/pencil.svg
         .social-links 
           if entry.socialLinks && entry.socialLinks.length 
             span Also posted to:
@@ -30,3 +34,7 @@ mixin citationNeededEntry(entry)
               a(class=`social-link u-syndication ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1), rel="syndication")
                 include ./icon.pug
                 +icon(socialLink.type)
+      .tags
+        if entry.tags && entry.tags.length
+          each tag in entry.tags 
+            a.tag.p-category(href=`/feed/tag/${tag.value}`, title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}

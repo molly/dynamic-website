@@ -82,7 +82,7 @@ export const getPaginatedAndFilteredFromDb = async (
 
     const cursor = documentsCollection
       .find(query)
-      .populate({ path: 'tags', model: Tag });
+      .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } });
 
     // Sort, paginate
     cursor.sort({ [dateKey]: sortOrder });

@@ -1,63 +1,13 @@
 import express from 'express';
 import mongoose from 'mongoose';
 
+import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { FeedEntryMicro } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 import { Tag } from '../models/tag.model.js';
-
 import { authenticated } from './auth.js';
 
 const router = express.Router();
-
-const hasTag = (tagArray, tag) => {
-  for (let i = 0; i < tagArray.length; i++) {
-    if (tagArray[i].toString() === tag.toString()) {
-      return true;
-    }
-  }
-  return false;
-};
-
-const updateTagsOnCreate = async (entry) => {
-  const tagIds = [];
-  if (entry.tags && entry.tags.length) {
-    for (let i = 0; i < entry.tags.length; i++) {
-      const tag = entry.tags[i];
-      let tagRecord;
-      if (mongoose.isValidObjectId(tag)) {
-        tagRecord = await Tag.findById(tag);
-        if (tagRecord) {
-          tagRecord.frequency.micro += 1;
-          tagRecord.frequency.total += 1;
-          const savedTag = await tagRecord.save();
-          tagIds.push(savedTag._id);
-          continue;
-        }
-      }
-      tagRecord = new Tag({
-        value: tag.replace(/[- ]/g, '_').toLowerCase(),
-        text: tag.replace(/_/g, ' '),
-        frequency: { shortform: 0, blockchain: 0, micro: 1, total: 1 },
-      });
-      const savedTag = await tagRecord.save();
-      tagIds.push(savedTag._id);
-    }
-  }
-  return tagIds;
-};
-
-const updateTagsOnEdit = async (oldTags, newTags) => {
-  const unchangedTags = newTags.filter((t) => hasTag(oldTags, t));
-  const tagsToAdd = newTags.filter((t) => !hasTag(oldTags, t));
-  const tagsToRemove = oldTags.filter((t) => !hasTag(newTags, t));
-  const addPromise = updateTagsOnCreate({ tags: tagsToAdd });
-  const removePromise = Tag.updateMany(
-    { _id: { $in: tagsToRemove } },
-    { $inc: { 'frequency.micro': -1, 'frequency.total': -1 } },
-  );
-  const [added] = await Promise.all([addPromise, removePromise]);
-  return [...unchangedTags, ...added]; // Don't really care about tag order, we can just mash these together.
-};
 
 router.post(
   '/entry',
@@ -66,7 +16,7 @@ router.post(
     try {
       // Update tags (create new ones if necessary, increment usage frequency)
       // Has to happen before the entry is created, or else we don't have the tag IDs to reference
-      const tags = await updateTagsOnCreate(req.body);
+      const tags = await updateTagsOnCreate(req.body.tags, 'micro');
 
       // Make entry
       const microEntryId = new mongoose.Types.ObjectId();
@@ -98,7 +48,11 @@ router.post(
     try {
       const entry = await MicroEntry.findById(req.params.id);
       const newEntry = req.body;
-      newEntry.tags = await updateTagsOnEdit(entry.tags, req.body.tags);
+      newEntry.tags = await updateTagsOnEdit(
+        entry.tags,
+        req.body.tags,
+        'micro',
+      );
       if (!entry) {
         res.sendStatus(404);
         return;
@@ -131,10 +85,7 @@ router.get('/entry/:slug', async (req, res) => {
 });
 
 router.get('/tags', async (_, res) => {
-  const tags = await Tag.find({}, { __v: 0 })
-    .collation({ locale: 'en' })
-    .sort({ text: 1 })
-    .lean();
+  const tags = await Tag.find({}, { __v: 0 }).sort({ value: 1 }).lean();
   res.json(tags);
 });
 

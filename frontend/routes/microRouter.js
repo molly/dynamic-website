@@ -1,9 +1,6 @@
 import express from 'express';
-import {
-  getMicroEntries,
-  getMicroEntriesWithTag,
-  getMicroEntry,
-} from '../../api/micro.js';
+import { getMicroEntries, getMicroEntry } from '../../api/micro.js';
+import { Tag } from '../../backend/models/tag.model.js';
 import { authenticated } from '../../backend/routes/auth.js';
 import { sanitizeTag } from '../js/helpers/sanitize.js';
 
@@ -56,12 +53,20 @@ router.get('/entry/:slug', async (req, res) => {
 // Tag feed
 router.get('/tag/:tag', async (req, res) => {
   const sanitizedTag = sanitizeTag(req.params.tag);
-  const entries = await getMicroEntriesWithTag(sanitizedTag);
+  const tag = await Tag.findOne({ value: sanitizedTag });
+  let hasResults = false;
+  let entries = [];
+  if (tag) {
+    hasResults = true;
+    entries = await getMicroEntries({ tag: tag._id });
+  }
   res.render('micro/index.pug', {
     entries,
     options: {
       isLoggedIn: req.isAuthenticated(),
-      tag: sanitizedTag, // Pug will escape it anyway, but can't hurt
+      tag: tag,
+      tagQuery: sanitizedTag,
+      hasResults,
     },
   });
 });

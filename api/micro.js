@@ -18,36 +18,18 @@ export const hydrateMicroEntry = (entry) => {
   return entry;
 };
 
-export const getMicroEntries = async () => {
-  const entries = await MicroEntry.find()
+export const getMicroEntries = async (query = {}) => {
+  const entries = await MicroEntry.find(query)
     .sort({ createdAt: -1 })
     .limit(10)
-    .populate({ path: 'tags', model: Tag })
+    .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
     .lean();
-  return entries.map(hydrateMicroEntry);
-};
-
-export const getMicroEntriesWithTag = async (tag) => {
-  const entries = await MicroEntry.aggregate([
-    {
-      $lookup: {
-        from: 'tags',
-        localField: 'tags',
-        foreignField: '_id',
-        as: 'entryTag',
-      },
-    },
-    { $match: { 'entryTag.value': tag } },
-    { $sort: { createdAt: -1 } },
-    { $limit: 10 },
-  ]).exec();
-  await MicroEntry.populate(entries, { path: 'tags', model: Tag });
   return entries.map(hydrateMicroEntry);
 };
 
 export const getMicroEntry = async (slug) => {
   const entry = await MicroEntry.findOne({ slug })
-    .populate({ path: 'tags', model: Tag })
+    .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
     .lean();
   return hydrateMicroEntry(entry);
 };

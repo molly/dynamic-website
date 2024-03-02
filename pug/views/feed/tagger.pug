@@ -11,43 +11,32 @@ html(class='feed-editor', lang='en')
     link(rel='manifest', href=`${importPrefix || ''}/site.webmanifest`)
     link(rel='stylesheet', href=`${importPrefix || ''}/assets/styles/base-styles.css`)
     link(rel='stylesheet', href="/static/editor.css")
+    link(rel='stylesheet', href="/static/feed.css")
     meta(name='theme-color', content='#191919')
     block head
 
   body
     .editor-container
-      #loading-overlay.overlay
-        include ../../includes/loadingSpinner
-      #error-overlay.overlay.hidden
-        .flex-column
-          h1 Error
-          p.error-message
       main
         .content-box
-          .content-container
-            input#title(type="text", placeholder="Post title")
-          #editorjs
-          
-          .content-container
-            hr
-            .input-group
-              label(for="slug") Slug
-              input#slug(type="text", placeholder="post-title")
+          if entryType == "citationNeeded"
+            include ../../mixins/feed/citationNeededEntry.pug
+            +citationNeededEntry(entry)
+          else if entryType == "readingShortform"
+            include ../../mixins/feed/readingEntry.pug
+            +readingEntry(entry, entry.shortform)
+          else if entryType == "readingBlockchain"
+            include ../../mixins/feed/readingEntry.pug
+            +readingEntry(entry, entry.blockchain)
 
-            .input-group
-              label(for="tags") Tags
-              input#tags.form-control-sm(autocomplete="off")
-
-            .input-group 
-              label(for="related") Related posts
-              input#related(type="text", placeholder="Post IDs")
+        .input-group
+          label(for="tags") Tags
+          input#tags.form-control-sm(autocomplete="off", value=entry.tags.map(e => e._id).join(','))
 
     footer.editor-footer
       .footer-controls
         .left-group
           button#save-button Save
           #last-edited
-
-        .right-group
-          button#signOut Sign out
-    script(src="/static/editor.js")
+    
+    script(src="/static/tagger.js")

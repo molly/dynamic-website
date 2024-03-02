@@ -1,5 +1,5 @@
 import express from 'express';
-import { updateTags } from '../helpers/tags.js';
+import { updateTagsOnCreate } from '../helpers/tags.js';
 import {
   BlockchainEntry,
   PressEntry,
@@ -27,7 +27,7 @@ router.post('/entry', authenticated(), async (req, res) => {
   const model = new models[type](entry);
   try {
     const result = await model.save();
-    await updateTags(entry, type);
+    await updateTagsOnCreate(entry.tags, type);
 
     // Add to activity feed
     if (type === 'shortform' || type === 'blockchain') {

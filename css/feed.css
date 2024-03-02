@@ -16,6 +16,7 @@
 
 h1.site-title {
   margin-bottom: 1em;
+  line-height: 1.25em;
 }
 
 .icon a,
@@ -122,28 +123,28 @@ a.social-link {
 }
 
 /* Footer ------------------------------------------------------------ */
-.footer {
+.entry .footer {
   font-size: 0.7em;
   border-top: 1px solid var(--hr-color);
   margin-top: 1em;
 }
 
-.footer .flex-row {
+.entry .footer .flex-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 0.5em;
 }
 
-.footer .post-meta {
+.entry .footer .post-meta {
   color: var(--timestamp-color);
 }
 
-.footer .post-meta a {
+.entry .footer .post-meta a {
   background-image: var(--image-underline-grey);
 }
 
-.footer .post-meta a:hover {
+.entry .footer .post-meta a:hover {
   color: var(--timestamp-color-hover);
   background-image: var(--image-underline-hover-grey);
 }

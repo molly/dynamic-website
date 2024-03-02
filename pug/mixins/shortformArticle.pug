@@ -1,4 +1,4 @@
-mixin shortformArticle(article, rss=false)
+mixin shortformArticle(article, rss=false, feed=false)
   .article
     if rss
       if article.image 
@@ -42,9 +42,10 @@ mixin shortformArticle(article, rss=false)
         if article.formattedDate
           | Published #{article.formattedDate}.
 
-        include ./verb.pug
-        +verb(article, to=false, capitalize=true)
-        | on #{article.formattedStarted}
+        if !feed
+          include ./verb.pug
+          +verb(article, to=false, capitalize=true)
+          | on #{article.formattedStarted}
 
       .summary
         != article.summary
@@ -60,6 +61,6 @@ mixin shortformArticle(article, rss=false)
           if index !== article.relatedReading.length - 1
             | , 
 
-    if !rss && article.tags && article.tags.length
+    if !rss && !feed && article.tags && article.tags.length
       .tags 
         span.tags= article.tags.map(function(t) { return t.text }).join(', ')

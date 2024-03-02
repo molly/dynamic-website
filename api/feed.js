@@ -44,14 +44,19 @@ const hydrateFeedEntries = (entries) =>
     return entry;
   });
 
-export const getFeedEntries = async () => {
-  const entries = await FeedEntry.find()
+export const getFeedEntries = async (query = {}) => {
+  const entries = await FeedEntry.find(query)
     .sort({ createdAt: -1 })
     .limit(20)
     .populate({
+      path: 'tags',
+      model: Tag,
+      options: { sort: { value: 1 } },
+    })
+    .populate({
       path: 'micro',
       model: MicroEntry,
-      populate: { path: 'tags', model: Tag },
+      populate: { path: 'tags', model: Tag, options: { sort: { value: 1 } } },
     })
     .populate({
       path: 'shortform',
