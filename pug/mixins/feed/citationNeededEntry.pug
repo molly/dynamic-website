@@ -27,6 +27,7 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false} = {})
             span.edit-icon.icon
               a(href=`/feed/tagger/citationNeeded/${entry._id}`)
                 include ../../icons/pencil.svg
+          |  from the #[a(href="https://citationneeded.news/") #[i Citation Needed]] newsletter.
         .social-links 
           if entry.socialLinks && entry.socialLinks.length 
             span Also posted to:

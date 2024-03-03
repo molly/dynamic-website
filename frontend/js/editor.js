@@ -19,10 +19,13 @@ const postMeta = {
   title: '',
   slug: DateTime.now().toFormat('yyyyMMddHHmm'),
   tags: [],
+  relatedPost: null,
+  relatedPostModel: null,
   id: null,
 };
 let savedPost = {};
 let tagSelect;
+let relatedPostsSelect;
 
 // Change handlers
 function onTitleChange() {
@@ -123,7 +126,7 @@ async function onFirstLoad() {
   });
 
   // Load TomSelect for tags editor
-  const { data: tagOptions } = await axios.get('/dynamic-api/micro/tags');
+  const { data: tagOptions } = await axios.get('/dynamic-api/tags');
   tagSelect = new TomSelect('#tags', {
     create: true,
     items: postMeta.tags,
@@ -134,10 +137,22 @@ async function onFirstLoad() {
     closeAfterSelect: true,
   });
 
+  // Load TomSelect for related posts
+  const { data: relatedOptions } = await axios.get(
+    '/dynamic-api/micro/relatedPosts',
+  );
+  relatedPostsSelect = new TomSelect('#related', {
+    items: postMeta.related,
+    valueField: '_id',
+    labelField: 'title',
+    searchField: ['title'],
+    options: relatedOptions,
+    allowEmptyOption: true,
+  });
+
   // Selectors
   const titleEl = document.getElementById('title');
   const slugEl = document.getElementById('slug');
-  // const relatedEl = document.getElementById('related');
   const saveButton = document.getElementById('save-button');
 
   // Set initial values
@@ -153,6 +168,17 @@ async function onFirstLoad() {
       postMeta.tags = value.split(',');
     } else {
       postMeta.tags = [];
+    }
+  });
+  relatedPostsSelect.on('change', function (value) {
+    if (value) {
+      postMeta.relatedPost = value;
+      postMeta.relatedPostModel = relatedOptions.find(
+        (opt) => opt._id === value,
+      ).type;
+    } else {
+      postMeta.relatedPost = null;
+      postMeta.relatedPostModel = null;
     }
   });
 
@@ -171,7 +197,7 @@ async function onFirstLoad() {
         .then((resp) => {
           return Promise.all([
             Promise.resolve(resp),
-            axios.get('/dynamic-api/micro/tags'),
+            axios.get('/dynamic-api/tags'),
           ]);
         })
         .then(([resp, tags]) => {

@@ -1,19 +1,27 @@
-mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {})
+mixin microEntry(entry, {isLoggedIn=false, isInFeed=false} = {})
   article.entry.h-entry.hentry
     header
       if isInFeed
         .post-icon.icon
-          if standalone
+          a(href=`/micro/entry/${entry.slug}`)
             include ../../icons/chat.svg
-          else
-            a(href=`/micro/entry/${entry.slug}`)
-              include ../../icons/chat.svg
           .description Posted:
       if entry.title
         h2.p-name #{entry.title}
     .p-content.e-content
       each block in entry.html
         != block
+
+      if entry.relatedPostModel 
+        .related-post
+          case entry.relatedPostModel
+            when "ShortformEntry"
+            when "BlockchainEntry"
+              include ../shortformArticle.pug
+              +shortformArticle(entry.relatedPost, false, true)
+            when "PressEntry"
+              include ../pressArticle.pug
+              +pressArticle(entry.relatedPost, false, true)
 
     footer.footer
       .flex-row.post-meta
@@ -24,6 +32,7 @@ mixin microEntry(entry, {standalone=false, isLoggedIn=false, isInFeed=false} = {
             span.edit-icon.icon
               a(href=`/micro/editor/${entry.slug}`)
                 include ../../icons/pencil.svg
+          |  from the #[a(href="/micro") micro posts] feed.
         .social-links 
           if entry.socialLinks && entry.socialLinks.length 
             span Also posted to:

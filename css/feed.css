@@ -27,6 +27,7 @@ a.social-link {
 
 /* Entry ------------------------------------------------------------- */
 .entry {
+  position: relative;
   width: 100%;
   padding: 1em 1em 0.5em 1em;
   background-color: var(--card-bg-color);
@@ -36,6 +37,10 @@ a.social-link {
 
 h1.site-title + .entry {
   margin-top: 2em;
+}
+
+.standalone .entry {
+  margin-top: 0;
 }
 
 .entry a {
@@ -68,6 +73,7 @@ h1.site-title + .entry {
   width: unset;
   height: unset;
   padding: 0.1em 0.5em 0 0.5em;
+  color: var(--timestamp-color);
   background-color: var(--card-bg-color);
   box-shadow: var(--shadow-1);
   z-index: -1;
@@ -84,7 +90,6 @@ h1.site-title + .entry {
 
 .entry header .description {
   font-size: 0.7em;
-  color: var(--timestamp-color);
   font-style: italic;
   margin-left: 0.5em;
 }
@@ -124,6 +129,37 @@ h1.site-title + .entry {
 .entry .p-content .media-wrapper.backgrounded {
   background: var(--note-background-color);
   padding: 1em;
+}
+
+/* Reading list */
+.entry .byline,
+.entry .details {
+  font-size: 0.7em;
+  color: var(--timestamp-color);
+}
+
+.entry blockquote.summary {
+  position: relative;
+  font-size: 0.8em;
+  line-height: 1.25em;
+  z-index: 1;
+}
+
+.entry blockquote.summary:before {
+  color: var(--color-blockquote-decorative-quote);
+  content: '\201C';
+  font-family: 'Times New Roman';
+  font-size: 5rem;
+  font-weight: 700;
+  left: -0.25em;
+  top: 0.08em;
+  position: absolute;
+  z-index: -1;
+}
+
+.related-post {
+  padding-left: 0.5em;
+  border-left: 3px solid var(--hr-color);
 }
 
 /* Footer ------------------------------------------------------------ */
@@ -218,7 +254,14 @@ h1.site-title + .entry {
   margin-right: 0.5em;
 }
 
-/* Dark mode */
+/* Standalone entries ------------------------------------------------------------ */
+.back-links {
+  margin-top: 1em;
+  font-size: 0.7em;
+  line-height: 1.2em;
+}
+
+/* Dark mode --------------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
   .entry .p-content .media-wrapper.invert-on-dark img {
     filter: invert(0.85);

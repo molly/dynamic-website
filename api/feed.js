@@ -1,3 +1,4 @@
+import db from '../backend/models/db.js';
 import {
   BlockchainEntry,
   ShortformEntry,
@@ -47,7 +48,6 @@ const hydrateFeedEntries = (entries) =>
 export const getFeedEntries = async (query = {}) => {
   const entries = await FeedEntry.find(query)
     .sort({ createdAt: -1 })
-    .limit(20)
     .populate({
       path: 'tags',
       model: Tag,
@@ -56,7 +56,10 @@ export const getFeedEntries = async (query = {}) => {
     .populate({
       path: 'micro',
       model: MicroEntry,
-      populate: { path: 'tags', model: Tag, options: { sort: { value: 1 } } },
+      populate: [
+        { path: 'tags', model: Tag, options: { sort: { value: 1 } } },
+        { path: 'relatedPost', connection: db.readingListConnection },
+      ],
     })
     .populate({
       path: 'shortform',

@@ -3,6 +3,9 @@
   --card-bg-color: #ffffff;
   --tag-background-color: #efefef;
 
+  /* Text */
+  --color-blockquote-decorative-quote: #efefef;
+
   /* Borders */
   --image-border-color: rgba(0, 0, 0, 0.05);
 
@@ -12,16 +15,18 @@
   --shadow-2: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
     rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
 
+  /* Underlines */
   --image-underline-grey: url('data:image/gif;base64,R0lGODlhAQABAIABAK2trURERCH+EUNyZWF0ZWQgd2l0aCBHSU1QACwAAAAAAQABAAACAkQBADs=');
   --image-underline-hover-grey: url('data:image/gif;base64,R0lGODlhAQABAIABAIiIiERERCH+EUNyZWF0ZWQgd2l0aCBHSU1QACwAAAAAAQABAAACAkQBADs=');
 
   @media (prefers-color-scheme: dark) {
-    --bg-color: #161616;
+    --feed-bg-color: #161616;
     --card-bg-color: #222222;
     --image-border-color: rgba(255, 255, 255, 0.05);
     --timestamp-color: #adadad;
     --timestamp-color-hover: #888888;
     --tag-background-color: none;
+    --color-blockquote-decorative-quote: #555555;
   }
 }
 
@@ -32,4 +37,5 @@
   --timestamp-color: #adadad;
   --timestamp-color-hover: #888888;
   --tag-background-color: none;
+  --color-blockquote-decorative-quote: #555555;
 }

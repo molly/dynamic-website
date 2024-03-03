@@ -1,4 +1,5 @@
 import EditorJSHtml from 'editorjs-html';
+import db from '../backend/models/db.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { Tag } from '../backend/models/tag.model.js';
 import { formatMedia } from './helpers/media.js';
@@ -23,6 +24,7 @@ export const getMicroEntries = async (query = {}) => {
     .sort({ createdAt: -1 })
     .limit(10)
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
+    .populate({ path: 'relatedPost', connection: db.readingListConnection })
     .lean();
   return entries.map(hydrateMicroEntry);
 };
@@ -30,6 +32,7 @@ export const getMicroEntries = async (query = {}) => {
 export const getMicroEntry = async (slug) => {
   const entry = await MicroEntry.findOne({ slug })
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
+    .populate({ path: 'relatedPost', connection: db.readingListConnection })
     .lean();
   return hydrateMicroEntry(entry);
 };

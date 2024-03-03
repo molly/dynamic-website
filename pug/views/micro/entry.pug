@@ -13,6 +13,11 @@ block body
   main
     .content-box
       .entries
-        #entryContainer
+        #entryContainer.standalone
           include ../../mixins/feed/microEntry.pug
-          +microEntry(entry, {standalone: true})
+          +microEntry(entry, {isInFeed: false})
+      .back-links
+        div
+          a(href="/feed") &laquo; Back to the activity feed
+        div
+          a(href="/micro") &laquo; Back to the microblog feed

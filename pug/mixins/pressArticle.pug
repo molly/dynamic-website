@@ -1,4 +1,4 @@
-mixin pressArticle(article)
+mixin pressArticle(article, rss=false, feed=false)
   .article
     .title
       a(href=article.href) "#{article.title}"
@@ -35,6 +35,6 @@ mixin pressArticle(article)
       if article.formattedDate
         |  #{article.formattedDate}.
 
-    if article.tags && article.tags.length
+    if !feed && article.tags && article.tags.length
       .tags
         span.tags= article.tags.map(function(t) { return t.text }).join(', ')

@@ -12,15 +12,13 @@ const MicroEntrySchema = new mongoose.Schema(
         ref: 'Tag',
       },
     ],
-    readingListReference: {
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        refPath: 'readingListReference.model',
-      },
-      model: {
-        type: String,
-        enum: ['ShortformEntry', 'BlockchainEntry', 'PressEntry'],
-      },
+    relatedPost: {
+      type: mongoose.Schema.Types.ObjectId,
+      refPath: 'relatedPostModel',
+    },
+    relatedPostModel: {
+      type: String,
+      enum: ['ShortformEntry', 'BlockchainEntry', 'PressEntry'],
     },
     socialLinks: [
       {

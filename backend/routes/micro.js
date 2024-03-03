@@ -2,9 +2,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
+import { ShortformEntry } from '../models/entry.model.js';
 import { FeedEntryMicro } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
-import { Tag } from '../models/tag.model.js';
 import { authenticated } from './auth.js';
 
 const router = express.Router();
@@ -84,9 +84,51 @@ router.get('/entry/:slug', async (req, res) => {
   }
 });
 
-router.get('/tags', async (_, res) => {
-  const tags = await Tag.find({}, { __v: 0 }).sort({ value: 1 }).lean();
-  res.json(tags);
+// Get related posts for dropdown
+router.get('/relatedPosts', async (req, res) => {
+  const results = await ShortformEntry.aggregate([
+    { $sort: { entryAdded: -1 } },
+    { $limit: 10 },
+    {
+      $project: {
+        sortBy: '$entryAdded',
+        title: 1,
+        _id: 1,
+        type: 'ShortformEntry',
+      },
+    },
+    {
+      $unionWith: {
+        coll: 'blockchain',
+        pipeline: [
+          { $sort: { entryAdded: -1 } },
+          { $limit: 10 },
+          {
+            $project: {
+              sortBy: '$entryAdded',
+              title: 1,
+              _id: 1,
+              type: 'BlockchainEntry',
+            },
+          },
+        ],
+      },
+    },
+    {
+      $unionWith: {
+        coll: 'press',
+        pipeline: [
+          { $sort: { date: -1 } },
+          { $limit: 5 },
+          {
+            $project: { sortBy: '$date', title: 1, _id: 1, type: 'PressEntry' },
+          },
+        ],
+      },
+    },
+    { $sort: { sortBy: -1 } },
+  ]);
+  res.json(results);
 });
 
 export default router;

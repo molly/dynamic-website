@@ -37,16 +37,31 @@ mixin shortformArticle(article, rss=false, feed=false)
       if article.publisher
         |  #{article.publisher}.
 
-    .details
-      span.read-date
+      if feed
+        span.read-date
         if article.formattedDate
-          | Published #{article.formattedDate}.
+          |  Published #{article.formattedDate}.
 
         if !feed
           include ./verb.pug
           +verb(article, to=false, capitalize=true)
           | on #{article.formattedStarted}
+    
+    if !feed
+      .details
+        span.read-date
+          if article.formattedDate
+            | Published #{article.formattedDate}.
 
+          if !feed
+            include ./verb.pug
+            +verb(article, to=false, capitalize=true)
+            | on #{article.formattedStarted}
+
+    if feed && article.summary
+      blockquote.summary
+        != article.summary
+    else if article.summary
       .summary
         != article.summary
     

@@ -6,8 +6,8 @@ export function getReadingDetails(feedEntry) {
   if (parenthetical) {
     if (parenthetical.indexOf('video') > -1) {
       return { icon: 'tv', verb: 'Watched' };
-    } else if (parenthetical.indexOf('podcast')) {
-      return { icon: 'headphones', verb: 'Listened to' };
+    } else if (parenthetical.indexOf('podcast') > -1) {
+      return { icon: 'speaker', verb: 'Listened to' };
     }
   }
   return { icon: 'newspaper', verb: 'Read' };
