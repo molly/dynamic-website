@@ -12,6 +12,8 @@ html(class='feed-editor', lang='en')
     link(rel='stylesheet', href=`${importPrefix || ''}/assets/styles/base-styles.css`)
     link(rel='stylesheet', href="/static/editor.css")
     meta(name='theme-color', content='#191919')
+    include ../../templates/titleAndDescription.pug
+    +titleAndDescription('Editor', "Micro post editor")
     block head
 
   body

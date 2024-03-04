@@ -8,13 +8,13 @@ import {
 } from './helpers/editorHelpers.js';
 
 import EditorJS from '@editorjs/editorjs';
+import Embed from '@editorjs/embed';
 import Header from '@editorjs/header';
 import InlineCode from '@editorjs/inline-code';
 import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
 
 import ImageTool from '@editorjs/image';
-import LinkTool from '@editorjs/link';
 import RawTool from '@editorjs/raw';
 import debounce from 'lodash.debounce';
 import TomSelect from 'tom-select';
@@ -117,6 +117,24 @@ async function onFirstLoad() {
     autofocus: true,
     tools: {
       header: Header,
+      embed: {
+        class: Embed,
+        config: {
+          services: {
+            twitter: true,
+            youtube: true,
+            w3igg: {
+              regex:
+                /https:\/\/(?:www\.)?web3isgoinggreat\.com\/\?id=([^/?&]*)/,
+              embedUrl:
+                'https://www.web3isgoinggreat.com/embed/<%= remote_id %>',
+              html: "<iframe frameborder='0' sandbox=''>",
+              width: 600,
+              height: 600,
+            },
+          },
+        },
+      },
       image: {
         class: ImageTool,
         config: {
@@ -136,7 +154,6 @@ async function onFirstLoad() {
         },
       },
       inlineCode: InlineCode,
-      linkTool: LinkTool,
       list: {
         class: List,
         inlineToolbar: true,

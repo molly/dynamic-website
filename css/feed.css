@@ -138,14 +138,14 @@ h1.site-title + .entry {
   color: var(--timestamp-color);
 }
 
-.entry blockquote.summary {
+.entry blockquote {
   position: relative;
   font-size: 0.8em;
   line-height: 1.25em;
   z-index: 1;
 }
 
-.entry blockquote.summary:before {
+.entry blockquote:before {
   color: var(--color-blockquote-decorative-quote);
   content: '\201C';
   font-family: 'Times New Roman';
@@ -155,6 +155,15 @@ h1.site-title + .entry {
   top: 0.08em;
   position: absolute;
   z-index: -1;
+}
+
+.entry .quote blockquote:has(+ cite) {
+  margin-bottom: 0;
+}
+
+.entry .quote cite {
+  font-size: 0.8em;
+  margin-left: 3em;
 }
 
 .related-post {
