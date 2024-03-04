@@ -4,7 +4,6 @@
 
 .editor-container {
   padding-top: 5rem;
-  padding-bottom: 3rem;
   margin-left: auto;
   margin-right: auto;
   max-width: 1200px;
@@ -56,10 +55,56 @@ input#related {
   color: var(--hr-color);
 }
 
+/* Social posts */
+input#social-posts {
+  display: inline;
+  margin-right: 0.5em;
+}
+
+label[for='social-posts'],
+label[for='social-posts'] h2 {
+  display: inline;
+}
+
+.social-editors {
+  display: flex;
+  margin: 0 auto;
+  padding: 0 5em;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ce-social-post-delimiter {
+  width: 100%;
+  border-bottom: 1px dashed var(--hr-color);
+  position: relative;
+}
+
+.ce-social-post-delimiter:after {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  z-index: 1;
+  border: 1px solid var(--hr-color);
+  content: attr(data-character-count);
+  font-size: 0.7em;
+  color: var(--timestamp-color);
+  background-color: var(--bg-color);
+  padding: 0 4px;
+  line-height: 1em;
+}
+
+.ce-social-post-delimiter[data-limit-exceeded='true']:after {
+  background-color: var(--over-character-limit-background-color);
+}
+
+/* Error */
 .flex-column {
   flex-direction: column;
 }
 
+/* Footer */
 footer.editor-footer {
   position: fixed;
   bottom: 0;
@@ -104,7 +149,7 @@ footer.editor-footer {
   align-items: center;
 }
 
-.overlay.hidden {
+.hidden {
   display: none;
 }
 

@@ -25,7 +25,7 @@ const edjsParser = EditorJSHtml({
         return `<iframe title="Web3 is Going Just Great" height="${data.height}" width="${data.width}" src="${data.embed}" frameborder="0" sandbox=""></iframe>`;
       default:
         throw new Error(
-          'Only Youtube and Vime Embeds are supported right now.',
+          'Only Youtube, Twitter, and W3IGG embeds are supported right now.',
         );
     }
   },

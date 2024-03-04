@@ -2,6 +2,7 @@
   --feed-bg-color: rgba(243, 246, 249, 0.6);
   --card-bg-color: #ffffff;
   --tag-background-color: #efefef;
+  --over-character-limit-background-color: #ffcccc;
 
   /* Text */
   --color-blockquote-decorative-quote: #efefef;

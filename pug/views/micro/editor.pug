@@ -43,13 +43,26 @@ html(class='feed-editor', lang='en')
             .input-group 
               label(for="related") Related posts
               select#related.form-control-sm
-            
-            details.social-links
-              summary Manually link social post IDs
-              each network in ["twitter", "mastodon", "bluesky", "youtube", "tiktok"]
-                .input-group
-                  label(for=network) #{network.charAt(0).toUpperCase() + network.slice(1)}
-                  input.social-post-id(id=network, type="text")
+    .social-container
+      .content-box
+        .content-container
+          input#social-posts(type="checkbox")
+          label(for="social-posts")
+            h2 Social posts
+      .social-editors.hidden
+        each network in ["twitter", "mastodon", "bluesky"]
+          .social-editor-wrapper
+            h3 #{network.charAt(0).toUpperCase() + network.slice(1)}
+            .social-editor(id=`${network}-editor`)
+
+      .content-box
+        .content-container
+          details.social-links
+            summary Manually link social post IDs
+            each network in ["twitter", "mastodon", "bluesky", "youtube", "tiktok"]
+              .input-group
+                label(for=network) #{network.charAt(0).toUpperCase() + network.slice(1)}
+                input.social-post-id(id=network, type="text")
 
     footer.editor-footer
       .footer-controls
