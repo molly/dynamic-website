@@ -162,6 +162,10 @@ h1.site-title + .entry {
   border-left: 3px solid var(--hr-color);
 }
 
+.cdx-social-link {
+  padding: 0 0.025em;
+}
+
 .cdx-social-link:not(.cdx-social-link ~ .cdx-social-link) {
   margin-left: 0.05em;
 }
@@ -181,6 +185,10 @@ h1.site-title + .entry {
 .cdx-social-link .cdx-mention-icon {
   width: 10px;
   height: unset;
+}
+
+.cdx-social-link.wikipedia .cdx-mention-icon {
+  width: 14px;
 }
 
 /* Footer ------------------------------------------------------------ */

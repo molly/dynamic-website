@@ -1,4 +1,5 @@
 export const NETWORKS = ['twitter', 'mastodon', 'bluesky', 'tiktok', 'youtube'];
+export const MENTION_NETWORKS = ['website', 'wikipedia', ...NETWORKS];
 
 const SOCIAL_PREFIXES = {
   twitter: 'https://twitter.com/molly0xFFF/status/',
@@ -14,6 +15,7 @@ export const GENERIC_SOCIAL_PREFIXES = {
   bluesky: 'https://bsky.app/profile/',
   tiktok: 'https://www.tiktok.com/@',
   youtube: 'https://www.youtube.com/channel/',
+  wikipedia: 'https://en.wikipedia.org/wiki/',
 };
 
 export function hydrateAndSortSocialLinks(links) {
@@ -41,6 +43,8 @@ export function getSocialLinkFromHandle(handle, network) {
     return `https://www.youtube.com/${handle}`;
   } else if (network === 'website') {
     return handle;
+  } else if (network === 'wikipedia') {
+    return `${GENERIC_SOCIAL_PREFIXES.wikipedia}${handle.replace(/ /g, '_')}`;
   }
   return `${GENERIC_SOCIAL_PREFIXES[network]}${handle}`;
 }

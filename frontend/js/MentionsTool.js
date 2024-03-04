@@ -1,5 +1,5 @@
 import {
-  NETWORKS,
+  MENTION_NETWORKS,
   getSocialLinkFromHandle,
 } from '../../api/helpers/socialMedia.js';
 
@@ -20,17 +20,7 @@ export default class MarkerTool {
 
   static get sanitize() {
     return {
-      span: function (el) {
-        if (
-          el.classList.contains('cdx-mention') ||
-          el.classList.contains('cdx-mention-icon') ||
-          el.classList.contains('cdx-mention-plain')
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
+      span: { class: true },
       svg: function (el) {
         return el.parentElement.classList.contains('cdx-mention-icon');
       },
@@ -41,9 +31,14 @@ export default class MarkerTool {
       },
       a: function (el) {
         if (el.classList.contains('u-url')) {
-          return { href: true, class: true, 'data-username': true };
+          return {
+            href: true,
+            class: true,
+            title: true,
+            'data-username': true,
+          };
         }
-        return false;
+        return { href: true, target: true, rel: true };
       },
     };
   }
@@ -73,7 +68,7 @@ export default class MarkerTool {
 
     const parentTag = this.api.selection.findParentTag(this.tag, this.class);
     if (parentTag) {
-      for (let network of ['website', ...NETWORKS]) {
+      for (let network of MENTION_NETWORKS) {
         const networkEl = parentTag.querySelector(`.${network}`);
         if (networkEl) {
           this.networks[network] =
@@ -141,7 +136,7 @@ export default class MarkerTool {
   renderActions() {
     this.inputBoxWrapper = document.createElement('DIV');
     this.inputs = [];
-    for (let network of ['website', ...NETWORKS]) {
+    for (let network of MENTION_NETWORKS) {
       const input = document.createElement('input');
       input.classList.add('cdx-mention-input');
       input.id = network;
@@ -186,9 +181,9 @@ export default class MarkerTool {
               link.title = input.id.charAt(0).toUpperCase() + input.id.slice(1);
 
               // Insert at the proper location
-              const networkIndex = NETWORKS.indexOf(input.id);
+              const networkIndex = MENTION_NETWORKS.indexOf(input.id);
               let inserted = false;
-              for (let laterNetwork of NETWORKS.slice(networkIndex)) {
+              for (let laterNetwork of MENTION_NETWORKS.slice(networkIndex)) {
                 const laterNetworkEl = mention.querySelector(
                   `.${laterNetwork}`,
                 );
