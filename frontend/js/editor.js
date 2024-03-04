@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { DateTime } from 'luxon';
 import '../../css/feed-editor.css';
-import { getSlugFromTitle } from './helpers/editorHelpers.js';
+import {
+  getSlugFromTitle,
+  socialLinksToArray,
+  socialLinksToMap,
+} from './helpers/editorHelpers.js';
 
 import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
@@ -14,6 +18,7 @@ import LinkTool from '@editorjs/link';
 import RawTool from '@editorjs/raw';
 import debounce from 'lodash.debounce';
 import TomSelect from 'tom-select';
+import MentionsTool from './MentionsTool.js';
 
 const postMeta = {
   title: '',
@@ -22,6 +27,7 @@ const postMeta = {
   relatedPost: null,
   relatedPostModel: null,
   id: null,
+  socialLinks: {},
 };
 let savedPost = {};
 let tagSelect;
@@ -43,12 +49,25 @@ function onSlugChange() {
 }
 const debouncedOnSlugChange = debounce(onSlugChange, 250);
 
+function onSocialChange() {
+  if (this.value) {
+    postMeta.socialLinks[this.id] = this.value;
+  } else {
+    delete postMeta.socialLinks[this.id];
+  }
+}
+const debouncedOnSocialChange = debounce(onSocialChange, 250);
+
+// Helpers to keep form in sync with DB after save
 function updateModelFromDb(data) {
   savedPost = data;
   postMeta.title = data.title;
   postMeta.slug = data.slug;
   postMeta.tags = data.tags;
   postMeta.id = data.id;
+  postMeta.relatedPost = data.relatedPost;
+  postMeta.relatedPostModel = data.relatedPostModel;
+  postMeta.socialLinks = socialLinksToMap(data.socialLinks);
 }
 
 function setInputValues() {
@@ -59,6 +78,10 @@ function setInputValues() {
   titleEl.value = postMeta.title;
   slugEl.value = postMeta.slug;
   tagSelect.setValue(postMeta.tags);
+  relatedPostsSelect.setValue(postMeta.relatedPost);
+  Object.entries(postMeta.socialLinks).forEach(([key, value]) => {
+    document.getElementById(key).value = value;
+  });
   if (savedPost.updatedAt) {
     slugEl.setAttribute('disabled', true);
     lastEdited.textContent = `Last edited: ${DateTime.fromISO(savedPost.updatedAt).toLocaleString(DateTime.DATETIME_FULL)}`;
@@ -119,6 +142,7 @@ async function onFirstLoad() {
         inlineToolbar: true,
         config: { defaultStyle: 'unordered' },
       },
+      mentions: MentionsTool,
       quote: Quote,
       raw: RawTool,
     },
@@ -142,7 +166,7 @@ async function onFirstLoad() {
     '/dynamic-api/micro/relatedPosts',
   );
   relatedPostsSelect = new TomSelect('#related', {
-    items: postMeta.related,
+    items: postMeta.relatedPost,
     valueField: '_id',
     labelField: 'title',
     searchField: ['title'],
@@ -161,6 +185,9 @@ async function onFirstLoad() {
   // Attach handlers
   titleEl.addEventListener('keydown', debouncedOnTitleChange);
   slugEl.addEventListener('keydown', debouncedOnSlugChange);
+  document
+    .querySelectorAll('.social-post-id')
+    .forEach((el) => el.addEventListener('keydown', debouncedOnSocialChange));
 
   // TomSelect uses .on
   tagSelect.on('change', function (value) {
@@ -189,9 +216,13 @@ async function onFirstLoad() {
       const endpoint = savedPost._id
         ? `/dynamic-api/micro/entry/${savedPost._id}`
         : '/dynamic-api/micro/entry';
+      const transformedPostMeta = {
+        ...postMeta,
+        socialLinks: socialLinksToArray(postMeta.socialLinks),
+      };
       axios
         .post(endpoint, {
-          ...postMeta,
+          ...transformedPostMeta,
           post: savedData,
         })
         .then((resp) => {

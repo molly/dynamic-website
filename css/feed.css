@@ -162,6 +162,27 @@ h1.site-title + .entry {
   border-left: 3px solid var(--hr-color);
 }
 
+.cdx-social-link:not(.cdx-social-link ~ .cdx-social-link) {
+  margin-left: 0.05em;
+}
+
+.cdx-social-link:not(.cdx-social-link ~ .cdx-social-link)::before {
+  content: '(';
+  font-size: 0.8em;
+  vertical-align: top;
+}
+
+.cdx-social-link:last-child::after {
+  content: ')';
+  font-size: 0.8em;
+  vertical-align: top;
+}
+
+.cdx-social-link .cdx-mention-icon {
+  width: 10px;
+  height: unset;
+}
+
 /* Footer ------------------------------------------------------------ */
 .entry .footer {
   font-size: 0.7em;

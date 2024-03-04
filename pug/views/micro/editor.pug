@@ -41,6 +41,13 @@ html(class='feed-editor', lang='en')
             .input-group 
               label(for="related") Related posts
               select#related.form-control-sm
+            
+            details.social-links
+              summary Manually link social post IDs
+              each network in ["twitter", "mastodon", "bluesky", "youtube", "tiktok"]
+                .input-group
+                  label(for=network) #{network.charAt(0).toUpperCase() + network.slice(1)}
+                  input.social-post-id(id=network, type="text")
 
     footer.editor-footer
       .footer-controls

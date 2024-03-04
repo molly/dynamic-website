@@ -25,6 +25,7 @@ export default [
           test: /\.css$/i,
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
+        { test: /\.svg$/, loader: 'svg-inline-loader' },
       ],
     },
   },

@@ -15,6 +15,10 @@
   margin: 0 auto;
 }
 
+.content-box {
+  margin-bottom: 70px; /* Space for footer */
+}
+
 .align-right {
   text-align: right;
 }
@@ -138,6 +142,21 @@ footer.editor-footer {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* MentionsTool */
+.cdx-mention {
+  background-color: var(--note-background-color);
+}
+
+.cdx-mention::before {
+  content: '@';
+  color: var(--grayText);
+  padding-right: 0.1em;
+}
+
+.cdx-mention-input {
+  display: block;
 }
 
 /* Dark mode */
