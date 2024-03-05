@@ -23,15 +23,25 @@ export const NETWORK_LIMITS = {
   bluesky: { post: 300, alt: 1000 },
 };
 
+export const createSocialBlock = (block, network) => {
+  const newBlock = JSON.parse(JSON.stringify(block));
+  let text = block.data.text;
+  if (block.type === 'quote') {
+    text = `"${text}"`;
+  }
+  newBlock.data.text = processText(text, network);
+  newBlock.type = 'paragraph';
+  return newBlock;
+};
+
 export const parseAndInsertDelimiters = (post, network) => {
   let charCount = 0;
   let images = [];
   const newPostBlocks = [];
   for (let i = 0; i < post.blocks.length; i++) {
     const currentBlock = post.blocks[i];
-    if (currentBlock.type === 'paragraph') {
-      const newBlock = JSON.parse(JSON.stringify(currentBlock));
-      newBlock.data.text = processText(currentBlock.data.text, network);
+    if (currentBlock.type === 'paragraph' || currentBlock.type === 'quote') {
+      const newBlock = createSocialBlock(currentBlock, network);
       const currentBlockLength = newBlock.data.text.length;
       if (charCount + currentBlockLength > NETWORK_LIMITS[network].post) {
         // End the current post and start a new one
@@ -47,10 +57,7 @@ export const parseAndInsertDelimiters = (post, network) => {
         newPostBlocks.push(newBlock);
         charCount = currentBlockLength;
       } else {
-        // Add to the current post
-        if (newPostBlocks.length > 0) {
-          charCount += 2; // Add two characters for the newlines
-        }
+        // Start a new post
         newPostBlocks.push(newBlock);
         charCount += currentBlockLength;
       }
@@ -79,6 +86,7 @@ export const parseAndInsertDelimiters = (post, network) => {
       limitExceeded: charCount > NETWORK_LIMITS[network].post,
     },
   });
+  console.log(newPostBlocks);
   return { ...post, blocks: newPostBlocks };
 };
 
@@ -88,7 +96,7 @@ export const updateDelimiters = (editor, post, network, tags = null) => {
   let charCount = tags ? tags.length + 1 : 0;
   for (let block of post.blocks) {
     if (block.type === 'paragraph') {
-      charCount += getCharacterCount(block, network);
+      charCount += processText(block, network).length;
     } else if (block.type === 'socialPostDelimiter') {
       if (charCount !== block.data.characterCount) {
         const limitExceeded = charCount > NETWORK_LIMITS[network].post;
