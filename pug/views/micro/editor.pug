@@ -46,13 +46,21 @@ html(class='feed-editor', lang='en')
     .social-container
       .content-box
         .content-container
-          input#social-posts(type="checkbox")
-          label(for="social-posts")
-            h2 Social posts
+          .input-group
+            input#social-posts(type="checkbox")
+            label(for="social-posts")
+              h2 Social posts
       .social-editors.hidden
         each network in ["twitter", "mastodon", "bluesky"]
           .social-editor-wrapper
-            h3 #{network.charAt(0).toUpperCase() + network.slice(1)}
+            .input-group
+              input.social-network-toggle(id=`${network}-social` type="checkbox", checked="checked")
+              label.social-network-toggle-label(for=`${network}-social`)
+                h3 #{network.charAt(0).toUpperCase() + network.slice(1)}
+            if network == "mastodon"
+              .input-group
+                label(for="mastodon-tags") Mastodon tags
+                input#mastodon-tags(type="text")
             .social-editor(id=`${network}-editor`)
 
       .content-box

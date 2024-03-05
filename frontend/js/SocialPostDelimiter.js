@@ -46,7 +46,8 @@ export default class Delimiter {
       wrapper: 'ce-social-post-delimiter',
     };
 
-    this.limit = config.limit || 1000;
+    // If the limit is null, this is being used in the primary editor to manually mark where posts should break.
+    this.limit = config.limit;
     this.data = data;
     this._element = this.drawView();
   }

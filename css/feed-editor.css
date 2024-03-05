@@ -56,13 +56,16 @@ input#related {
 }
 
 /* Social posts */
-input#social-posts {
+input#social-posts,
+input.social-network-toggle {
   display: inline;
   margin-right: 0.5em;
 }
 
 label[for='social-posts'],
-label[for='social-posts'] h2 {
+label[for='social-posts'] h2,
+label.social-network-toggle-label,
+label.social-network-toggle-label h3 {
   display: inline;
 }
 
@@ -72,7 +75,11 @@ label[for='social-posts'] h2 {
   padding: 0 5em;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+}
+
+.social-editor-wrapper:not(:last-child) {
+  margin-right: 1em;
 }
 
 .ce-social-post-delimiter {
@@ -81,7 +88,7 @@ label[for='social-posts'] h2 {
   position: relative;
 }
 
-.ce-social-post-delimiter:after {
+.ce-social-post-delimiter[data-character-count]:after {
   position: absolute;
   right: 0;
   top: 50%;
@@ -97,6 +104,15 @@ label[for='social-posts'] h2 {
 
 .ce-social-post-delimiter[data-limit-exceeded='true']:after {
   background-color: var(--over-character-limit-background-color);
+}
+
+.social-editor .image-tool__caption,
+.social-editor .image-tool__alt {
+  display: none;
+}
+
+#mastodon-tags {
+  width: 100%;
 }
 
 /* Error */

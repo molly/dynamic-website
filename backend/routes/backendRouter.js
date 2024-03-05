@@ -4,6 +4,7 @@ import feedRouter from './feed.js';
 import imageRouter from './images.js';
 import microRouter from './micro.js';
 import readingListRouter from './readingList.js';
+import socialRouter from './social.js';
 
 const app = express.Router();
 
@@ -17,6 +18,7 @@ if (process.argv[2] !== 'prod') {
   // Feature flag
   app.use('/micro', microRouter);
   app.use('/micro/image', imageRouter);
+  app.use('/micro/social', socialRouter);
 }
 app.use('/feed', feedRouter);
 
