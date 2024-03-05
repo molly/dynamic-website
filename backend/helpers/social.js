@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const processText = (text) => {
   const processed = text
     .replace(/<br ?\/? ?>/g, '\n')
@@ -11,6 +13,7 @@ export const processText = (text) => {
 
 const EMPTY_POST = { text: '', images: [] };
 
+// Format post to be posted to social media
 export const processSocialPost = (blocks, tags = null) => {
   const posts = [];
   let currentPost = JSON.parse(JSON.stringify(EMPTY_POST));
@@ -38,4 +41,44 @@ export const processSocialPost = (blocks, tags = null) => {
     }
   }
   return posts;
+};
+
+// Get all images from posts and store in an object so they can be reused
+export const getImages = async (socialPosts) => {
+  // First collect all image URLs
+  const imageUrls = new Set();
+  for (let network of Object.keys(socialPosts)) {
+    if (socialPosts[network]) {
+      for (let post of socialPosts[network]) {
+        for (let image of post.images) {
+          imageUrls.add(image.href);
+        }
+      }
+    }
+  }
+
+  // Fetch images
+  const promises = [];
+
+  // Set doesn't have .map() ¯\_(ツ)_/¯
+  imageUrls.forEach((url) =>
+    promises.push(
+      axios.get(url, {
+        decompress: false,
+        responseType: 'arraybuffer',
+      }),
+    ),
+  );
+
+  const images = await Promise.all(promises).then((responses) => {
+    const images = {};
+    for (let response of responses) {
+      images[response.config.url] = {
+        buffer: Buffer.from(response.data),
+        mimeType: response.headers['content-type'],
+      };
+    }
+    return images;
+  });
+  return images;
 };

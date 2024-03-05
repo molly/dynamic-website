@@ -1,6 +1,7 @@
 import express from 'express';
 
-import { processSocialPost } from '../helpers/social.js';
+import { getImages, processSocialPost } from '../helpers/social.js';
+import { postTweets } from '../helpers/twitter.js';
 import { authenticated } from './auth.js';
 
 const router = express.Router();
@@ -8,8 +9,10 @@ const router = express.Router();
 router.post(
   '/',
   authenticated({ redirectTo: '/micro/login' }),
-  function (req, res) {
+  async function (req, res) {
     const { twitter, mastodon, bluesky } = req.body;
+
+    // Process posts to proper format
     const socialPosts = {
       twitter: twitter ? processSocialPost(twitter.blocks) : null,
       mastodon: mastodon
@@ -17,7 +20,12 @@ router.post(
         : null,
       bluesky: bluesky ? processSocialPost(bluesky.blocks) : null,
     };
-    res.json(socialPosts);
+
+    const images = await getImages(socialPosts);
+
+    // Make posts
+    const tweetId = await postTweets(socialPosts.twitter, images);
+    res.json({ tweet: tweetId });
   },
 );
 
