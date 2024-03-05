@@ -45,9 +45,17 @@ const hydrateFeedEntries = (entries) =>
     return entry;
   });
 
-export const getFeedEntries = async (query = {}) => {
-  const entries = await FeedEntry.find(query)
-    .sort({ createdAt: -1 })
+export const getFeedEntries = async ({ query, start, limit }) => {
+  let q = FeedEntry.find(query).sort({ createdAt: -1 });
+
+  if (start) {
+    q = q.skip(start);
+  }
+  if (limit) {
+    q = q.limit(limit);
+  }
+
+  const entries = await q
     .populate({
       path: 'tags',
       model: Tag,
@@ -67,5 +75,13 @@ export const getFeedEntries = async (query = {}) => {
     })
     .populate({ path: 'blockchain', model: BlockchainEntry })
     .lean();
-  return hydrateFeedEntries(entries);
+  const hydrated = hydrateFeedEntries(entries);
+
+  const totalResults = await FeedEntry.countDocuments(query);
+  let totalUnfilteredResults = totalResults;
+  if (query) {
+    totalUnfilteredResults = await FeedEntry.countDocuments({});
+  }
+
+  return { entries: hydrated, totalResults, totalUnfilteredResults };
 };

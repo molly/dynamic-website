@@ -13,27 +13,57 @@ import { authenticated } from '../../backend/routes/auth.js';
 import { sanitizeTag } from '../js/helpers/sanitize.js';
 
 const router = express.Router();
+const LIMIT = 10;
 
 router.get('/', async function (req, res) {
-  const entries = await getFeedEntries();
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  const start = (page - 1) * LIMIT;
+  const result = await getFeedEntries({
+    query: {},
+    start,
+    limit: LIMIT,
+  });
+
   res.render('feed/index.pug', {
-    entries,
+    entries: result.entries,
+    currentPage: page,
+    pageSize: LIMIT,
+    totalPages: Math.ceil(result.totalResults / LIMIT),
+    totalResults: result.totalResults,
+    totalUnfilteredResults: result.totalUnfilteredResults,
     options: { isInFeed: true, isLoggedIn: req.isAuthenticated() },
   });
 });
 
 // Tag feed
 router.get('/tag/:tag', async (req, res) => {
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  const start = (page - 1) * LIMIT;
   const sanitizedTag = sanitizeTag(req.params.tag);
   const tag = await Tag.findOne({ value: sanitizedTag });
   let hasResults = false;
-  let entries = [];
+  const results = {
+    currentPage: page,
+    pageSize: LIMIT,
+    entries: [],
+    totalPages: 0,
+    totalResults: 0,
+    totalUnfilteredResults: 0,
+  };
   if (tag) {
     hasResults = true;
-    entries = await getFeedEntries({ tags: tag._id });
+    const result = await getFeedEntries({
+      query: { tags: tag._id },
+      start,
+      limit: LIMIT,
+    });
+    results.entries = result.entries;
+    results.totalPages = Math.ceil(result.totalResults / LIMIT);
+    results.totalResults = result.totalResults;
+    results.totalUnfilteredResults = result.totalUnfilteredResults;
   }
   res.render('feed/index.pug', {
-    entries,
+    ...results,
     options: {
       isLoggedIn: req.isAuthenticated(),
       tag: tag,

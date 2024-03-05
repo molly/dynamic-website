@@ -299,6 +299,36 @@ h1.site-title + .entry {
   line-height: 1.2em;
 }
 
+/* Paginator --------------------------------------------------------------------- */
+label[for='paginator'] {
+  display: block;
+  margin-top: 1em;
+}
+
+#paginator {
+  outline: 0;
+  border: 0;
+  padding: 0 !important;
+}
+
+#paginator button {
+  background-color: transparent;
+  font-size: 1rem;
+  color: var(--main-text-color);
+  border: none;
+}
+
+#paginator button:hover,
+#paginator button:focus,
+#paginator button:active {
+  cursor: pointer;
+  background-color: var(--accent-color-purple-background);
+}
+
+#paginator button[aria-pressed] {
+  background-color: var(--accent-color-purple-background-hover);
+}
+
 /* Dark mode --------------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
   .entry .p-content .media-wrapper.invert-on-dark img {

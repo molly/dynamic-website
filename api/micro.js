@@ -41,14 +41,27 @@ export const hydrateMicroEntry = (entry) => {
   return entry;
 };
 
-export const getMicroEntries = async (query = {}) => {
-  const entries = await MicroEntry.find(query)
-    .sort({ createdAt: -1 })
-    .limit(10)
+export const getMicroEntries = async ({ query, start, limit }) => {
+  let q = MicroEntry.find(query).sort({ createdAt: -1 });
+
+  if (start) {
+    q = q.skip(start);
+  }
+  if (limit) {
+    q = q.limit(limit);
+  }
+  const entries = await q
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
     .populate({ path: 'relatedPost', connection: db.readingListConnection })
     .lean();
-  return entries.map(hydrateMicroEntry);
+  const hydrated = entries.map(hydrateMicroEntry);
+  const totalResults = await MicroEntry.countDocuments(query);
+  let totalUnfilteredResults = totalResults;
+  if (query) {
+    totalUnfilteredResults = await MicroEntry.countDocuments({});
+  }
+
+  return { entries: hydrated, totalResults, totalUnfilteredResults };
 };
 
 export const getMicroEntry = async (slug) => {

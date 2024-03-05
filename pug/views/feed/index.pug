@@ -32,3 +32,7 @@ block body
           +readingEntry(entry, entry.shortform, options)
         when "readingBlockchain"
           +readingEntry(entry, entry.blockchain, options)
+    
+    include ../../includes/paginator.pug
+  
+  script(src="/static/feed.js")

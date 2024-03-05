@@ -5,6 +5,7 @@ import { authenticated } from '../../backend/routes/auth.js';
 import { sanitizeTag } from '../js/helpers/sanitize.js';
 
 const router = express.Router();
+const LIMIT = 10;
 
 // Editing
 router.get('/login', (req, res) => {
@@ -34,9 +35,16 @@ router.get(
 // View
 // All micro posts feed
 router.get('/', async (req, res) => {
-  const entries = await getMicroEntries();
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  const start = (page - 1) * LIMIT;
+  const result = await getMicroEntries({ query: {}, start, limit: LIMIT });
   res.render('micro/index.pug', {
-    entries,
+    entries: result.entries,
+    currentPage: page,
+    pageSize: LIMIT,
+    totalPages: Math.ceil(result.totalResults / LIMIT),
+    totalResults: result.totalResults,
+    totalUnfilteredResults: result.totalUnfilteredResults,
     options: { isLoggedIn: req.isAuthenticated() },
   });
 });
@@ -52,16 +60,33 @@ router.get('/entry/:slug', async (req, res) => {
 
 // Tag feed
 router.get('/tag/:tag', async (req, res) => {
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  const start = (page - 1) * LIMIT;
   const sanitizedTag = sanitizeTag(req.params.tag);
   const tag = await Tag.findOne({ value: sanitizedTag });
   let hasResults = false;
-  let entries = [];
+  const results = {
+    currentPage: page,
+    pageSize: LIMIT,
+    entries: [],
+    totalPages: 0,
+    totalResults: 0,
+    totalUnfilteredResults: 0,
+  };
   if (tag) {
     hasResults = true;
-    entries = await getMicroEntries({ tag: tag._id });
+    const result = await getMicroEntries({
+      query: { tag: tag._id },
+      start,
+      limit: LIMIT,
+    });
+    results.entries = result.entries;
+    results.totalPages = Math.ceil(result.totalResults / LIMIT);
+    results.totalResults = result.totalResults;
+    results.totalUnfilteredResults = result.totalUnfilteredResults;
   }
   res.render('micro/index.pug', {
-    entries,
+    ...results,
     options: {
       isLoggedIn: req.isAuthenticated(),
       tag: tag,

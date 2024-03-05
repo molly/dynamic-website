@@ -86,7 +86,6 @@ export const parseAndInsertDelimiters = (post, network) => {
       limitExceeded: charCount > NETWORK_LIMITS[network].post,
     },
   });
-  console.log(newPostBlocks);
   return { ...post, blocks: newPostBlocks };
 };
 

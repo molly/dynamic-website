@@ -22,3 +22,7 @@ block body
     include ../../mixins/feed/microEntry.pug
     each entry in entries
       +microEntry(entry, options)
+
+    include ../../includes/paginator.pug
+
+  script(src="/static/feed.js")
