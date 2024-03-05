@@ -14,8 +14,8 @@
   margin: 0 auto;
 }
 
-.content-box {
-  margin-bottom: 70px; /* Space for footer */
+.social-container {
+  padding-bottom: 70px; /* Space for footer */
 }
 
 .align-right {

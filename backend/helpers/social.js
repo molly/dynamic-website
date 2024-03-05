@@ -1,20 +1,53 @@
 import axios from 'axios';
+import * as cheerio from 'cheerio';
 
-export const processText = (text) => {
-  const processed = text
-    .replace(/<br ?\/? ?>/g, '\n')
-    .replace(/<(?:i|b|em|strong)>(.*?)<\/(?:i|b|em|strong)>/g, (_, p1) =>
-      p1.toUpperCase(),
-    )
-    .replace(/<a[^>]+>(.*?)<\/a>/, '$1')
-    .replace(/<[^>]+>(.*?)<\/[^>]+>/g, '$1');
-  return processed;
+export const processText = (text, network) => {
+  const $ = cheerio.load(text);
+
+  // Replace mentions
+  const $mentions = $('.cdx-mention');
+  for (let mention of $mentions) {
+    const $mention = $(mention);
+    const $networkMention = $mention.find(`.${network}`);
+    let username = null;
+    if ($networkMention.length) {
+      username = $networkMention.data('username');
+      $mention.replaceWith(`${username.startsWith('@') ? '' : '@'}${username}`);
+    } else {
+      username = $mention.find('.cdx-mention-plain').text();
+      $mention.replaceWith(username);
+    }
+  }
+
+  // Replace breaks
+  $('br').each((_, elem) => $(elem).replaceWith('\n\n'));
+
+  // Replace links
+  $('a').each((_, elem) => {
+    const $a = $(elem);
+    const linkText = $a.text();
+    const href = $a.attr('href');
+    if (linkText === href) {
+      $a.replaceWith(href);
+    } else {
+      $a.replaceWith(`${linkText} (${href})`);
+    }
+  });
+
+  // Replace emphasis
+  $('i, b, em, strong').each((_, elem) => {
+    const $tag = $(elem);
+    $tag.replaceWith($tag.text().toUpperCase());
+  });
+
+  // Returning .text() instead of .html() should strip any remaining HTML tags
+  return $.text();
 };
 
 const EMPTY_POST = { text: '', images: [] };
 
 // Format post to be posted to social media
-export const processSocialPost = (blocks, tags = null) => {
+export const processSocialPost = (blocks, network, tags = null) => {
   const posts = [];
   let currentPost = JSON.parse(JSON.stringify(EMPTY_POST));
   for (let block of blocks) {
@@ -23,7 +56,7 @@ export const processSocialPost = (blocks, tags = null) => {
         if (currentPost.text.length > 0) {
           currentPost.text += '\n\n';
         }
-        currentPost.text += processText(block.data.text);
+        currentPost.text += processText(block.data.text, network);
         break;
       case 'socialPostDelimiter':
         if (tags && tags.length > 0) {

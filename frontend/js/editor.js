@@ -6,7 +6,7 @@ import {
   NETWORK_LIMITS,
   debouncedUpdateDelimiters,
   getSlugFromTitle,
-  insertDelimiters,
+  parseAndInsertDelimiters,
   socialLinksToArray,
   socialLinksToMap,
   updateDelimiters,
@@ -84,7 +84,7 @@ async function toggleSocialPosts({ target: { checked } }) {
     if (!editors.twitter) {
       const post = await editors.primary.save();
       for (const network of ['twitter', 'mastodon', 'bluesky']) {
-        const postWithDelimiters = insertDelimiters(post, network);
+        const postWithDelimiters = parseAndInsertDelimiters(post, network);
         editors[network] = new EditorJS({
           holder: `${network}-editor`,
           tools: {
@@ -281,18 +281,27 @@ function save() {
       );
     }
 
-    // Wait for all promises to resolve
+    // Wait for the post and social post promises to resolve
     Promise.all(promises)
       .then(([postResp, socialResp]) => {
         // Hit the tags endpoint to fetch new tags with their IDs
-        // Pass the post and social responses to the next block
-        return Promise.all([
-          Promise.resolve(postResp),
-          Promise.resolve(socialResp),
-          axios.get('/dynamic-api/tags'),
-        ]);
+        const tagsPromise = axios.get('/dynamic-api/tags');
+
+        let postPromise;
+        if (socialResp) {
+          // Update the post again with the social post links
+          postPromise = axios.post(`/dynamic-api/micro/entry/${postResp._id}`, {
+            ...transformedPostMeta,
+            socialLinks: socialLinksToArray(socialResp),
+          });
+        } else {
+          postPromise = Promise.resolve(postResp);
+        }
+
+        // Pass the post and tags responses to the next block
+        return Promise.all([postPromise, tagsPromise]);
       })
-      .then(([postResp, socialResp, tags]) => {
+      .then(([postResp, tags]) => {
         // Update tags select
         tagSelect.clearOptions();
         tagSelect.addOptions(tags.data);

@@ -1,4 +1,5 @@
 import debounce from 'lodash.debounce';
+import { processText } from '../../../backend/helpers/social.js';
 
 export const getSlugFromTitle = (title) => {
   return title
@@ -22,17 +23,17 @@ export const NETWORK_LIMITS = {
   bluesky: { post: 300, alt: 1000 },
 };
 
-export const insertDelimiters = (post, network) => {
+export const parseAndInsertDelimiters = (post, network) => {
   let charCount = 0;
   let images = [];
   const newPostBlocks = [];
   for (let i = 0; i < post.blocks.length; i++) {
     const currentBlock = post.blocks[i];
     if (currentBlock.type === 'paragraph') {
-      if (
-        charCount + currentBlock.data.text.length >
-        NETWORK_LIMITS[network].post
-      ) {
+      const newBlock = JSON.parse(JSON.stringify(currentBlock));
+      newBlock.data.text = processText(currentBlock.data.text, network);
+      const currentBlockLength = newBlock.data.text.length;
+      if (charCount + currentBlockLength > NETWORK_LIMITS[network].post) {
         // End the current post and start a new one
         newPostBlocks.push(...images);
         images = [];
@@ -43,15 +44,15 @@ export const insertDelimiters = (post, network) => {
             limitExceeded: charCount > NETWORK_LIMITS[network].post,
           },
         });
-        newPostBlocks.push(currentBlock);
-        charCount = currentBlock.data.text.length;
+        newPostBlocks.push(newBlock);
+        charCount = currentBlockLength;
       } else {
         // Add to the current post
         if (newPostBlocks.length > 0) {
           charCount += 2; // Add two characters for the newlines
         }
-        newPostBlocks.push(currentBlock);
-        charCount += currentBlock.data.text.length;
+        newPostBlocks.push(newBlock);
+        charCount += currentBlockLength;
       }
     } else if (currentBlock.type === 'socialPostDelimiter') {
       // Manual post break
@@ -87,7 +88,7 @@ export const updateDelimiters = (editor, post, network, tags = null) => {
   let charCount = tags ? tags.length + 1 : 0;
   for (let block of post.blocks) {
     if (block.type === 'paragraph') {
-      charCount += block.data.text.length;
+      charCount += getCharacterCount(block, network);
     } else if (block.type === 'socialPostDelimiter') {
       if (charCount !== block.data.characterCount) {
         const limitExceeded = charCount > NETWORK_LIMITS[network].post;
