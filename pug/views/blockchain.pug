@@ -1,7 +1,7 @@
 extends ../templates/base.pug
 
 block vars
-  - var htmlClass = 'reading';
+  - var htmlClass = 'reading blockchain';
   - var importPrefix = 'https://www.mollywhite.net'
   - var showTagCount = true 
   - var frequencyCategory = 'blockchain'
@@ -13,20 +13,21 @@ block head
 
 block body
   main
-    .content-box
+    .content-box.h-feed.hfeed
       a(href="/reading") < All reading lists
-      p
-        | This is a list of the reading I've been doing pertaining to blockchains, cryptocurrencies, 
-        | and anything else that could be lumped in to the "web3" umbrella. As with my other reading 
-        | lists, this is just a log of what I've read, not necessarily list of recommendations. I also
-        | include other non-written forms of media (podcasts, recorded lectures, etc.) in this list.
-      p
-        | For the most part, this list won't include the reading I do to research entries that go in 
-        a(href="http://web3isgoinggreat.com/")
-          i Web3 Is Going Just Great
-        |, primarily due to volume. I usually include those articles in the links section of the related 
-        i W3IGG
-        |  entry, if you're looking for a specific source I used or want to learn more.
+      .p-summary.site-description
+        p
+          | This is a list of the reading I've been doing pertaining to blockchains, cryptocurrencies, 
+          | and anything else that could be lumped in to the "web3" umbrella. As with my other reading 
+          | lists, this is just a log of what I've read, not necessarily list of recommendations. I also
+          | include other non-written forms of media (podcasts, recorded lectures, etc.) in this list.
+        p
+          | For the most part, this list won't include the reading I do to research entries that go in 
+          a(href="http://web3isgoinggreat.com/")
+            i Web3 Is Going Just Great
+          |, primarily due to volume. I usually include those articles in the links section of the related 
+          i W3IGG
+          |  entry, if you're looking for a specific source I used or want to learn more.
 
       h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Blockchain reading list 
       div.rss-link
@@ -38,9 +39,9 @@ block body
 
       .articles
         #articlesContainer
-          include ../mixins/article.pug
+          include ../mixins/shortformArticle.pug
           each article in results
-            +article(article)
+            +shortformArticle(article)
 
       include ../includes/paginator.pug
 

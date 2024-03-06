@@ -1,15 +1,15 @@
 mixin book(book) 
-  .book
+  .book.h-entry.hentry
     if book.imageSrc 
       if book.href && !shortForm
         a.book-cover-link(href=book.href)
-          img(
+          img.u-photo(
             class={'book-cover': true, 'bordered': book.border},
             src=book.imageSrc,
             alt="Cover image of #{book.title}"
           )
       else
-        img(
+        img.u-photo(
           class={'book-cover': true, 'bordered': book.border},
           src=book.imageSrc,
           alt="Cover image of #{book.title}"
@@ -21,7 +21,7 @@ mixin book(book)
       .title
         if book.type === "chapter"
           | in 
-        i #{book.title}
+        i.p-name #{book.title}
 
         if book.subtitle 
           .subtitle 
@@ -29,7 +29,8 @@ mixin book(book)
 
       .byline
         if book.author
-          | #{book.author}
+          include ./author.pug
+          +author(book.author)
           if !shortForm
             | .
         if book.editor 
@@ -43,20 +44,20 @@ mixin book(book)
             if !book.formattedDate
               | .
             else
-              | , #{book.formattedDate}.
+              | , #[time.dt-published.published(datetime=book.date) #{book.formattedDate}].
           else 
             if book.formattedDate
-              | Published #{book.formattedDate}. 
+              | Published #[time.dt-published.published(datetime=book.date) #{book.formattedDate}]. 
       
       if !shortForm
         .reading-info
-          if book.status 
-            div(class=['status', book.status])
+          if book.status
+            div.p-category(class=['status', book.status])
               != READING_STATUSES_MAP[book.status][0].toUpperCase() + READING_STATUSES_MAP[book.status].substr(1)
           
           if book.formattedStarted
             .reading-dates 
-              | Started #{book.formattedStarted}
+              | Started #[time.dt-accessed.accessed(datetime=book.started) #{book.formattedStarted}]
               if !book.formattedCompleted
                 | .
               else 
@@ -80,4 +81,7 @@ mixin book(book)
 
       if book.tags && book.tags.length
         .tags
-          span.tags= book.tags.map(function(t) { return t.text }).join(', ')
+          each tag, index in book.tags
+            span.p-category #{tag}
+            if index !== book.tags.length - 1
+              | , 

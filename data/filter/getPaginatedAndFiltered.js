@@ -1,7 +1,7 @@
 import getLocalJson from '../utils/getLocalJson.js';
+import { filter } from './filter.js';
 import { paginate } from './paginate.js';
 import { preprocess } from './preprocess.js';
-import { filter } from './filter.js';
 
 const getPaginatedAndFiltered = async (
   relativePath,
@@ -10,7 +10,7 @@ const getPaginatedAndFiltered = async (
   paginationDefaults,
 ) => {
   const data = await getLocalJson(relativePath);
-  let resp = preprocess(data, defaults);
+  let resp = preprocess(data, defaults, true);
   resp = { ...resp, ...filter(resp, req, defaults) };
   resp = { ...resp, ...paginate(resp, req, paginationDefaults) };
   return { ...resp, totalUnfilteredResults: data.length };

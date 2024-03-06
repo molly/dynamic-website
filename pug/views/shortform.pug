@@ -13,12 +13,12 @@ block head
 
 block body
   main
-    .content-box
+    .content-box.h-feed.hfeed
       a(href="/reading") < All reading lists
-      p
+      p.p-summary.site-description
         | This is an incomplete list of the shortform reading (and listening and watching) I've been doing lately.
 
-      h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Shortform reading list 
+      h3.p-name.site-title(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Shortform reading list 
       div.rss-link
         i.fas.fa-rss(aria-hidden="true") 
         |  

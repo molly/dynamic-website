@@ -48,7 +48,7 @@ const preprocess = (data, query) => {
     return query.order === 'reverse' ? 1 : -1;
   });
 
-  processed.forEach((p) => delete p.date);
+  processed.forEach((p) => (p.date = p.date.toISODate()));
 
   const allTopics = Object.values(topicsMap);
   allTopics.sort((a, b) =>

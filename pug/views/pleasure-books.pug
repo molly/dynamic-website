@@ -13,9 +13,9 @@ block head
 
 block body
   main
-    .content-box
+    .content-box.h-feed.hfeed
       a(href="/reading") < All reading lists
-      h3(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Fiction reading
+      h3.p-name.site-title(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Fiction reading
 
       include ../includes/filters.pug
 

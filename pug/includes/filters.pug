@@ -11,7 +11,11 @@
             aria-pressed=query.tags.includes(tag.value).toString()
             type="button"
           ) #{tag.text}
+          if showTagCount && !frequencyCategory
+            // Used by JSON files
+            span.tag-count (#{tag.frequency})
           if showTagCount && frequencyCategory
+            // Used where tags are stored in the DB
             span.tag-count (#{tag.frequency[frequencyCategory]})
 
     if showStatusFilter 

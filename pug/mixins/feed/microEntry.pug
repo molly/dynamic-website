@@ -18,10 +18,10 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false} = {})
             when "ShortformEntry"
             when "BlockchainEntry"
               include ../shortformArticle.pug
-              +shortformArticle(entry.relatedPost, false, true)
+              +shortformArticle(entry.relatedPost, false, true, true)
             when "PressEntry"
               include ../pressArticle.pug
-              +pressArticle(entry.relatedPost, false, true)
+              +pressArticle(entry.relatedPost, false, true, true)
 
     footer.footer
       .flex-row.post-meta

@@ -323,6 +323,9 @@
 .wikipedia-writing .related-reading {
   padding-left: 0.625rem;
 }
+.reading.blockchain .details {
+  padding-left: 0;
+}
 .reading .details,
 .reading .related-reading,
 .reading .target-articles,

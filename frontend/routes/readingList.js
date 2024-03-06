@@ -87,7 +87,7 @@ router.get(
 
 router.get('/blockchain/feed.xml', async (req, res) => {
   const blockchain = await getRssEntriesFromDb('blockchain');
-  const results = await getRssResults(blockchain, 'rssBlockchainArticle');
+  const results = await getRssResults(blockchain, 'rssArticle');
   res.set('Content-Type', 'text/xml');
   res.render('feed.pug', {
     prefix: 'blockchain',

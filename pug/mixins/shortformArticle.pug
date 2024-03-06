@@ -1,12 +1,15 @@
-mixin shortformArticle(article, rss=false, feed=false)
-  .article
+mixin shortformArticle(article, rss=false, feed=false, embedded=false)
+  div(class=`article ${feed ? 'h-cite hcite' : 'h-entry hentry'}`)
     if rss
       if article.image 
-        img(src=article.image.src, class="webfeedsFeaturedVisual", alt=article.image.alt, style="max-width: 300px;")
+        img.u-photo(src=article.image.src, class="webfeedsFeaturedVisual", alt=article.image.alt, style="max-width: 300px;")
 
     if !rss
       .title
-        a(href=article.href) "#{article.title}"
+        a.u-url.u-repost-of(class=embedded ? 'u-in-reply-to' : '', href=article.href, rel="bookmark")
+          |"
+          span.p-name #{article.title}
+          |"
 
         if article.parenthetical
           |  (#{article.parenthetical})
@@ -15,8 +18,8 @@ mixin shortformArticle(article, rss=false, feed=false)
           |.
 
     .byline
-      if article.author
-        | #{article.author}
+      include ./author.pug
+      +author(article.author)
       
       if article.work || article.publisher 
         if article.preposition != null 
@@ -30,39 +33,40 @@ mixin shortformArticle(article, rss=false, feed=false)
 
       if article.work
         if article.workItalics === false
-          | #{article.work}.
+          span.p-publication #{article.work}
         else
-          i #{article.work}.
+          i.p-publication #{article.work}
+        | .
 
       if article.publisher
         |  #{article.publisher}.
 
       if feed
         span.read-date
-        if article.formattedDate
-          |  Published #{article.formattedDate}.
+          if article.formattedDate
+            | Published #[time.dt-published.published(datetime=article.date) #{article.formattedDate}].
 
         if !feed
           include ./verb.pug
           +verb(article, to=false, capitalize=true)
-          | on #{article.formattedStarted}
+          | on #[time.dt-accessed.accessed(datetime=article.started) #{article.formattedStarted}]
     
     if !feed
       .details
         span.read-date
           if article.formattedDate
-            | Published #{article.formattedDate}.
+            | Published #[time.dt-published.published(datetime=article.date) #{article.formattedDate}].
 
           if !feed
             include ./verb.pug
             +verb(article, to=false, capitalize=true)
-            | on #{article.formattedStarted}
+            | on #[time.dt-accessed.accessed(datetime=article.started) #{article.formattedStarted}]
 
     if feed && article.summary
-      blockquote.summary
+      blockquote.summary.p-summary.entry-summary
         != article.summary
     else if article.summary
-      .summary
+      .summary.p-summary.entry-summary
         != article.summary
     
     if article.relatedReading && article.relatedReading.length 
@@ -78,4 +82,8 @@ mixin shortformArticle(article, rss=false, feed=false)
 
     if !rss && !feed && article.tags && article.tags.length
       .tags 
-        span.tags= article.tags.map(function(t) { return t.text }).join(', ')
+        span.tags
+          each tag, index in article.tags
+            span.p-category #{tag.text}
+            if index !== article.tags.length - 1
+              | , 

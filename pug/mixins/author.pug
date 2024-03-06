@@ -1,0 +1,11 @@
+mixin author(author)
+  if author
+    if author.match(/(and|, ?)/)
+      - var parts = author.split(/(,? and |, )/g)
+      each part in parts
+        if part.match(/(,? and |, )/)
+          | #{part}
+        else
+          span.p-author.h-card #{part}
+    else
+      span.p-author.h-card #{author}
