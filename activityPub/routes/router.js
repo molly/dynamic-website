@@ -1,8 +1,9 @@
 import express from 'express';
+import { verifyRequestSignature } from '../helpers/security.js';
 
 const router = express.Router();
 
-router.get('./.well-known/webfinger', (req, res) => {
+router.get('/.well-known/webfinger', (req, res) => {
   if (!req.query.resource || !req.query.resource.startsWith('acct:')) {
     res
       .status(400)
@@ -33,6 +34,10 @@ router.get('/ap/user/:id', (req, res) => {
   } else {
     res.sendStatus(404);
   }
+});
+
+router.get('/ap/inbox', verifyRequestSignature, (req, res) => {
+  console.log(req.body);
 });
 
 export default router;

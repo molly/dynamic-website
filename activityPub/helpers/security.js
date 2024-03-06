@@ -1,18 +1,21 @@
-
+import axios from 'axios';
 import httpSignature from 'http-signature';
 
 // Verify signatures on incoming requests
-export const verifyRequestSignature(req, res, next) => {
+export const verifyRequestSignature = async (req, res, next) => {
   const signature = httpSignature.parseRequest(req);
+  console.log(signature);
   if (!signature) {
     res.status(401).send({ message: 'No signature' });
   }
   const keyId = signature.params.keyId;
 
-  const publicKey = await axios.get(keyId, {headers: {Accept: 'application/activity+json'}})
+  const publicKey = await axios.get(keyId, {
+    headers: { Accept: 'application/activity+json' },
+  });
   if (!httpSignature.verifySignature(signature, publicKey)) {
     res.status(401).send({ message: 'Invalid signature' });
   } else {
     next();
   }
-}
+};
