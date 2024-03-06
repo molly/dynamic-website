@@ -1,8 +1,5 @@
 import express from 'express';
-import {
-  getPaginatedAndFilteredFromDb,
-  getRssEntriesFromDb,
-} from '../../api/client.js';
+import { getPaginatedAndFilteredFromDb } from '../../api/client.js';
 import BOOK_DEFAULTS from '../../data/books/bookDefaults.js';
 import {
   READING_STATUSES_LISTS,
@@ -10,7 +7,6 @@ import {
 } from '../../data/constants/readingStatuses.js';
 import getPaginatedAndFiltered from '../../data/filter/getPaginatedAndFiltered.js';
 import getLandingPageSummary from '../../data/filter/landing.js';
-import getRssResults from '../../data/filter/rss.js';
 
 const router = express.Router();
 
@@ -72,27 +68,16 @@ router.get('/fiction', async (req, res) => {
 });
 
 // RSS ========================================================================
-router.get(
-  ['/shortform/feed.xml', '/reading/dib/feed.xml'],
-  async (req, res) => {
-    const shortform = await getRssEntriesFromDb('shortform');
-    const results = await getRssResults(shortform, 'rssArticle');
-    res.set('Content-Type', 'text/xml');
-    res.render('feed.pug', {
-      prefix: 'shortform',
-      results,
-    });
-  },
-);
+router.get(['/shortform/feed.xml', '/reading/dib/feed.xml'], (req, res) => {
+  res.sendFile(
+    new URL('../../rss/shortformFeed.xml', import.meta.url).pathname,
+  );
+});
 
-router.get('/blockchain/feed.xml', async (req, res) => {
-  const blockchain = await getRssEntriesFromDb('blockchain');
-  const results = await getRssResults(blockchain, 'rssArticle');
-  res.set('Content-Type', 'text/xml');
-  res.render('feed.pug', {
-    prefix: 'blockchain',
-    results,
-  });
+router.get('/blockchain/feed.xml', (req, res) => {
+  res.sendFile(
+    new URL('../../rss/blockchainFeed.xml', import.meta.url).pathname,
+  );
 });
 
 export default router;

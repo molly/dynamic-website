@@ -4,18 +4,17 @@ mixin shortformArticle(article, rss=false, feed=false, embedded=false)
       if article.image 
         img.u-photo(src=article.image.src, class="webfeedsFeaturedVisual", alt=article.image.alt, style="max-width: 300px;")
 
-    if !rss
-      .title
-        a.u-url.u-repost-of(class=embedded ? 'u-in-reply-to' : '', href=article.href, rel="bookmark")
-          |"
-          span.p-name #{article.title}
-          |"
+    .title
+      a.u-url.u-repost-of(class=embedded ? 'u-in-reply-to' : '', href=article.href, rel="bookmark")
+        |"
+        span.p-name #{article.title}
+        |"
 
-        if article.parenthetical
-          |  (#{article.parenthetical})
+      if article.parenthetical
+        |  (#{article.parenthetical})
 
-        if article.parenthetical || article.title && !article.title.match(/[.?!]$/m)
-          |.
+      if article.parenthetical || article.title && !article.title.match(/[.?!]$/m)
+        |.
 
     .byline
       include ./author.pug
@@ -44,7 +43,7 @@ mixin shortformArticle(article, rss=false, feed=false, embedded=false)
       if feed
         span.read-date
           if article.formattedDate
-            | Published #[time.dt-published.published(datetime=article.date) #{article.formattedDate}].
+            |  Published #[time.dt-published.published(datetime=article.date) #{article.formattedDate}].
 
         if !feed
           include ./verb.pug

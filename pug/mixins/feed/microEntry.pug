@@ -1,9 +1,10 @@
-mixin microEntry(entry, {isLoggedIn=false, isInFeed=false} = {})
+mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
+  - var baseUrl = isRss ? 'https://mollywhite.net' : ''
   article.entry.h-entry.hentry
     header
-      if isInFeed
+      if isInFeed && !isRss
         .post-icon.icon
-          a(href=`/micro/entry/${entry.slug}`)
+          a(href=`${baseUrl}/micro/entry/${entry.slug}`)
             include ../../icons/chat.svg
           .description Posted:
       if entry.title
@@ -18,29 +19,37 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false} = {})
             when "ShortformEntry"
             when "BlockchainEntry"
               include ../shortformArticle.pug
-              +shortformArticle(entry.relatedPost, false, true, true)
+              +shortformArticle(entry.relatedPost, isRss, true, true)
             when "PressEntry"
               include ../pressArticle.pug
-              +pressArticle(entry.relatedPost, false, true, true)
+              +pressArticle(entry.relatedPost, isRss, true, true)
 
     footer.footer
       .flex-row.post-meta
         .timestamp
-          a(href=`/micro/entry/${entry.slug}`)
+          a(href=`${baseUrl}/micro/entry/${entry.slug}`)
             time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
           if isLoggedIn
             span.edit-icon.icon
-              a(href=`/micro/editor/${entry.slug}`)
+              a(href=`${baseUrl}/micro/editor/${entry.slug}`)
                 include ../../icons/pencil.svg
-          |  from the #[a(href="/micro") micro posts] feed.
+          if !isRss
+            |  from the #[a(href="${baseUrl}/micro") micro posts] feed.
         .social-links 
           if entry.socialLinks && entry.socialLinks.length 
             span Also posted to:
-            each socialLink in entry.socialLinks
+            each socialLink, index in entry.socialLinks
               a(class=`social-link u-syndication ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1), rel="syndication")
-                include ./icon.pug
-                +icon(socialLink.type)
+                if !isRss
+                  include ./icon.pug
+                  +icon(socialLink.type)
+                else
+                  | #{socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1)}
+                  if index !== entry.socialLinks.length - 1
+                    | , 
       .tags
         if entry.tags && entry.tags.length
-          each tag in entry.tags 
-            a.tag.p-category(href=`/${isInFeed ? 'feed' : 'micro'}/tag/${tag.value}`, title=`See all ${isInFeed ? 'feed' : 'micro'} posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+          each tag, index in entry.tags 
+            a.tag.p-category(href=`${baseUrl}/${isInFeed ? 'feed' : 'micro'}/tag/${tag.value}`, title=`See all ${isInFeed ? 'feed' : 'micro'} posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+            if isRss && index !== entry.tags.length - 1
+              | , 

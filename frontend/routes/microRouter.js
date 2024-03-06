@@ -96,4 +96,9 @@ router.get('/tag/:tag', async (req, res) => {
   });
 });
 
+// RSS
+router.get('/feed.xml', (_, res) => {
+  res.sendFile(new URL('../../rss/microFeed.xml', import.meta.url).pathname);
+});
+
 export default router;

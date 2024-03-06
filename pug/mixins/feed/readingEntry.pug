@@ -1,23 +1,30 @@
-mixin readingEntry(entry, readingEntry, {isLoggedIn=false} = {})
+mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false} = {})
+  - var baseUrl = isRss ? 'https://www.mollywhite.net' : ''
   article.entry.h-entry.hentry
     header
-      .post-icon.icon
-        include ./icon.pug
-        +icon(entry.icon)
+      if !isRss
+        .post-icon.icon
+          include ./icon.pug
+          +icon(entry.icon)
+          .description #{entry.verb}:
+      else
         .description #{entry.verb}:
     .p-content
       include ../shortformArticle.pug
-      +shortformArticle(readingEntry, false, true)
+      +shortformArticle(readingEntry, isRss, true)
     footer.footer
       .flex-row.post-meta
         .timestamp
           time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
           if isLoggedIn
             span.edit-icon.icon
-              a(href=`/feed/tagger/reading${'shortform' in entry ? 'Shortform' : 'Blockchain'}/${entry._id}`)
+              a(href=`${baseUrl}/feed/tagger/reading${'shortform' in entry ? 'Shortform' : 'Blockchain'}/${entry._id}`)
                 include ../../icons/pencil.svg
-          |  from the #[a(href=`/reading/${'shortform' in entry ? 'shortform' : 'blockchain'}`) #{'shortform' in entry ? 'shortform' : 'blockchain'} reading list].
+          if !isRss
+            |  from the #[a(href=`${baseUrl}/reading/${'shortform' in entry ? 'shortform' : 'blockchain'}`) #{'shortform' in entry ? 'shortform' : 'blockchain'} reading list].
       .tags
         if entry.tags && entry.tags.length
-          each tag in entry.tags 
-            a.tag.p-category(href=`/feed/tag/${tag.value}` title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+          each tag, index in entry.tags 
+            a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}` title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+            if isRss && index !== entry.tags.length - 1
+              | , 

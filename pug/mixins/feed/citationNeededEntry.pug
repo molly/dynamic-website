@@ -1,9 +1,16 @@
-mixin citationNeededEntry(entry,  {isLoggedIn=false} = {})
+mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false} = {})
+  - var baseUrl = isRss ? 'https://www.mollywhite.net' : ''
   article.entry.h-entry.hentry
     header
-      .post-icon.icon
-        a(href=`https://www.citationneeded.news/${entry.slug}`)
-          include ../../icons/brackets.svg
+      if !isRss
+        .post-icon.icon
+          a(href=`https://www.citationneeded.news/${entry.slug}`)
+            include ../../icons/brackets.svg
+          .description Published an issue of 
+            a(href="https://www.citationneeded.news/")
+              i Citation Needed
+            |:
+      else
         .description Published an issue of 
           a(href="https://www.citationneeded.news/")
             i Citation Needed
@@ -25,17 +32,23 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false} = {})
             time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.absoluteTime) #{entry.humanTime}
           if isLoggedIn
             span.edit-icon.icon
-              a(href=`/feed/tagger/citationNeeded/${entry._id}`)
+              a(href=`${baseUrl}/feed/tagger/citationNeeded/${entry._id}`)
                 include ../../icons/pencil.svg
-          |  from the #[a(href="https://citationneeded.news/") #[i Citation Needed]] newsletter.
+          if !isRss
+            |  from the #[a(href="https://citationneeded.news/") #[i Citation Needed]] newsletter.
         .social-links 
           if entry.socialLinks && entry.socialLinks.length 
             span Also posted to:
             each socialLink in entry.socialLinks
               a(class=`social-link u-syndication ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1), rel="syndication")
-                include ./icon.pug
-                +icon(socialLink.type)
+                if !isRss
+                  include ./icon.pug
+                  +icon(socialLink.type)
+                else
+                  | #{socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1)}
       .tags
         if entry.tags && entry.tags.length
-          each tag in entry.tags 
-            a.tag.p-category(href=`/feed/tag/${tag.value}`, title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+          each tag, index in entry.tags 
+            a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}`, title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+            if isRss && index !== entry.tags.length - 1
+              | , 

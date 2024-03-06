@@ -45,7 +45,11 @@ const hydrateFeedEntries = (entries) =>
     return entry;
   });
 
-export const getFeedEntries = async ({ query, start, limit }) => {
+export const getFeedEntries = async ({
+  query = {},
+  start = 0,
+  limit = 10,
+} = {}) => {
   let q = FeedEntry.find(query).sort({ createdAt: -1 });
 
   if (start) {

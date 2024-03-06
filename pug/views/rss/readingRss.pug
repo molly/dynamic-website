@@ -4,14 +4,15 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
   title(type="html")= `Molly White's ${prefix[0].toUpperCase()}${prefix.slice(1)} Reading List`
   author
     name Molly White 
-    email molly.white5@gmail.com
+    email molly@mollywhite.net 
     uri https://www.mollywhite.net
   link(rel="self" href=`https://mollywhite.net/reading/${prefix}/feed.xml`)
   link(rel="alternate" href=`https://mollywhite.net/reading/${prefix}`)
-  icon https://mollywhite.net/images/icons/apple-touch-icon.png
-  webfeeds:icon https://mollywhite.net/images/icons/apple-touch-icon.png
-  webfeeds:cover(image="https://www.mollywhite.net/images/mollyandmax.png")
-  webfeeds:accentColor 96B78
+  icon https://mollywhite.net/assets/images/icons/apple-touch-icon.png
+  logo https://www.mollywhite.net/assets/images/molly_illustration.png
+  webfeeds:icon https://www.mollywhite.net/assets/images/molly_illustration.png
+  webfeeds:cover(image="https://www.mollywhite.net/assets/images/molly_illustration_social.png")
+  webfeeds:accentColor #5948a4 
   updated= results[0].entryAdded
   rights(type="html")= 'Copyright &copy; Molly White&nbsp;' + new Date().getFullYear() + '.'
 

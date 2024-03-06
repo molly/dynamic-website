@@ -41,7 +41,11 @@ export const hydrateMicroEntry = (entry) => {
   return entry;
 };
 
-export const getMicroEntries = async ({ query, start, limit }) => {
+export const getMicroEntries = async ({
+  query = {},
+  start = 0,
+  limit = 10,
+} = {}) => {
   let q = MicroEntry.find(query).sort({ createdAt: -1 });
 
   if (start) {

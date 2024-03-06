@@ -1,0 +1,14 @@
+mixin feedEntry(entry, options)
+  case entry.entryType
+    when "micro"
+      include ./microEntry.pug
+      +microEntry(entry.micro, options)
+    when "citationNeeded"
+      include ./citationNeededEntry.pug
+      +citationNeededEntry(entry, options)
+    when "readingShortform"
+      include ./readingEntry.pug
+      +readingEntry(entry, entry.shortform, options)
+    when "readingBlockchain"
+      include ./readingEntry.pug
+      +readingEntry(entry, entry.blockchain, options)

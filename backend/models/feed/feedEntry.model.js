@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { generateRssForFeed } from '../../helpers/rss.js';
 import db from '../db.js';
 import MicroEntry from '../micro/microEntry.model.js';
 
@@ -14,6 +15,8 @@ const FeedEntrySchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// Generate RSS on each save
+FeedEntrySchema.post('save', generateRssForFeed);
 export const FeedEntry = db.feedConnection.model(
   'FeedEntry',
   FeedEntrySchema,

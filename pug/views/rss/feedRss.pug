@@ -1,0 +1,40 @@
+doctype xml 
+feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss/1.0")
+  id=`https://www.mollywhite.net/${path}/feed.xml`
+  title(type="text") #{title}
+  author
+    name Molly White 
+    email molly@mollywhite.net
+    uri https://www.mollywhite.net
+  link(rel="self" href=`https://mollywhite.net/reading/${path}/feed.xml`)
+  link(rel="alternate" href=`https://mollywhite.net/${path}`)
+  icon https://mollywhite.net/assets/images/icons/apple-touch-icon.png
+  logo https://www.mollywhite.net/assets/images/molly_illustration.png
+  webfeeds:icon https://www.mollywhite.net/assets/images/molly_illustration.png
+  webfeeds:cover(image="https://www.mollywhite.net/assets/images/molly_illustration_social.png")
+  webfeeds:accentColor 5948a4
+  updated #{lastUpdated.toISOString()}
+  rights(type="html")= 'Copyright &copy; Molly White&nbsp;' + new Date().getFullYear() + '.'
+
+  each entry, index in entries
+    -
+      var url;
+      if (entry.__t === 'FeedEntryMicro' || entry.__t === "MicroEntry") {
+        url = `https://www.mollywhite.net/micro/${entry.micro.slug}`;
+      } else if (entry.__t === 'FeedEntryReading') {
+        var type = entry.shortform ? 'shortform' : 'blockchain';
+        url = `https://www.mollywhite.net/reading/${type}?search=${encodeURIComponent(entry[type].title)}`;
+      } else if (entry.__t === 'FeedEntryCitationNeeded') {
+        url = `https://citationneeded.news/${entry.slug}`;
+      }
+      var title = entry.title || `Note published on ${entry.absoluteTime}`;
+    entry
+      title(type="html") #{title}
+      link(href=url, type="text/html", rel="alternate", title=entry.title)
+      published= entry.createdAt.toISOString()
+      updated= entry.updatedAt.toISOString()
+      id #{url}
+      content(type="html")= entry.html
+      if entry.tags
+        each tag in entry.tags 
+          category(term=tag.value, label=tag.text)

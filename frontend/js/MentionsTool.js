@@ -9,7 +9,9 @@ const getSvgIcon = async (network) => {
   );
   const iconEl = document.createElement('SPAN');
   iconEl.classList.add('cdx-mention-icon', 'icon');
+  iconEl.style.width = network === 'wikipedia' ? '14px' : '10px';
   iconEl.innerHTML = svg.default;
+  iconEl.firstChild.style.width = network === 'wikipedia' ? '14px' : '10px';
   return iconEl;
 };
 
@@ -20,7 +22,7 @@ export default class MarkerTool {
 
   static get sanitize() {
     return {
-      span: { class: true },
+      span: { class: true, style: true },
       svg: function (el) {
         return el.parentElement.classList.contains('cdx-mention-icon');
       },
@@ -36,9 +38,10 @@ export default class MarkerTool {
             class: true,
             title: true,
             'data-username': true,
+            style: true,
           };
         }
-        return { href: true, target: true, rel: true };
+        return { href: true, target: true, rel: true, style: true };
       },
     };
   }
@@ -176,6 +179,8 @@ export default class MarkerTool {
             } else {
               // For other social networks, add the link after the primary text
               link.classList.add('cdx-social-link');
+              link.style.padding = '0 0.025em';
+              link.style.marginLeft = '0.05em';
               link.setAttribute('data-username', input.value);
               link.appendChild(await getSvgIcon(input.id));
               link.title = input.id.charAt(0).toUpperCase() + input.id.slice(1);

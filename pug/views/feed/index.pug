@@ -7,6 +7,7 @@ block vars
 block head
   include ../../templates/titleAndDescription.pug
   +titleAndDescription('Feed', "Molly White's activity feed")
+  link(rel="alternate", type="application/rss+xml", title="Molly White's activity feed", href="https://mollywhite.net/feed/feed.xml")
   link(rel='stylesheet', href="/static/feed.css")
 
 block body
@@ -19,20 +20,11 @@ block body
     if options.hasResults === false
       p No results found. 
         a(href="/feed") View all activity
-    include ../../mixins/feed/microEntry.pug
-    include ../../mixins/feed/citationNeededEntry.pug
-    include ../../mixins/feed/readingEntry.pug
-    each entry in entries
-      case entry.entryType
-        when "micro"
-          +microEntry(entry.micro, options)
-        when "citationNeeded"
-          +citationNeededEntry(entry, options)
-        when "readingShortform"
-          +readingEntry(entry, entry.shortform, options)
-        when "readingBlockchain"
-          +readingEntry(entry, entry.blockchain, options)
-    
-    include ../../includes/paginator.pug
+    else
+      include ../../mixins/feed/feedEntry.pug
+      each entry in entries
+        +feedEntry(entry, options)
+  
+      include ../../includes/paginator.pug
   
   script(src="/static/feed.js")

@@ -24,6 +24,7 @@ router.get('/', async function (req, res) {
     limit: LIMIT,
   });
 
+  console.log(result.entries);
   res.render('feed/index.pug', {
     entries: result.entries,
     currentPage: page,
@@ -110,5 +111,10 @@ router.get(
     }
   },
 );
+
+// RSS
+router.get('/feed.xml', (_, res) => {
+  res.sendFile(new URL('../../rss/feedFeed.xml', import.meta.url).pathname);
+});
 
 export default router;
