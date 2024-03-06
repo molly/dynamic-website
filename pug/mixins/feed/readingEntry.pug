@@ -1,6 +1,6 @@
 mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false} = {})
   - var baseUrl = isRss ? 'https://www.mollywhite.net' : ''
-  article.entry.h-entry.hentry
+  article.entry.h-entry.hentry(data-entry-id=entry._id)
     header
       if !isRss
         .post-icon.icon

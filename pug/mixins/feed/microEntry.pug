@@ -1,6 +1,6 @@
 mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
   - var baseUrl = isRss ? 'https://mollywhite.net' : ''
-  article.entry.h-entry.hentry
+  article.entry.h-entry.hentry(data-entry-id=entry._id)
     header
       if isInFeed && !isRss
         .post-icon.icon

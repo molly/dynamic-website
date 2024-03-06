@@ -42,6 +42,7 @@
     "express": "^4.18.2",
     "express-session": "^1.18.0",
     "fs": "0.0.1-security",
+    "http-signature": "^1.4.0",
     "https": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
     "lodash.debounce": "^4.0.8",

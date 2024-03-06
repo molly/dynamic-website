@@ -33,6 +33,12 @@ const db = {
       serverApi: ServerApiVersion.v1,
     },
   ),
+  activityPubConnection: mongoose.createConnection(
+    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/activityPub?retryWrites=true&w=majority`,
+    {
+      serverApi: ServerApiVersion.v1,
+    },
+  ),
 };
 
 db.initialize = async function () {
@@ -40,13 +46,23 @@ db.initialize = async function () {
     db.authConnection.asPromise(),
     db.readingListConnection.asPromise(),
     db.microConnection.asPromise(),
+    db.feedConnection.asPromise(),
+    db.tagConnection.asPromise(),
+    db.activityPubConnection.asPromise(),
   ]);
   console.log('initialized');
 };
 
 db.gracefulClose = async function () {
-  await db.mongoose.connection.close();
-  console.log('db connection closed');
+  await Promise.all([
+    db.authConnection.close(),
+    db.readingListConnection.close(),
+    db.microConnection.close(),
+    db.feedConnection.close(),
+    db.tagsConnection.close(),
+    db.activityPubConnection.close(),
+  ]);
+  console.log('db connections closed');
   process.exit(0);
 };
 
