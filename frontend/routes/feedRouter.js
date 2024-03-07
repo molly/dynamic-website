@@ -24,7 +24,6 @@ router.get('/', async function (req, res) {
     limit: LIMIT,
   });
 
-  console.log(result.entries);
   res.render('feed/index.pug', {
     entries: result.entries,
     currentPage: page,

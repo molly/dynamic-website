@@ -40,13 +40,21 @@ db.initialize = async function () {
     db.authConnection.asPromise(),
     db.readingListConnection.asPromise(),
     db.microConnection.asPromise(),
+    db.feedConnection.asPromise(),
+    db.tagConnection.asPromise(),
   ]);
   console.log('initialized');
 };
 
 db.gracefulClose = async function () {
-  await db.mongoose.connection.close();
-  console.log('db connection closed');
+  await Promise.all([
+    db.authConnection.close(),
+    db.readingListConnection.close(),
+    db.microConnection.close(),
+    db.feedConnection.close(),
+    db.tagConnection.close(),
+  ]);
+  console.log('db connections closed');
   process.exit(0);
 };
 
