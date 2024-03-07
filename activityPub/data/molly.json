@@ -3,16 +3,16 @@
     "https://www.w3.org/ns/activitystreams",
     "https://w3id.org/security/v1"
   ],
-  "id": "https://mollywhite.net/ap/user/molly",
+  "id": "https://www.mollywhite.net/ap/user/molly",
   "type": "Person",
-  "following": "https://mollywhite.net/ap/user/molly/following",
-  "followers": "https://mollywhite.net/ap/user/molly/followers",
-  "inbox": "https://mollywhite.net/ap/user/molly/inbox",
-  "outbox": "https://mollywhite.net/ap/user/molly/outbox",
+  "following": "https://www.mollywhite.net/ap/user/molly/following",
+  "followers": "https://www.mollywhite.net/ap/user/molly/followers",
+  "inbox": "https://www.mollywhite.net/ap/user/molly/inbox",
+  "outbox": "https://www.mollywhite.net/ap/user/molly/outbox",
   "preferredUsername": "molly",
   "name": "Molly White",
   "summary": "<p>Molly White's activity feed</p>",
-  "url": "https://mollywhite.net/",
+  "url": "https://www.mollywhite.net/",
   "manuallyApprovesFollowers": false,
   "discoverable": true,
   "alsoKnownAs": [
@@ -20,12 +20,12 @@
     "https://hachyderm.io/@molly"
   ],
   "publicKey": {
-    "id": "https://mollywhite.net/ap/user/molly#main-key",
-    "owner": "https://mollywhite.net/ap/user/molly",
+    "id": "https://www.mollywhite.net/ap/user/molly#main-key",
+    "owner": "https://www.mollywhite.net/ap/user/molly",
     "publicKeyPem": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuXHKbC9JuLVzV/tAlv1Ib9rSbG+m+QgfZpEDwpy9UlcU+yXxwBszG/wZYcwXed+TSBaoo0kuThva+SiSm5Zi+yMp5N5UYmYjVDoszlL20mB5+oMWvptaCevwpwVHFlEX68p+v52vjTu+KtFlA2iVBMEQe91zzmmqY83xhou3d6M3hd7DOdnZZk/9CfgQ/XsOqn81WHMPecaYMdgxwkM9mfas4dEoei4ig/C0n1Wlg2j1Ti2Zso3Qfz2WB1z785FkF2s0H+xFZd8Hj7xAyQE37uXGJrjFlzuvsqEBmfzHL4bQ/apsiBAdxn1O1tspCltpujIYwwwjCB0axRwBpYsprwIDAQAB-----END PUBLIC KEY-----"
   },
   "endpoints": {
-    "sharedInbox": "https://mollywhite.net/ap/inbox"
+    "sharedInbox": "https://www.mollywhite.net/ap/inbox"
   },
   "icon": {
     "type": "Image",

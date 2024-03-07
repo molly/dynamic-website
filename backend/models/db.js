@@ -59,7 +59,7 @@ db.gracefulClose = async function () {
     db.readingListConnection.close(),
     db.microConnection.close(),
     db.feedConnection.close(),
-    db.tagsConnection.close(),
+    db.tagConnection.close(),
     db.activityPubConnection.close(),
   ]);
   console.log('db connections closed');

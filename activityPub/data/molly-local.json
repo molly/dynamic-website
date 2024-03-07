@@ -1,0 +1,35 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    "https://w3id.org/security/v1"
+  ],
+  "id": "http://localhost:5001/ap/user/molly",
+  "type": "Person",
+  "following": "http://localhost:5001/ap/user/molly/following",
+  "followers": "http://localhost:5001/ap/user/molly/followers",
+  "inbox": "http://localhost:5001/ap/user/molly/inbox",
+  "outbox": "http://localhost:5001/ap/user/molly/outbox",
+  "preferredUsername": "molly",
+  "name": "Molly White",
+  "summary": "<p>Molly White's activity feed</p>",
+  "url": "http://localhost:5001/",
+  "manuallyApprovesFollowers": false,
+  "discoverable": true,
+  "alsoKnownAs": [
+    "https://mastodon.social/users/molly",
+    "https://hachyderm.io/@molly"
+  ],
+  "publicKey": {
+    "id": "http://localhost:5001/ap/user/molly#main-key",
+    "owner": "http://localhost:5001/ap/user/molly",
+    "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuXHKbC9JuLVzV/tAlv1I\nb9rSbG+m+QgfZpEDwpy9UlcU+yXxwBszG/wZYcwXed+TSBaoo0kuThva+SiSm5Zi\n+yMp5N5UYmYjVDoszlL20mB5+oMWvptaCevwpwVHFlEX68p+v52vjTu+KtFlA2iV\nBMEQe91zzmmqY83xhou3d6M3hd7DOdnZZk/9CfgQ/XsOqn81WHMPecaYMdgxwkM9\nmfas4dEoei4ig/C0n1Wlg2j1Ti2Zso3Qfz2WB1z785FkF2s0H+xFZd8Hj7xAyQE3\n7uXGJrjFlzuvsqEBmfzHL4bQ/apsiBAdxn1O1tspCltpujIYwwwjCB0axRwBpYsp\nrwIDAQAB\n-----END PUBLIC KEY-----\n"
+  },
+  "endpoints": {
+    "sharedInbox": "http://localhost:5001/ap/inbox"
+  },
+  "icon": {
+    "type": "Image",
+    "mediaType": "image/jpeg",
+    "url": "https://www.mollywhite.net/assets/images/molly.jpeg"
+  }
+}
