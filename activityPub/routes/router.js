@@ -1,7 +1,10 @@
+import bodyParser from 'body-parser';
 import express from 'express';
 import { intercept, verifyRequestSignature } from '../helpers/security.js';
 
 const router = express.Router();
+router.use(bodyParser.json({ type: 'application/activity+json' }));
+router.use(bodyParser.urlencoded({ extended: true }));
 router.use(intercept);
 
 router.get('/.well-known/webfinger', (req, res) => {
@@ -51,12 +54,12 @@ router.get('/ap/user/:id', (req, res) => {
 
 router.post('/ap/inbox', verifyRequestSignature, (req, res) => {
   console.log(req.body);
-  console.log(req);
+  res.sendStatus(200);
 });
 
 router.post('/ap/user/molly/inbox', verifyRequestSignature, (req, res) => {
   console.log(req.body);
-  console.log(req);
+  res.sendStatus(200);
 });
 
 export default router;

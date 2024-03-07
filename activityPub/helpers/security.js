@@ -20,7 +20,9 @@ export const verifyRequestSignature = async (req, res, next) => {
   });
   const publicKey = publicKeyResp.data.publicKey.publicKeyPem;
   if (!httpSignature.verifySignature(signature, publicKey)) {
+    console.log('invalid signature');
     res.status(401).send({ message: 'Invalid signature' });
+    return;
   } else {
     console.log('valid!');
     next();
