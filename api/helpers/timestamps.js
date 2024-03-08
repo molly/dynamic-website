@@ -5,12 +5,18 @@ export const hydrateTimestamps = (entry) => {
   if (!entry) {
     return {};
   }
-  const createdAtDt = DateTime.fromJSDate(entry.createdAt);
-  const absoluteTime = createdAtDt.toLocaleString(DateTime.DATETIME_FULL);
-  const relativeTime = DateTime.now() - createdAtDt;
-  let humanTime = absoluteTime;
-  if (relativeTime < ONE_MONTH) {
-    humanTime = createdAtDt.toRelative();
+  const timestamps = {};
+  for (let ts of ['createdAt', 'updatedAt', 'deletedAt']) {
+    if (ts in entry) {
+      const createdAtDt = DateTime.fromJSDate(entry.createdAt);
+      const absoluteTime = createdAtDt.toLocaleString(DateTime.DATETIME_FULL);
+      const relativeTime = DateTime.now() - createdAtDt;
+      let humanTime = absoluteTime;
+      if (relativeTime < ONE_MONTH) {
+        humanTime = createdAtDt.toRelative();
+      }
+      timestamps[ts] = { absoluteTime, humanTime };
+    }
   }
-  return { absoluteTime, humanTime };
+  return timestamps;
 };

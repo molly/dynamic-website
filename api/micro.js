@@ -34,8 +34,10 @@ const edjsParser = EditorJSHtml({
 });
 
 export const hydrateMicroEntry = (entry) => {
-  Object.assign(entry, hydrateTimestamps(entry));
-  entry.html = edjsParser.parse(entry.post);
+  Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
+  if (entry.post && entry.post.blocks) {
+    entry.html = edjsParser.parse(entry.post);
+  }
   if (entry.socialLinks?.length) {
     entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);
   }
@@ -47,7 +49,9 @@ export const getMicroEntries = async ({
   start = 0,
   limit = 10,
 } = {}) => {
-  let q = MicroEntry.find(query).sort({ createdAt: -1 });
+  let q = MicroEntry.find({ deletedAt: { $exists: false }, ...query }).sort({
+    createdAt: -1,
+  });
 
   if (start) {
     q = q.skip(start);
@@ -74,5 +78,6 @@ export const getMicroEntry = async (slug) => {
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
     .populate({ path: 'relatedPost', connection: db.readingListConnection })
     .lean();
+
   return hydrateMicroEntry(entry);
 };

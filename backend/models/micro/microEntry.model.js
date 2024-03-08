@@ -7,7 +7,7 @@ const MicroEntrySchema = new mongoose.Schema(
   {
     title: String,
     slug: { type: String, required: true, unique: true },
-    post: { type: Object, required: true },
+    post: { type: Object },
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,

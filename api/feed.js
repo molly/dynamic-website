@@ -15,7 +15,7 @@ import { hydrateMicroEntry } from './micro.js';
 const hydrateFeedEntries = (entries) =>
   entries.map((entry) => {
     // Hydrate timestamps for all entries
-    Object.assign(entry, hydrateTimestamps(entry));
+    Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
 
     // Do additional hydration based on entry type
     if (entry.__t === 'FeedEntryMicro') {
@@ -50,7 +50,9 @@ export const getFeedEntries = async ({
   start = 0,
   limit = 10,
 } = {}) => {
-  let q = FeedEntry.find(query).sort({ createdAt: -1 });
+  let q = FeedEntry.find({ deletedAt: { $exists: false }, ...query }).sort({
+    createdAt: -1,
+  });
 
   if (start) {
     q = q.skip(start);

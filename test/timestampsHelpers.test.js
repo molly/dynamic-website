@@ -6,8 +6,10 @@ describe('timestamps helpers', () => {
       createdAt: new Date('2021-01-01T12:00:00Z'),
     };
     const hydrated = hydrateTimestamps(entry);
-    expect(hydrated.absoluteTime).toBe('January 1, 2021 at 7:00 AM EST');
-    expect(hydrated.humanTime).toBe('January 1, 2021 at 7:00 AM EST');
+    expect(hydrated.createdAt.absoluteTime).toBe(
+      'January 1, 2021 at 7:00 AM EST',
+    );
+    expect(hydrated.createdAt.humanTime).toBe('January 1, 2021 at 7:00 AM EST');
   });
 
   test('adds relative timestamp to recent entry', () => {
@@ -15,6 +17,6 @@ describe('timestamps helpers', () => {
       createdAt: new Date(Date.now() - 86400000),
     };
     const hydrated = hydrateTimestamps(entry);
-    expect(hydrated.humanTime).toBe('1 day ago');
+    expect(hydrated.createdAt.humanTime).toBe('1 day ago');
   });
 });

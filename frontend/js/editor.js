@@ -311,6 +311,7 @@ function save() {
         updateModelFromDb(postResp.data);
         setInputValues();
 
+        deleteButton.classList.remove('hidden');
         // Re-enable save button
         saveButton.removeAttribute('disabled');
 

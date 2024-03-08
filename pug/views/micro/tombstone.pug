@@ -1,0 +1,34 @@
+extends ../../templates/base.pug
+
+block vars
+  - var htmlClass = 'micro';
+  - var importPrefix = 'https://www.mollywhite.net'
+
+block head
+  include ../../templates/titleAndDescription.pug
+  +titleAndDescription(entry.title, "Entry in Molly White's microblog")
+  link(rel='stylesheet', href="/static/feed.css")
+
+block body
+  main
+    .content-box
+      .entries
+        #entryContainer.standalone
+          article.entry.h-entry.hentry
+            .p-content.e-content This post is gone.
+
+            footer.footer
+              .flex-row.post-meta
+                .timestamp
+                  | Originally published 
+                  a(href=`${baseUrl}/micro/entry/${entry.slug}`)
+                    time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
+                  | . Deleted 
+                  time.dt-deleted(datetime=entry.deletedAt.toISOString(), title=entry.timestamps.deletedAt.absoluteTime) #{entry.timestamps.deletedAt.humanTime}
+                  | .
+                
+      .back-links
+        div
+          a(href="/feed") &laquo; Back to the activity feed
+        div
+          a(href="/micro") &laquo; Back to the microblog feed

@@ -89,18 +89,20 @@ router.delete(
       await updateTagsOnEdit(microEntry.tags, [], 'micro');
 
       // Clear micro entry
-      microEntry.post = {};
       for (let key of [
         'title',
+        'post',
         'tags',
         'relatedPost',
         'relatedPostModel',
         'socialLinks',
       ]) {
-        delete microEntry[key];
+        microEntry[key] = undefined;
       }
       microEntry.deletedAt = new Date();
 
+      // Clear feed entry
+      feedEntry.tags = undefined;
       feedEntry.deletedAt = new Date();
 
       await Promise.all([microEntry.save(), feedEntry.save()]);
