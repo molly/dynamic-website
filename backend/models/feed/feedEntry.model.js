@@ -31,6 +31,7 @@ export const FeedEntryMicro = FeedEntry.discriminator(
       ref: MicroEntry,
       required: true,
     },
+    deletedAt: Date,
   }),
 );
 

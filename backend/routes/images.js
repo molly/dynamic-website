@@ -4,6 +4,7 @@ import express from 'express';
 import multer from 'multer';
 import MulterGoogleCloudStorage from 'multer-cloud-storage';
 import crypto from 'node:crypto';
+import { USER_AGENT } from '../config/requests.js';
 
 const storage = new Storage();
 const bucket = storage.bucket('storage.mollywhite.net');
@@ -47,6 +48,7 @@ router.post('/byURL', async (req, res) => {
   const targetFilename = `${crypto.randomBytes(10)}_${originalFilename}`;
   const file = bucket.file(`micro/${targetFilename}`);
   const { data } = await axios.get(req.body.url, {
+    headers: { 'User-Agent': USER_AGENT },
     decompress: false,
     responseType: 'stream',
   });

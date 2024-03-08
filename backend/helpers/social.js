@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 export const processText = (text, network) => {
-  const $ = cheerio.load(text);
+  const $ = cheerio.load(text, null, false);
 
   // Replace mentions
   const $mentions = $('.cdx-mention');

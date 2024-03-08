@@ -30,6 +30,7 @@ const edjsParser = EditorJSHtml({
     }
   },
   socialPostDelimiter: () => null, // Just used internally, should not display at all
+  raw: ({ data }) => data.html,
 });
 
 export const hydrateMicroEntry = (entry) => {

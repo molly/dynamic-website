@@ -1,3 +1,4 @@
+import IORedis from 'ioredis';
 import { ServerApiVersion } from 'mongodb';
 import mongoose from 'mongoose';
 
@@ -33,6 +34,7 @@ const db = {
       serverApi: ServerApiVersion.v1,
     },
   ),
+  redis: new IORedis(32856, { maxRetriesPerRequest: null }),
 };
 
 db.initialize = async function () {

@@ -75,6 +75,40 @@ router.post(
   },
 );
 
+router.delete(
+  '/entry/:id',
+  authenticated({ redirectTo: '/micro/login' }),
+  async function (req, res) {
+    const microEntry = await MicroEntry.findById(req.params.id);
+    const feedEntry = await FeedEntryMicro.findOne({ micro: req.params.id });
+    if (!microEntry) {
+      res.sendStatus(404);
+      return;
+    } else {
+      // Decrement tag frequency
+      await updateTagsOnEdit(microEntry.tags, [], 'micro');
+
+      // Clear micro entry
+      microEntry.post = {};
+      for (let key of [
+        'title',
+        'tags',
+        'relatedPost',
+        'relatedPostModel',
+        'socialLinks',
+      ]) {
+        delete microEntry[key];
+      }
+      microEntry.deletedAt = new Date();
+
+      feedEntry.deletedAt = new Date();
+
+      await Promise.all([microEntry.save(), feedEntry.save()]);
+      res.sendStatus(204);
+    }
+  },
+);
+
 router.get('/entry/:slug', async (req, res) => {
   const entry = await MicroEntry.findOne({ slug: req.params.slug });
   if (entry) {

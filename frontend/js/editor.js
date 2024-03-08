@@ -43,6 +43,7 @@ let tagSelect;
 let relatedPostsSelect;
 let socialPostsCheckbox;
 let saveButton;
+let deleteButton;
 
 // Change handlers -------------------------------------------------------------------------------
 /**
@@ -323,6 +324,17 @@ function save() {
   });
 }
 
+// Delete -----------------------------------------------------------------------------------------
+/**
+ * Delete a saved post.
+ */
+function deletePost() {
+  deleteButton.setAttribute('disabled', true);
+  axios.delete(`/dynamic-api/micro/entry/${savedPost._id}`).then(() => {
+    window.location = '/feed';
+  });
+}
+
 // On first load --------------------------------------------------------------------------------
 async function onFirstLoad() {
   // Load post data if we're editing an existing post
@@ -394,6 +406,7 @@ async function onFirstLoad() {
   socialPostsCheckbox = document.getElementById('social-posts');
   const mastodonTags = document.getElementById('mastodon-tags');
   saveButton = document.getElementById('save-button');
+  deleteButton = document.getElementById('delete-button');
 
   // Set initial values
   setInputValues();
@@ -432,6 +445,10 @@ async function onFirstLoad() {
   });
 
   saveButton.addEventListener('click', save);
+  deleteButton.addEventListener('click', deletePost);
+  if (savedPost._id) {
+    deleteButton.classList.remove('hidden');
+  }
 
   // Ready
   document.getElementById('loading-overlay').classList.add('hidden');

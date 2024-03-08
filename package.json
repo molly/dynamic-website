@@ -31,7 +31,7 @@
     "@editorjs/raw": "^2.5.0",
     "@google-cloud/storage": "^7.7.0",
     "axios": "^1.6.7",
-    "bcryptjs": "^2.4.3",
+    "bullmq": "^5.4.2",
     "cheerio": "^1.0.0-rc.12",
     "connect-mongodb-session": "^5.0.0",
     "cookie-parser": "^1.4.6",
@@ -42,7 +42,9 @@
     "express": "^4.18.2",
     "express-session": "^1.18.0",
     "fs": "0.0.1-security",
+    "http-signature": "^1.4.0",
     "https": "^1.0.0",
+    "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.2",
     "lodash.debounce": "^4.0.8",
     "lodash.sortby": "^4.7.0",
@@ -59,8 +61,7 @@
     "pug": "^3.0.2",
     "svg-inline-loader": "^0.8.2",
     "tom-select": "^2.3.1",
-    "twitter-api-v2": "^1.16.0",
-    "uninstall": "^0.0.0"
+    "twitter-api-v2": "^1.16.0"
   },
   "devDependencies": {
     "css-loader": "^6.10.0",
