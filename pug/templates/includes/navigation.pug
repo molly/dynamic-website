@@ -6,11 +6,15 @@ nav(role='nav')
     at someone out of frame.")
   button#menu-toggle.menu-toggle Menu
   #nav-links.nav-links.collapsed
-    a(href='/') Home
+    ul.top-level
+      li
+        a(href='/') Home
+      li
+        a(href='/about') About
     ul
       li.nav-header Work
       li
-        a(href='https://newsletter.mollywhite.net/') Newsletter
+        a(href='https://newsletter.mollywhite.net/') #[i Citation Needed] newsletter
       li
         a(href='https://web3isgoinggreat.com/')
           i Web3 is Going Just Great
@@ -30,8 +34,6 @@ nav(role='nav')
         a(href='/wikipedia-work') Wikipedia writing
       li
         a(href='/projects') Software
-      li
-        a(href='https://blog.mollywhite.net/') Blog
     ul
       li.nav-header About
       li
@@ -42,6 +44,8 @@ nav(role='nav')
         a(href='/verify') Identity
     ul
       li.nav-header Social
+      li
+        a(href="/micro") Microblog
       li
         a(href='https://twitter.com/molly0xFFF') Twitter
       li
