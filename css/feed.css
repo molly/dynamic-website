@@ -25,6 +25,21 @@ a.social-link {
   text-decoration: none;
 }
 
+nav a {
+  text-shadow:
+    0 0.05em var(--feed-bg-color),
+    0.05em 0.05em var(--feed-bg-color),
+    -0.05em 0.05em var(--feed-bg-color),
+    0.1em 0.05em var(--feed-bg-color),
+    -0.1em 0.05em var(--feed-bg-color),
+    0.1em 0 var(--feed-bg-color),
+    -0.1em 0 var(--feed-bg-color),
+    0em -0.05em var(--feed-bg-color),
+    0em -0.075em var(--feed-bg-color),
+    -0.125em 0 var(--feed-bg-color),
+    0.125em 0 var(--feed-bg-color);
+}
+
 /* Entry ------------------------------------------------------------- */
 .entry {
   position: relative;
