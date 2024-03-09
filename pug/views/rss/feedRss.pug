@@ -19,15 +19,21 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
   each entry, index in entries
     -
       var url;
+      var title;
       if (entry.__t === 'FeedEntryMicro' || entry.__t === "MicroEntry") {
         url = `https://www.mollywhite.net/micro/entry/${entry.micro.slug}`;
+        title = entry.micro.title;
       } else if (entry.__t === 'FeedEntryReading') {
         var type = entry.shortform ? 'shortform' : 'blockchain';
         url = `https://www.mollywhite.net/reading/${type}?search=${encodeURIComponent(entry[type].title)}`;
+        title = `Read "${entry[type].title}"`;
       } else if (entry.__t === 'FeedEntryCitationNeeded') {
         url = `https://citationneeded.news/${entry.slug}`;
+        title = `Published on Citation Needed: "${entry.title}"`;
       }
-      var title = entry.title || `Note published on ${entry.timestamps.createdAt.absoluteTime}`;
+      if (!title) {
+        title = `Note published on ${entry.timestamps.createdAt.absoluteTime}`;
+      }
     entry
       title(type="html") #{title}
       link(href=url, type="text/html", rel="alternate", title=entry.title)
