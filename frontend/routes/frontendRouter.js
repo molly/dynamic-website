@@ -10,11 +10,7 @@ const app = express.Router();
 app.use('/reading', readingListRouter);
 app.use('/press', pressRouter);
 app.use('/wikipedia-work', wikipediaRouter);
-
-if (process.argv[2] !== 'prod') {
-  // Feature flag
-  app.use('/micro', microRouter);
-  app.use('/feed', feedRouter);
-}
+app.use('/micro', microRouter);
+app.use('/feed', feedRouter);
 
 export default app;

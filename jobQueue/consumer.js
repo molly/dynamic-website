@@ -2,12 +2,16 @@ import axios from 'axios';
 import { Queue, UnrecoverableError, Worker } from 'bullmq';
 import * as cheerio from 'cheerio';
 import IORedis from 'ioredis';
+import auth from '../backend/config/auth.config.js';
 
 import { discoverWebmentionEndpoint } from './discoverWebmentionEndpoint.js';
 import { processSaveWebmention } from './processSaveWebmention.js';
 import { makeExternalRequestConfig } from './requestConfig.js';
 
-const connection = new IORedis(32856, { maxRetriesPerRequest: null });
+const connection = new IORedis(
+  { port: 32856, password: auth.redisPassword },
+  { maxRetriesPerRequest: null },
+);
 const jobQueue = new Queue('jobQueue', {
   connection,
   defaultJobOptions: {
@@ -71,14 +75,11 @@ async function processSendWebmention({ source, target, webmentionEndpoint }) {
 
 async function processReceiveWebmention({ source, target }) {
   try {
-    console.log('hitting source');
     const sourceResp = await axios.get(source, {
       ...makeExternalRequestConfig({
         headers: { Accept: 'text/html, application/json, text/plain' },
       }),
     });
-    console.log('resp', sourceResp.headers['content-type']);
-    console.log('resp', sourceResp.data);
 
     // If the source links to the target, add a job to save the webmention
     if (sourceResp.headers['content-type'].includes('text/html')) {
@@ -96,11 +97,9 @@ async function processReceiveWebmention({ source, target }) {
       (sourceResp.headers['content-type'].includes('text/plain') &&
         sourceResp.data.includes(target.href))
     ) {
-      console.log('saving', { source, target });
       await jobQueue.add('save-webmention', { source, target });
     }
   } catch (err) {
-    console.log(err);
     if (err.response) {
       if (err.response.status >= 400 && err.response.status < 500) {
         // Don't retry
@@ -115,7 +114,6 @@ async function processReceiveWebmention({ source, target }) {
 new Worker(
   'jobQueue',
   async (job) => {
-    console.log(job.name);
     switch (job.name) {
       case 'discover-webmention':
         await processDiscoverWebMention(job.data);

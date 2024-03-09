@@ -1,6 +1,7 @@
 import IORedis from 'ioredis';
 import { ServerApiVersion } from 'mongodb';
 import mongoose from 'mongoose';
+import auth from '../config/auth.config.js';
 
 const db = {
   mongoose,
@@ -40,7 +41,10 @@ const db = {
       serverApi: ServerApiVersion.v1,
     },
   ),
-  redis: new IORedis(32856, { maxRetriesPerRequest: null }),
+  redis: new IORedis(
+    { port: 32856, password: auth.redisPassword },
+    { maxRetriesPerRequest: null },
+  ),
 };
 
 db.initialize = async function () {
