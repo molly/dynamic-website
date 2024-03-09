@@ -20,7 +20,7 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
     -
       var url;
       if (entry.__t === 'FeedEntryMicro' || entry.__t === "MicroEntry") {
-        url = `https://www.mollywhite.net/micro/${entry.micro.slug}`;
+        url = `https://www.mollywhite.net/micro/entry/${entry.micro.slug}`;
       } else if (entry.__t === 'FeedEntryReading') {
         var type = entry.shortform ? 'shortform' : 'blockchain';
         url = `https://www.mollywhite.net/reading/${type}?search=${encodeURIComponent(entry[type].title)}`;
