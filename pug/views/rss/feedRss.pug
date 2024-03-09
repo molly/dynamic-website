@@ -27,7 +27,7 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
       } else if (entry.__t === 'FeedEntryCitationNeeded') {
         url = `https://citationneeded.news/${entry.slug}`;
       }
-      var title = entry.title || `Note published on ${entry.absoluteTime}`;
+      var title = entry.title || `Note published on ${entry.timestamps.createdAt.absoluteTime}`;
     entry
       title(type="html") #{title}
       link(href=url, type="text/html", rel="alternate", title=entry.title)

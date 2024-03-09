@@ -342,8 +342,9 @@ function deletePost() {
 // On first load --------------------------------------------------------------------------------
 async function onFirstLoad() {
   // Load post data if we're editing an existing post
-  const slug = window.location.pathname.split('/').slice(3);
-  if (slug.length) {
+  let slug = window.location.pathname.split('/').slice(3);
+  if (slug.length && slug[0] !== '') {
+    slug = slug[0];
     try {
       const resp = await axios.get(`/dynamic-api/micro/entry/${slug}`);
       if (resp) {
