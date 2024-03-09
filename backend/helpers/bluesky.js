@@ -1,7 +1,93 @@
 import Bsky from '@atproto/api';
-const { BskyAgent, RichText } = Bsky;
+import * as cheerio from 'cheerio';
+const { BskyAgent, RichText, UnicodeString } = Bsky;
 
 import auth from '../config/auth.config.js';
+
+export const createRichText = (post, $, $links) => {
+  const facets = [];
+  const postText = $.text();
+  const postBytes = new UnicodeString(postText);
+
+  while ($links.length > 0) {
+    const $link = $($links[0]);
+    const facet = {
+      features: [
+        { uri: $link.attr('href'), $type: 'app.bsky.richtext.facet#link' },
+      ],
+      index: {},
+    };
+
+    // Extract indices, convert to UTF-8 indices
+    const startInd = $link[0].startIndex;
+    const endInd = startInd + $link.text().length;
+    facet.index.byteStart = postBytes.utf16IndexToUtf8Index(startInd);
+    facet.index.byteEnd = postBytes.utf16IndexToUtf8Index(endInd);
+    facets.push(facet);
+
+    // Remove link, recreate cheerio representation to move on with updated indices
+    $link.replaceWith($link.text());
+    $ = cheerio.load(
+      $.html(),
+      {
+        xmlMode: true,
+        withStartIndices: true,
+        withEndIndices: true,
+        decodeEntities: false,
+      },
+      false,
+    );
+    $links = $('a');
+  }
+  return {
+    $type: 'app.bsky.feed.post',
+    text: postBytes.toString(),
+    facets,
+    createdAt: new Date().toISOString(),
+  };
+};
+
+export const makeSkeet = async (post, agent) => {
+  const $ = cheerio.load(
+    post.text,
+    {
+      xmlMode: true,
+      withStartIndices: true,
+      withEndIndices: true,
+      decodeEntities: false,
+    },
+    false,
+  );
+  const $links = $('a');
+  let needsCustomRichText = false;
+  $links.each((_, elem) => {
+    const $el = $(elem);
+    if ($el.text() !== $(elem).attr('href')) {
+      needsCustomRichText = true;
+      return false;
+    }
+  });
+
+  if (!needsCustomRichText) {
+    // Replace any link with just the plain URL
+    $links.each((_, elem) => {
+      const $a = $(elem);
+      $a.replaceWith($a.attr('href'));
+    });
+    // Strip remaining HTML since processText doesn't do this for Bsky
+    const text = $.text();
+    const rt = new RichText({ text });
+    await rt.detectFacets(agent);
+    return {
+      $type: 'app.bsky.feed.post',
+      text: rt.text,
+      facets: rt.facets,
+      createdAt: new Date().toISOString(),
+    };
+  } else {
+    return createRichText(post, $, $links);
+  }
+};
 
 export const postSkeets = async (posts, imagesMap) => {
   const agent = new BskyAgent({
@@ -35,14 +121,7 @@ export const postSkeets = async (posts, imagesMap) => {
 
   const skeetsToPost = [];
   for (let post of posts) {
-    const rt = new RichText({ text: post.text });
-    await rt.detectFacets(agent);
-    const skeet = {
-      $type: 'app.bsky.feed.post',
-      text: rt.text,
-      facets: rt.facets,
-      createdAt: new Date().toISOString(),
-    };
+    const skeet = await makeSkeet(post, agent);
     if (post.images.length > 0) {
       skeet.embed = {
         $type: 'app.bsky.embed.images',

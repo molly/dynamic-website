@@ -20,6 +20,7 @@ module.exports = {
     ],
     'require-await': ['error'],
     'comma-dangle': 0,
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
   },
   overrides: [
     {

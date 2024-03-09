@@ -25,9 +25,9 @@ router.post('/', authenticated(), async function (req, res) {
 
   // Make posts
   const promises = [
-    postTweets(socialPosts.twitter, images),
-    postToots(socialPosts.mastodon, images),
-    postSkeets(socialPosts.bluesky, images),
+    twitter ? postTweets(socialPosts.twitter, images) : Promise.resolve(null),
+    mastodon ? postToots(socialPosts.mastodon, images) : Promise.resolve(null),
+    bluesky ? postSkeets(socialPosts.bluesky, images) : Promise.resolve(null),
   ];
   const [tweetId, tootId, skeetId] = await Promise.all(promises);
   res.json({ twitter: tweetId, mastodon: tootId, bluesky: skeetId });

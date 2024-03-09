@@ -23,16 +23,19 @@ export const processText = (text, network) => {
   $('br').each((_, elem) => $(elem).replaceWith('\n\n'));
 
   // Replace links
-  $('a').each((_, elem) => {
-    const $a = $(elem);
-    const linkText = $a.text();
-    const href = $a.attr('href');
-    if (linkText === href) {
-      $a.replaceWith(href);
-    } else {
-      $a.replaceWith(`${linkText} (${href})`);
-    }
-  });
+  if (network !== 'bluesky') {
+    // Bluesky supports rich text with links, so retain them for that network
+    $('a').each((_, elem) => {
+      const $a = $(elem);
+      const linkText = $a.text();
+      const href = $a.attr('href');
+      if (linkText === href) {
+        $a.replaceWith(href);
+      } else {
+        $a.replaceWith(`${linkText} (${href})`);
+      }
+    });
+  }
 
   // Replace emphasis
   $('i, b, em, strong').each((_, elem) => {
@@ -40,6 +43,9 @@ export const processText = (text, network) => {
     $tag.replaceWith($tag.text().toUpperCase());
   });
 
+  if (network === 'bluesky') {
+    return $.html();
+  }
   // Returning .text() instead of .html() should strip any remaining HTML tags
   return $.text();
 };

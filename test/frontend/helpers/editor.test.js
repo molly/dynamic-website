@@ -2,7 +2,7 @@ import {
   getSlugFromTitle,
   socialLinksToArray,
   socialLinksToMap,
-} from '../frontend/js/helpers/editorHelpers';
+} from '../../../frontend/js/helpers/editorHelpers';
 
 describe('editor helpers', () => {
   test('creates slug from post title', () => {
@@ -32,6 +32,16 @@ describe('editor helpers', () => {
       { type: 'twitter', postId: '123' },
       { type: 'mastodon', postId: '456' },
     ];
+    expect(socialLinksToArray(socialLinks)).toEqual(expected);
+  });
+
+  test('converts social links map to array, omitting nulls/undefined', () => {
+    const socialLinks = {
+      twitter: undefined,
+      mastodon: '456',
+      bluesky: null,
+    };
+    const expected = [{ type: 'mastodon', postId: '456' }];
     expect(socialLinksToArray(socialLinks)).toEqual(expected);
   });
 });

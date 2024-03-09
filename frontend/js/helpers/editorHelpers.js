@@ -15,7 +15,9 @@ export const socialLinksToMap = (socialLinks) =>
   }, {});
 
 export const socialLinksToArray = (socialLinks) =>
-  Object.entries(socialLinks).map(([type, postId]) => ({ type, postId }));
+  Object.entries(socialLinks)
+    .filter(([_, postId]) => postId != undefined)
+    .map(([type, postId]) => ({ type, postId }));
 
 export const NETWORK_LIMITS = {
   twitter: { post: 280, alt: 1000 },

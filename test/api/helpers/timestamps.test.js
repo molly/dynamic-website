@@ -1,4 +1,4 @@
-import { hydrateTimestamps } from '../api/helpers/timestamps.js';
+import { hydrateTimestamps } from '../../../api/helpers/timestamps.js';
 
 describe('timestamps helpers', () => {
   test('adds human readable timestamps to entry far in the past', () => {

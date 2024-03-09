@@ -1,4 +1,4 @@
-import { processText } from '../backend/helpers/social';
+import { processText } from '../../../backend/helpers/social';
 
 describe('processText', () => {
   it('should replace linebreaks with newlines', () => {
