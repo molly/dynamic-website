@@ -20,6 +20,13 @@ export async function processSaveWebmention({ source, target }) {
   let microConnection;
   let MicroEntry;
 
+  const existingWebmention = await Webmention.findOne({ source, target });
+  if (existingWebmention) {
+    // No need to do anything, because this is an update to a webmention I've already stored.
+    // In the future, if I store the body of the source webmention, I would update it here.
+    return;
+  }
+
   const webmention = new Webmention({
     source,
     target,
