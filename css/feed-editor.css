@@ -40,6 +40,10 @@ input {
   background-color: var(--card-bg-color);
 }
 
+input#title {
+  margin-top: 1em;
+}
+
 input#title,
 input#slug,
 input#related {

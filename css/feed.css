@@ -298,13 +298,6 @@ h1.site-title + .entry {
   margin-right: 0.5em;
 }
 
-/* Standalone entries ------------------------------------------------------------ */
-.back-links {
-  margin-top: 1em;
-  font-size: 0.7em;
-  line-height: 1.2em;
-}
-
 /* Paginator --------------------------------------------------------------------- */
 label[for='paginator'] {
   display: block;

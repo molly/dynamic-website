@@ -14,6 +14,13 @@ router.post('/', async (req, res) => {
     });
     return;
   }
+  // Let's be reasonable, now.
+  if (req.body['source'].length > 2048 || req.body['target'].length > 2048) {
+    res.status(400).json({
+      error: 'Source and target URLs should be less than 2048 characters.',
+    });
+    return;
+  }
 
   let source;
   let target;

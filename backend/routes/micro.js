@@ -111,6 +111,7 @@ router.delete(
   },
 );
 
+// Get a single entry
 router.get('/entry/:slug', async (req, res) => {
   const entry = await MicroEntry.findOne({ slug: req.params.slug });
   if (entry) {

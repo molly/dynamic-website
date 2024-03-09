@@ -4,7 +4,9 @@ import express from 'express';
 import multer from 'multer';
 import MulterGoogleCloudStorage from 'multer-cloud-storage';
 import crypto from 'node:crypto';
+
 import { USER_AGENT } from '../config/requests.js';
+import { authenticated } from './auth.js';
 
 const storage = new Storage();
 const bucket = storage.bucket('storage.mollywhite.net');
@@ -27,23 +29,27 @@ const uploadHandler = multer({
 });
 
 // Upload local file by multipart form.
-router.post('/byFile', uploadHandler.single('image'), (req, res) => {
-  try {
-    res.json({
-      success: 1,
-      file: {
-        url: `https://storage.mollywhite.net/micro/${encodeURIComponent(req.file.filename)}`,
-        contentType: req.file.contentType,
-      },
-    });
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(500).send({ error: err });
-  }
-});
+router.post(
+  '/byFile',
+  [authenticated(), uploadHandler.single('image')],
+  (req, res) => {
+    try {
+      res.json({
+        success: 1,
+        file: {
+          url: `https://storage.mollywhite.net/micro/${encodeURIComponent(req.file.filename)}`,
+          contentType: req.file.contentType,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(500).send({ error: err });
+    }
+  },
+);
 
 // Upload remote file by URL. Streams the file from the URL to the bucket.
-router.post('/byURL', async (req, res) => {
+router.post('/byURL', authenticated(), async (req, res) => {
   const originalFilename = req.body.url.split('/').pop();
   const targetFilename = `${crypto.randomBytes(10)}_${originalFilename}`;
   const file = bucket.file(`micro/${targetFilename}`);

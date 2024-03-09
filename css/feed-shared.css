@@ -7,3 +7,9 @@
 .icon a {
   background: none;
 }
+
+.back-links {
+  margin-top: 1em;
+  font-size: 0.7em;
+  line-height: 1.2em;
+}
