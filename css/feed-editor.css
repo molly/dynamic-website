@@ -151,6 +151,10 @@ footer.editor-footer {
   margin-left: 1em;
 }
 
+#delete-button {
+  margin-right: 1em;
+}
+
 /* Loading spinner */
 .overlay {
   position: fixed;

@@ -26,15 +26,23 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
 
     footer.footer
       .flex-row.post-meta
-        .timestamp
-          a(href=`${baseUrl}/micro/entry/${entry.slug}`)
-            time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
-          if isLoggedIn
-            span.edit-icon.icon
-              a(href=`${baseUrl}/micro/editor/${entry.slug}`)
-                include ../../icons/pencil.svg
-          if !isRss
-            |  from the #[a(href="${baseUrl}/micro") micro posts] feed.
+        .timestamp-block
+          .timestamp
+            a(href=`${baseUrl}/micro/entry/${entry.slug}`)
+              time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
+            
+            if isLoggedIn
+              span.edit-icon.icon
+                a(href=`${baseUrl}/micro/editor/${entry.slug}`)
+                  include ../../icons/pencil.svg
+            if !isRss
+              |  from the #[a(href="${baseUrl}/micro") micro posts] feed.
+          if entry.updatedAt && entry.updatedAt - entry.createdAt > 5 * 60 * 1000
+            .timestamp
+              | Updated 
+              time.dt-updated(datetime=entry.updatedAt.toISOString(), title=entry.timestamps.updatedAt.absoluteTime) #{entry.timestamps.updatedAt.humanTime}
+              | .
+
         .social-links 
           if entry.socialLinks && entry.socialLinks.length 
             span Also posted to:

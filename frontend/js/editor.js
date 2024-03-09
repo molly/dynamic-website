@@ -291,10 +291,13 @@ function save() {
         let postPromise;
         if (socialResp) {
           // Update the post again with the social post links
-          postPromise = axios.post(`/dynamic-api/micro/entry/${postResp._id}`, {
-            ...transformedPostMeta,
-            socialLinks: socialLinksToArray(socialResp),
-          });
+          postPromise = axios.post(
+            `/dynamic-api/micro/entry/${postResp.data._id}`,
+            {
+              ...transformedPostMeta,
+              socialLinks: socialLinksToArray(socialResp.data),
+            },
+          );
         } else {
           postPromise = Promise.resolve(postResp);
         }

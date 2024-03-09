@@ -5,6 +5,7 @@ import config from './backend/config/auth.config.js';
 
 import db from './backend/models/db.js';
 import backendRouter from './backend/routes/backendRouter.js';
+import webmentionRouter from './backend/routes/webmentionRouter.js';
 import frontendRouter from './frontend/routes/frontendRouter.js';
 
 import connectMongoSession from 'connect-mongodb-session';
@@ -52,6 +53,7 @@ app.set('view engine', new URL('pug', import.meta.url).pathname);
 
 app.use('/dynamic-api', backendRouter);
 app.use('/', frontendRouter);
+app.use('/webmention', webmentionRouter);
 
 db.initialize().then(() => {
   if (process.argv[2] === 'prod') {

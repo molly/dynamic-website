@@ -227,6 +227,11 @@ h1.site-title + .entry {
   background-image: var(--image-underline-hover-grey);
 }
 
+.timestamp,
+.social-links {
+  line-height: 1.2em;
+}
+
 .edit-icon {
   width: 15px;
   height: 15px;
@@ -265,6 +270,7 @@ h1.site-title + .entry {
   display: flex;
   flex-wrap: wrap;
   line-height: 1em;
+  margin-top: 1em;
 }
 
 .entry .tag {

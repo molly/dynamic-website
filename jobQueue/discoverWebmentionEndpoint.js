@@ -1,18 +1,14 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { WEBMENTION_USER_AGENT } from './useragents.js';
+import { makeExternalRequestConfig } from './requestConfig.js';
 
 // Find the webmention endpoint for a given URL
 // Queue consumer handles errors
-export default async (url) => {
+export const discoverWebmentionEndpoint = async (url) => {
   let endpoint;
 
   // First try to get the endpoint from the HTML headers
-  const resp = await axios.get(url, {
-    headers: { 'User-Agent': WEBMENTION_USER_AGENT },
-    timeout: 5000,
-    maxContentLength: 1000000, // 1MB
-  });
+  const resp = await axios.get(url, makeExternalRequestConfig());
   const headers = resp.headers;
   if (headers['link']) {
     const links = headers['link'].split(',');

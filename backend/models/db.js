@@ -34,6 +34,12 @@ const db = {
       serverApi: ServerApiVersion.v1,
     },
   ),
+  webmentionConnection: mongoose.createConnection(
+    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/webmentions?retryWrites=true&w=majority`,
+    {
+      serverApi: ServerApiVersion.v1,
+    },
+  ),
   redis: new IORedis(32856, { maxRetriesPerRequest: null }),
 };
 
@@ -44,6 +50,7 @@ db.initialize = async function () {
     db.microConnection.asPromise(),
     db.feedConnection.asPromise(),
     db.tagConnection.asPromise(),
+    db.webmentionConnection.asPromise(),
   ]);
   console.log('initialized');
 };
@@ -55,6 +62,7 @@ db.gracefulClose = async function () {
     db.microConnection.close(),
     db.feedConnection.close(),
     db.tagConnection.close(),
+    db.webmentionConnection.close(),
   ]);
   console.log('db connections closed');
   process.exit(0);
