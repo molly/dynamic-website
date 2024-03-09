@@ -7,6 +7,15 @@ import getRssResults from '../../data/filter/rss.js';
 import { FeedEntry } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 
+// Checks that the directory exists and then writes the file
+function writeRssFile(path, xml) {
+  const dir = new URL('../../rss', import.meta.url).pathname;
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  fs.writeFileSync(new URL(path, import.meta.url).pathname, xml);
+}
+
 export async function generateRssForFeed() {
   const { entries } = await getFeedEntries({ limit: 20 });
   const lastUpdated = await FeedEntry.find({}, 'updatedAt')
@@ -31,10 +40,7 @@ export async function generateRssForFeed() {
     },
   );
 
-  fs.writeFileSync(
-    new URL('../../rss/feedFeed.xml', import.meta.url).pathname,
-    xml,
-  );
+  writeRssFile('../../rss/feedFeed.xml', xml);
 }
 
 export async function generateRssForMicro() {
@@ -61,10 +67,7 @@ export async function generateRssForMicro() {
     },
   );
 
-  fs.writeFileSync(
-    new URL('../../rss/microFeed.xml', import.meta.url).pathname,
-    xml,
-  );
+  writeRssFile('../../rss/microFeed.xml', xml);
 }
 
 export async function generateRssForShortform() {
@@ -77,10 +80,7 @@ export async function generateRssForShortform() {
       results,
     },
   );
-  fs.writeFileSync(
-    new URL('../../rss/shortformFeed.xml', import.meta.url).pathname,
-    xml,
-  );
+  writeRssFile('../../rss/shortformFeed.xml', xml);
 }
 
 export async function generateRssForBlockchain() {
@@ -93,8 +93,5 @@ export async function generateRssForBlockchain() {
       results,
     },
   );
-  fs.writeFileSync(
-    new URL('../../rss/blockchainFeed.xml', import.meta.url).pathname,
-    xml,
-  );
+  writeRssFile('../../rss/blockchainFeed.xml', xml);
 }

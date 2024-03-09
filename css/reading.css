@@ -75,7 +75,7 @@
 }
 .reading .filter-box button.tag[aria-pressed='true'],
 .wikipedia-writing .filter-box button.tag[aria-pressed='true'] {
-  background-color: var(--accent-color-purple-background-hover);
+  background-color: var(--accent-color-purple-background);
 }
 .reading fieldset,
 .wikipedia-writing fieldset {
@@ -274,11 +274,11 @@
 .wikipedia-writing #paginator button:focus,
 .wikipedia-writing #paginator button:active {
   cursor: pointer;
-  background-color: var(--accent-color-purple-background);
+  background-color: var(--accent-color-purple-background-hover);
 }
 .reading #paginator button[aria-pressed],
 .wikipedia-writing #paginator button[aria-pressed] {
-  background-color: var(--accent-color-purple-background-hover);
+  background-color: var(--accent-color-purple-background);
 }
 .reading .summary,
 .wikipedia-writing .summary {

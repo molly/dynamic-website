@@ -227,15 +227,14 @@ h1.site-title + .entry {
   background-image: var(--image-underline-hover-grey);
 }
 
-.timestamp,
-.social-links {
+.post-meta * {
   line-height: 1.2em;
 }
 
 .edit-icon {
-  width: 15px;
-  height: 15px;
   background: none;
+  width: 12px;
+  height: 12px;
   margin-left: 0.2em;
 }
 
@@ -245,6 +244,7 @@ h1.site-title + .entry {
   position: relative;
   flex-shrink: 0;
   align-items: center;
+  margin-left: 0.5em;
 }
 
 .social-link {
@@ -321,11 +321,11 @@ label[for='paginator'] {
 #paginator button:focus,
 #paginator button:active {
   cursor: pointer;
-  background-color: var(--accent-color-purple-background);
+  background-color: var(--accent-color-purple-background-hover);
 }
 
 #paginator button[aria-pressed] {
-  background-color: var(--accent-color-purple-background-hover);
+  background-color: var(--accent-color-purple-background);
 }
 
 /* Dark mode --------------------------------------------------------------------- */
@@ -355,4 +355,33 @@ label[for='paginator'] {
 }
 [data-theme='dark'] .entry .p-content .media-wrapper.invert-on-dark img {
   filter: invert(0.85);
+}
+
+/* Mobile --------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+  h1.site-title {
+    margin-top: 0.5em;
+    text-align: center;
+  }
+
+  .feed .content-box {
+    margin-left: 0;
+  }
+
+  .feed main {
+    padding: 0 0.2em;
+  }
+
+  .feed .entry {
+    margin-top: 2em;
+  }
+
+  .feed.micro .entry {
+    margin-top: 1em;
+  }
+
+  .entry blockquote {
+    margin-inline-start: 30px;
+    margin-inline-end: 20px;
+  }
 }

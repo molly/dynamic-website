@@ -15,7 +15,9 @@
 }
 
 .social-container {
-  padding-bottom: 70px; /* Space for footer */
+  padding-bottom: 85px; /* Space for footer */
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .align-right {
@@ -37,6 +39,7 @@ label {
 }
 
 input {
+  color: var(--main-text-color);
   background-color: var(--card-bg-color);
 }
 
@@ -130,13 +133,16 @@ footer.editor-footer {
   bottom: 0;
   width: 100%;
   background-color: var(--note-background-color);
-  padding: 1em;
+  padding: 0.5em 1em;
   z-index: 1;
 }
 
-.footer-controls {
+.footer-group {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.footer-controls {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -149,10 +155,19 @@ footer.editor-footer {
   align-items: center;
 }
 
+button {
+  color: var(--main-text-color);
+  background-color: var(--button-color);
+}
+
+button:hover {
+  background-color: var(--button-color-hover);
+}
+
 #last-edited {
   font-size: 0.8em;
   color: var(--timestamp-color);
-  margin-left: 1em;
+  margin-bottom: 0.5em;
 }
 
 #delete-button {
@@ -236,5 +251,36 @@ footer.editor-footer {
 @media (prefers-color-scheme: dark) {
   .image-tool--white .image-tool__image-picture {
     filter: invert(0.85);
+  }
+
+  .ts-control,
+  .ts-control,
+  .ts-wrapper.single.input-active .ts-control,
+  .ts-dropdown,
+  .ts-dropdown.form-control {
+    color: var(--main-text-color);
+    background: var(--card-bg-color);
+    border-color: var(--hr-color);
+  }
+
+  .ts-dropdown .active {
+    background-color: var(--button-color-hover);
+    color: var(--main-text-color);
+  }
+
+  .ts-wrapper.multi .ts-control > div {
+    color: var(--main-text-color);
+    background-color: var(--button-color);
+  }
+}
+
+/* Mobile --------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+  .editor-container {
+    padding-top: 0;
+  }
+
+  input#title {
+    margin-top: 0.5em;
   }
 }

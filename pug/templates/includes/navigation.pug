@@ -1,6 +1,9 @@
 nav(role='nav')
   .logo-image
-    img(src=`${importPrefix || ''}/assets/images/molly.jpeg` alt="A photograph of Molly White sitting at a table in a video studio. She's\
+    picture
+      source(media="(min-width: 769px)", srcset=`${importPrefix || ''}/assets/images/molly.webp`, type="image/webp")
+      source(media="(max-width: 768px)", srcset=`${importPrefix || ''}/assets/images/molly_horizontal.webp`, type="image/webp")
+      img(src=`${importPrefix || ''}/assets/images/molly.jpeg`, type="image/webp", alt="A photograph of Molly White sitting at a table in a video studio. She's\
     a white woman with long brown hair that's shaved on one side, she has brown eyes, and she's wearing a black and\
     white striped shirt and black blazer. There is a colorful cartoon background behind her. She's smiling and looking\
     at someone out of frame.")
