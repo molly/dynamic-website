@@ -12,7 +12,7 @@
     "watch": "npm-run-all --parallel watch:build watch:server",
     "watch:build": "webpack --watch",
     "watch:server": "nodemon --watch",
-    "prod": "npm run build:frontend && node index.js prod",
+    "prod": "node index.js prod",
     "build:frontend": "webpack",
     "lint": "eslint . --fix",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js ./test",
