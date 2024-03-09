@@ -41,18 +41,32 @@ const extractUrlsFromBlocks = (blocks) => {
       urls.push(...extractUrlsFromText(block.data.html));
     }
   }
+  console.log(urls);
   return urls;
 };
 
 // On save, queue jobs to send webmentions to all URLs in previous and new version of post
 export const sendWebmentions = async (doc) => {
-  if (!doc.change) {
-    // This is a save with no changes, so don't resend webmentions. Frontend should stop this, but just in casies.
-    return;
+  const changes = doc.getChanges();
+  const old = await MicroEntry.findById(doc._id).lean();
+  if (
+    changes['$set'] &&
+    Object.keys(changes['$set']).length === 2 &&
+    changes['$set'].updatedAt &&
+    changes['$set'].post
+  ) {
+    if (
+      old &&
+      JSON.stringify(old.post.blocks) ===
+        JSON.stringify(changes['$set'].post.blocks)
+    ) {
+      // No changes to post, so no need to send webmentions
+      return;
+    }
   }
+
   let urls = [];
   const source = 'https://www.mollywhite.net/micro/' + doc.slug;
-  const old = await MicroEntry.findById(doc._id).lean();
 
   if (!doc.deletedAt) {
     // Extract URLs from new version of post (if there is one -- deleted posts don't have this)

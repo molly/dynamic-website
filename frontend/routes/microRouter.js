@@ -17,7 +17,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get(
-  '/editor/:slug?',
+  '/editor/?:slug?',
   authenticated({ redirectTo: '/micro/login' }),
   (req, res) => {
     res.render('micro/editor.pug');
