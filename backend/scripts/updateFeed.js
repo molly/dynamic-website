@@ -1,21 +1,30 @@
 import db from '../models/db.js';
-import { BlockchainEntry } from '../models/entry.model.js';
-import { FeedEntryReading } from '../models/feed/feedEntry.model.js';
+import { FeedEntryMicro } from '../models/feed/feedEntry.model.js';
+import MicroEntry from '../models/micro/microEntry.model.js';
+import { Tag } from '../models/tag.model.js';
 
 async function migrate() {
   await db.initialize();
-  const entries = await BlockchainEntry.find({
-    entryAdded: { $gte: new Date(2024, 1, 23) },
-  }).lean();
-  for (let entry of entries) {
-    const exists = await FeedEntryReading.findOne({ blockchain: entry._id });
-    if (!exists) {
-      const feedEntry = new FeedEntryReading({
-        blockchain: entry._id,
-        tags: entry.tags,
-      });
-      await feedEntry.save();
-    }
+  const feedEntries = await FeedEntryMicro.find()
+    .populate({
+      path: 'tags',
+      model: Tag,
+      options: { sort: { value: 1 } },
+    })
+    .populate({
+      path: 'micro',
+      model: MicroEntry,
+      populate: [
+        { path: 'tags', model: Tag, options: { sort: { value: 1 } } },
+        { path: 'relatedPost', connection: db.readingListConnection },
+      ],
+    });
+  console.log(feedEntries.length);
+  for (let entry of feedEntries) {
+    const tags = entry.micro.tags;
+    console.log(tags);
+    entry.tags = tags;
+    await entry.save();
   }
   await db.gracefulClose();
 }

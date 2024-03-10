@@ -8,7 +8,7 @@ export const hydrateTimestamps = (entry) => {
   const timestamps = {};
   for (let ts of ['createdAt', 'updatedAt', 'deletedAt']) {
     if (ts in entry) {
-      const createdAtDt = DateTime.fromJSDate(entry.createdAt);
+      const createdAtDt = DateTime.fromJSDate(entry[ts]);
       const absoluteTime = createdAtDt.toLocaleString(DateTime.DATETIME_FULL);
       const relativeTime = DateTime.now() - createdAtDt;
       let humanTime = absoluteTime;
