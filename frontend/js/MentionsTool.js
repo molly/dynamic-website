@@ -177,6 +177,17 @@ export default class MarkerTool {
               link.appendChild(plainText.cloneNode(true));
               plainText.replaceWith(link);
             } else {
+              let existingSocialLinkGroup = mention.querySelector(
+                '.cdx-mention-social-group',
+              );
+              let linkGroup;
+              if (!existingSocialLinkGroup) {
+                linkGroup = document.createElement('SPAN');
+                linkGroup.classList.add('cdx-mention-social-group');
+              } else {
+                linkGroup = existingSocialLinkGroup;
+              }
+
               // For other social networks, add the link after the primary text
               link.classList.add('cdx-social-link');
               link.style.padding = '0 0.025em';
@@ -185,21 +196,27 @@ export default class MarkerTool {
               link.appendChild(await getSvgIcon(input.id));
               link.title = input.id.charAt(0).toUpperCase() + input.id.slice(1);
 
-              // Insert at the proper location
-              const networkIndex = MENTION_NETWORKS.indexOf(input.id);
-              let inserted = false;
-              for (let laterNetwork of MENTION_NETWORKS.slice(networkIndex)) {
-                const laterNetworkEl = mention.querySelector(
-                  `.${laterNetwork}`,
-                );
-                if (laterNetworkEl) {
-                  mention.insertBefore(link, laterNetworkEl);
-                  inserted = true;
-                  return;
+              if (existingSocialLinkGroup) {
+                // Insert at the proper location
+                const networkIndex = MENTION_NETWORKS.indexOf(input.id);
+                let inserted = false;
+                for (let laterNetwork of MENTION_NETWORKS.slice(networkIndex)) {
+                  const laterNetworkEl = existingSocialLinkGroup.querySelector(
+                    `.${laterNetwork}`,
+                  );
+                  if (laterNetworkEl) {
+                    existingSocialLinkGroup.insertBefore(link, laterNetworkEl);
+                    inserted = true;
+                    return;
+                  }
                 }
-              }
-              if (!inserted) {
-                mention.appendChild(link);
+                if (!inserted) {
+                  existingSocialLinkGroup.appendChild(link);
+                }
+              } else {
+                // This is the first link in the group
+                linkGroup.appendChild(link);
+                mention.append(document.createTextNode(' '), linkGroup);
               }
             }
           }

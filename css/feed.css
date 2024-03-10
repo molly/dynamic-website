@@ -199,17 +199,18 @@ nav a {
   padding: 0 0.025em;
 }
 
-.cdx-social-link:not(.cdx-social-link ~ .cdx-social-link) {
+.cdx-mention-social-group {
   margin-left: 0.05em;
+  white-space: nowrap;
 }
 
-.cdx-social-link:not(.cdx-social-link ~ .cdx-social-link)::before {
+.cdx-mention-social-group::before {
   content: '(';
   font-size: 0.8em;
   vertical-align: top;
 }
 
-.cdx-social-link:last-child::after {
+.cdx-mention-social-group::after {
   content: ')';
   font-size: 0.8em;
   vertical-align: top;

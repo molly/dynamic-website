@@ -41,7 +41,6 @@ const extractUrlsFromBlocks = (blocks) => {
       urls.push(...extractUrlsFromText(block.data.html));
     }
   }
-  console.log(urls);
   return urls;
 };
 
