@@ -45,7 +45,10 @@ export const parseAndInsertDelimiters = (post, network) => {
     if (currentBlock.type === 'paragraph' || currentBlock.type === 'quote') {
       const newBlock = createSocialBlock(currentBlock, network);
       const currentBlockLength = newBlock.data.text.length;
-      if (charCount + currentBlockLength > NETWORK_LIMITS[network].post) {
+      if (
+        newPostBlocks.length > 0 &&
+        charCount + currentBlockLength > NETWORK_LIMITS[network].post
+      ) {
         // End the current post and start a new one
         newPostBlocks.push(...images);
         images = [];
@@ -97,7 +100,7 @@ export const updateDelimiters = (editor, post, network, tags = null) => {
   let charCount = tags ? tags.length + 1 : 0;
   for (let block of post.blocks) {
     if (block.type === 'paragraph') {
-      charCount += processText(block, network).length;
+      charCount += processText(block.data.text, network).length;
     } else if (block.type === 'socialPostDelimiter') {
       if (charCount !== block.data.characterCount) {
         const limitExceeded = charCount > NETWORK_LIMITS[network].post;
