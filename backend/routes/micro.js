@@ -30,6 +30,7 @@ router.post(
       const feedEntryPromise = new FeedEntryMicro({
         type: 'micro',
         micro: microEntryId,
+        tags,
       }).save();
 
       const [entryResult] = await Promise.all([entryPromise, feedEntryPromise]);
