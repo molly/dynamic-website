@@ -1,12 +1,13 @@
 nav(role='nav')
   .logo-image
-    picture
-      source(media="(min-width: 769px)", srcset=`${importPrefix || ''}/assets/images/molly.webp`, type="image/webp")
-      source(media="(max-width: 768px)", srcset=`${importPrefix || ''}/assets/images/molly_horizontal.webp`, type="image/webp")
-      img(src=`${importPrefix || ''}/assets/images/molly.jpeg`, type="image/webp", alt="A photograph of Molly White sitting at a table in a video studio. She's\
-    a white woman with long brown hair that's shaved on one side, she has brown eyes, and she's wearing a black and\
-    white striped shirt and black blazer. There is a colorful cartoon background behind her. She's smiling and looking\
-    at someone out of frame.")
+    a.u-url.u-uid(href="https://www.mollywhite.net/")
+      picture
+        source(media="(min-width: 769px)", srcset=`${importPrefix || ''}/assets/images/molly.webp`, type="image/webp")
+        source(media="(max-width: 768px)", srcset=`${importPrefix || ''}/assets/images/molly_horizontal.webp`, type="image/webp")
+        img.u-photo.u-logo(src=`${importPrefix || ''}/assets/images/molly.jpeg`, type="image/webp", alt="A photograph of Molly White sitting at a table in a video studio. She's\
+      a white woman with long brown hair that's shaved on one side, she has brown eyes, and she's wearing a black and\
+      white striped shirt and black blazer. There is a colorful cartoon background behind her. She's smiling and looking\
+      at someone out of frame.")
   button#menu-toggle.menu-toggle Menu
   #nav-links.nav-links.collapsed
     ul.top-level
@@ -17,9 +18,9 @@ nav(role='nav')
     ul
       li.nav-header Work
       li
-        a(href='https://newsletter.mollywhite.net/') #[i Citation Needed] newsletter
+        a.u-url(href='https://newsletter.mollywhite.net/') #[i Citation Needed] newsletter
       li
-        a(href='https://web3isgoinggreat.com/')
+        a.u-url(href='https://web3isgoinggreat.com/')
           i Web3 is Going Just Great
       li
         a(href='https://blog.mollywhite.net/blockchain/') Blockchain essays
@@ -50,10 +51,12 @@ nav(role='nav')
       li
         a(href="/micro") Microblog
       li
-        a(href='https://twitter.com/molly0xFFF') Twitter
+        a.u-url(href='https://twitter.com/molly0xFFF', rel="me") Twitter
       li
-        a(href='https://hachyderm.io/@molly0xfff') Mastodon
+        a.u-url(href='https://hachyderm.io/@molly0xfff', rel="me") Mastodon
       li
-        a(href='https://www.youtube.com/@molly0xfff') YouTube
+        a.u-url(href='https://bsky.app/profile/molly.wiki', rel="me") Bluesky
+      li
+        a.u-url(href='https://www.youtube.com/@molly0xfff', rel="me") YouTube
       li
         a(href='/social') Everything else
