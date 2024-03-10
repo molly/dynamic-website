@@ -16,6 +16,9 @@ block body
       hi.p-name.site-title Thoughts tagged "#{options.tag ? options.tag.text : options.tagQuery}"
     else
       h1.p-name.site-title Thoughts
+    p.p-summary.site-description Short thoughts, notes, links, and musings by #[a(href="https://www.mollywhite.net/about" class="u-author") Molly White]. 
+      a(rel="alternate", type="application/rss+xml", title="Molly White's microblog feed", href="https://www.mollywhite.net/micro/feed.xml")
+        span.no-wrap RSS #[img.icon.bw-icon(src="https://www.mollywhite.net/storage/rss.svg")]
     
     if options.hasResults === false
       p No results found. 

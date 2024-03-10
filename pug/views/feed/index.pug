@@ -16,6 +16,8 @@ block body
       h1.p-name.site-title Activity tagged "#{options.tag ? options.tag.text : options.tagQuery}"
     else
       h1.p-name.site-title Activity
+    p.p-summary.site-description 
+      a.hidden(href="https://www.mollywhite.net/about" class="u-author") Molly White
 
     if options.hasResults === false
       p No results found. 

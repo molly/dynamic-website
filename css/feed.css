@@ -15,14 +15,22 @@
 }
 
 h1.site-title {
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
   line-height: 1.25em;
+}
+
+p.site-description {
+  margin-top: 0;
 }
 
 .icon a,
 a.social-link {
   background-image: none !important;
   text-decoration: none;
+}
+
+.hidden {
+  display: none;
 }
 
 nav a {
@@ -50,8 +58,9 @@ nav a {
   margin-top: 3em;
 }
 
-h1.site-title + .entry {
-  margin-top: 2em;
+/* Micro entries don't have tabs, so smaller margin */
+.micro .entry {
+  margin-top: 1em;
 }
 
 .standalone .entry {
