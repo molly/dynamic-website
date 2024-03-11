@@ -181,6 +181,10 @@ nav a {
   z-index: -1;
 }
 
+.entry .quote {
+  margin-bottom: 1em;
+}
+
 .entry .quote blockquote:has(+ cite) {
   margin-bottom: 0;
 }
