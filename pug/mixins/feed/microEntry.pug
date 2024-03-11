@@ -9,7 +9,7 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
           .description Posted:
       if entry.title
         h2.p-name #{entry.title}
-    .p-content.e-content
+    .e-content
       each block in entry.html
         != block
 
