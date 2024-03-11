@@ -9,7 +9,7 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
           .description Posted:
       if entry.title
         h2.p-name #{entry.title}
-    .e-content
+    .content.e-content
       each block in entry.html
         != block
 
@@ -38,7 +38,7 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
             if !isRss
               |  from the #[a(href=`${baseUrl}/micro`) micro posts] feed.
           if entry.updatedAt && entry.updatedAt - entry.createdAt > 5 * 60 * 1000
-            .timestamp
+            .timestampF
               | Updated 
               time.dt-updated(datetime=entry.updatedAt.toISOString(), title=entry.timestamps.updatedAt.absoluteTime) #{entry.timestamps.updatedAt.humanTime}
               | .

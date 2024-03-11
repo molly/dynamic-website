@@ -6,10 +6,6 @@
   background-color: var(--feed-bg-color);
 }
 
-.feed .page-container {
-  max-width: 60rem;
-}
-
 .feed .content-box {
   margin-left: 40px;
 }
@@ -119,38 +115,38 @@ nav a {
 }
 
 /* Content ------------------------------------------------------------ */
-.entry .p-content > p {
+.entry .content > p {
   margin-top: 0;
 }
 
-.entry .p-content > .media-wrapper {
+.entry .content > .media-wrapper {
   margin-top: 1em;
 }
 
 /* Media */
-.entry .p-content .media-wrapper {
+.entry .content .media-wrapper {
   max-width: 40rem;
 }
 
-.entry .p-content .media-wrapper img,
-.entry .p-content .media-wrapper video {
+.entry .content .media-wrapper img,
+.entry .content .media-wrapper video {
   display: block;
   width: 100%;
 }
 
-.entry .p-content .media-wrapper.full-width {
+.entry .content .media-wrapper.full-width {
   max-width: 60rem;
 }
 
-.entry .p-content .media-wrapper.vertical {
+.entry .content .media-wrapper.vertical {
   max-height: 40rem;
 }
 
-.entry .p-content .media-wrapper.bordered {
+.entry .content .media-wrapper.bordered {
   border: 1px solid var(--image-border-color);
 }
 
-.entry .p-content .media-wrapper.backgrounded {
+.entry .content .media-wrapper.backgrounded {
   background: var(--note-background-color);
   padding: 1em;
 }
@@ -359,7 +355,7 @@ label[for='paginator'] {
 
 /* Dark mode --------------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
-  .entry .p-content .media-wrapper.invert-on-dark img {
+  .entry .content .media-wrapper.invert-on-dark img {
     filter: invert(0.85);
   }
 
@@ -382,7 +378,7 @@ label[for='paginator'] {
   color: var(--timestamp-color-hover);
   background-color: transparent;
 }
-[data-theme='dark'] .entry .p-content .media-wrapper.invert-on-dark img {
+[data-theme='dark'] .entry .content .media-wrapper.invert-on-dark img {
   filter: invert(0.85);
 }
 
