@@ -36,7 +36,13 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
                 a(href=`${baseUrl}/micro/editor/${entry.slug}`)
                   include ../../icons/pencil.svg
             if !isRss
-              |  from the #[a(href=`${baseUrl}/micro`) micro posts] feed.
+              |  from the #[a(href=`${baseUrl}/micro`) micro posts] feed
+              if !entry.relatedPostModel
+                | .
+              else if entry.relatedPostModel == "ShortformEntry"
+                |  and the #[a(href=`${baseUrl}/reading/shortform`) shortform reading list].
+              else if entry.relatedPostModel == "BlockchainEntry"
+                |  and the #[a(href=`${baseUrl}/reading/blockchain`) blockchain reading list].
           if entry.updatedAt && entry.updatedAt - entry.createdAt > 5 * 60 * 1000
             .timestampF
               | Updated 
