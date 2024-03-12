@@ -1,4 +1,5 @@
 import { TwitterApi } from 'twitter-api-v2';
+import { NETWORK_LIMITS } from '../../frontend/js/helpers/editorHelpers.js';
 import auth from '../config/auth.config.js';
 
 export const postTweets = async (posts, imagesMap) => {
@@ -26,7 +27,9 @@ export const postTweets = async (posts, imagesMap) => {
             image.href,
             mediaId,
             client.v1.createMediaMetadata(mediaId, {
-              alt_text: { text: image.alt },
+              alt_text: {
+                text: image.alt.substring(0, NETWORK_LIMITS.twitter.alt),
+              },
             }),
           ]);
         } else {

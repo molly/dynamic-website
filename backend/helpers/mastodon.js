@@ -52,7 +52,7 @@ export const postToots = async (posts, imagesMap) => {
     } else {
       const result = await client.v1.statuses.create({
         ...toot,
-        inReplyToId: results[i - 1].id,
+        inReplyToId: results[i - 1],
       });
       results.push(result.id);
     }

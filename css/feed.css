@@ -151,6 +151,14 @@ nav a {
   padding: 1em;
 }
 
+.entry .content .media-wrapper {
+  margin-bottom: 1em;
+}
+
+.entry .content .media-wrapper + .media-wrapper {
+  margin-bottom: 0;
+}
+
 /* Reading list */
 .entry .byline,
 .entry .details {

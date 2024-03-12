@@ -218,7 +218,15 @@ async function getSocialPostContent(network) {
   }
   const resp = {};
   if (network === 'mastodon') {
-    resp.tags = document.getElementById('mastodon-tags').value;
+    const tags = document.getElementById('mastodon-tags').value.split(/, ?/g);
+    resp.tags = tags
+      .map((tag) => {
+        if (!tag.startsWith('#')) {
+          return `#${tag}`;
+        }
+        return tag;
+      })
+      .join(' ');
   }
   const post = await editors[network].save();
   resp.blocks = post.blocks;
