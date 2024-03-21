@@ -49,8 +49,9 @@ export const formatMedia = ({ data }, galleryId = null) => {
 
 export const formatGallery = ({ data }) => {
   let html = `<figure class="media-wrapper media-wrapper-gallery">`;
+  const galleryId = getUniqueId(10);
   for (let file of data.files) {
-    html += formatMedia({ data: file }, getUniqueId(10));
+    html += formatMedia({ data: file }, galleryId);
   }
   if (data.caption) {
     html += `<figcaption>${data.caption}</figcaption>`;
