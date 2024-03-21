@@ -2,11 +2,12 @@ import EditorJSHtml from 'editorjs-html';
 import db from '../backend/models/db.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { Tag } from '../backend/models/tag.model.js';
-import { formatMedia } from './helpers/media.js';
+import { formatGallery, formatMedia } from './helpers/media.js';
 import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
 import { hydrateTimestamps } from './helpers/timestamps.js';
 
 const edjsParser = EditorJSHtml({
+  gallery: formatGallery,
   image: formatMedia,
   quote: ({ data }) => {
     let cite = '';

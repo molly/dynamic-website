@@ -159,6 +159,36 @@ nav a {
   margin-bottom: 0;
 }
 
+/* Gallery */
+figure {
+  margin-block: unset;
+  margin-inline: unset;
+}
+
+.entry .content .media-wrapper.media-wrapper-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-flow: dense;
+  gap: 0.1em;
+  max-width: unset;
+}
+
+.entry .content .media-wrapper-gallery .media-wrapper {
+  margin: 0;
+}
+
+.entry .content .media-wrapper-gallery .media-wrapper img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.entry .content .media-wrapper-gallery .media-wrapper {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
 /* Reading list */
 .entry .byline,
 .entry .details {

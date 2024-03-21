@@ -1,4 +1,6 @@
 import '../../css/feed.css';
+// eslint-disable-next-line prettier/prettier, no-unused-vars
+import fslightbox from 'fslightbox'
 
 function onPageChangeClick(pageNumber) {
   const url = new URL(window.location);

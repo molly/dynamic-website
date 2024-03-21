@@ -3,8 +3,8 @@ import axios from 'axios';
 import express from 'express';
 import multer from 'multer';
 import MulterGoogleCloudStorage from 'multer-cloud-storage';
-import crypto from 'node:crypto';
 
+import { getUniqueId } from '../../api/helpers/uniqueId.js';
 import { USER_AGENT } from '../config/requests.js';
 import { authenticated } from './auth.js';
 
@@ -22,7 +22,7 @@ const uploadHandler = multer({
     filename: (req, file, cb) =>
       cb(
         null,
-        `${crypto.randomBytes(10)}_${file.originalname.replace(/[^a-zA-Z0-9_.]/g, '-')}`,
+        `${getUniqueId(10)}_${file.originalname.replace(/[^a-zA-Z0-9_.]/g, '-')}`,
       ),
     projectId: 'mollywhite',
   }),
@@ -51,7 +51,7 @@ router.post(
 // Upload remote file by URL. Streams the file from the URL to the bucket.
 router.post('/byURL', authenticated(), async (req, res) => {
   const originalFilename = req.body.url.split('/').pop();
-  const targetFilename = `${crypto.randomBytes(10)}_${originalFilename}`;
+  const targetFilename = `${getUniqueId(10)}_${originalFilename}`;
   const file = bucket.file(`micro/${targetFilename}`);
   const { data } = await axios.get(req.body.url, {
     headers: { 'User-Agent': USER_AGENT },
