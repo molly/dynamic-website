@@ -30,6 +30,7 @@
     "@editorjs/quote": "^2.6.0",
     "@editorjs/raw": "^2.5.0",
     "@google-cloud/storage": "^7.7.0",
+    "archetype": "github:LaurentGoderre/archetype#fix-lodash_set-vuln",
     "axios": "^1.6.7",
     "bullmq": "^5.4.2",
     "cheerio": "^1.0.0-rc.12",
