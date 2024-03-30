@@ -4,6 +4,7 @@ import { getRssEntriesFromDb } from '../../api/client.js';
 import { getFeedEntries } from '../../api/feed.js';
 import { getMicroEntries } from '../../api/micro.js';
 import getRssResults from '../../data/filter/rss.js';
+import { toISOWithoutMillis } from '../../pug/js/toISO.js';
 import { FeedEntry } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 
@@ -27,7 +28,11 @@ export async function generateRssForFeed() {
     new URL('../../pug/views/rss/feedEntry.pug', import.meta.url).pathname,
   );
   for (let entry of entries) {
-    entry.html = compiledPug({ entry, options: { isRss: true } });
+    entry.html = compiledPug({
+      entry,
+      options: { isRss: true },
+      toISOWithoutMillis,
+    });
   }
 
   const xml = pug.renderFile(
@@ -37,6 +42,7 @@ export async function generateRssForFeed() {
       title: "Molly White's activity feed",
       lastUpdated: lastUpdated[0].updatedAt,
       entries,
+      toISOWithoutMillis,
     },
   );
 
@@ -54,7 +60,11 @@ export async function generateRssForMicro() {
     new URL('../../pug/views/rss/microEntry.pug', import.meta.url).pathname,
   );
   for (let entry of entries) {
-    entry.html = compiledPug({ entry, options: { isRss: true } });
+    entry.html = compiledPug({
+      entry,
+      options: { isRss: true },
+      toISOWithoutMillis,
+    });
   }
 
   const xml = pug.renderFile(
@@ -64,6 +74,7 @@ export async function generateRssForMicro() {
       title: "Molly White's microblog feed",
       lastUpdated: lastUpdated[0].updatedAt,
       entries,
+      toISOWithoutMillis,
     },
   );
 
@@ -78,6 +89,7 @@ export async function generateRssForShortform() {
     {
       prefix: 'shortform',
       results,
+      toISOWithoutMillis,
     },
   );
   writeRssFile('../../rss/shortformFeed.xml', xml);
@@ -91,6 +103,7 @@ export async function generateRssForBlockchain() {
     {
       prefix: 'blockchain',
       results,
+      toISOWithoutMillis,
     },
   );
   writeRssFile('../../rss/blockchainFeed.xml', xml);

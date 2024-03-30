@@ -15,7 +15,7 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false} = {})
     footer.footer
       .flex-row.post-meta
         .timestamp
-          time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
+          time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
           if isLoggedIn
             span.edit-icon.icon
               a(href=`${baseUrl}/feed/tagger/reading${'shortform' in entry ? 'Shortform' : 'Blockchain'}/${entry._id}`)

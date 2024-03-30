@@ -13,7 +13,7 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
   webfeeds:icon https://www.mollywhite.net/assets/images/molly_illustration.png
   webfeeds:cover(image="https://www.mollywhite.net/assets/images/molly_illustration_social.png")
   webfeeds:accentColor 5948a4
-  updated #{lastUpdated.toISOString()}
+  updated #{toISOWithoutMillis(lastUpdated)}
   rights(type="html")= 'Copyright &copy; Molly White&nbsp;' + new Date().getFullYear() + '.'
 
   each entry, index in entries
@@ -37,8 +37,8 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
     entry
       title(type="html") #{title}
       link(href=url, type="text/html", rel="alternate", title=entry.title)
-      published= entry.createdAt.toISOString()
-      updated= entry.updatedAt.toISOString()
+      published= toISOWithoutMillis(entry.createdAt)
+      updated= toISOWithoutMillis(entry.updatedAt)
       id #{url}
       content(type="html")= entry.html
       if entry.tags

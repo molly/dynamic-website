@@ -23,9 +23,9 @@ block body
                 .timestamp
                   | Originally published 
                   a(href=`${baseUrl}/micro/entry/${entry.slug}`)
-                    time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
+                    time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
                   | . Deleted 
-                  time.dt-deleted(datetime=entry.deletedAt.toISOString(), title=entry.timestamps.deletedAt.absoluteTime) #{entry.timestamps.deletedAt.humanTime}
+                  time.dt-deleted(datetime=toISOWithoutMillis(entry.deletedAt), title=entry.timestamps.deletedAt.absoluteTime) #{entry.timestamps.deletedAt.humanTime}
                   | .
                 
       .back-links

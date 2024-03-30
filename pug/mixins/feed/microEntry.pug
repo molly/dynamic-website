@@ -29,7 +29,7 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
         .timestamp-block
           .timestamp
             a(href=`${baseUrl}/micro/entry/${entry.slug}`)
-              time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
+              time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
             
             if isLoggedIn
               span.edit-icon.icon
@@ -46,7 +46,7 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
           if entry.updatedAt && entry.updatedAt - entry.createdAt > 5 * 60 * 1000
             .timestampF
               | Updated 
-              time.dt-updated(datetime=entry.updatedAt.toISOString(), title=entry.timestamps.updatedAt.absoluteTime) #{entry.timestamps.updatedAt.humanTime}
+              time.dt-updated(datetime=toISOWithoutMillis(entry.updatedAt), title=entry.timestamps.updatedAt.absoluteTime) #{entry.timestamps.updatedAt.humanTime}
               | .
 
         .social-links 

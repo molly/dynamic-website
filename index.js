@@ -13,6 +13,7 @@ import session from 'express-session';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from './backend/models/user.model.js';
+import { toISOWithoutMillis } from './pug/js/toISO.js';
 
 const PORT = process.env.PORT || 5001;
 
@@ -50,6 +51,7 @@ app.use('/static', express.static(new URL('dist', import.meta.url).pathname));
 
 app.set('views', new URL('pug/views', import.meta.url).pathname);
 app.set('view engine', new URL('pug', import.meta.url).pathname);
+app.locals.toISOWithoutMillis = toISOWithoutMillis;
 
 app.use('/dynamic-api', backendRouter);
 app.use('/', frontendRouter);

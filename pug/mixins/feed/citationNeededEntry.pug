@@ -29,7 +29,7 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false} = {})
       .flex-row.post-meta
         .timestamp
           a(href=`https://www.citationneeded.news/${entry.slug}`)
-            time.dt-published(datetime=entry.createdAt.toISOString(), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
+            time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
           if isLoggedIn
             span.edit-icon.icon
               a(href=`${baseUrl}/feed/tagger/citationNeeded/${entry._id}`)
