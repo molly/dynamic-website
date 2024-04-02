@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
+const TWO_WEEKS = 1000 * 60 * 60 * 24 * 14;
 
 export const hydrateTimestamps = (entry) => {
   if (!entry) {
@@ -12,7 +12,7 @@ export const hydrateTimestamps = (entry) => {
       const absoluteTime = createdAtDt.toLocaleString(DateTime.DATETIME_FULL);
       const relativeTime = DateTime.now() - createdAtDt;
       let humanTime = absoluteTime;
-      if (relativeTime < ONE_MONTH) {
+      if (relativeTime < TWO_WEEKS) {
         humanTime = createdAtDt.toRelative();
       }
       timestamps[ts] = { absoluteTime, humanTime };

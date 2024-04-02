@@ -1,5 +1,5 @@
 import express from 'express';
-import { getFeedEntries } from '../../api/feed.js';
+import { getFeedEntries, hydrateFeedEntry } from '../../api/feed.js';
 import {
   BlockchainEntry,
   ShortformEntry,
@@ -88,7 +88,10 @@ router.get(
         path: 'tags',
         model: Tag,
       });
-      res.render('feed/tagger.pug', { entry, entryType: 'citationNeeded' });
+      res.render('feed/tagger.pug', {
+        entry: hydrateFeedEntry(entry),
+        entryType: 'citationNeeded',
+      });
     } else if (
       entryType === 'readingShortform' ||
       entryType === 'readingBlockchain'
@@ -104,7 +107,10 @@ router.get(
           model: ShortformEntry,
         })
         .populate({ path: 'blockchain', model: BlockchainEntry });
-      res.render('feed/tagger.pug', { entry, entryType });
+      res.render('feed/tagger.pug', {
+        entry: hydrateFeedEntry(entry),
+        entryType,
+      });
     } else {
       res.statusCode(400);
     }

@@ -5,7 +5,7 @@ let tags = [];
 
 async function onFirstLoad() {
   // Load TomSelect for tags editor
-  const { data: tagOptions } = await axios.get('/dynamic-api/micro/tags');
+  const { data: tagOptions } = await axios.get('/dynamic-api/tags');
   const tagSelect = new TomSelect('#tags', {
     create: true,
     valueField: '_id',
@@ -37,7 +37,7 @@ async function onFirstLoad() {
       .then((resp) => {
         return Promise.all([
           Promise.resolve(resp),
-          axios.get('/dynamic-api/micro/tags'),
+          axios.get('/dynamic-api/tags'),
         ]);
       })
       .then(([resp, tags]) => {
