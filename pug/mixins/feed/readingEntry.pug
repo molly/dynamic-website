@@ -9,7 +9,7 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false} = {})
           .description #{entry.verb}:
       else
         .description #{entry.verb}:
-    .p-content
+    .content.e-content
       include ../shortformArticle.pug
       +shortformArticle(readingEntry, isRss, true)
     footer.footer

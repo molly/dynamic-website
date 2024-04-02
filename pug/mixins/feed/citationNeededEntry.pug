@@ -17,7 +17,7 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false} = {})
           |:
       h2.p-name
         a.u-syndication(href=`https://www.citationneeded.news/${entry.slug}` rel="syndication") #{entry.title}
-    .p-content
+    .content.e-content
       if entry.image
         .media-wrapper
           a(href=`https://www.citationneeded.news/${entry.slug}`)
