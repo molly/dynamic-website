@@ -218,15 +218,19 @@ async function getSocialPostContent(network) {
   }
   const resp = {};
   if (network === 'mastodon') {
-    const tags = document.getElementById('mastodon-tags').value.split(/, ?/g);
-    resp.tags = tags
-      .map((tag) => {
-        if (!tag.startsWith('#')) {
-          return `#${tag}`;
-        }
-        return tag;
-      })
-      .join(' ');
+    let tags = document.getElementById('mastodon-tags');
+    if (tags) {
+      tags = tags.value.split(/, ?/g);
+      resp.tags = tags
+        .map((tag) => {
+          let trimmed = tag.trim();
+          if (!tag.startsWith('#')) {
+            return `#${trimmed}`;
+          }
+          return trimmed;
+        })
+        .join(' ');
+    }
   }
   const post = await editors[network].save();
   resp.blocks = post.blocks;
