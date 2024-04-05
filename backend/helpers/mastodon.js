@@ -1,4 +1,5 @@
 import { createRestAPIClient } from 'masto';
+import { NETWORK_LIMITS } from '../../frontend/js/helpers/editorHelpers.js';
 import auth from '../config/auth.config.js';
 
 export const postToots = async (posts, imagesMap) => {
@@ -21,7 +22,7 @@ export const postToots = async (posts, imagesMap) => {
         image.href,
         client.v2.media.create({
           file: new Blob([imageBuffer], { type: mimeType }),
-          description: image.alt,
+          description: image.alt.substring(0, NETWORK_LIMITS.mastodon.alt),
         }),
       ]),
     );

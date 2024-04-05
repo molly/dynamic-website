@@ -1,5 +1,6 @@
 import Bsky from '@atproto/api';
 import * as cheerio from 'cheerio';
+import { NETWORK_LIMITS } from '../../frontend/js/helpers/editorHelpers.js';
 const { BskyAgent, RichText, UnicodeString } = Bsky;
 
 import auth from '../config/auth.config.js';
@@ -127,7 +128,7 @@ export const postSkeets = async (posts, imagesMap) => {
         $type: 'app.bsky.embed.images',
         images: post.images.map((image) => ({
           image: imagesMap[image.href].blob,
-          alt: image.alt,
+          alt: image.alt.substring(0, NETWORK_LIMITS.bluesky.alt),
         })),
       };
     }

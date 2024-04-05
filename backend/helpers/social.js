@@ -2,6 +2,10 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 export const processText = (text, network) => {
+  // Replace whitespace
+  text.replace(/\n{2,}/g, '\n\n');
+  text.replace(/[\u00A0\u2000-\u200B\u202F\u205F]/g, ' ');
+
   const $ = cheerio.load(text, null, false);
 
   // Replace mentions
