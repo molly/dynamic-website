@@ -19,10 +19,8 @@ async function migrate() {
         { path: 'relatedPost', connection: db.readingListConnection },
       ],
     });
-  console.log(feedEntries.length);
   for (let entry of feedEntries) {
     const tags = entry.micro.tags;
-    console.log(tags);
     entry.tags = tags;
     await entry.save();
   }

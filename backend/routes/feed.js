@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { mergeSocialLinks } from '../../frontend/js/helpers/editorHelpers.js';
 import { validateGhostWebhook } from '../helpers/ghostAuth.js';
 import { updateTagsOnEdit } from '../helpers/tags.js';
 import { BlockchainEntry, ShortformEntry } from '../models/entry.model.js';
@@ -24,7 +25,7 @@ router.post('/citationNeeded', validateGhostWebhook, async (req, res) => {
     }).save();
     res.json(result);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).send({ error: err });
   }
 });
@@ -46,12 +47,21 @@ router.post('/tags/:entryType', authenticated(), async (req, res) => {
     ReadingEntryModel = BlockchainEntry;
     category = 'blockchain';
   }
-  const { id, tags } = req.body;
+  const { id, tags, socialLinks } = req.body;
+  let tagIds = null;
   const feedEntry = await FeedEntryModel.findById(id);
-  const tagIds = await updateTagsOnEdit(feedEntry.tags, tags, category);
-  feedEntry.tags = tagIds;
+  if (tags && tags.length) {
+    const tagIds = await updateTagsOnEdit(feedEntry.tags, tags, category);
+    feedEntry.tags = tagIds;
+  }
+  if (socialLinks && Object.keys(socialLinks).length) {
+    feedEntry.socialLinks = mergeSocialLinks(
+      feedEntry.socialLinks,
+      socialLinks,
+    );
+  }
   const resp = await feedEntry.save();
-  if (ReadingEntryModel) {
+  if (tagIds && ReadingEntryModel) {
     await ReadingEntryModel.findByIdAndUpdate(id, { tags: tagIds });
   }
   res.json(resp);

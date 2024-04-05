@@ -1,7 +1,10 @@
 import axios from 'axios';
+import debounce from 'lodash.debounce';
 import TomSelect from 'tom-select';
+import { socialLinksToArray } from './helpers/editorHelpers.js';
 
 let tags = [];
+let socialLinks = {};
 
 async function onFirstLoad() {
   // Load TomSelect for tags editor
@@ -24,6 +27,22 @@ async function onFirstLoad() {
     }
   });
 
+  /**
+   * Update the postMeta.socialLinks when the social post link changes
+   */
+  function onSocialPostLinkChange() {
+    if (this.value) {
+      socialLinks[this.id] = this.value;
+    } else {
+      delete socialLinks[this.id];
+    }
+  }
+  const debouncedOnSocialChange = debounce(onSocialPostLinkChange, 250);
+
+  document
+    .querySelectorAll('.social-post-id')
+    .forEach((el) => el.addEventListener('keydown', debouncedOnSocialChange));
+
   const saveButton = document.getElementById('save-button');
   saveButton.addEventListener('click', async function () {
     const pathParts = window.location.pathname.split('/');
@@ -33,6 +52,7 @@ async function onFirstLoad() {
       .post(`/dynamic-api/feed/tags/${entryType}`, {
         id: entryId,
         tags,
+        socialLinks: socialLinksToArray(socialLinks),
       })
       .then((resp) => {
         return Promise.all([
@@ -45,7 +65,14 @@ async function onFirstLoad() {
         tagSelect.addOptions(tags.data);
         tags = resp.data.tags;
         tagSelect.setValue(tags);
+        for (let link of resp.data.socialLinks) {
+          document.getElementById(link.type).value = link.postId;
+        }
+        socialLinks = {};
         saveButton.removeAttribute('disabled');
+      })
+      .catch((err) => {
+        console.error(err);
       });
   });
 }

@@ -1,5 +1,6 @@
 import {
   getSlugFromTitle,
+  mergeSocialLinks,
   socialLinksToArray,
   socialLinksToMap,
 } from '../../../frontend/js/helpers/editorHelpers';
@@ -43,5 +44,22 @@ describe('editor helpers', () => {
     };
     const expected = [{ type: 'mastodon', postId: '456' }];
     expect(socialLinksToArray(socialLinks)).toEqual(expected);
+  });
+
+  test('merges old and new social links', () => {
+    const oldLinks = [
+      { type: 'twitter', postId: '123' },
+      { type: 'mastodon', postId: '456' },
+    ];
+    const newLinks = [
+      { type: 'mastodon', postId: '789' },
+      { type: 'bluesky', postId: '101' },
+    ];
+    const expected = [
+      { type: 'twitter', postId: '123' },
+      { type: 'mastodon', postId: '789' },
+      { type: 'bluesky', postId: '101' },
+    ];
+    expect(mergeSocialLinks(oldLinks, newLinks)).toEqual(expected);
   });
 });

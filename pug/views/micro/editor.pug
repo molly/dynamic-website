@@ -73,9 +73,10 @@ html(class='feed-editor', lang='en')
           details.social-links
             summary Manually link social post IDs
             each network in ["twitter", "mastodon", "bluesky", "youtube", "tiktok"]
+              - var socialLink = entry.socialLinks && entry.socialLinks.find(e => e.type === network)
               .input-group
                 label(for=network) #{network.charAt(0).toUpperCase() + network.slice(1)}
-                input.social-post-id(id=network, type="text")
+                input.social-post-id(id=network, type="text", value=socialLink ? socialLink.postId : "")
 
     footer.editor-footer
       .footer-group

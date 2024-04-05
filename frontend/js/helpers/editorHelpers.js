@@ -19,6 +19,19 @@ export const socialLinksToArray = (socialLinks) =>
     .filter(([_, postId]) => postId != undefined)
     .map(([type, postId]) => ({ type, postId }));
 
+export const mergeSocialLinks = (oldLinks, newLinks) => {
+  const oldLinksCopy = JSON.parse(JSON.stringify(oldLinks));
+  for (let link of newLinks) {
+    const oldLinkIndex = oldLinks.findIndex((e) => e.type === link.type);
+    if (oldLinkIndex !== -1) {
+      oldLinksCopy[oldLinkIndex].postId = link.postId;
+    } else {
+      oldLinksCopy.push(link);
+    }
+  }
+  return oldLinksCopy;
+};
+
 export const NETWORK_LIMITS = {
   twitter: { post: 280, alt: 1000 },
   mastodon: { post: 500, alt: 1500 },
