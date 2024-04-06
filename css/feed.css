@@ -30,7 +30,10 @@ a.social-link {
   display: none;
 }
 
-nav a {
+.feed nav a,
+.micro nav a,
+.home nav a,
+.home .about a {
   text-shadow:
     0 0.05em var(--feed-bg-color),
     0.05em 0.05em var(--feed-bg-color),
