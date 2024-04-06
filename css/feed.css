@@ -76,6 +76,7 @@ nav a {
     0 -0.075em var(--card-bg-color),
     -0.125em 0 var(--card-bg-color),
     0.125em 0 var(--card-bg-color);
+  word-break: break-all;
 }
 
 /* Header ------------------------------------------------------------ */
