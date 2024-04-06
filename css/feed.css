@@ -2,7 +2,8 @@
 @import './base.css';
 
 .feed body,
-.micro body {
+.micro body,
+.home body {
   background-color: var(--feed-bg-color);
 }
 

@@ -7,7 +7,6 @@ block vars
 block head
   include ../../templates/titleAndDescription.pug
   +titleAndDescription('Feed', "Molly White's activity feed")
-  link(rel="alternate", type="application/rss+xml", title="Molly White's activity feed", href="https://www.mollywhite.net/feed/feed.xml")
   link(rel='stylesheet', href="/static/feed.css")
 
 block body
@@ -26,7 +25,7 @@ block body
       include ../../mixins/feed/feedEntry.pug
       each entry in entries
         +feedEntry(entry, options)
-  
-      include ../../includes/paginator.pug
-  
+
+    include ../../includes/paginator.pug
+
   script(src="/static/feed.js")
