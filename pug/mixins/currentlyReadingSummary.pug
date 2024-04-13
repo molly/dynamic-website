@@ -3,7 +3,7 @@ mixin currentlyReadingSummary(books)
   if books.length
     .currently-reading
       if books[0].status === 'read' || books[0].status === 'reference' 
-        span I mostly recently read:
+        span I most recently read:
       else if books[0].status === 'currentlyReading'
         span I'm currently reading:
         
