@@ -82,7 +82,7 @@ a.social-link {
     0.125em 0 var(--card-bg-color);
 }
 
-.entry a.raw-url {
+.entry .break {
   word-break: break-all;
 }
 
@@ -129,6 +129,12 @@ a.social-link {
 
 .entry .content > .media-wrapper {
   margin-top: 1em;
+}
+
+.entry .content code,
+.entry .content kbd,
+.entry .content samp {
+  font-size: 1rem;
 }
 
 /* Media */
