@@ -80,6 +80,9 @@ a.social-link {
     0 -0.075em var(--card-bg-color),
     -0.125em 0 var(--card-bg-color),
     0.125em 0 var(--card-bg-color);
+}
+
+.entry a.raw-url {
   word-break: break-all;
 }
 
