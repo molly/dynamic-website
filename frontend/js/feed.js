@@ -1,6 +1,14 @@
 import '../../css/feed.css';
 // eslint-disable-next-line prettier/prettier, no-unused-vars
-import fslightbox from 'fslightbox'
+
+const formatter = new Intl.DateTimeFormat('default', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  timeZoneName: 'short',
+});
 
 function onPageChangeClick(pageNumber) {
   const url = new URL(window.location);
@@ -9,6 +17,18 @@ function onPageChangeClick(pageNumber) {
 }
 
 (function () {
+  // Convert timestamps to local timezone/formats
+  document
+    .querySelectorAll('.timestamp-block time')
+    .forEach(function (timestamp) {
+      const datetime = timestamp.getAttribute('datetime');
+      const formatted = formatter.format(new Date(datetime));
+      timestamp.setAttribute('title', formatted);
+      if (!timestamp.textContent.includes('ago')) {
+        timestamp.textContent = formatted;
+      }
+    });
+
   // Pagination handlers
   if (document.getElementById('paginator')) {
     document
