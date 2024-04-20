@@ -218,7 +218,7 @@ async function getSocialPostContent(network) {
   }
   const resp = {};
   if (network === 'mastodon') {
-    let tags = document.getElementById('mastodon-tags');
+    let tags = document.getElementById('mastodon-tags').value;
     if (tags) {
       tags = tags.value.split(/, ?/g);
       resp.tags = tags
