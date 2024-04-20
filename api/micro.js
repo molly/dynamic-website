@@ -18,8 +18,16 @@ const edjsParser = EditorJSHtml({
   },
   embed: ({ data }) => {
     switch (data.service) {
-      case 'youtube':
-        return `<iframe width="${data.width}" height="${data.height}" src="${data.embed}" title="YouTube video player" frameborder="0" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+      case 'youtube': {
+        let embed = data.embed;
+        if (embed.startsWith('https://www.youtube.com/embed/')) {
+          embed = embed.replace(
+            'https://www.youtube.com/embed/',
+            'https://invidious.fdn.fr/embed/',
+          );
+        }
+        return `<iframe width="${data.width}" height="${data.height}" src="${embed}" title="Invidious video player" frameborder="0" allow="encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+      }
       case 'twitter':
         return `<iframe width="${data.width}" height="${data.height}" src="${data.embed}" title="Twitter" frameborder="0" sandbox=""></iframe>`;
       case 'w3igg':
