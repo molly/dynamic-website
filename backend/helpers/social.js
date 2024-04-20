@@ -48,10 +48,10 @@ export const processText = (text, network) => {
   });
 
   if (network === 'bluesky') {
-    return $.html();
+    return { text: $.html(), plainText: $.text() };
   }
   // Returning .text() instead of .html() should strip any remaining HTML tags
-  return $.text();
+  return { text: $.text() };
 };
 
 const EMPTY_POST = { text: '', images: [] };
@@ -66,7 +66,7 @@ export const processSocialPost = (blocks, network, tags = null) => {
         if (currentPost.text.length > 0) {
           currentPost.text += '\n\n';
         }
-        currentPost.text += processText(block.data.text, network);
+        currentPost.text += processText(block.data.text, network).text;
         break;
       case 'socialPostDelimiter':
         if (tags && tags.length > 0) {

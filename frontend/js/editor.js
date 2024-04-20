@@ -220,7 +220,7 @@ async function getSocialPostContent(network) {
   if (network === 'mastodon') {
     let tags = document.getElementById('mastodon-tags').value;
     if (tags) {
-      tags = tags.value.split(/, ?/g);
+      tags = tags.split(/, ?/g);
       resp.tags = tags
         .map((tag) => {
           let trimmed = tag.trim();

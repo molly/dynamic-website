@@ -44,7 +44,7 @@ export const createSocialBlock = (block, network) => {
   if (block.type === 'quote') {
     text = `"${text}"`;
   }
-  newBlock.data.text = processText(text, network);
+  newBlock.data.text = processText(text, network).text;
   newBlock.type = 'paragraph';
   return newBlock;
 };
@@ -57,7 +57,13 @@ export const parseAndInsertDelimiters = (post, network) => {
     const currentBlock = post.blocks[i];
     if (currentBlock.type === 'paragraph' || currentBlock.type === 'quote') {
       const newBlock = createSocialBlock(currentBlock, network);
-      const currentBlockLength = newBlock.data.text.length;
+      let currentBlockLength = newBlock.data.text.length;
+      if (network === 'bluesky') {
+        // For bluesky posts, the character count is the length of the plain text rather than the richtext
+        currentBlockLength = processText(currentBlock.data.text, network)
+          .plainText.length;
+      }
+
       if (
         newPostBlocks.length > 0 &&
         charCount + currentBlockLength > NETWORK_LIMITS[network].post
@@ -113,7 +119,13 @@ export const updateDelimiters = (editor, post, network, tags = null) => {
   let charCount = tags ? tags.length + 1 : 0;
   for (let block of post.blocks) {
     if (block.type === 'paragraph') {
-      charCount += processText(block.data.text, network).length;
+      const processed = processText(block.data.text, network);
+      if (network === 'bluesky') {
+        // For bluesky posts, the character count is the length of the plain text rather than the richtext
+        charCount += processed.plainText.length;
+      } else {
+        charCount = processed.text.length;
+      }
     } else if (block.type === 'socialPostDelimiter') {
       if (charCount !== block.data.characterCount) {
         const limitExceeded = charCount > NETWORK_LIMITS[network].post;
