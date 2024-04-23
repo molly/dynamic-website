@@ -1,3 +1,4 @@
+import Codecup from '@calumk/editorjs-codecup';
 import Embed from '@editorjs/embed';
 import Header from '@editorjs/header';
 import ImageTool from '@editorjs/image';
@@ -62,6 +63,7 @@ export const editorToolConfig = {
       ],
     },
   },
+  code: Codecup,
   inlineCode: InlineCode,
   list: {
     class: List,

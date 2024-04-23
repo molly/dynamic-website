@@ -22,6 +22,19 @@ export default [
     module: {
       rules: [
         {
+          test: /frontend\/js\/.*\.(?:js|mjs|cjs)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: [['@babel/preset-env', { targets: 'defaults' }]],
+            },
+          },
+          resolve: {
+            fullySpecified: false,
+          },
+        },
+        {
           test: /\.css$/i,
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },

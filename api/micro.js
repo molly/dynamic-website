@@ -40,6 +40,13 @@ const edjsParser = EditorJSHtml({
   },
   socialPostDelimiter: () => null, // Just used internally, should not display at all
   raw: ({ data }) => data.html,
+  code: ({ data }) => {
+    const languageClass = data.language
+      ? ` class="language-${data.language}"`
+      : '';
+    const lineNumberClass = data.showlinenumbers ? ' class="line-numbers"' : '';
+    return `<pre${lineNumberClass}><code${languageClass}>${data.code}</code></pre>`;
+  },
 });
 
 export const hydrateMicroEntry = (entry) => {

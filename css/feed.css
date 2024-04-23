@@ -1,5 +1,6 @@
 @import './feed-shared.css';
 @import './base.css';
+@import './prism.css';
 
 .feed body,
 .micro body,

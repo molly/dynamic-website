@@ -1,5 +1,5 @@
 import '../../css/feed.css';
-// eslint-disable-next-line prettier/prettier, no-unused-vars
+import PrismJS from 'prismjs';
 
 const formatter = new Intl.DateTimeFormat('default', {
   year: 'numeric',
@@ -47,4 +47,6 @@ function onPageChangeClick(pageNumber) {
         onPageChangeClick(this.getAttribute('data-last-page'));
       });
   }
+
+  PrismJS.highlightAll();
 })();
