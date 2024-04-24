@@ -407,6 +407,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
 }
 
 @media (prefers-color-scheme: dark) {
+  code[class*='language-'],
   pre[class*='language-'] {
     background: hsl(220, 13%, 18%);
     color: hsl(220, 14%, 71%);
