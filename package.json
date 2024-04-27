@@ -10,7 +10,7 @@
   "scripts": {
     "start": "npm run build:frontend && node index.js dev",
     "watch": "npm-run-all --parallel watch:build watch:server",
-    "watch:build": "webpack --watch",
+    "watch:build": "webpack --watch --mode=development",
     "watch:server": "nodemon --watch",
     "prod": "node index.js prod",
     "build:frontend": "webpack",

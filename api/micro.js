@@ -29,7 +29,7 @@ const edjsParser = EditorJSHtml({
         return `<iframe width="${data.width}" height="${data.height}" src="${embed}" title="Invidious video player" frameborder="0" allow="encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
       }
       case 'twitter':
-        return `<iframe width="${data.width}" height="${data.height}" src="${data.embed}" title="Twitter" frameborder="0" sandbox=""></iframe>`;
+        return `<iframe width="${data.width}" height="${data.height}" src="${data.embed}" title="Twitter" frameborder="0" sandbox="allow-scripts"></iframe>`;
       case 'w3igg':
         return `<iframe title="Web3 is Going Just Great" height="${data.height}" width="${data.width}" src="${data.embed}" frameborder="0" sandbox=""></iframe>`;
       default:

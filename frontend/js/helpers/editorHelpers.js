@@ -39,13 +39,24 @@ export const NETWORK_LIMITS = {
 };
 
 export const createSocialBlock = (block, network) => {
-  const newBlock = JSON.parse(JSON.stringify(block));
-  let text = block.data.text;
+  const newBlock = {
+    data: {},
+    type: 'paragraph',
+    id: block.id,
+  };
+
+  let text;
+  if (block.type === 'embed') {
+    text = block.data.source;
+  } else {
+    text = block.data.text;
+  }
+
   if (block.type === 'quote') {
     text = `"${text}"`;
   }
+
   newBlock.data.text = processText(text, network).text;
-  newBlock.type = 'paragraph';
   return newBlock;
 };
 
@@ -55,13 +66,13 @@ export const parseAndInsertDelimiters = (post, network) => {
   const newPostBlocks = [];
   for (let i = 0; i < post.blocks.length; i++) {
     const currentBlock = post.blocks[i];
-    if (currentBlock.type === 'paragraph' || currentBlock.type === 'quote') {
+    if (['paragraph', 'quote', 'embed'].includes(currentBlock.type)) {
       const newBlock = createSocialBlock(currentBlock, network);
       let currentBlockLength = newBlock.data.text.length;
       if (network === 'bluesky') {
         // For bluesky posts, the character count is the length of the plain text rather than the richtext
-        currentBlockLength = processText(currentBlock.data.text, network)
-          .plainText.length;
+        currentBlockLength = processText(newBlock.data.text, network).plainText
+          .length;
       }
 
       if (
