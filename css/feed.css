@@ -313,11 +313,11 @@ figure {
   background-color: var(--tag-background-color);
   font-style: italic;
   margin-bottom: 0.5em;
+  text-decoration: none;
 }
 
 .entry .tag::before {
-  content: '#';
-  margin-right: 0.1em;
+  content: '#\2009';
 }
 
 .entry .tag:hover {
