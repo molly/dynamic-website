@@ -39,7 +39,14 @@ const makeQuery = async (req) => {
       /[.*+?^${}()|[\]\\]/g,
       '\\$&',
     );
-    const fields = ['title', 'author', 'work', 'publisher', 'summary'];
+    const fields = [
+      'title',
+      'author',
+      'work',
+      'publisher',
+      'summary',
+      'parenthetical',
+    ];
     query.$or = fields.map((field) => ({
       [field]: { $regex: escapedSearchQuery, $options: 'i' },
     }));
