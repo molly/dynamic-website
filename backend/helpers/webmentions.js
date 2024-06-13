@@ -12,14 +12,14 @@ const extractUrlsFromText = (text) => {
     const $ = cheerio.load(text, null, false);
     for (let link of $('a')) {
       const $link = $(link);
-      if (!$link.data('username')) {
+      if (!$link.data('username') && $link.attr('href').startsWith('http')) {
         links.push($link.attr('href'));
       }
     }
     return links;
   } else {
     // Otherwise a simple regex should suffice
-    const matches = text.matchAll(/<a.*?href=['"](.*?)["']/g);
+    const matches = text.matchAll(/<a.*?href=['"](http.*?)["']/g);
     return Array.from(matches).map((match) => match[1]);
   }
 };
