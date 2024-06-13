@@ -50,12 +50,14 @@ const edjsParser = EditorJSHtml({
 });
 
 export const hydrateMicroEntry = (entry) => {
-  Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
-  if (entry.post && entry.post.blocks) {
-    entry.html = edjsParser.parse(entry.post);
-  }
-  if (entry.socialLinks?.length) {
-    entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);
+  if (entry) {
+    Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
+    if (entry.post && entry.post.blocks) {
+      entry.html = edjsParser.parse(entry.post);
+    }
+    if (entry.socialLinks?.length) {
+      entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);
+    }
   }
   return entry;
 };

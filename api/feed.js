@@ -19,7 +19,7 @@ export const hydrateFeedEntry = (entry) => {
   Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
 
   // Do additional hydration based on entry type
-  if (entry.__t === 'FeedEntryMicro') {
+  if (entry.__t === 'FeedEntryMicro' && entry.micro) {
     entry.entryType = 'micro';
     entry.micro = hydrateMicroEntry(entry.micro);
   } else if (entry.__t === 'FeedEntryCitationNeeded') {
