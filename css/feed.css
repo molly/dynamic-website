@@ -85,6 +85,14 @@ p.site-description {
 }
 
 /* Content ------------------------------------------------------------ */
+.entry h2 {
+  margin-bottom: 1em;
+}
+
+.entry .content > p {
+  margin-top: 0;
+}
+
 .entry .content > .media-wrapper {
   margin-top: 1em;
 }
