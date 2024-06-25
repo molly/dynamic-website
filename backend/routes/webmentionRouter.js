@@ -1,6 +1,7 @@
 import { Queue } from 'bullmq';
 import express from 'express';
 import db from '../models/db.js';
+import logger from '../winston.js';
 
 const router = express.Router();
 
@@ -56,6 +57,7 @@ router.post('/', async (req, res) => {
   }
 
   // Initial validation passed, add this to the queue for processing and send 202
+  logger.info('Received webmention', req.body);
   const jobQueue = new Queue('jobQueue', {
     connection: db.redis,
     defaultJobOptions: {
