@@ -85,10 +85,6 @@ p.site-description {
 }
 
 /* Content ------------------------------------------------------------ */
-.entry .content > p {
-  margin-top: 0;
-}
-
 .entry .content > .media-wrapper {
   margin-top: 1em;
 }
