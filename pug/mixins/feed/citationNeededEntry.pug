@@ -1,4 +1,4 @@
-mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false} = {})
+mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false, hasImage=false} = {})
   - var baseUrl = isRss ? 'https://www.mollywhite.net' : ''
   article.entry.h-entry.hentry
     header
@@ -24,6 +24,8 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false} = {})
             img(src=entry.image alt=entry.imageAlt)
       .p-summary
         != entry.excerpt
+      if isRss && !hasImage
+        img(src="https://www.mollywhite.net/assets/images/molly_illustration_social.png", alt="Illustration of Molly White sitting and typing on a laptop.", style="display: none;")
 
     footer.footer
       .flex-row.post-meta

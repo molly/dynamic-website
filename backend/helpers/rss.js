@@ -18,6 +18,18 @@ function writeRssFile(path, xml) {
   fs.writeFileSync(new URL(path, import.meta.url).pathname, xml);
 }
 
+function hasImage(entry) {
+  if (entry.entryType === 'micro') {
+    const firstImage = entry.micro.post.blocks.find(
+      (block) => block.type === 'image',
+    );
+    return !!firstImage;
+  } else if (entry.entryType === 'citationNeeded' && entry.image) {
+    return true;
+  }
+  return false;
+}
+
 export async function generateRssForFeed() {
   const { entries } = await getFeedEntries({ limit: 20 });
   const lastUpdated = await FeedEntry.find({}, 'updatedAt')
@@ -32,7 +44,7 @@ export async function generateRssForFeed() {
     entry.html = decode(
       compiledPug({
         entry,
-        options: { isRss: true },
+        options: { isRss: true, hasImage: hasImage(entry) },
         toISOWithoutMillis,
       }),
     );

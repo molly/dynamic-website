@@ -42,7 +42,6 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
       id #{entry._id}
       content(type="html")
         = entry.html
-        img(src="https://www.mollywhite.net/assets/images/molly_illustration_social.png", alt="Illustration of Molly White sitting and typing on a laptop.")
       if entry.tags
         each tag in entry.tags 
           category(term=tag.value, label=tag.text)

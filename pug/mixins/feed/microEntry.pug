@@ -1,4 +1,4 @@
-mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
+mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false, hasImage=false} = {})
   - var baseUrl = isRss ? 'https://www.mollywhite.net' : ''
   article.entry.h-entry.hentry
     header
@@ -23,6 +23,9 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false} = {})
             when "PressEntry"
               include ../pressArticle.pug
               +pressArticle(entry.relatedPost, isRss, true, true)
+
+      if isRss && !hasImage
+        img(src="https://www.mollywhite.net/assets/images/molly_illustration_social.png", alt="Illustration of Molly White sitting and typing on a laptop.", style="display: none;")
 
     footer.footer
       .flex-row.post-meta
