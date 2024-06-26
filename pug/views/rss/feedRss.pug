@@ -20,7 +20,6 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
     -
       var url;
       var title;
-      var thumbnail;
       if (entry.__t === 'FeedEntryMicro' || entry.__t === "MicroEntry") {
         url = `https://www.mollywhite.net/micro/entry/${entry.micro.slug}`;
         title = entry.micro.title;
@@ -35,19 +34,15 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
       if (!title) {
         title = `Note published on ${entry.timestamps.createdAt.absoluteTimeET}`;
       }
-      if (entry.thumbnail) {
-        thumbnail = `<![CDATA[ <img src="${entry.thumbnail.href}" alt="${entry.thumbnail.alt}" /> ]]>`;
-      }
     entry
       title(type="html") #{title}
       link(href=url, type="text/html", rel="alternate", title=entry.title)
       published= toISOWithoutMillis(entry.createdAt)
       updated= toISOWithoutMillis(entry.updatedAt)
       id #{entry._id}
-      if thumbnail
-        description
-          != thumbnail
-      content(type="html")= entry.html
+      content(type="html")
+        = entry.html
+        img(src="https://www.mollywhite.net/assets/images/molly_illustration_social.png", alt="Illustration of Molly White sitting and typing on a laptop.")
       if entry.tags
         each tag in entry.tags 
           category(term=tag.value, label=tag.text)

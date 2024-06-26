@@ -18,26 +18,6 @@ function writeRssFile(path, xml) {
   fs.writeFileSync(new URL(path, import.meta.url).pathname, xml);
 }
 
-function getThumbnail(entry) {
-  if (entry.entryType === 'micro') {
-    const firstImage = entry.micro.post.blocks.find(
-      (block) => block.type === 'image',
-    );
-    if (firstImage) {
-      return {
-        href: firstImage.data.file.url,
-        alt: firstImage.data.alt || 'Image',
-      };
-    }
-  } else if (entry.entryType === 'citationNeeded' && entry.image) {
-    return { href: entry.image, alt: entry.imageAlt || 'Image' };
-  }
-  return {
-    href: 'https://www.mollywhite.net/assets/images/molly_illustration_social.png',
-    alt: 'Illustration of Molly White sitting and typing on a laptop.',
-  };
-}
-
 export async function generateRssForFeed() {
   const { entries } = await getFeedEntries({ limit: 20 });
   const lastUpdated = await FeedEntry.find({}, 'updatedAt')
@@ -56,7 +36,6 @@ export async function generateRssForFeed() {
         toISOWithoutMillis,
       }),
     );
-    entry.thumbnail = getThumbnail(entry);
   }
 
   const xml = pug.renderFile(

@@ -26,7 +26,7 @@ const edjsParser = EditorJSHtml({
             'https://invidious.fdn.fr/embed/',
           );
         }
-        return `<iframe width="${data.width}" height="${data.height}" src="${embed}" title="Invidious video player" frameborder="0" allow="encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+        return `<iframe width="${data.width}" height="${data.height}" src="${embed}" title="Invidious video player" frameborder="0" allow="encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
       }
       case 'twitter':
         return `<iframe width="${data.width}" height="${data.height}" src="${data.embed}" title="Twitter" frameborder="0" sandbox="allow-scripts"></iframe>`;
