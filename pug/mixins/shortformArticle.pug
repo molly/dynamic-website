@@ -6,15 +6,13 @@ mixin shortformArticle(article, rss=false, feed=false, embedded=false)
 
     .title
       a.u-url.u-repost-of(class=embedded ? 'u-in-reply-to' : '', href=article.href, rel="bookmark")
-        |"
-        span.p-name #{article.title}
-        |"
+        |"#[span.p-name #{article.title}]"
 
       if article.parenthetical
         |  (#{article.parenthetical})
 
       if article.parenthetical || article.title && !article.title.match(/[.?!]$/m)
-        |.
+        |. 
 
     .byline
       include ./author.pug
@@ -28,14 +26,14 @@ mixin shortformArticle(article, rss=false, feed=false, embedded=false)
         else 
           |  for 
       else
-        |.
+        |. 
 
       if article.work
         if article.workItalics === false
           span.p-publication #{article.work}
         else
           i.p-publication #{article.work}
-        | .
+        | . 
 
       if article.publisher
         |  #{article.publisher}.
@@ -59,7 +57,7 @@ mixin shortformArticle(article, rss=false, feed=false, embedded=false)
           if !feed
             include ./verb.pug
             +verb(article, to=false, capitalize=true)
-            | on #[time.dt-accessed.accessed(datetime=article.started) #{article.formattedStarted}]
+            | on #[time.dt-accessed.accessed(datetime=article.started) #{article.formattedStarted}]. 
 
     if feed && article.summary
       blockquote.summary.p-summary.entry-summary
