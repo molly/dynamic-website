@@ -44,15 +44,18 @@ router.get('/', async (req, res) => {
 // Single micro post
 router.get('/entry/:slug', async (req, res) => {
   const entry = await getMicroEntry(req.params.slug);
+  if (!entry) {
+    res.status(400).render('micro/404.pug');
+    return;
+  }
   if (entry.deletedAt) {
     res.status(410).render('micro/tombstone.pug', { entry });
     return;
-  } else {
-    res.render('micro/entry.pug', {
-      entry,
-      options: { isLoggedIn: req.isAuthenticated() },
-    });
   }
+  res.render('micro/entry.pug', {
+    entry,
+    options: { isLoggedIn: req.isAuthenticated() },
+  });
 });
 
 // Tag feed

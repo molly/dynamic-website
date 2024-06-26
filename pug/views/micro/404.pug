@@ -1,0 +1,28 @@
+extends ../../templates/base.pug
+
+block vars
+  - var htmlClass = 'micro';
+  - var importPrefix = 'https://www.mollywhite.net'
+
+block head
+  include ../../templates/titleAndDescription.pug
+  +titleAndDescription("404", "Entry in Molly White's microblog")
+  link(rel='stylesheet', href="/static/feed.css")
+  meta(http-equiv="Status", content="404")
+
+block body
+  main
+    .content-box
+      .entries
+        #entryContainer.standalone
+          article.entry.h-entry.hentry
+              header
+                h2 404
+              .content.p-content
+                p There's no post here.
+
+      .back-links
+        div
+          a(href="/feed") &laquo; Back to the activity feed
+        div
+          a(href="/micro") &laquo; Back to the microblog feed
