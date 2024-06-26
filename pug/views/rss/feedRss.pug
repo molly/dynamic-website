@@ -1,4 +1,4 @@
-doctype xml 
+doctype xml
 feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss/1.0")
   id=`https://www.mollywhite.net/${path}/feed.xml`
   title(type="text") #{title}
@@ -14,12 +14,13 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
   webfeeds:cover(image="https://www.mollywhite.net/assets/images/molly_illustration_social.png")
   webfeeds:accentColor 5948a4
   updated #{toISOWithoutMillis(lastUpdated)}
-  rights(type="html")= 'Copyright &copy; Molly White&nbsp;' + new Date().getFullYear() + '.'
+  rights(type="html")= 'Copyright © Molly White ' + new Date().getFullYear() + '.'
 
   each entry, index in entries
     -
       var url;
       var title;
+      var thumbnail;
       if (entry.__t === 'FeedEntryMicro' || entry.__t === "MicroEntry") {
         url = `https://www.mollywhite.net/micro/entry/${entry.micro.slug}`;
         title = entry.micro.title;
@@ -32,14 +33,20 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
         title = `Published on Citation Needed: "${entry.title}"`;
       }
       if (!title) {
-        title = `Note published on ${entry.timestamps.createdAt.absoluteTime}`;
+        title = `Note published on ${entry.timestamps.createdAt.absoluteTimeET}`;
+      }
+      if (entry.thumbnail) {
+        thumbnail = `<![CDATA[ <img src="${entry.thumbnail.href}" alt="${entry.thumbnail.alt}" /> ]]>`;
       }
     entry
       title(type="html") #{title}
       link(href=url, type="text/html", rel="alternate", title=entry.title)
       published= toISOWithoutMillis(entry.createdAt)
       updated= toISOWithoutMillis(entry.updatedAt)
-      id #{url}
+      id #{entry._id}
+      if thumbnail
+        description
+          != thumbnail
       content(type="html")= entry.html
       if entry.tags
         each tag in entry.tags 
