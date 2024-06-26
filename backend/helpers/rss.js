@@ -77,7 +77,7 @@ export async function generateRssForMicro() {
   for (let entry of entries) {
     entry.html = compiledPug({
       entry,
-      options: { isRss: true },
+      options: { isRss: true, hasImage: hasImage(entry) },
       toISOWithoutMillis,
     });
   }
