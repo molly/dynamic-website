@@ -34,7 +34,7 @@ mixin pressArticle(article, rss=false, feed=false, embedded=false)
         | . 
 
       if article.publisher
-        |  #{article.publisher}.
+        |  #{article.publisher}. 
 
       if article.formattedDate
         |#[time.dt-published.published(datetime=article.date) #{article.formattedDate}].

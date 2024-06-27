@@ -9,6 +9,7 @@ export const TagSchema = new mongoose.Schema({
     blockchain: Number,
     micro: Number,
     citationNeeded: Number,
+    press: Number,
     total: Number,
   },
 });

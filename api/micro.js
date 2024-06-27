@@ -1,3 +1,4 @@
+import * as cheerio from 'cheerio';
 import EditorJSHtml from 'editorjs-html';
 import db from '../backend/models/db.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
@@ -49,11 +50,36 @@ const edjsParser = EditorJSHtml({
   },
 });
 
+const getEntryPlaintext = (entry) => {
+  return entry.post.blocks
+    .filter((block) =>
+      ['paragraph', 'header', 'list', 'quote'].includes(block.type),
+    )
+    .map((block) => {
+      let text;
+      if (block.type === 'list') {
+        if (block.data.style === 'unordered') {
+          text = block.data.items.join('');
+        } else {
+          text = block.data.items
+            .map((item, index) => `${index + 1}. ${item}`)
+            .join(' ');
+        }
+      } else {
+        text = block.data.text;
+      }
+      const $ = cheerio.load(text, null, false);
+      return $.text();
+    })
+    .join(' ');
+};
+
 export const hydrateMicroEntry = (entry) => {
   if (entry) {
     Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
     if (entry.post && entry.post.blocks) {
       entry.html = edjsParser.parse(entry.post);
+      entry.plainText = getEntryPlaintext(entry);
     }
     if (entry.socialLinks?.length) {
       entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);

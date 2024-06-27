@@ -6,7 +6,7 @@ block vars
 
 block head
   include ../../templates/titleAndDescription.pug
-  +titleAndDescription(entry.title, "Entry in Molly White's microblog")
+  +titleAndDescription(entry.title, entry.plainText || "Entry in Molly White's microblog")
   link(rel='stylesheet', href="/static/feed.css")
 
 block body
