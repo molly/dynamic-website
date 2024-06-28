@@ -13,7 +13,7 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false, hasImage
       include ../shortformArticle.pug
       +shortformArticle(readingEntry, isRss, true)
       if isRss && !hasImage
-        img(src="https://www.mollywhite.net/assets/images/molly_illustration_social.png", alt="Illustration of Molly White sitting and typing on a laptop.", style="display: none;")
+        img(src="https://www.mollywhite.net/assets/images/placeholder_social.png", alt="Illustration of Molly White sitting and typing on a laptop, on a purple background with 'Molly White' in white serif.", style="display: none;")
     footer.footer
       .flex-row.post-meta
         .timestamp
