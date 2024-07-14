@@ -178,12 +178,12 @@ figure {
 
 .entry blockquote {
   position: relative;
-  font-size: 0.8em;
+  font-size: 1rem;
   line-height: 1.25em;
   z-index: 1;
 }
 
-.entry blockquote:before {
+.entry .content > blockquote:before {
   color: var(--color-blockquote-decorative-quote);
   content: '\201C';
   font-family: 'Times New Roman';
