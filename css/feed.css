@@ -325,6 +325,7 @@ figure {
   display: flex;
   flex-wrap: wrap;
   flex-grow: 1;
+  line-height: 1em;
 }
 
 .entry .tag {
