@@ -1,0 +1,65 @@
+- var importPrefix = 'https://www.mollywhite.net'
+
+html(class='feed-editor', lang='en')
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(rel='icon' href=`${importPrefix || ''}/assets/images/icons/favicon.ico`)
+    link(rel='icon' href=`${importPrefix || ''}/assets/images/icons/favicon-16x16.png` sizes='16x16' type='image/png')
+    link(rel='icon' href=`${importPrefix || ''}/assets/images/icons/favicon-32x32.png` sizes='32x32' type='image/png')
+    link(rel='apple-touch-icon' href=`${importPrefix || ''}/assets/images/icons/apple-touch-icon.png` sizes='180x180')
+    link(rel='manifest', href=`${importPrefix || ''}/site.webmanifest`)
+    link(rel='stylesheet', href=`${importPrefix || ''}/assets/styles/base-styles.css`)
+    link(rel='stylesheet', href="/static/editor.css")
+    meta(name='theme-color', content='#191919')
+    include ../../templates/titleAndDescription.pug
+    +titleAndDescription('Webmentions', "Webmentions interface")
+    block head
+
+  body
+    .editor-container
+      main
+        h2 Webmentions
+
+        if !webmention
+          p No entries with unmoderated webmentions.
+        else
+          .webmention
+            div Source: #[a(href=webmention.source) #{webmention.source}]
+            div Target: #[a(href=webmention.target) #{webmention.target}]
+            button.parse(data-id=webmention._id) Parse h-entry
+            .hidden(id=`error-${webmention._id}`)
+            .hidden.result-box(id=`result-${webmention._id}`)
+              .input-group
+                label(for=`author-${webmention._id}`) Author
+                input(id=`author-${webmention._id}`, type="text", placeholder="Author")
+
+              .input-group
+                label(for=`author-url-${webmention._id}`) Author URL
+                input(id=`author-url-${webmention._id}`, type="text", placeholder="Author URL")
+
+              .input-group
+                label(for=`type-${webmention._id}`) Type
+                select(id=`type-${webmention._id}`)
+                  option(value="reply") Reply
+                  option(value="like") Like
+                  option(value="repost") Repost
+                  option(value="bookmark") Bookmark
+
+              .input-group 
+                label(for=`published-${webmention._id}`) Published
+                input(id=`published-${webmention._id}`, placeholder="Published")
+
+              .input-group 
+                label(for=`content-${webmention._id}`) Content
+                textarea(id=`content-${webmention._id}`, placeholder="Content")
+              
+              .input-group 
+                label(for=`summary-${webmention._id}`) Summary
+                textarea(id=`summary-${webmention._id}`, placeholder="Summary")
+
+              button(id="approve" data-id=webmention._id) Approve
+                  
+
+  
+  script(src="/static/webmentions.js")

@@ -1,72 +1,110 @@
-mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isRss=false, hasImage=false} = {})
+mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, isRss=false, hasImage=false} = {})
   - var baseUrl = isRss ? 'https://www.mollywhite.net' : ''
-  article.entry.h-entry.hentry
-    header
-      if isInFeed && !isRss
-        .post-icon.icon
-          a(href=`${baseUrl}/micro/entry/${entry.slug}`)
-            include ../../icons/chat.svg
-          .description Posted:
-      if entry.title
-        h2.p-name #{entry.title}
-    .content.e-content
-      each block in entry.html
-        != block
-
-      if entry.relatedPostModel 
-        .related-post
-          case entry.relatedPostModel
-            when "ShortformEntry"
-            when "BlockchainEntry"
-              include ../shortformArticle.pug
-              +shortformArticle(entry.relatedPost, isRss, true, true)
-            when "PressEntry"
-              include ../pressArticle.pug
-              +pressArticle(entry.relatedPost, isRss, true, true)
-
-      if isRss && !hasImage
-        img(src="https://www.mollywhite.net/assets/images/placeholder_social.png", alt="Illustration of Molly White sitting and typing on a laptop, on a purple background with 'Molly White' in white serif.", style="display: none;")
-
-    footer.footer
-      .flex-row.post-meta
-        .timestamp-block
-          .timestamp
+  article
+    .entry.h-entry.hentry
+      header
+        if isInFeed && !isRss
+          .post-icon.icon
             a(href=`${baseUrl}/micro/entry/${entry.slug}`)
-              time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
-            
-            if isLoggedIn
-              span.edit-icon.icon
-                a(href=`${baseUrl}/micro/editor/${entry.slug}`)
-                  include ../../icons/pencil.svg
-            if !isRss
-              |  from the #[a(href=`${baseUrl}/micro`) micro posts] feed
-              if !entry.relatedPostModel
-                | .
-              else if entry.relatedPostModel == "ShortformEntry"
-                |  and the #[a(href=`${baseUrl}/reading/shortform`) shortform reading list].
-              else if entry.relatedPostModel == "BlockchainEntry"
-                |  and the #[a(href=`${baseUrl}/reading/blockchain`) blockchain reading list].
-          if entry.updatedAt && entry.updatedAt - entry.createdAt > 5 * 60 * 1000
-            .timestampF
-              | Updated 
-              time.dt-updated(datetime=toISOWithoutMillis(entry.updatedAt), title=entry.timestamps.updatedAt.absoluteTime) #{entry.timestamps.updatedAt.humanTime}
-              | .
+              include ../../icons/chat.svg
+            .description Posted:
+        if entry.title
+          h2.p-name #{entry.title}
+      .content.e-content
+        each block in entry.html
+          != block
 
-        .social-links 
-          if entry.socialLinks && entry.socialLinks.length 
-            span Also posted to:
-            each socialLink, index in entry.socialLinks
-              a(class=`social-link u-syndication ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1), rel="syndication")
-                if !isRss
-                  include ./icon.pug
-                  +icon(socialLink.type)
-                else
-                  | #{socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1)}
-                  if index !== entry.socialLinks.length - 1
-                    | , 
-      .tags
-        if entry.tags && entry.tags.length
-          each tag, index in entry.tags 
-            a.tag.p-category(href=`${baseUrl}/${isInFeed ? 'feed' : 'micro'}/tag/${tag.value}`, title=`See all ${isInFeed ? 'feed' : 'micro'} posts tagged "${tag.text}"` rel="category tag") #{tag.text}
-            if isRss && index !== entry.tags.length - 1
-              | , 
+        if entry.relatedPostModel 
+          .related-post
+            case entry.relatedPostModel
+              when "ShortformEntry"
+              when "BlockchainEntry"
+                include ../shortformArticle.pug
+                +shortformArticle(entry.relatedPost, isRss, true, true)
+              when "PressEntry"
+                include ../pressArticle.pug
+                +pressArticle(entry.relatedPost, isRss, true, true)
+
+        if isRss && !hasImage
+          img(src="https://www.mollywhite.net/assets/images/placeholder_social.png", alt="Illustration of Molly White sitting and typing on a laptop, on a purple background with 'Molly White' in white serif.", style="display: none;")
+
+      footer.footer
+        .flex-row.post-meta
+          .timestamp-block
+            .timestamp
+              a(href=`${baseUrl}/micro/entry/${entry.slug}`)
+                time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
+              
+              if isLoggedIn
+                span.edit-icon.icon
+                  a(href=`${baseUrl}/micro/editor/${entry.slug}`)
+                    include ../../icons/pencil.svg
+              if !isRss
+                |  from the #[a(href=`${baseUrl}/micro`) micro posts] feed
+                if !entry.relatedPostModel
+                  | .
+                else if entry.relatedPostModel == "ShortformEntry"
+                  |  and the #[a(href=`${baseUrl}/reading/shortform`) shortform reading list].
+                else if entry.relatedPostModel == "BlockchainEntry"
+                  |  and the #[a(href=`${baseUrl}/reading/blockchain`) blockchain reading list].
+            if entry.updatedAt && entry.updatedAt - entry.createdAt > 5 * 60 * 1000
+              .timestampF
+                | Updated 
+                time.dt-updated(datetime=toISOWithoutMillis(entry.updatedAt), title=entry.timestamps.updatedAt.absoluteTime) #{entry.timestamps.updatedAt.humanTime}
+                | .
+
+          .social-links 
+            if entry.socialLinks && entry.socialLinks.length 
+              span Also posted to:
+              each socialLink, index in entry.socialLinks
+                a(class=`social-link u-syndication ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1), rel="syndication")
+                  if !isRss
+                    include ./icon.pug
+                    +icon(socialLink.type)
+                  else
+                    | #{socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1)}
+                    if index !== entry.socialLinks.length - 1
+                      | , 
+        .bottomRow
+          .tags
+            if entry.tags && entry.tags.length
+              each tag, index in entry.tags 
+                a.tag.p-category(href=`${baseUrl}/${isInFeed ? 'feed' : 'micro'}/tag/${tag.value}`, title=`See all ${isInFeed ? 'feed' : 'micro'} posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+                if isRss && index !== entry.tags.length - 1
+                  | , 
+          if isInFeed || isInMicroFeed
+            .comments
+              include ./icon.pug
+              a.comments-icon(href=`${baseUrl}/micro/entry/${entry.slug}`)
+                +icon('comment')
+                if entry.webmentions && Array.isArray(entry.webmentions)
+                  - var webmentionCount = entry.webmentions.filter(m => !m.approved).length
+                  if webmentionCount
+                    span #{entry.webmentions.length}
+
+    if !isInFeed && !isInMicroFeed
+      if "webmentions" in entry && entry.webmentions
+        section.interactions
+          each type of ['likes', 'bookmarks', 'reposts']
+            - var webmentionsOfType = type in entry.webmentions ? entry.webmentions[type] : []
+            if webmentionsOfType.length
+              div(class=type)
+                | #{type.charAt(0).toUpperCase() + type.slice(1).replace(/e?s$/, 'ed')} by 
+                each webmention, index in webmentionsOfType
+                  a(href=webmention.source, title=webmention.body.author, rel="nofollow") #{webmention.body.author}
+                  if index !== webmentionsOfType.length - 1
+                    | ,
+       
+          if "withContent" in entry.webmentions && entry.webmentions.withContent.length
+            .replies
+              each reply, index in entry.webmentions.withContent
+                .u-comment.h-cite #[a.u-url(href=reply.source, rel="nofollow") #{reply.body.type ? reply.body.type.charAt(0).toUpperCase() + reply.body.type.slice(1) : "Reply"}] by #[a.u-author.h-card(href=reply.body.authorUrl, rel="nofollow") #{reply.body.author}]
+                  if reply.body.published
+                    |  on #[time.dt-published(datetime=toISOWithoutMillis(reply.body.published)) #{webmentionTimestamp(reply.body.published)}]
+                  if reply.body.summary
+                    .p-summary 
+                      != reply.body.summary
+                      |  ...
+                  else
+                    .p-content
+                      != reply.body.content

@@ -243,6 +243,23 @@ button:hover {
   display: block;
 }
 
+/* Webmentions */
+.webmention {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5em;
+  border: 1px solid var(--hr-color);
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.webmention .result-box,
+.webmention .input-group textarea,
+.webmention .input-group input {
+  width: 100%;
+}
+
 /* Dark mode */
 [data-theme='dark'] .image-tool--white .image-tool__image-picture {
   filter: invert(0.85);

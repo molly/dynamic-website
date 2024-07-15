@@ -1,6 +1,7 @@
 import express from 'express';
 import { getMicroEntries, getMicroEntry } from '../../api/micro.js';
 import { Tag } from '../../backend/models/tag.model.js';
+import { Webmention } from '../../backend/models/webmention.model.js';
 import { authenticated } from '../../backend/routes/auth.js';
 import { sanitizeTag } from '../js/helpers/sanitize.js';
 
@@ -52,8 +53,45 @@ router.get('/entry/:slug', async (req, res) => {
     res.status(410).render('micro/tombstone.pug', { entry });
     return;
   }
+
+  // Sort webmentions
+  let webmentions = null;
+  if (entry.webmentions && entry.webmentions.length > 0) {
+    webmentions = {
+      withContent: [],
+      likes: [],
+      reposts: [],
+      bookmarks: [],
+    };
+    entry.webmentions.forEach((mention) => {
+      if (!mention.approved) {
+        return;
+      }
+      if (mention.body.content || mention.body.summary) {
+        webmentions.withContent.push(mention);
+      } else if (mention.body.type === 'like') {
+        webmentions.likes.push(mention);
+      } else if (mention.body.type === 'repost') {
+        webmentions.reposts.push(mention);
+      } else if (mention.body.type === 'bookmark') {
+        webmentions.bookmarks.push(mention);
+      }
+    });
+    for (const key in webmentions) {
+      webmentions[key].sort((a, b) => {
+        if (a.published > b.published) {
+          return -1;
+        }
+        if (a.published < b.published) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+  }
+
   res.render('micro/entry.pug', {
-    entry,
+    entry: { ...entry, webmentions },
     options: { isLoggedIn: req.isAuthenticated() },
   });
 });
@@ -95,6 +133,17 @@ router.get('/tag/:tag', async (req, res) => {
     },
   });
 });
+
+// Webmentions admin
+router.get(
+  '/webmentions',
+  authenticated({ redirectTo: '/micro/login' }),
+  async (_, res) => {
+    const webmention = await Webmention.findOne({ approved: false });
+    console.log(webmention);
+    res.render('micro/webmentions.pug', { webmention });
+  },
+);
 
 // RSS
 router.get('/feed.xml', (_, res) => {

@@ -3,6 +3,7 @@ import EditorJSHtml from 'editorjs-html';
 import db from '../backend/models/db.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { Tag } from '../backend/models/tag.model.js';
+import { Webmention } from '../backend/models/webmention.model.js';
 import { formatGallery, formatMedia } from './helpers/media.js';
 import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
 import { hydrateTimestamps } from './helpers/timestamps.js';
@@ -106,6 +107,7 @@ export const getMicroEntries = async ({
   const entries = await q
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
     .populate({ path: 'relatedPost', connection: db.readingListConnection })
+    .populate({ path: 'webmentions', model: Webmention })
     .lean();
   const hydrated = entries.map(hydrateMicroEntry);
   const totalResults = await MicroEntry.countDocuments(query);
@@ -121,6 +123,7 @@ export const getMicroEntry = async (slug) => {
   const entry = await MicroEntry.findOne({ slug })
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
     .populate({ path: 'relatedPost', connection: db.readingListConnection })
+    .populate({ path: 'webmentions', model: Webmention })
     .lean();
 
   return hydrateMicroEntry(entry);

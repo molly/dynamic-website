@@ -6,6 +6,7 @@ import {
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { Tag } from '../backend/models/tag.model.js';
+import { Webmention } from '../backend/models/webmention.model.js';
 import { formatArticleDate } from '../data/filter/preprocess.js';
 import { getReadingDetails } from './helpers/reading.js';
 import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
@@ -74,6 +75,7 @@ export const getFeedEntries = async ({
       populate: [
         { path: 'tags', model: Tag, options: { sort: { value: 1 } } },
         { path: 'relatedPost', connection: db.readingListConnection },
+        { path: 'webmentions', model: Webmention },
       ],
     })
     .populate({

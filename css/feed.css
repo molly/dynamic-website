@@ -114,6 +114,11 @@ p.site-description {
   width: 100%;
 }
 
+.entry .content video,
+.entry .content iframe {
+  max-width: 100%;
+}
+
 .entry .content .media-wrapper.full-width {
   max-width: 60rem;
 }
@@ -183,7 +188,8 @@ figure {
   z-index: 1;
 }
 
-.entry .content > blockquote:before {
+.entry .content > blockquote:before,
+.entry .content > .quote > blockquote:before {
   color: var(--color-blockquote-decorative-quote);
   content: '\201C';
   font-family: 'Times New Roman';
@@ -193,6 +199,10 @@ figure {
   top: 0.08em;
   position: absolute;
   z-index: -1;
+}
+.entry .content > blockquote ~ blockquote:before,
+.entry .content > .quote ~ .quote blockquote:before {
+  content: '';
 }
 
 .entry .quote {
@@ -304,11 +314,17 @@ figure {
 }
 
 /* Tags */
+.footer .bottomRow {
+  display: flex;
+  margin-top: 1em;
+  line-height: 1em;
+  align-items: center;
+}
+
 .footer .tags {
   display: flex;
   flex-wrap: wrap;
-  line-height: 1em;
-  margin-top: 1em;
+  flex-grow: 1;
 }
 
 .entry .tag {
@@ -331,6 +347,72 @@ figure {
 
 .entry .tag:not(:last-child) {
   margin-right: 0.5em;
+}
+
+.footer .comments,
+.footer .comments a {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--timestamp-color);
+  text-decoration: none;
+}
+
+.footer .comments-icon svg {
+  height: 14px;
+}
+
+/* Interactions */
+.interactions {
+  position: relative;
+  width: 100%;
+  padding: 1em;
+  font-size: 0.7em;
+  background-color: var(--card-bg-color);
+  box-shadow: var(--shadow-1);
+  margin-top: 1em;
+}
+
+.replies .p-content,
+.replies .p-summary {
+  margin-left: 1rem;
+  line-height: 1rem;
+}
+
+.replies .u-comment:not(:first-child) {
+  margin-top: 1rem;
+}
+
+/* Manual webmention submit form */
+.webmention-submit {
+  font-size: 0.7em;
+  line-height: 1em;
+  margin-top: 2rem;
+}
+
+.submit-box {
+  display: flex;
+  align-items: center;
+  margin: 1em 0 0.5em 0;
+}
+
+.submit-box input {
+  color: var(--main-text-color);
+  border: 1px solid var(--table-border-color);
+  background-color: var(--bg-color);
+  flex-grow: 1;
+}
+
+.submit-box button {
+  margin-left: 0.5em;
+  background-color: var(--button-color);
+  color: var(--main-text-color);
+  border: 1px solid var(--table-border-color);
+  border-radius: 0;
+}
+
+#submit-error {
+  color: var(--color-error);
 }
 
 /* Paginator --------------------------------------------------------------------- */

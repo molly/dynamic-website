@@ -24,7 +24,7 @@ block body
         a(href="/micro") View all thoughts
     include ../../mixins/feed/microEntry.pug
     each entry in entries
-      +microEntry(entry, options)
+      +microEntry(entry, {...options, isInMicroFeed: true})
 
     include ../../includes/paginator.pug
 

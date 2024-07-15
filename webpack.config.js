@@ -14,6 +14,7 @@ export default [
       reading: './frontend/js/reading.js',
       feed: './frontend/js/feed.js',
       tagger: './frontend/js/tagger.js',
+      webmentions: './frontend/js/webmentions.js',
     },
     output: {
       path: distPath,

@@ -21,3 +21,15 @@ block body
           a(href="/feed") &laquo; Back to the activity feed
         div
           a(href="/micro") &laquo; Back to the microblog feed
+
+      .webmention-submit
+        | Have you responded to this post on your own site? Send a #[a(href="https://indieweb.org/Webmention") webmention]!
+        | Note: Webmentions are moderated for anti-spam purposes, so they will not appear immediately.
+        .submit-box
+          input#webmention-manual(type="text", placeholder=`https://your-site.com/posts/response-to-${entry.slug}`, name="source", required)
+          button#webmention-manual-submit Send
+        #submit-error.hidden
+        #submit-success.hidden
+
+
+  script(src="/static/feed.js")

@@ -6,6 +6,7 @@
 
   /* Text */
   --color-blockquote-decorative-quote: #efefef;
+  --color-error: #b91c1c;
 
   /* Borders */
   --image-border-color: rgba(0, 0, 0, 0.05);
@@ -28,6 +29,7 @@
     --timestamp-color-hover: #888888;
     --tag-background-color: none;
     --color-blockquote-decorative-quote: #555555;
+    --color-error: #f87171;
   }
 }
 
