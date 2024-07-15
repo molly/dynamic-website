@@ -78,9 +78,9 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
               a.comments-icon(href=`${baseUrl}/micro/entry/${entry.slug}`)
                 +icon('comment')
                 if entry.webmentions && Array.isArray(entry.webmentions)
-                  - var webmentionCount = entry.webmentions.filter(m => !m.approved).length
+                  - var webmentionCount = entry.webmentions.filter(m => m.approved).length
                   if webmentionCount
-                    span #{entry.webmentions.length}
+                    span #{webmentionCount}
 
     if !isInFeed && !isInMicroFeed
       if "webmentions" in entry && entry.webmentions

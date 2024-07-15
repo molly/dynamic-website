@@ -140,7 +140,6 @@ router.get(
   authenticated({ redirectTo: '/micro/login' }),
   async (_, res) => {
     const webmention = await Webmention.findOne({ approved: false });
-    console.log(webmention);
     res.render('micro/webmentions.pug', { webmention });
   },
 );
