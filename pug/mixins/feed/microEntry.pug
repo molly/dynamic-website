@@ -83,7 +83,7 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
                     span #{webmentionCount}
 
     if !isInFeed && !isInMicroFeed
-      if "webmentions" in entry && entry.webmentions
+      if "webmentions" in entry && entry.webmentions && entry.webmentions.length > 0
         section.interactions
           each type of ['likes', 'bookmarks', 'reposts']
             - var webmentionsOfType = type in entry.webmentions ? entry.webmentions[type] : []

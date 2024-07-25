@@ -65,6 +65,7 @@ router.get('/tag/:tag', async (req, res) => {
   res.render('feed/index.pug', {
     ...results,
     options: {
+      isInFeed: true,
       isLoggedIn: req.isAuthenticated(),
       tag: tag,
       tagQuery: sanitizedTag,
