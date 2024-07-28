@@ -1,11 +1,39 @@
 [
   {
+    "title": "The Left Hand of Darkness",
+    "author": "Ursula K. Le Guin",
+    "date": "1969",
+    "publisher": "Ace Books",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1488213612i/18423.jpg",
+    "started": "2024-07-27",
+    "status": "currentlyReading",
+    "href": "https://www.goodreads.com/book/show/18423.The_Left_Hand_of_Darkness",
+    "tags": [
+      "science_fiction"
+    ]
+  },
+  {
+    "title": "The 7 1/2 Deaths of Evelyn Hardcastle",
+    "author": "Stuart Turton",
+    "date": "2018-02-08",
+    "publisher": "Sourcebooks Landmark",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1506896221i/36337550.jpg",
+    "started": "2024-06-15",
+    "status": "currentlyReading",
+    "href": "https://www.goodreads.com/book/show/36337550-the-7-1-2-deaths-of-evelyn-hardcastle",
+    "tags": [
+      "mystery",
+      "thriller"
+    ]
+  },
+  {
     "title": "Leviathan Wakes",
     "author": "James S.A. Corey",
     "date": "2011-06-02",
     "started": "2023-12-17",
+    "completed": "2024-07-21",
     "publisher": "Orbit",
-    "status": "currentlyReading",
+    "status": "read",
     "href": "https://www.goodreads.com/book/show/8855321-leviathan-wakes",
     "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1411013134i/8855321.jpg",
     "tags": [
