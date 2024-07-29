@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { mergeSocialLinks } from '../../frontend/js/helpers/editorHelpers.js';
+import { validateGhostWebhook } from '../helpers/ghostAuth.js';
 import { updateTagsOnEdit } from '../helpers/tags.js';
 import { BlockchainEntry, ShortformEntry } from '../models/entry.model.js';
 import {
@@ -11,7 +12,7 @@ import { authenticated } from './auth.js';
 
 const router = express.Router();
 
-router.post('/citationNeeded', async (req, res) => {
+router.post('/citationNeeded', validateGhostWebhook, async (req, res) => {
   try {
     const { post } = req.body;
     const result = await new FeedEntryCitationNeeded({
