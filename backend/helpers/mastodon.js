@@ -22,7 +22,10 @@ export const postToots = async (posts, imagesMap) => {
         image.href,
         client.v2.media.create({
           file: new Blob([imageBuffer], { type: mimeType }),
-          description: image.alt.substring(0, NETWORK_LIMITS.mastodon.alt),
+          description: image.alt.substring(
+            0,
+            NETWORK_LIMITS.mastodon.alt - 100,
+          ),
         }),
       ]),
     );

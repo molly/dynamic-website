@@ -30,21 +30,23 @@ const getAltText = (alt, fallback) => {
 };
 
 export const formatMedia = ({ data }, galleryId = null) => {
-  const source = data.file && data.file.url ? data.file.url : data.url;
-  const classes = getImageClass(data);
-  let media;
+  if (data) {
+    const source = data.file && data.file.url ? data.file.url : data.url;
+    const classes = getImageClass(data);
+    let media;
 
-  // Create media element
-  if (data.file?.contentType?.startsWith('video/')) {
-    media = `<video controls src="${source}" alt="${getAltText(data.alt, 'Video')}" />`;
+    // Create media element
+    if (data.file?.contentType?.startsWith('video/')) {
+      media = `<video controls src="${source}" alt="${getAltText(data.alt, 'Video')}" />`;
+    }
+    media = `<img src="${source}" alt="${getAltText(data.alt, 'Image')}" />`;
+
+    // Add lightbox
+    media = `<a href="${source}" data-fslightbox=${galleryId || getUniqueId(10)}>${media}</a>`;
+
+    // Return with wrapper div
+    return `<div ${classes}>${media}</div>`;
   }
-  media = `<img src="${source}" alt="${getAltText(data.alt, 'Image')}" />`;
-
-  // Add lightbox
-  media = `<a href="${source}" data-fslightbox=${galleryId || getUniqueId(10)}>${media}</a>`;
-
-  // Return with wrapper div
-  return `<div ${classes}>${media}</div>`;
 };
 
 export const formatGallery = ({ data }) => {

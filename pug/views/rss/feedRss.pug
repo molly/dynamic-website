@@ -20,9 +20,13 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
     -
       var url;
       var title;
-      if (entry.__t === 'FeedEntryMicro' || entry.__t === "MicroEntry") {
+      if (entry.__t === 'FeedEntryMicro') {
         url = `https://www.mollywhite.net/micro/entry/${entry.micro.slug}`;
         title = entry.micro.title;
+      else if (entry.__t === "MicroEntry") {
+        url = `https://www.mollywhite.net/micro/entry/${entry.slug}`;
+        title = entry.title;
+      }
       } else if (entry.__t === 'FeedEntryReading') {
         var type = entry.shortform ? 'shortform' : 'blockchain';
         url = `https://www.mollywhite.net/reading/${type}?search=${encodeURIComponent(entry[type].title)}`;
