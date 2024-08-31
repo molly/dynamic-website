@@ -75,6 +75,7 @@ export async function generateRssForMicro() {
     new URL('../../pug/views/rss/microEntry.pug', import.meta.url).pathname,
   );
   for (let entry of entries) {
+    entry.__t = 'MicroEntry';
     entry.html = compiledPug({
       entry,
       options: { isRss: true, hasImage: hasImage(entry) },
