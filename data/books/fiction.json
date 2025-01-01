@@ -1,5 +1,33 @@
 [
   {
+    "title": "The Algebraist",
+    "author": "Iain M. Banks",
+    "date": "2004",
+    "publisher": "Night Shade Books",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388530602i/12009.jpg",
+    "started": "2024-12-29",
+    "status": "currentlyReading",
+    "href": "https://www.goodreads.com/book/show/12009.The_Algebraist",
+    "tags": [
+      "science_fiction",
+      "space_opera"
+    ]
+  },
+  {
+    "title": "Trace",
+    "author": "Patricia Cornwell",
+    "date": "2004",
+    "publisher": "Berkeley Books",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1310723816i/6530.jpg",
+    "started": "2024-10-24",
+    "status": "read",
+    "href": "https://www.goodreads.com/book/show/6530.Trace",
+    "tags": [
+      "mystery",
+      "thriller"
+    ]
+  },
+  {
     "title": "The Left Hand of Darkness",
     "author": "Ursula K. Le Guin",
     "date": "1969",
@@ -37,7 +65,8 @@
     "href": "https://www.goodreads.com/book/show/8855321-leviathan-wakes",
     "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1411013134i/8855321.jpg",
     "tags": [
-      "science_fiction"
+      "science_fiction",
+      "space_opera"
     ]
   },
   {
