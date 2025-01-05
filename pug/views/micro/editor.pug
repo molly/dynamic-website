@@ -72,7 +72,7 @@ html(class='feed-editor', lang='en')
         .content-container
           details.social-links
             summary Manually link social post IDs
-            each network in ["twitter", "mastodon", "bluesky", "youtube", "tiktok"]
+            each network in ["twitter", "mastodon", "bluesky", "threads", "youtube", "tiktok"]
               .input-group
                 label(for=network) #{network.charAt(0).toUpperCase() + network.slice(1)}
                 input.social-post-id(id=network, type="text")

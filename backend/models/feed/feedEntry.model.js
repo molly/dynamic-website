@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { NETWORKS } from '../../../api/helpers/socialMedia.js';
 import { generateRssForFeed } from '../../helpers/rss.js';
 import db from '../db.js';
 import MicroEntry from '../micro/microEntry.model.js';
@@ -47,7 +48,7 @@ export const FeedEntryCitationNeeded = FeedEntry.discriminator(
       {
         type: {
           type: String,
-          enum: ['twitter', 'mastodon', 'bluesky', 'tiktok', 'youtube'],
+          enum: NETWORKS,
         },
         postId: { type: String },
       },

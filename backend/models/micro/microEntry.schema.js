@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { NETWORKS } from '../../../api/helpers/socialMedia.js';
 export const MicroEntrySchema = new mongoose.Schema(
   {
     title: String,
@@ -22,7 +23,7 @@ export const MicroEntrySchema = new mongoose.Schema(
       {
         type: {
           type: String,
-          enum: ['twitter', 'mastodon', 'bluesky', 'tiktok', 'youtube'],
+          enum: NETWORKS,
         },
         postId: { type: String },
       },
