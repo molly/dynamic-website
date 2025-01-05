@@ -31,96 +31,111 @@ function hasImage(entry) {
 }
 
 export async function generateRssForFeed() {
-  const { entries } = await getFeedEntries({ limit: 20 });
-  const lastUpdated = await FeedEntry.find({}, 'updatedAt')
-    .sort({ updatedAt: -1 })
-    .limit(1)
-    .lean();
+  try {
+    const { entries } = await getFeedEntries({ limit: 20 });
+    const lastUpdated = await FeedEntry.find({}, 'updatedAt')
+      .sort({ updatedAt: -1 })
+      .limit(1)
+      .lean();
 
-  const compiledPug = pug.compileFile(
-    new URL('../../pug/views/rss/feedEntry.pug', import.meta.url).pathname,
-  );
-  for (let entry of entries) {
-    entry.html = decode(
-      compiledPug({
-        entry,
-        options: { isRss: true, hasImage: hasImage(entry) },
-        toISOWithoutMillis,
-      }),
+    const compiledPug = pug.compileFile(
+      new URL('../../pug/views/rss/feedEntry.pug', import.meta.url).pathname,
     );
+    for (let entry of entries) {
+      entry.html = decode(
+        compiledPug({
+          entry,
+          options: { isRss: true, hasImage: hasImage(entry) },
+          toISOWithoutMillis,
+        }),
+      );
+    }
+
+    const xml = pug.renderFile(
+      new URL('../../pug/views/rss/feedRss.pug', import.meta.url).pathname,
+      {
+        path: 'feed',
+        title: "Molly White's activity feed",
+        lastUpdated: lastUpdated[0].updatedAt,
+        entries,
+        toISOWithoutMillis,
+      },
+    );
+    writeRssFile('../../rss/feedFeed.xml', xml);
+  } catch (err) {
+    console.error('Error in generateRssForFeed', err);
   }
-
-  const xml = pug.renderFile(
-    new URL('../../pug/views/rss/feedRss.pug', import.meta.url).pathname,
-    {
-      path: 'feed',
-      title: "Molly White's activity feed",
-      lastUpdated: lastUpdated[0].updatedAt,
-      entries,
-      toISOWithoutMillis,
-    },
-  );
-
-  writeRssFile('../../rss/feedFeed.xml', xml);
 }
 
 export async function generateRssForMicro() {
-  const { entries } = await getMicroEntries({ limit: 20 });
-  const lastUpdated = await MicroEntry.find({}, 'updatedAt')
-    .sort({ updatedAt: -1 })
-    .limit(1)
-    .lean();
+  try {
+    const { entries } = await getMicroEntries({ limit: 20 });
+    const lastUpdated = await MicroEntry.find({}, 'updatedAt')
+      .sort({ updatedAt: -1 })
+      .limit(1)
+      .lean();
 
-  const compiledPug = pug.compileFile(
-    new URL('../../pug/views/rss/microEntry.pug', import.meta.url).pathname,
-  );
-  for (let entry of entries) {
-    entry.__t = 'MicroEntry';
-    entry.html = compiledPug({
-      entry,
-      options: { isRss: true, hasImage: hasImage(entry) },
-      toISOWithoutMillis,
-    });
+    const compiledPug = pug.compileFile(
+      new URL('../../pug/views/rss/microEntry.pug', import.meta.url).pathname,
+    );
+    for (let entry of entries) {
+      entry.__t = 'MicroEntry';
+      entry.html = compiledPug({
+        entry,
+        options: { isRss: true, hasImage: hasImage(entry) },
+        toISOWithoutMillis,
+      });
+    }
+
+    const xml = pug.renderFile(
+      new URL('../../pug/views/rss/feedRss.pug', import.meta.url).pathname,
+      {
+        path: '/micro',
+        title: "Molly White's microblog feed",
+        lastUpdated: lastUpdated[0].updatedAt,
+        entries,
+        toISOWithoutMillis,
+      },
+    );
+
+    writeRssFile('../../rss/microFeed.xml', xml);
+  } catch (err) {
+    console.error('Error in generateRssForMicro', err);
   }
-
-  const xml = pug.renderFile(
-    new URL('../../pug/views/rss/feedRss.pug', import.meta.url).pathname,
-    {
-      path: '/micro',
-      title: "Molly White's microblog feed",
-      lastUpdated: lastUpdated[0].updatedAt,
-      entries,
-      toISOWithoutMillis,
-    },
-  );
-
-  writeRssFile('../../rss/microFeed.xml', xml);
 }
 
 export async function generateRssForShortform() {
-  const shortform = await getRssEntriesFromDb('shortform');
-  const results = await getRssResults(shortform, 'rssArticle');
-  const xml = pug.renderFile(
-    new URL('../../pug/views/rss/readingRss.pug', import.meta.url).pathname,
-    {
-      prefix: 'shortform',
-      results,
-      toISOWithoutMillis,
-    },
-  );
-  writeRssFile('../../rss/shortformFeed.xml', xml);
+  try {
+    const shortform = await getRssEntriesFromDb('shortform');
+    const results = await getRssResults(shortform, 'rssArticle');
+    const xml = pug.renderFile(
+      new URL('../../pug/views/rss/readingRss.pug', import.meta.url).pathname,
+      {
+        prefix: 'shortform',
+        results,
+        toISOWithoutMillis,
+      },
+    );
+    writeRssFile('../../rss/shortformFeed.xml', xml);
+  } catch (err) {
+    console.error('Error in generateRssForShortform', err);
+  }
 }
 
 export async function generateRssForBlockchain() {
-  const blockchain = await getRssEntriesFromDb('blockchain');
-  const results = await getRssResults(blockchain, 'rssArticle');
-  const xml = pug.renderFile(
-    new URL('../../pug/views/rss/readingRss.pug', import.meta.url).pathname,
-    {
-      prefix: 'blockchain',
-      results,
-      toISOWithoutMillis,
-    },
-  );
-  writeRssFile('../../rss/blockchainFeed.xml', xml);
+  try {
+    const blockchain = await getRssEntriesFromDb('blockchain');
+    const results = await getRssResults(blockchain, 'rssArticle');
+    const xml = pug.renderFile(
+      new URL('../../pug/views/rss/readingRss.pug', import.meta.url).pathname,
+      {
+        prefix: 'blockchain',
+        results,
+        toISOWithoutMillis,
+      },
+    );
+    writeRssFile('../../rss/blockchainFeed.xml', xml);
+  } catch (err) {
+    console.error('Error in generateRssForBlockchain', err);
+  }
 }
