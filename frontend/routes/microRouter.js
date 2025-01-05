@@ -114,7 +114,7 @@ router.get('/tag/:tag', async (req, res) => {
   if (tag) {
     hasResults = true;
     const result = await getMicroEntries({
-      query: { tag: tag._id },
+      query: { tags: tag._id },
       start,
       limit: LIMIT,
     });
