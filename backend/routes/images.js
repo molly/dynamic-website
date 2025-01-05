@@ -2,7 +2,7 @@ import { Storage } from '@google-cloud/storage';
 import axios from 'axios';
 import express from 'express';
 import multer from 'multer';
-import MulterGoogleCloudStorage from 'multer-cloud-storage';
+import MulterCustomStorage from '../helpers/MulterCustomStorage.js';
 
 import { getUniqueId } from '../../api/helpers/uniqueId.js';
 import { USER_AGENT } from '../config/requests.js';
@@ -14,7 +14,7 @@ const bucket = storage.bucket('storage.mollywhite.net');
 const router = express.Router();
 
 const uploadHandler = multer({
-  storage: MulterGoogleCloudStorage.storageEngine({
+  storage: new MulterCustomStorage({
     bucket: 'storage.mollywhite.net',
     destination: 'micro',
     keyFilename: new URL('../config/service-account.json', import.meta.url)
