@@ -75,7 +75,9 @@ export const filter = ({ results }, req, { defaultKey }) => {
   // ORDER
   if (defaultKey === 'SHORTFORM') {
     filteredResults.sort(makeSortByWeek(req.query.order));
-  } else if (defaultKey === 'BOOK' || defaultKey === 'BLOCKCHAIN') {
+  } else if (defaultKey === 'BOOK') {
+    filteredResults.sort(makeSortBySimpleDateKey('completed', req.query.order));
+  } else if (defaultKey === 'BLOCKCHAIN') {
     filteredResults.sort(makeSortBySimpleDateKey('started', req.query.order));
   } else {
     filteredResults.sort(makeSortBySimpleDateKey('date', req.query.order));
