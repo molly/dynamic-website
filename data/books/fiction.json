@@ -1,12 +1,27 @@
 [
   {
+    "title": "Babel",
+    "author": "R. F. Kuang",
+    "date": "2022",
+    "publisher": "Harper Voyager",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1677361825i/57945316.jpg",
+    "started": "2025-01-30",
+    "status": "currentlyReading",
+    "href": "https://www.goodreads.com/book/show/57945316-babel",
+    "tags": [
+      "fantasy",
+      "historical"
+    ]
+  },
+  {
     "title": "The Algebraist",
     "author": "Iain M. Banks",
     "date": "2004",
     "publisher": "Night Shade Books",
     "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388530602i/12009.jpg",
     "started": "2024-12-29",
-    "status": "currentlyReading",
+    "completed": "2025-01-30",
+    "status": "read",
     "href": "https://www.goodreads.com/book/show/12009.The_Algebraist",
     "tags": [
       "science_fiction",
