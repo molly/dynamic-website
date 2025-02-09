@@ -5,13 +5,15 @@
     "date": "2014",
     "publisher": "CreateSpace",
     "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1405532474i/22733729.jpg",
-    "started": "2025-02-03",
-    "status": "currentlyReading",
+    "started": "2025-02-07",
+    "completed": "2025-02-08",
+    "status": "read",
     "href": "https://www.goodreads.com/book/show/22733729-the-long-way-to-a-small-angry-planet",
     "tags": [
+      "cozy",
+      "lgbt",
       "science_fiction",
-      "space_opera",
-      "lgbt"
+      "space_opera"
     ]
   },
   {
