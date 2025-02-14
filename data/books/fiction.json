@@ -1,12 +1,28 @@
 [
   {
+    "title": "Dungeon Crawler Carl",
+    "author": "Matt Dinniman",
+    "date": "2020",
+    "publisher": "Ace Books",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1715780755i/211721806.jpg",
+    "started": "2025-02-13",
+    "status": "currentlyReading",
+    "href": "https://www.goodreads.com/book/show/211721806-dungeon-crawler-carl",
+    "tags": [
+      "humor",
+      "fantasy",
+      "science_fiction"
+    ]
+  },
+  {
     "title": "Heavy Weather",
     "author": "Bruce Sterling",
     "date": "1994",
     "publisher": "Bantam",
     "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1403180973i/359386.jpg",
     "started": "2025-02-11",
-    "status": "currentlyReading",
+    "completed": "2025-02-12",
+    "status": "read",
     "href": "https://www.goodreads.com/book/show/359386.Heavy_Weather",
     "tags": [
       "cyberpunk",
