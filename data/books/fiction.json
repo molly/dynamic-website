@@ -1,12 +1,28 @@
 [
   {
+    "title": "Carl's Doomsday Scenario",
+    "author": "Matt Dinniman",
+    "date": "2021",
+    "publisher": "Ace Books",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1719949673i/212393364.jpg",
+    "started": "2025-02-16",
+    "status": "currentlyReading",
+    "href": "https://www.goodreads.com/book/show/212393364-carl-s-doomsday-scenario",
+    "tags": [
+      "humor",
+      "fantasy",
+      "science_fiction"
+    ]
+  },
+  {
     "title": "Dungeon Crawler Carl",
     "author": "Matt Dinniman",
     "date": "2020",
     "publisher": "Ace Books",
     "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1715780755i/211721806.jpg",
     "started": "2025-02-13",
-    "status": "currentlyReading",
+    "completed": "2025-02-16",
+    "status": "read",
     "href": "https://www.goodreads.com/book/show/211721806-dungeon-crawler-carl",
     "tags": [
       "humor",
@@ -225,8 +241,8 @@
     "started": "2022-06-26",
     "completed": "2022-06-26",
     "tags": [
-      "science_fiction",
-      "comedy"
+      "humor",
+      "science_fiction"
     ]
   },
   {
