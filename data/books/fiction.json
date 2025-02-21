@@ -1,12 +1,43 @@
 [
   {
+    "title": "The Dungeon Anarchist's Cookbook",
+    "author": "Matt Dinniman",
+    "date": "2021",
+    "publisher": "Ace Books",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1719949594i/211721809.jpg",
+    "started": "2025-02-19",
+    "status": "currentlyReading",
+    "href": "https://www.goodreads.com/book/show/57001971-the-dungeon-anarchist-s-cookbook",
+    "tags": [
+      "humor",
+      "fantasy",
+      "science_fiction"
+    ]
+  },
+  {
+    "title": "The Bezzle",
+    "author": "Cory Doctorow",
+    "date": "2024",
+    "publisher": "Tor Books",
+    "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1690390791i/127306588.jpg",
+    "started": "2025-02-19",
+    "completed": "2025-02-19",
+    "status": "read",
+    "href": "https://www.goodreads.com/book/show/127306588-the-bezzle",
+    "tags": [
+      "thriller",
+      "crime"
+    ]
+  },
+  {
     "title": "Carl's Doomsday Scenario",
     "author": "Matt Dinniman",
     "date": "2021",
     "publisher": "Ace Books",
     "imageSrc": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1719949673i/212393364.jpg",
     "started": "2025-02-16",
-    "status": "currentlyReading",
+    "completed": "2025-02-19",
+    "status": "read",
     "href": "https://www.goodreads.com/book/show/212393364-carl-s-doomsday-scenario",
     "tags": [
       "humor",
