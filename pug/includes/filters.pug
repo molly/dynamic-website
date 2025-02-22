@@ -28,6 +28,27 @@
               aria-pressed=query.statuses.includes(status.value).toString()
               type="button"
             ) #{status.text}
+      
+      .checkboxes-wrapper
+        .checkboxes 
+          .checkbox-group
+            input(
+              type="checkbox"
+              name="ficNonfic"
+              value="hidefiction" 
+              checked=!query.hidefiction
+              id="hidefiction"
+            )
+            label(for="hidefiction") Fiction
+          .checkbox-group
+            input(
+              type="checkbox"
+              name="ficNonfic"
+              value="hidenonfiction" 
+              checked=!query.hidenonfiction
+              id="hidenonfiction"
+            )
+            label(for="hidenonfiction") Non-fiction
 
     .search-form
       label(for="search") Search

@@ -1,7 +1,7 @@
 extends ../templates/base.pug
 
 block vars
-  - var htmlClass = 'reading';
+  - var htmlClass = 'reading landing';
   - var page = 'reading';
   - var importPrefix = 'https://www.mollywhite.net'
   - var showTagCount = true
@@ -37,14 +37,7 @@ block body
             
       .reading-section
         h3
-          a(href="/reading/fiction") Fiction
+          a(href="/reading/fiction") Books 
         .reading-section-body  
           include ../mixins/currentlyReadingSummary.pug
-          +currentlyReadingSummary(currentlyReadingPleasure)
-          
-      .reading-section
-        h3
-          a(href="/reading/nonfiction") Non-fiction
-        .reading-section-body  
-          include ../mixins/currentlyReadingSummary.pug
-          +currentlyReadingSummary(currentlyReadingReference)
+          +currentlyReadingSummary(currentlyReadingBooks)

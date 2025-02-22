@@ -5,18 +5,19 @@ block vars
   - var page = 'pleasure';
   - var importPrefix = 'https://www.mollywhite.net'
   - var showTagCount = true
+  - var frequencyCategory = 'total' 
   - var showStatusFilter = true
 
 block head
   include ../templates/titleAndDescription.pug
   link(rel='stylesheet', href="/static/reading.css")
-  +titleAndDescription('Fiction reading', 'Molly White\'s fiction reading list.')
+  +titleAndDescription('Books', 'Molly White\'s book reading list.')
 
 block body
   main
     .content-box.h-feed.hfeed
       a(href="/reading") < All reading lists
-      h3.p-name.site-title(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Fiction reading
+      h3.p-name.site-title(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Books
 
       include ../includes/filters.pug
 

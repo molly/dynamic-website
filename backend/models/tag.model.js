@@ -14,3 +14,4 @@ export const TagSchema = new mongoose.Schema({
   },
 });
 export const Tag = db.tagConnection.model('Tag', TagSchema, 'tags');
+export const BookTag = db.tagConnection.model('Tag', TagSchema, 'bookTags');

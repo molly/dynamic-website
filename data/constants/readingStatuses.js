@@ -2,8 +2,7 @@ const BASE_READING_STATUSES_LIST = [
   { text: 'currently reading', value: 'currentlyReading' },
   { text: 'read', value: 'read' },
   { text: 'reference', value: 'reference' },
-  { text: 'shelved', value: 'shelved' },
-  { text: 'to read', value: 'toRead' },
+  { text: 'did not finish', value: 'dnf' },
 ];
 
 export const READING_STATUSES_MAP = BASE_READING_STATUSES_LIST.reduce(

@@ -73,9 +73,9 @@
   cursor: pointer;
   background-color: var(--accent-color-purple-background-hover);
 }
-.reading .filter-box button.tag[aria-pressed='true'],
-.wikipedia-writing .filter-box button.tag[aria-pressed='true'] {
-  background-color: var(--accent-color-purple-background);
+.reading .filter-box button[aria-pressed='true'],
+.wikipedia-writing .filter-box button[aria-pressed='true'] {
+  background-color: var(--accent-color-purple-background-hover);
 }
 .reading fieldset,
 .wikipedia-writing fieldset {
@@ -249,6 +249,19 @@
 .wikipedia-writing .book .reading-info {
   font-size: 1.1rem;
 }
+.reading:not(.landing) .book .reading-info {
+  margin-top: 1rem;
+}
+.reading .book .book-info,
+.reading .book .series-info {
+  font-size: 0.9rem;
+}
+.reading .book .book-info {
+  line-height: 1.25rem;
+}
+.reading .book .series-info {
+  line-height: 1rem;
+}
 .reading .book .reading-dates,
 .wikipedia-writing .book .reading-dates {
   display: inline-block;
@@ -410,22 +423,27 @@
 .wikipedia-writing .icons .icon-image a img {
   max-height: 100%;
 }
-.wikipedia-writing .checkboxes-wrapper {
+.wikipedia-writing .checkboxes-wrapper,
+.reading. .checkboxes-wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.wikipedia-writing .checkboxes-wrapper .checkboxes {
+.wikipedia-writing .checkboxes-wrapper .checkboxes,
+.reading .checkboxes-wrapper .checkboxes {
   display: flex;
 }
-.wikipedia-writing .checkboxes-wrapper .checkboxes .checkbox-group {
+.wikipedia-writing .checkboxes-wrapper .checkboxes .checkbox-group,
+.reading .checkboxes-wrapper .checkboxes .checkbox-group {
   display: flex;
   align-items: center;
   margin-right: 0.375rem;
 }
-.wikipedia-writing .checkboxes-wrapper .checkboxes .checkbox-group input {
+.wikipedia-writing .checkboxes-wrapper .checkboxes .checkbox-group input,
+.reading .checkboxes-wrapper .checkboxes .checkbox-group input {
   margin-right: 0.375rem;
 }
-.wikipedia-writing .checkboxes-wrapper .checkboxes .checkbox-group label {
+.wikipedia-writing .checkboxes-wrapper .checkboxes .checkbox-group label,
+.reading .checkboxes-wrapper .checkboxes .checkbox-group label {
   display: inline;
 }

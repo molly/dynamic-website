@@ -128,6 +128,13 @@ function onFiltersSubmit(e) {
         onCheckboxClick(this.id);
       });
     });
+  document
+    .querySelectorAll('input[type="checkbox"][name="ficNonfic"]')
+    .forEach(function (checkbox) {
+      checkbox.addEventListener('click', function () {
+        onCheckboxClick(this.id);
+      });
+    });
 
   // Pagination handlers
   if (document.getElementById('paginator')) {

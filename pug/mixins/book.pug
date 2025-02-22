@@ -1,7 +1,7 @@
 mixin book(book) 
   .book.h-entry.hentry
     if book.imageSrc 
-      if book.href && !shortForm
+      if book.href 
         a.book-cover-link(href=book.href)
           img.u-photo(
             class={'book-cover': true, 'bordered': book.border},
@@ -16,72 +16,60 @@ mixin book(book)
         )
 
     .book-details
-      if book.type === "chapter"
-        .chapter-title "#{book.chapterTitle}".
+      if book.series
+        .series-info
+          i #{book.series}
+          |  series
+          if book.seriesNumber
+            | , book #[span.series-number #{book.seriesNumber}]
+          | .
       .title
-        if book.type === "chapter"
-          | in 
         i.p-name #{book.title}
 
         if book.subtitle 
           .subtitle 
             i #{book.subtitle}
 
+
       .byline
         if book.author
+          | by  
           include ./author.pug
           +author(book.author)
-          if !shortForm
-            | .
         if book.editor 
           if book.author 
             |  
           | #{book.editor} (ed.).
 
-        if !shortForm
-          if book.publisher
-            |  Published by #{book.publisher}
-            if !book.formattedDate
-              | .
-            else
-              | , #[time.dt-published.published(datetime=book.date) #{book.formattedDate}].
-          else 
-            if book.formattedDate
-              | Published #[time.dt-published.published(datetime=book.date) #{book.formattedDate}]. 
+      .book-info
+        if book.publisher
+          |  #{book.publisher}
+          if !book.formattedDate
+            | .
+          else
+            | , #[time.dt-published.published(datetime=book.date) #{book.formattedDate}].
+        else 
+          if book.formattedDate
+            | #[time.dt-published.published(datetime=book.date) #{book.formattedDate}]. 
+        if book.pages 
+          |  #{book.pages} pages.
       
-      if !shortForm
-        .reading-info
-          if book.status
-            div.p-category(class=['status', book.status])
-              != READING_STATUSES_MAP[book.status][0].toUpperCase() + READING_STATUSES_MAP[book.status].substr(1)
-          
-          if book.formattedStarted
-            .reading-dates 
-              | Started #[time.dt-accessed.accessed(datetime=book.started) #{book.formattedStarted}]
-              if !book.formattedCompleted
-                | .
-              else 
-                | ; completed #{book.formattedCompleted}.
-            
-      if page === 'reference' && !shortForm 
-        if book.targetArticles.length 
-          .target-articles
-            i.fab.fa-wikipedia-w
-            span.header For Wikipedia article
-              if book.targetArticles.length === 1
-                |: 
-              else 
-                |s: 
-            
-            ul 
-              each ta, index in book.targetArticles
-                a(href=ta.href) #{ta.title}
-                if index !== book.targetArticles.length - 1
-                  span , 
-
       if book.tags && book.tags.length
         .tags
           each tag, index in book.tags
             span.p-category #{typeof tag === 'string' ? tag.replace(/_/g, " ") : tag.text}
             if index !== book.tags.length - 1
               | , 
+      
+      .reading-info
+        if !shortForm && book.status
+          div.p-category(class=['status', book.status])
+            != READING_STATUSES_MAP[book.status][0].toUpperCase() + READING_STATUSES_MAP[book.status].substr(1)
+        
+        if book.formattedStarted
+          .reading-dates 
+            | Started #[time.dt-accessed.accessed(datetime=book.started) #{book.formattedStarted}]
+            if !book.formattedCompleted
+              | .
+            else 
+              | ; completed #{book.formattedCompleted}.
