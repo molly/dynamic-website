@@ -49,7 +49,6 @@ export const hydrateFeedEntry = (entry) => {
         ...entry.book,
         ...formatArticleDate(entry.book),
       };
-      console.log(entry);
     }
   }
   return entry;

@@ -45,13 +45,14 @@ router.post(
       const tags = await updateTagsOnCreate(req.body.tags, 'micro', true);
 
       // Make or update book record
-      let bookEntry = await Book.find({
+      let bookEntries = await Book.find({
         title: req.body.title,
         author: req.body.author,
       });
+      let bookEntry;
       let bookEntryId;
 
-      if (!bookEntry.length) {
+      if (!bookEntries.length) {
         // Create new
         bookEntryId = new mongoose.Types.ObjectId();
         bookEntry = await new Book({
@@ -61,7 +62,8 @@ router.post(
         }).save();
       } else {
         // Update existing
-        bookEntryId = bookEntry[0]._id;
+        bookEntry = bookEntries[0];
+        bookEntryId = bookEntry._id;
         Object.keys(req.body)
           .filter(
             (key) => !['_id', 'createdAt', 'updatedAt', '__v'].includes(key),

@@ -20,20 +20,27 @@ export const updateTagsOnCreate = async (tags, category, isBook = false) => {
       if (mongoose.isValidObjectId(tag)) {
         tagRecord = await tagModel.findById(tag);
         if (tagRecord) {
-          tagRecord.frequency[category] += 1;
+          if (!isBook) {
+            tagRecord.frequency[category] += 1;
+          }
           tagRecord.frequency.total += 1;
           const savedTag = await tagRecord.save();
           tagIds.push(savedTag._id);
           continue;
         }
       }
-      const frequency = {
-        shortform: 0,
-        blockchain: 0,
-        micro: 0,
-        citationNeeded: 0,
+      let frequency = {
         total: 1,
       };
+      if (!isBook) {
+        frequency = {
+          shortform: 0,
+          blockchain: 0,
+          micro: 0,
+          citationNeeded: 0,
+          total: 1,
+        };
+      }
       frequency[category] = 1;
       tagRecord = new tagModel({
         value: tag.replace(/[- ]/g, '_').toLowerCase(),
