@@ -6,7 +6,7 @@ import {
 } from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
-import { Tag } from '../backend/models/tag.model.js';
+import { BookTag, Tag } from '../backend/models/tag.model.js';
 import { Webmention } from '../backend/models/webmention.model.js';
 import { formatArticleDate } from '../data/filter/preprocess.js';
 import { getReadingDetails } from './helpers/reading.js';
@@ -49,6 +49,7 @@ export const hydrateFeedEntry = (entry) => {
         ...entry.book,
         ...formatArticleDate(entry.book),
       };
+      console.log(entry);
     }
   }
   return entry;
@@ -92,6 +93,22 @@ export const getFeedEntries = async ({
     .populate({ path: 'blockchain', model: BlockchainEntry })
     .populate({ path: 'book', model: Book })
     .lean();
+
+  if (entries.some((entry) => 'book' in entry)) {
+    const bookTags = await BookTag.find({}).lean();
+    const bookTagsMap = bookTags.reduce((acc, tag) => {
+      const { _id, ...rest } = tag;
+      acc[_id.toString()] = rest;
+      return acc;
+    }, {});
+    entries.forEach((entry) => {
+      if ('book' in entry) {
+        entry.book.tags = entry.book.tags.map((tagId) => bookTagsMap[tagId]);
+        entry.tags = entry.tags.map((tagId) => bookTagsMap[tagId]);
+      }
+    });
+  }
+
   const hydrated = hydrateFeedEntries(entries);
 
   const totalResults = await FeedEntry.countDocuments(query);

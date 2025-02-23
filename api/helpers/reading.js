@@ -1,8 +1,8 @@
 export function getReadingDetails(feedEntry) {
   const entry = feedEntry.shortform || feedEntry.blockchain || feedEntry.book;
-  if (entry.book) {
+  if ('book' in feedEntry) {
     const details = { icon: 'book' };
-    switch (entry.book.status) {
+    switch (entry.status) {
       case 'read':
         details.verb = 'Finished reading';
         break;
