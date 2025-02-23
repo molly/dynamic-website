@@ -3,8 +3,9 @@ mixin book(book, embedded=false)
   - var READING_STATUSES_MAP =  {'currentlyReading': "Currently reading", 'read': "Read", "dnf": "Did not finish", "reference": "Reference"}
   .book.h-entry.hentry
     if book.imageSrc 
-      if book.href 
-        a.book-cover-link(href=book.href)
+      if embedded || book.href
+        - var link = embedded ? `https://www.mollywhite.net/reading/books?search=${encodeURIComponent(book.title)}` : book.href;
+        a.book-cover-link(href=link)
           img.u-photo(
             class={'book-cover': true, 'bordered': book.border},
             src=book.imageSrc,

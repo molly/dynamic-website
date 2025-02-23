@@ -35,14 +35,16 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false, hasImage
             else if "book" in entry
               a(href=`${baseUrl}/reading/books`) book reading list 
             | .
-      .tags
-        if "book" in entry && readingEntry.tags && readingEntry.tags.length
-          each tag, index in readingEntry.tags
-            a.tag.p-category(href=`${baseUrl}/reading/books?tags=${tag.value}` title=`See all books tagged "${tag.text}"` rel="category tag") #{tag.text}
-            if isRss && index !== readingEntry.tags.length - 1
-              | , 
-        else
-          if entry.tags && entry.tags.length
+      if "book" in entry && readingEntry.tags && readingEntry.tags.length
+        .bottomRow
+          .tags
+            each tag, index in readingEntry.tags
+              a.tag.p-category(href=`${baseUrl}/reading/books?tags=${tag.value}` title=`See all books tagged "${tag.text}"` rel="category tag") #{tag.text}
+              if isRss && index !== readingEntry.tags.length - 1
+                | , 
+      else if entry.tags && entry.tags.length
+        .bottomRow
+          .tags
             each tag, index in entry.tags 
               a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}` title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
               if isRss && index !== entry.tags.length - 1

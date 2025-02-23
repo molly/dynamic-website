@@ -48,9 +48,10 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false, hasImage=false
                   +icon(socialLink.type)
                 else
                   | #{socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1)}
-      .tags
-        if entry.tags && entry.tags.length
-          each tag, index in entry.tags 
-            a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}`, title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
-            if isRss && index !== entry.tags.length - 1
-              | , 
+      .bottomRow
+        .tags
+          if entry.tags && entry.tags.length
+            each tag, index in entry.tags 
+              a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}`, title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+              if isRss && index !== entry.tags.length - 1
+                | , 

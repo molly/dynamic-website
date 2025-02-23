@@ -23,11 +23,6 @@ router.get('/', async function (req, res) {
     start,
     limit: LIMIT,
   });
-  for (const entry of result.entries) {
-    if (entry.book) {
-      console.log(entry.book.tags);
-    }
-  }
 
   res.render('feed/index.pug', {
     entries: result.entries,
