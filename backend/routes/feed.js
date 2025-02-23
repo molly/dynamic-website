@@ -77,7 +77,10 @@ router.post(
             (key) => !['_id', 'createdAt', 'updatedAt', '__v'].includes(key),
           )
           .forEach((key) => {
-            if (bookEntry[key] !== req.body[key]) {
+            if (
+              (Array.isArray(req.body[key]) && req.body[key].length > 0) || // Don't erase arrays if the new array is empty
+              bookEntry[key] !== req.body[key]
+            ) {
               bookEntry[key] = req.body[key];
             }
           });
