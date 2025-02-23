@@ -54,12 +54,18 @@ export const updateTagsOnCreate = async (tags, category, isBook = false) => {
   return tagIds;
 };
 
-export const updateTagsOnEdit = async (oldTags, newTags, category) => {
+export const updateTagsOnEdit = async (
+  oldTags,
+  newTags,
+  category,
+  isBook = false,
+) => {
+  const tagModel = isBook ? BookTag : Tag;
   const unchangedTags = newTags.filter((t) => hasTag(oldTags, t));
   const tagsToAdd = newTags.filter((t) => !hasTag(oldTags, t));
   const tagsToRemove = oldTags.filter((t) => !hasTag(newTags, t));
   const addPromise = updateTagsOnCreate(tagsToAdd, category);
-  const removePromise = Tag.updateMany(
+  const removePromise = tagModel.updateMany(
     { _id: { $in: tagsToRemove } },
     { $inc: { [`frequency.${category}`]: -1, 'frequency.total': -1 } },
   );

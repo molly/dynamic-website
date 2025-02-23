@@ -40,9 +40,10 @@ router.post(
       const postToFeed = req.body.postToFeed;
       delete req.body.postToFeed;
 
-      // Update tags (create new ones if necessary, increment usage frequency)
-      // Has to happen before the entry is created, or else we don't have the tag IDs to reference
-      const tags = await updateTagsOnCreate(req.body.tags, 'micro', true);
+      if (req.body.tags && req.body.tags.length) {
+        // Update tags (create new ones if necessary, increment usage frequency)
+        // Has to happen before the entry is created, or else we don't have the tag IDs to reference
+      }
 
       // Make or update book record
       let bookEntries = await Book.find({
@@ -51,10 +52,11 @@ router.post(
       });
       let bookEntry;
       let bookEntryId;
-
+      let tags;
       if (!bookEntries.length) {
         // Create new
         bookEntryId = new mongoose.Types.ObjectId();
+        tags = await updateTagsOnCreate(req.body.tags, 'book', true);
         bookEntry = await new Book({
           ...req.body,
           tags,
@@ -64,6 +66,12 @@ router.post(
         // Update existing
         bookEntry = bookEntries[0];
         bookEntryId = bookEntry._id;
+        tags = await updateTagsOnEdit(
+          bookEntry.tags,
+          req.body.tags,
+          'book',
+          true,
+        );
         Object.keys(req.body)
           .filter(
             (key) => !['_id', 'createdAt', 'updatedAt', '__v'].includes(key),
@@ -81,6 +89,7 @@ router.post(
       if (postToFeed) {
         feedEntry = await new FeedEntryReading({
           book: bookEntryId,
+          status: req.body.status,
           tags,
         }).save();
       }

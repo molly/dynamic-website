@@ -71,5 +71,9 @@ export const FeedEntryReading = FeedEntry.discriminator(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Book',
     },
+    status: {
+      type: String,
+      enum: ['read', 'currentlyReading', 'dnf', 'reference', 'toRead'],
+    },
   }),
 );
