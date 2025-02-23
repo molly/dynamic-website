@@ -1,3 +1,4 @@
+import { Book } from '../backend/models/book.model.js';
 import db from '../backend/models/db.js';
 import {
   BlockchainEntry,
@@ -42,6 +43,12 @@ export const hydrateFeedEntry = (entry) => {
         ...entry.blockchain,
         ...formatArticleDate(entry.blockchain),
       };
+    } else if ('book' in entry) {
+      entry.entryType = 'readingBook';
+      entry.book = {
+        ...entry.book,
+        ...formatArticleDate(entry.book),
+      };
     }
   }
   return entry;
@@ -83,6 +90,7 @@ export const getFeedEntries = async ({
       model: ShortformEntry,
     })
     .populate({ path: 'blockchain', model: BlockchainEntry })
+    .populate({ path: 'book', model: Book })
     .lean();
   const hydrated = hydrateFeedEntries(entries);
 

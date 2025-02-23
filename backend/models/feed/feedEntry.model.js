@@ -67,5 +67,9 @@ export const FeedEntryReading = FeedEntry.discriminator(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'BlockchainEntry',
     },
+    book: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Book',
+    },
   }),
 );

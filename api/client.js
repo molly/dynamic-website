@@ -53,6 +53,7 @@ const makeQuery = async (req, book = false) => {
       'publisher',
       'summary',
       'parenthetical',
+      'series',
     ];
     query.$or = fields.map((field) => ({
       [field]: { $regex: escapedSearchQuery, $options: 'i' },
@@ -209,9 +210,11 @@ export const getPaginatedAndFilteredBooksFromDb = async (
     const results = (queryResult[0]?.data || []).map((result) => {
       return {
         ...result,
-        tags: result.tags.map((tagId) => {
-          return allTagsMap[tagId.toString()];
-        }),
+        tags: result.tags
+          .map((tagId) => {
+            return allTagsMap[tagId.toString()];
+          })
+          .sort((a, b) => a.text.localeCompare(b.text)),
       };
     });
 

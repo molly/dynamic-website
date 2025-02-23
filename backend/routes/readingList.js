@@ -6,7 +6,7 @@ import {
   ShortformEntry,
 } from '../models/entry.model.js';
 import { FeedEntryReading } from '../models/feed/feedEntry.model.js';
-import { Tag } from '../models/tag.model.js';
+import { BookTag, Tag } from '../models/tag.model.js';
 import { authenticated } from './auth.js';
 
 const router = express.Router();
@@ -20,6 +20,11 @@ const models = {
 router.get('/tags', async (_, res) => {
   const tags = await Tag.find({}, { __v: 0 }).lean();
   res.send(tags);
+});
+
+router.get('/bookTags', async (_, res) => {
+  const bookTags = await BookTag.find({}, { __v: 0 }).lean();
+  res.send(bookTags);
 });
 
 router.post('/entry', authenticated(), async (req, res) => {

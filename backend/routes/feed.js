@@ -1,8 +1,10 @@
 import express from 'express';
+import mongoose from 'mongoose';
 
 import { mergeSocialLinks } from '../../frontend/js/helpers/editorHelpers.js';
 import { validateGhostWebhook } from '../helpers/ghostAuth.js';
-import { updateTagsOnEdit } from '../helpers/tags.js';
+import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
+import { Book } from '../models/book.model.js';
 import { BlockchainEntry, ShortformEntry } from '../models/entry.model.js';
 import {
   FeedEntryCitationNeeded,
@@ -29,6 +31,65 @@ router.post('/citationNeeded', validateGhostWebhook, async (req, res) => {
     res.status(500).send({ error: err });
   }
 });
+
+router.post(
+  '/book',
+  authenticated({ redirectTo: '/micro/login' }),
+  async function (req, res) {
+    try {
+      const postToFeed = req.body.postToFeed;
+      delete req.body.postToFeed;
+
+      // Update tags (create new ones if necessary, increment usage frequency)
+      // Has to happen before the entry is created, or else we don't have the tag IDs to reference
+      const tags = await updateTagsOnCreate(req.body.tags, 'micro', true);
+
+      // Make or update book record
+      let bookEntry = await Book.find({
+        title: req.body.title,
+        author: req.body.author,
+      });
+      let bookEntryId;
+
+      if (!bookEntry.length) {
+        // Create new
+        bookEntryId = new mongoose.Types.ObjectId();
+        bookEntry = await new Book({
+          ...req.body,
+          tags,
+          _id: bookEntryId,
+        }).save();
+      } else {
+        // Update existing
+        bookEntryId = bookEntry[0]._id;
+        Object.keys(req.body)
+          .filter(
+            (key) => !['_id', 'createdAt', 'updatedAt', '__v'].includes(key),
+          )
+          .forEach((key) => {
+            if (bookEntry[key] !== req.body[key]) {
+              bookEntry[key] = req.body[key];
+            }
+          });
+        await bookEntry.save();
+      }
+
+      // Add entry to feed
+      let feedEntry;
+      if (postToFeed) {
+        feedEntry = await new FeedEntryReading({
+          book: bookEntryId,
+          tags,
+        }).save();
+      }
+
+      res.json([bookEntry, feedEntry]);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send({ error: err });
+    }
+  },
+);
 
 // Tagger
 router.post('/tags/:entryType', authenticated(), async (req, res) => {

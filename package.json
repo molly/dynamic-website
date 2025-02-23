@@ -17,7 +17,7 @@
     "lint": "eslint . --fix",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js ./test",
     "postinstall": "patch-package",
-    "scripts": "node backend/scripts/recountTags.js"
+    "scripts": "node backend/scripts/loadBooks.js"
   },
   "dependencies": {
     "@atproto/api": "^0.10.4",
@@ -40,7 +40,6 @@
     "cookie-parser": "^1.4.6",
     "cookie-session": "^2.1.0",
     "core-js": "^3.36.0",
-    "cors": "^2.8.5",
     "editorjs-gallery": "^1.0.12",
     "editorjs-html": "^3.4.3",
     "express": "^4.18.2",

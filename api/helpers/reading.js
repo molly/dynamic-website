@@ -1,5 +1,26 @@
 export function getReadingDetails(feedEntry) {
-  const entry = feedEntry.shortform || feedEntry.blockchain;
+  const entry = feedEntry.shortform || feedEntry.blockchain || feedEntry.book;
+  if (entry.book) {
+    const details = { icon: 'book' };
+    switch (entry.book.status) {
+      case 'read':
+        details.verb = 'Finished reading';
+        break;
+      case 'currentlyReading':
+        details.verb = 'Started reading';
+        break;
+      case 'dnf':
+        details.verb = 'Stopped reading';
+        break;
+      case 'reference':
+        details.verb = 'Referenced';
+        break;
+      default:
+        details.verb = 'Read';
+    }
+    return details;
+  }
+
   const parenthetical = entry.parenthetical
     ? entry.parenthetical.toLowerCase()
     : null;

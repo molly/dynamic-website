@@ -10,23 +10,40 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false, hasImage
       else
         .description #{entry.verb}:
     .content.e-content
-      include ../shortformArticle.pug
-      +shortformArticle(readingEntry, isRss, true)
+      if "book" in entry 
+        include ../book.pug
+        +book(readingEntry)
+      else
+        include ../shortformArticle.pug
+        +shortformArticle(readingEntry, isRss, true)
       if isRss && !hasImage
         img(src="https://www.mollywhite.net/assets/images/placeholder_social.png", alt="Illustration of Molly White sitting and typing on a laptop, on a purple background with 'Molly White' in white serif.", style="display: none;")
     footer.footer
       .flex-row.post-meta
         .timestamp
           time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
-          if isLoggedIn
+          if isLoggedIn && !("book" in entry)
             span.edit-icon.icon
               a(href=`${baseUrl}/feed/tagger/reading${'shortform' in entry ? 'Shortform' : 'Blockchain'}/${entry._id}`)
                 include ../../icons/pencil.svg
           if !isRss
-            |  from the #[a(href=`${baseUrl}/reading/${'shortform' in entry ? 'shortform' : 'blockchain'}`) #{'shortform' in entry ? 'shortform' : 'blockchain'} reading list].
+            |  from the 
+            if "shortform" in entry
+              a(href=`${baseUrl}/reading/shortform`) shortform reading list
+            else if "blockchain" in entry
+              a(href=`${baseUrl}/reading/blockchain`) blockchain reading list
+            else if "book" in entry
+              a(href=`${baseUrl}/reading/books`) book reading list 
+            | .
       .tags
-        if entry.tags && entry.tags.length
-          each tag, index in entry.tags 
-            a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}` title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
-            if isRss && index !== entry.tags.length - 1
+        if "book" in entry && readingEntry.tags && readingEntry.tags.length
+          each tag, index in readingEntry.tags
+            a.tag.p-category(href=`${baseUrl}/reading/books?tags=${tag.value}` title=`See all books tagged "${tag.text}"` rel="category tag") #{tag.text}
+            if isRss && index !== readingEntry.tags.length - 1
               | , 
+        else
+          if entry.tags && entry.tags.length
+            each tag, index in entry.tags 
+              a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}` title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+              if isRss && index !== entry.tags.length - 1
+                | , 

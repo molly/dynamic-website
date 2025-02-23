@@ -12,3 +12,6 @@ mixin feedEntry(entry, options)
     when "readingBlockchain"
       include ./readingEntry.pug
       +readingEntry(entry, entry.blockchain, options)
+    when "readingBook"
+      include ./readingEntry.pug
+      +readingEntry(entry, entry.book, options)

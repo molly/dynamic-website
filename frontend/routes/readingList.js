@@ -13,7 +13,6 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const results = await getLandingPageSummary();
-  console.log(results);
   res.render('reading.pug', { READING_STATUSES_MAP, ...results });
 });
 
