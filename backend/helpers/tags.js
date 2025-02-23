@@ -64,10 +64,14 @@ export const updateTagsOnEdit = async (
   const unchangedTags = newTags.filter((t) => hasTag(oldTags, t));
   const tagsToAdd = newTags.filter((t) => !hasTag(oldTags, t));
   const tagsToRemove = oldTags.filter((t) => !hasTag(newTags, t));
-  const addPromise = updateTagsOnCreate(tagsToAdd, category);
+  const addPromise = updateTagsOnCreate(tagsToAdd, category, isBook);
+  const updateFields = { 'frequency.total': -1 };
+  if (!isBook) {
+    updateFields[`frequency.${category}`] = -1;
+  }
   const removePromise = tagModel.updateMany(
     { _id: { $in: tagsToRemove } },
-    { $inc: { [`frequency.${category}`]: -1, 'frequency.total': -1 } },
+    { $inc: updateFields },
   );
   const [added] = await Promise.all([addPromise, removePromise]);
   return [...unchangedTags, ...added]; // Don't really care about tag order, we can just mash these together.

@@ -52,11 +52,13 @@ router.post(
       });
       let bookEntry;
       let bookEntryId;
-      let tags;
+      let tags = [];
       if (!bookEntries.length) {
         // Create new
         bookEntryId = new mongoose.Types.ObjectId();
-        tags = await updateTagsOnCreate(req.body.tags, 'book', true);
+        if (req.body.tags && req.body.tags.length) {
+          tags = await updateTagsOnCreate(req.body.tags, 'book', true);
+        }
         bookEntry = await new Book({
           ...req.body,
           tags,
@@ -66,12 +68,14 @@ router.post(
         // Update existing
         bookEntry = bookEntries[0];
         bookEntryId = bookEntry._id;
-        tags = await updateTagsOnEdit(
-          bookEntry.tags,
-          req.body.tags,
-          'book',
-          true,
-        );
+        if (req.body.tags && req.body.tags.length) {
+          tags = await updateTagsOnEdit(
+            bookEntry.tags,
+            req.body.tags,
+            'book',
+            true,
+          );
+        }
         Object.keys(req.body)
           .filter(
             (key) => !['_id', 'createdAt', 'updatedAt', '__v'].includes(key),
