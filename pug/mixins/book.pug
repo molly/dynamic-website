@@ -1,4 +1,6 @@
+
 mixin book(book) 
+  - var READING_STATUSES_MAP =  {'currentlyReading': "Currently reading", 'read': "Read", "dnf": "Did not finish", "reference": "Reference"}
   .book.h-entry.hentry
     if book.imageSrc 
       if book.href 
@@ -62,7 +64,7 @@ mixin book(book)
               | , 
       
       .reading-info
-        if !shortForm && book.status
+        if !shortForm && book.status && book.status in READING_STATUSES_MAP
           div.p-category(class=['status', book.status])
             != READING_STATUSES_MAP[book.status][0].toUpperCase() + READING_STATUSES_MAP[book.status].substr(1)
         
