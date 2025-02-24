@@ -6,6 +6,7 @@ import { getFeedEntries } from '../../api/feed.js';
 import { getMicroEntries } from '../../api/micro.js';
 import getRssResults from '../../data/filter/rss.js';
 import { toISOWithoutMillis } from '../../pug/js/toISO.js';
+import { ShortformEntry } from '../models/entry.model.js';
 import { FeedEntry } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 
@@ -106,6 +107,19 @@ export async function generateRssForMicro() {
 
 export async function generateRssForReading() {
   try {
+    const lastUpdated = await ShortformEntry.aggregate([
+      { $match: { updatedAt: { $ne: null } } }, // Filter out shortform entries without an updatedAt
+      { $project: { updatedAt: 1 } },
+      {
+        $unionWith: {
+          coll: 'books',
+          pipeline: [{ $project: { updatedAt: 1 } }],
+        },
+      },
+      { $sort: { updatedAt: -1 } }, // Sort by updatedAt (descending)
+      { $limit: 1 }, // Get the most recent one
+    ]);
+
     const entries = await getRssReadingFromDb();
     const results = await getRssResults(entries, 'rssArticle');
     const xml = pug.renderFile(
@@ -113,6 +127,7 @@ export async function generateRssForReading() {
       {
         prefix: 'shortform',
         results,
+        lastUpdated: lastUpdated[0].updatedAt,
         toISOWithoutMillis,
       },
     );

@@ -17,7 +17,7 @@
     "lint": "eslint . --fix",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js ./test",
     "postinstall": "patch-package",
-    "scripts": "node backend/scripts/copyBlockchain.js"
+    "scripts": "node backend/scripts/loadBooks.js"
   },
   "dependencies": {
     "@atproto/api": "^0.10.4",

@@ -13,16 +13,20 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
   webfeeds:icon https://www.mollywhite.net/assets/images/molly_illustration.png
   webfeeds:cover(image="https://www.mollywhite.net/assets/images/molly_illustration_social.png")
   webfeeds:accentColor #5948a4 
-  updated= results[0].entryAdded
+  updated #{toISOWithoutMillis(lastUpdated)}
   rights(type="html")= 'Copyright &copy; Molly White&nbsp;' + new Date().getFullYear() + '.'
 
   each article, index in results
     - var entryUrl = `https://mollywhite.net/reading/${article.type === 'book' ? 'books' : 'shortform'}?search=${encodeURIComponent(article.title)}`
+    - var created = article.createdAt || article.entryAdded || article.started
+    - var updated = article.updatedAt
     entry
       title(type="html")= article.title 
       link(href=entryUrl rel="alternate" type="text/html" title=article.title)
-      published= article.entryAdded
-      updated= article.entryAdded
+      if created
+        published= toISOWithoutMillis(created)
+      if updated
+        updated= toISOWithoutMillis(updated)
       id #{entryUrl}
       content(xml:base=`https://mollywhite.net/reading/${prefix}` type="html")= article.entryHtml 
       summary(type="text")= article.rssSummary
