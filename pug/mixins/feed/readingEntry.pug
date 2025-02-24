@@ -31,8 +31,8 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false, hasImage
             if "shortform" in entry
               a(href=`${baseUrl}/reading/shortform`) shortform reading list
             else if "book" in entry
-              a(href=`${baseUrl}/reading/books`) book reading list 
-            | .
+              a(href=`${baseUrl}/reading/books`) book reading list
+            |.
       if "book" in entry && readingEntry.tags && readingEntry.tags.length
         .bottomRow
           .tags
