@@ -40,10 +40,8 @@ router.get('/books', async (req, res) => {
 });
 
 // RSS ========================================================================
-router.get(['/shortform/feed.xml', '/reading/dib/feed.xml'], (req, res) => {
-  res.sendFile(
-    new URL('../../rss/shortformFeed.xml', import.meta.url).pathname,
-  );
+router.get('/feed.xml', (req, res) => {
+  res.sendFile(new URL('../../rss/readingFeed.xml', import.meta.url).pathname);
 });
 
 export default router;
