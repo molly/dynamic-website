@@ -92,12 +92,12 @@ export const getFeedEntries = async ({
     }, {});
     entries.forEach((entry) => {
       if ('book' in entry) {
-        entry.book.tags = entry.book.tags.map((tagId) =>
-          tagId in bookTagsMap ? bookTagsMap[tagId] : tagId,
-        );
-        entry.tags = entry.tags.map((tagId) =>
-          tagId in bookTagsMap ? bookTagsMap[tagId] : tagId,
-        );
+        entry.book.tags = entry.book.tags
+          .map((tagId) => (tagId in bookTagsMap ? bookTagsMap[tagId] : tagId))
+          .sort((a, b) => a.value.localeCompare(b.value));
+        entry.tags = entry.tags
+          .map((tagId) => (tagId in bookTagsMap ? bookTagsMap[tagId] : tagId))
+          .sort((a, b) => a.value.localeCompare(b.value));
       }
     });
   }
