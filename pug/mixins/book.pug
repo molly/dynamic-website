@@ -25,13 +25,14 @@ mixin book(book, embedded=false)
           |  series
           if book.seriesNumber
             | , book #[span.series-number #{book.seriesNumber}]
-          | .
+          | . 
       .title
         i.p-name #{book.title}
 
         if book.subtitle 
           .subtitle 
             i #{book.subtitle}
+        |  
 
 
       .byline
@@ -55,7 +56,7 @@ mixin book(book, embedded=false)
           if book.formattedDate
             | #[time.dt-published.published(datetime=book.date) #{book.formattedDate}]. 
         if book.pages 
-          |  #{book.pages} pages.
+          |  #{book.pages} pages. 
       
       if !embedded && book.tags && book.tags.length
         .tags
