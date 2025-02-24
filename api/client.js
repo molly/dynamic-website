@@ -1,19 +1,20 @@
 import { Book } from '../backend/models/book.model.js';
-import {
-  BlockchainEntry,
-  PressEntry,
-  ShortformEntry,
-} from '../backend/models/entry.model.js';
+import { PressEntry, ShortformEntry } from '../backend/models/entry.model.js';
 import { BookTag, Tag } from '../backend/models/tag.model.js';
 import { getLimit } from '../data/filter/paginate.js';
 import { formatArticleDate } from '../data/filter/preprocess.js';
+
+const makeTagMap = (tags) =>
+  tags.reduce((acc, tag) => {
+    const { _id, ...rest } = tag;
+    acc[_id.toString()] = rest;
+    return acc;
+  }, {});
 
 const getDocumentsCollection = (collection) => {
   switch (collection) {
     case 'shortform':
       return ShortformEntry;
-    case 'blockchain':
-      return BlockchainEntry;
     case 'press':
       return PressEntry;
     case 'books':
@@ -79,9 +80,7 @@ export const getPaginatedAndFilteredFromDb = async (
   const limit = getLimit(req.query.limit, paginationDefaults);
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const start = (page - 1) * limit;
-  const dateKey = ['blockchain', 'shortform'].includes(collection)
-    ? 'started'
-    : 'date';
+  const dateKey = collection === 'shortform' ? 'started' : 'date';
   const sortOrder = req.query.order && req.query.order === 'reverse' ? 1 : -1;
   const query = await makeQuery(req);
 
@@ -202,11 +201,7 @@ export const getPaginatedAndFilteredBooksFromDb = async (
     const totalUnfilteredResults = await documentsCollection.countDocuments();
 
     // Hydrate tags
-    const allTagsMap = allTags.reduce((acc, tag) => {
-      const { _id, ...rest } = tag;
-      acc[_id.toString()] = rest;
-      return acc;
-    }, {});
+    const allTagsMap = makeTagMap(allTags);
     const results = (queryResult[0]?.data || []).map((result) => {
       return {
         ...result,
@@ -237,33 +232,76 @@ export const getLandingPageEntriesFromDb = async () => {
     const mostRecentShortform = await ShortformEntry.findOne({}).sort({
       started: -1,
     });
-    const mostRecentBlockchain = await BlockchainEntry.findOne({}).sort({
-      started: -1,
-    });
-    return { mostRecentBlockchain, mostRecentShortform };
+    return { mostRecentShortform };
   } catch (err) {
     console.log(err);
   }
 };
 
-export const getRssEntriesFromDb = async (collection) => {
+export const getRssReadingFromDb = async () => {
   const limit = 20;
+  const articleTags = await Tag.find().lean();
+  const articleTagMap = makeTagMap(articleTags);
+  const bookTags = await BookTag.find().lean();
+  const bookTagMap = makeTagMap(bookTags);
   try {
     // Get entries
-    const documentsCollection = getDocumentsCollection(collection);
-    const cursor = documentsCollection
-      .find({})
-      .sort({ entryAdded: -1 })
-      .limit(limit);
-    const results = await cursor.lean();
+    const entries = await ShortformEntry.aggregate([
+      // Get recent articles from 'shortform'
+      {
+        $addFields: {
+          sortValue: '$entryAdded', // Ensure consistent sorting key
+          type: { $literal: 'article' }, // Identify source
+        },
+      },
+      { $sort: { entryAdded: -1 } },
+      { $limit: limit },
+
+      // Union with books collection
+      {
+        $unionWith: {
+          coll: 'books',
+          pipeline: [
+            {
+              $addFields: {
+                sortValue: {
+                  $dateFromString: {
+                    dateString: { $ifNull: ['$completed', '$started'] }, // Convert string to Date
+                    format: '%Y-%m-%d',
+                  },
+                },
+                type: { $literal: 'book' }, // Identify source
+              },
+            },
+            { $sort: { sortValue: -1 } },
+            { $limit: limit },
+          ],
+        },
+      },
+
+      // Sort combined results and take top [limit]
+      {
+        $sort: { sortValue: -1 },
+      },
+      { $limit: limit },
+    ]).exec();
 
     // Preprocess
-    for (const article of results) {
+    for (const article of entries) {
       const formattedDates = formatArticleDate(article);
+      if (article.type === 'article') {
+        article.tags = article.tags.map((tagId) => {
+          return articleTagMap[tagId.toString()];
+        });
+      } else if (article.type === 'book') {
+        article.tags = article.tags.map((tagId) => {
+          return bookTagMap[tagId.toString()];
+        });
+      }
       Object.assign(article, formattedDates);
     }
 
-    return results;
+    return entries;
   } catch (err) {
     console.log(err);
   }

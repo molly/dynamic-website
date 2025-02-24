@@ -24,14 +24,12 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false, hasImage
           time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
           if isLoggedIn && !("book" in entry)
             span.edit-icon.icon
-              a(href=`${baseUrl}/feed/tagger/reading${'shortform' in entry ? 'Shortform' : 'Blockchain'}/${entry._id}`)
+              a(href=`${baseUrl}/feed/tagger/readingShortform/${entry._id}`)
                 include ../../icons/pencil.svg
           if !isRss
             |  from the 
             if "shortform" in entry
               a(href=`${baseUrl}/reading/shortform`) shortform reading list
-            else if "blockchain" in entry
-              a(href=`${baseUrl}/reading/blockchain`) blockchain reading list
             else if "book" in entry
               a(href=`${baseUrl}/reading/books`) book reading list 
             | .

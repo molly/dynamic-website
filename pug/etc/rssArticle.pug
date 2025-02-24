@@ -1,2 +1,6 @@
-include /mixins/shortformArticle.pug
-+shortformArticle(article, true)
+if article.type === "article"
+  include /mixins/shortformArticle.pug
+  +shortformArticle(article, true)
+else if article.type === "book"
+  include /mixins/book.pug
+  +book(article, true)

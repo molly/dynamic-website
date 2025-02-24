@@ -1,9 +1,5 @@
 import db from '../models/db.js';
-import {
-  BlockchainEntry,
-  PressEntry,
-  ShortformEntry,
-} from '../models/entry.model.js';
+import { PressEntry, ShortformEntry } from '../models/entry.model.js';
 import { FeedEntryCitationNeeded } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 import { Tag } from '../models/tag.model.js';
@@ -15,7 +11,6 @@ async function migrate() {
   for (const tag of tags) {
     tag.frequency = {
       shortform: 0,
-      blockchain: 0,
       micro: 0,
       citationNeeded: 0,
       press: 0,
@@ -26,7 +21,6 @@ async function migrate() {
 
   const models = [
     { model: MicroEntry, collection: 'micro' },
-    { model: BlockchainEntry, collection: 'blockchain' },
     { model: ShortformEntry, collection: 'shortform' },
     { model: PressEntry, collection: 'press' },
     { model: FeedEntryCitationNeeded, collection: 'citationNeeded' },

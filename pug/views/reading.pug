@@ -28,15 +28,6 @@ block body
 
       .reading-section
         h3
-          a(href="/reading/blockchain") Blockchain reading list 
-        div.rss-link
-          img.rss-icon.bw-icon(src="https://www.mollywhite.net/storage/rss.svg")
-          a(href="https://www.mollywhite.net/reading/blockchain/feed.xml", target="_blank") RSS
-        .reading-section-body  
-          +currentlyReadingArticleSummary(mostRecentBlockchain)
-            
-      .reading-section
-        h3
           a(href="/reading/fiction") Books 
         .reading-section-body  
           include ../mixins/currentlyReadingSummary.pug

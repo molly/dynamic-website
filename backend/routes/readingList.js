@@ -1,10 +1,6 @@
 import express from 'express';
 import { updateTagsOnCreate } from '../helpers/tags.js';
-import {
-  BlockchainEntry,
-  PressEntry,
-  ShortformEntry,
-} from '../models/entry.model.js';
+import { PressEntry, ShortformEntry } from '../models/entry.model.js';
 import { FeedEntryReading } from '../models/feed/feedEntry.model.js';
 import { BookTag, Tag } from '../models/tag.model.js';
 import { authenticated } from './auth.js';
@@ -12,7 +8,6 @@ import { authenticated } from './auth.js';
 const router = express.Router();
 
 const models = {
-  blockchain: BlockchainEntry,
   press: PressEntry,
   shortform: ShortformEntry,
 };
@@ -37,7 +32,7 @@ router.post('/entry', authenticated(), async (req, res) => {
     const result = await model.save();
 
     // Add to activity feed
-    if (postToFeed && (type === 'shortform' || type === 'blockchain')) {
+    if (postToFeed && type === 'shortform') {
       await new FeedEntryReading({
         [type]: result._id,
         tags: tagIds,

@@ -1,8 +1,5 @@
 import mongoose from 'mongoose';
-import {
-  generateRssForBlockchain,
-  generateRssForShortform,
-} from '../helpers/rss.js';
+import { generateRssForReading } from '../helpers/rss.js';
 import db from './db.js';
 
 export const EntrySchema = {
@@ -41,25 +38,13 @@ const ShortformSchema = new mongoose.Schema({
 });
 
 ShortformSchema.post('save', async () => {
-  await generateRssForShortform();
+  await generateRssForReading();
 });
 
 export const ShortformEntry = db.readingListConnection.model(
   'ShortformEntry',
   ShortformSchema,
   'shortform',
-);
-
-const BlockchainSchema = new mongoose.Schema(ShortformBaseSchema);
-
-BlockchainSchema.post('save', async () => {
-  await generateRssForBlockchain();
-});
-
-export const BlockchainEntry = db.readingListConnection.model(
-  'BlockchainEntry',
-  BlockchainSchema,
-  'blockchain',
 );
 
 export const PressEntry = db.readingListConnection.model(

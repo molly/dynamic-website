@@ -5,7 +5,7 @@ import { mergeSocialLinks } from '../../frontend/js/helpers/editorHelpers.js';
 import { validateGhostWebhook } from '../helpers/ghostAuth.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Book } from '../models/book.model.js';
-import { BlockchainEntry, ShortformEntry } from '../models/entry.model.js';
+import { ShortformEntry } from '../models/entry.model.js';
 import {
   FeedEntryCitationNeeded,
   FeedEntryReading,
@@ -121,10 +121,6 @@ router.post('/tags/:entryType', authenticated(), async (req, res) => {
     FeedEntryModel = FeedEntryReading;
     ReadingEntryModel = ShortformEntry;
     category = 'shortform';
-  } else if (req.params.entryType === 'readingBlockchain') {
-    FeedEntryModel = FeedEntryReading;
-    ReadingEntryModel = BlockchainEntry;
-    category = 'blockchain';
   }
   const { id, tags, socialLinks } = req.body;
   let tagIds = null;

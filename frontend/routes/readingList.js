@@ -25,16 +25,7 @@ router.get('/shortform', async (req, res) => {
   });
 });
 
-router.get('/blockchain', async (req, res) => {
-  const results = await getPaginatedAndFilteredFromDb('blockchain', req);
-  const selectedTags = req.query.tags ? req.query.tags.split('-') : [];
-  res.render('blockchain.pug', {
-    query: { ...req.query, tags: selectedTags },
-    ...results,
-  });
-});
-
-router.get('/fiction', async (req, res) => {
+router.get('/books', async (req, res) => {
   const results = await getPaginatedAndFilteredBooksFromDb('books', req, {
     default: 10,
   });
@@ -52,12 +43,6 @@ router.get('/fiction', async (req, res) => {
 router.get(['/shortform/feed.xml', '/reading/dib/feed.xml'], (req, res) => {
   res.sendFile(
     new URL('../../rss/shortformFeed.xml', import.meta.url).pathname,
-  );
-});
-
-router.get('/blockchain/feed.xml', (req, res) => {
-  res.sendFile(
-    new URL('../../rss/blockchainFeed.xml', import.meta.url).pathname,
   );
 });
 

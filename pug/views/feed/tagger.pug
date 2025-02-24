@@ -25,9 +25,6 @@ html(class='feed-editor', lang='en')
           else if entryType == "readingShortform"
             include ../../mixins/feed/readingEntry.pug
             +readingEntry(entry, entry.shortform)
-          else if entryType == "readingBlockchain"
-            include ../../mixins/feed/readingEntry.pug
-            +readingEntry(entry, entry.blockchain)
 
         .content-box
           .content-container

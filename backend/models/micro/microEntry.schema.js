@@ -17,7 +17,7 @@ export const MicroEntrySchema = new mongoose.Schema(
     },
     relatedPostModel: {
       type: String,
-      enum: ['ShortformEntry', 'BlockchainEntry', 'PressEntry'],
+      enum: ['ShortformEntry', 'PressEntry'],
     },
     socialLinks: [
       {

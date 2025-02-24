@@ -1,9 +1,8 @@
 import express from 'express';
 import {
-  generateRssForBlockchain,
   generateRssForFeed,
   generateRssForMicro,
-  generateRssForShortform,
+  generateRssForReading,
 } from '../helpers/rss.js';
 import { authenticated } from './auth.js';
 
@@ -15,19 +14,14 @@ router.post('/build', authenticated(), (req, res) => {
   const { feed } = req.body;
   if (!feed) {
     return res.status(400).send({ message: 'Feed not provided' });
-  } else if (
-    ['shortform', 'blockchain', 'micro', 'feed', 'all'].indexOf(feed) === -1
-  ) {
+  } else if (['reading', 'micro', 'feed', 'all'].indexOf(feed) === -1) {
     return res.status(400).send({ message: 'Invalid feed type' });
   }
 
   // Just kick off the build; this will happen async
   switch (feed) {
-    case 'shortform':
-      generateRssForShortform();
-      break;
-    case 'blockchain':
-      generateRssForBlockchain();
+    case 'reading':
+      generateRssForReading();
       break;
     case 'micro':
       generateRssForMicro();
@@ -36,8 +30,7 @@ router.post('/build', authenticated(), (req, res) => {
       generateRssForFeed();
       break;
     case 'all':
-      generateRssForShortform();
-      generateRssForBlockchain();
+      generateRssForReading();
       generateRssForMicro();
       generateRssForFeed();
       break;

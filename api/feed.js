@@ -1,9 +1,6 @@
 import { Book } from '../backend/models/book.model.js';
 import db from '../backend/models/db.js';
-import {
-  BlockchainEntry,
-  ShortformEntry,
-} from '../backend/models/entry.model.js';
+import { ShortformEntry } from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { BookTag, Tag } from '../backend/models/tag.model.js';
@@ -36,12 +33,6 @@ export const hydrateFeedEntry = (entry) => {
       entry.shortform = {
         ...entry.shortform,
         ...formatArticleDate(entry.shortform),
-      };
-    } else if ('blockchain' in entry) {
-      entry.entryType = 'readingBlockchain';
-      entry.blockchain = {
-        ...entry.blockchain,
-        ...formatArticleDate(entry.blockchain),
       };
     } else if ('book' in entry) {
       entry.entryType = 'readingBook';
@@ -89,7 +80,6 @@ export const getFeedEntries = async ({
       path: 'shortform',
       model: ShortformEntry,
     })
-    .populate({ path: 'blockchain', model: BlockchainEntry })
     .populate({ path: 'book', model: Book })
     .lean();
 

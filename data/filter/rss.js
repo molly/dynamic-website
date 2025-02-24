@@ -68,7 +68,9 @@ const getRssResults = (data, template) => {
       article,
     });
 
-    article.rssSummary = makeSummary(article);
+    if (article.type === 'article') {
+      article.rssSummary = makeSummary(article);
+    }
     if (!article.entryAdded) {
       if (article.started) {
         article.entryAdded = DateTime.fromISO(article.started).toISO();

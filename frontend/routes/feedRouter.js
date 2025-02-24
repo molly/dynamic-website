@@ -1,9 +1,6 @@
 import express from 'express';
 import { getFeedEntries, hydrateFeedEntry } from '../../api/feed.js';
-import {
-  BlockchainEntry,
-  ShortformEntry,
-} from '../../backend/models/entry.model.js';
+import { ShortformEntry } from '../../backend/models/entry.model.js';
 import {
   FeedEntryCitationNeeded,
   FeedEntryReading,
@@ -93,10 +90,7 @@ router.get(
         entry: hydrateFeedEntry(entry),
         entryType: 'citationNeeded',
       });
-    } else if (
-      entryType === 'readingShortform' ||
-      entryType === 'readingBlockchain'
-    ) {
+    } else if (entryType === 'readingShortform') {
       entry = await FeedEntryReading.findById(entryId)
         .populate({
           path: 'tags',
@@ -106,8 +100,7 @@ router.get(
         .populate({
           path: 'shortform',
           model: ShortformEntry,
-        })
-        .populate({ path: 'blockchain', model: BlockchainEntry });
+        });
       res.render('feed/tagger.pug', {
         entry: hydrateFeedEntry(entry),
         entryType,

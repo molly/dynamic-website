@@ -9,9 +9,6 @@ mixin feedEntry(entry, options)
     when "readingShortform"
       include ./readingEntry.pug
       +readingEntry(entry, entry.shortform, options)
-    when "readingBlockchain"
-      include ./readingEntry.pug
-      +readingEntry(entry, entry.blockchain, options)
     when "readingBook"
       include ./readingEntry.pug
       +readingEntry(entry, entry.book, options)

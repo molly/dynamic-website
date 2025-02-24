@@ -57,7 +57,7 @@ mixin book(book, embedded=false)
         if book.pages 
           |  #{book.pages} pages.
       
-      if book.tags && book.tags.length
+      if !embedded && book.tags && book.tags.length
         .tags
           each tag, index in book.tags
             span.p-category #{typeof tag === 'string' ? tag.replace(/_/g, " ") : tag.text}

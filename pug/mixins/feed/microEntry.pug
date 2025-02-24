@@ -18,7 +18,6 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
           .related-post
             case entry.relatedPostModel
               when "ShortformEntry"
-              when "BlockchainEntry"
                 include ../shortformArticle.pug
                 +shortformArticle(entry.relatedPost, isRss, true, true)
               when "PressEntry"
@@ -45,8 +44,6 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
                   | .
                 else if entry.relatedPostModel == "ShortformEntry"
                   |  and the #[a(href=`${baseUrl}/reading/shortform`) shortform reading list].
-                else if entry.relatedPostModel == "BlockchainEntry"
-                  |  and the #[a(href=`${baseUrl}/reading/blockchain`) blockchain reading list].
             if entry.updatedAt && entry.updatedAt - entry.createdAt > 5 * 60 * 1000
               .timestampF
                 | Updated 

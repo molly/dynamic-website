@@ -1,13 +1,13 @@
 doctype xml 
 feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss/1.0")
-  id=`https://www.mollywhite.net/reading/${prefix}/feed.xml`
-  title(type="html")= `Molly White's ${prefix[0].toUpperCase()}${prefix.slice(1)} Reading List`
+  id=`https://www.mollywhite.net/reading/feed.xml`
+  title(type="html")= `Molly White's Reading List`
   author
     name Molly White 
     email molly@mollywhite.net 
     uri https://www.mollywhite.net
-  link(rel="self" href=`https://mollywhite.net/reading/${prefix}/feed.xml`)
-  link(rel="alternate" href=`https://mollywhite.net/reading/${prefix}`)
+  link(rel="self" href=`https://mollywhite.net/reading/feed.xml`)
+  link(rel="alternate" href=`https://mollywhite.net/reading`)
   icon https://mollywhite.net/assets/images/icons/apple-touch-icon.png
   logo https://www.mollywhite.net/assets/images/molly_illustration.png
   webfeeds:icon https://www.mollywhite.net/assets/images/molly_illustration.png
@@ -17,7 +17,7 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
   rights(type="html")= 'Copyright &copy; Molly White&nbsp;' + new Date().getFullYear() + '.'
 
   each article, index in results
-    - var entryUrl = `https://mollywhite.net/reading/${prefix}?search=${encodeURIComponent(article.title)}`
+    - var entryUrl = `https://mollywhite.net/reading/${article.type === 'book' ? 'books' : 'shortform'}?search=${encodeURIComponent(article.title)}`
     entry
       title(type="html")= article.title 
       link(href=entryUrl rel="alternate" type="text/html" title=article.title)

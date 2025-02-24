@@ -1,7 +1,7 @@
 import { decode } from 'html-entities';
 import fs from 'node:fs';
 import pug from 'pug';
-import { getRssEntriesFromDb } from '../../api/client.js';
+import { getRssReadingFromDb } from '../../api/client.js';
 import { getFeedEntries } from '../../api/feed.js';
 import { getMicroEntries } from '../../api/micro.js';
 import getRssResults from '../../data/filter/rss.js';
@@ -104,10 +104,10 @@ export async function generateRssForMicro() {
   }
 }
 
-export async function generateRssForShortform() {
+export async function generateRssForReading() {
   try {
-    const shortform = await getRssEntriesFromDb('shortform');
-    const results = await getRssResults(shortform, 'rssArticle');
+    const entries = await getRssReadingFromDb();
+    const results = await getRssResults(entries, 'rssArticle');
     const xml = pug.renderFile(
       new URL('../../pug/views/rss/readingRss.pug', import.meta.url).pathname,
       {
@@ -116,26 +116,8 @@ export async function generateRssForShortform() {
         toISOWithoutMillis,
       },
     );
-    writeRssFile('../../rss/shortformFeed.xml', xml);
+    writeRssFile('../../rss/readingFeed.xml', xml);
   } catch (err) {
-    console.error('Error in generateRssForShortform', err);
-  }
-}
-
-export async function generateRssForBlockchain() {
-  try {
-    const blockchain = await getRssEntriesFromDb('blockchain');
-    const results = await getRssResults(blockchain, 'rssArticle');
-    const xml = pug.renderFile(
-      new URL('../../pug/views/rss/readingRss.pug', import.meta.url).pathname,
-      {
-        prefix: 'blockchain',
-        results,
-        toISOWithoutMillis,
-      },
-    );
-    writeRssFile('../../rss/blockchainFeed.xml', xml);
-  } catch (err) {
-    console.error('Error in generateRssForBlockchain', err);
+    console.error('Error in generateRssForReading', err);
   }
 }

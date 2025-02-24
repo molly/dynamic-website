@@ -137,23 +137,6 @@ router.get('/relatedPosts', async (req, res) => {
     },
     {
       $unionWith: {
-        coll: 'blockchain',
-        pipeline: [
-          { $sort: { entryAdded: -1 } },
-          { $limit: 10 },
-          {
-            $project: {
-              sortBy: '$entryAdded',
-              title: 1,
-              _id: 1,
-              type: 'BlockchainEntry',
-            },
-          },
-        ],
-      },
-    },
-    {
-      $unionWith: {
         coll: 'press',
         pipeline: [
           { $sort: { date: -1 } },

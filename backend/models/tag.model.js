@@ -6,7 +6,6 @@ export const TagSchema = new mongoose.Schema({
   value: { type: String, required: true, unique: true },
   frequency: {
     shortform: Number,
-    blockchain: Number,
     micro: Number,
     citationNeeded: Number,
     press: Number,

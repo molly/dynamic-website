@@ -35,7 +35,6 @@ export const updateTagsOnCreate = async (tags, category, isBook = false) => {
       if (!isBook) {
         frequency = {
           shortform: 0,
-          blockchain: 0,
           micro: 0,
           citationNeeded: 0,
           total: 1,

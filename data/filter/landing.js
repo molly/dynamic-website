@@ -23,12 +23,10 @@ export const getCurrentlyReadingBooks = async () => {
 };
 
 const getLandingPageSummary = async () => {
-  const { mostRecentBlockchain, mostRecentShortform } =
-    await getLandingPageEntriesFromDb();
+  const { mostRecentShortform } = await getLandingPageEntriesFromDb();
   const currentlyReadingBooks = await getCurrentlyReadingBooks();
 
   return {
-    mostRecentBlockchain,
     mostRecentShortform,
     currentlyReadingBooks,
   };
