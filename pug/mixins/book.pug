@@ -1,5 +1,5 @@
 
-mixin book(book, embedded=false) 
+mixin book(book, rss=false, embedded=false) 
   - var READING_STATUSES_MAP =  {'currentlyReading': "Currently reading", 'read': "Read", "dnf": "Did not finish", "reference": "Reference"}
   .book.h-entry.hentry
     if book.imageSrc 
@@ -10,12 +10,14 @@ mixin book(book, embedded=false)
             class={'book-cover': true, 'bordered': book.border},
             src=book.imageSrc,
             alt=`Cover image of ${book.title}`
+            style=rss ? "max-width: 300px;" : ""
           )
       else
         img.u-photo(
           class={'book-cover': true, 'bordered': book.border},
           src=book.imageSrc,
           alt=`Cover image of ${book.title}`
+          style=rss ? "max-width: 300px;" : ""
         )
 
     .book-details
@@ -58,7 +60,7 @@ mixin book(book, embedded=false)
         if book.pages 
           |  #{book.pages} pages. 
       
-      if !embedded && book.tags && book.tags.length
+      if !rss && book.tags && book.tags.length
         .tags
           each tag, index in book.tags
             span.p-category #{typeof tag === 'string' ? tag.replace(/_/g, " ") : tag.text}
