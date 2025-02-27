@@ -165,6 +165,13 @@ export const getPaginatedAndFilteredBooksFromDb = async (
         {
           $addFields: {
             sortValue: { $ifNull: ['$completed', '$started'] },
+            statusPriority: {
+              $cond: {
+                if: { $eq: ['$status', 'currentlyReading'] },
+                then: 1,
+                else: 0,
+              },
+            },
           },
         },
         // Use $facet to run multiple pipelines
@@ -179,6 +186,7 @@ export const getPaginatedAndFilteredBooksFromDb = async (
               {
                 $sort: {
                   sortValue: sortOrder,
+                  statusPriority: sortOrder,
                   entryAdded: sortOrder,
                 },
               },
