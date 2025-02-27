@@ -39,7 +39,7 @@ router.get('/book', async (req, res) => {
       author: req.query.author,
     });
     if (bookEntry) {
-      res.json({ id: bookEntry._id });
+      res.json(bookEntry);
     } else {
       res.status(404).send({ error: 'Book not found' });
     }
@@ -115,6 +115,44 @@ router.post(
           book: bookEntryId,
           status: req.body.status,
           tags,
+        }).save();
+      }
+
+      res.json([bookEntry, feedEntry]);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send({ error: err });
+    }
+  },
+);
+
+router.post(
+  '/bookUpdate',
+  authenticated({ redirectTo: '/micro/login' }),
+  async function (req, res) {
+    try {
+      const postToFeed = req.body.postToFeed;
+      delete req.body.postToFeed;
+
+      // Get book record
+      let bookEntryId = req.body.id;
+      let bookEntry = await Book.findById(req.body.id);
+      if (!bookEntry) {
+        res.status(404).send({ error: 'Book not found' });
+        return;
+      }
+      ['status', 'completed'].forEach((key) => {
+        bookEntry[key] = req.body[key];
+      });
+      await bookEntry.save();
+
+      // Add entry to feed
+      let feedEntry;
+      if (postToFeed) {
+        feedEntry = await new FeedEntryReading({
+          book: bookEntryId,
+          status: req.body.status,
+          tags: bookEntry.tags,
         }).save();
       }
 
