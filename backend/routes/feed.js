@@ -32,6 +32,23 @@ router.post('/citationNeeded', validateGhostWebhook, async (req, res) => {
   }
 });
 
+router.get('/book', async (req, res) => {
+  try {
+    const bookEntry = await Book.findOne({
+      title: req.query.title,
+      author: req.query.author,
+    });
+    if (bookEntry) {
+      res.json({ id: bookEntry._id });
+    } else {
+      res.status(404).send({ error: 'Book not found' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: err });
+  }
+});
+
 router.post(
   '/book',
   authenticated({ redirectTo: '/micro/login' }),
