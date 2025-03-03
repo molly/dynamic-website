@@ -135,8 +135,8 @@ router.post(
       delete req.body.postToFeed;
 
       // Get book record
-      let bookEntryId = req.body.id;
-      let bookEntry = await Book.findById(req.body.id);
+      let bookEntryId = req.body._id;
+      let bookEntry = await Book.findById(bookEntryId);
       if (!bookEntry) {
         res.status(404).send({ error: 'Book not found' });
         return;
