@@ -15,6 +15,7 @@ export const getCurrentlyReadingBooks = async () => {
       .sort({ completed: -1 })
       .populate({ path: 'tags', model: BookTag })
       .lean();
+    books = [books];
   }
   return books.map((result) => ({
     ...result,

@@ -44,7 +44,7 @@ export const processText = (text, network) => {
   // Replace emphasis
   $('i, b, em, strong').each((_, elem) => {
     const $tag = $(elem);
-    $tag.replaceWith($tag.text().toUpperCase());
+    $tag.replaceWith($tag.text());
   });
 
   if (network === 'bluesky') {

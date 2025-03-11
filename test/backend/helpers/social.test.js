@@ -7,14 +7,6 @@ describe('processText', () => {
     expect(processedText).toEqual('this is a\n\npost');
   });
 
-  it('should replace italics with uppercase', () => {
-    const text = '<i>this is a post</i> with less emphasis at the end';
-    const processedText = processText(text, 'twitter');
-    expect(processedText).toEqual(
-      'THIS IS A POST with less emphasis at the end',
-    );
-  });
-
   it('should replace bold with uppercase', () => {
     const text = '<b>this is a post</b> with less emphasis at the end';
     const processedText = processText(text, 'twitter');
