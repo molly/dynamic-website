@@ -8,11 +8,16 @@ mixin currentlyReadingSummary(books)
         span I'm currently reading:
         
       include ./book.pug
-      +book(books[0])
+      for book in books.slice(0, 3)
+        +book(book)
+
       if books[0].status === 'currentlyReading'
-        if books.length === 2
+        if books.length === 4
           span.others ... and one other book.
-        else if books.length > 2
-          span.others ... and #{books.length - 1} other books.
+        else if books.length > 4 && books.length < 12
+          - var numbers = ['two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+          span.others ... and #{numbers[books.length - 5]} other books.
+        else if books.length >= 12
+          span.others ... and #{books.length - 3} other books.
   else 
     div I haven't recently read any books.
