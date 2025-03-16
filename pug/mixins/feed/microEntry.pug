@@ -10,6 +10,7 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
             .description Posted:
         if entry.title
           h2.p-name #{entry.title}
+          br
       .content.e-content
         each block in entry.html
           != block
@@ -51,8 +52,8 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
                 | .
 
           .social-links 
-            if entry.socialLinks && entry.socialLinks.length 
-              span Also posted to:
+            if entry.socialLinks && entry.socialLinks.length
+              span  Also posted to: 
               each socialLink, index in entry.socialLinks
                 a(class=`social-link u-syndication ${socialLink.type}` href=socialLink.href, title=socialLink.type.charAt(0).toUpperCase() + socialLink.type.slice(1), rel="syndication")
                   if !isRss

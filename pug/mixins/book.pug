@@ -42,14 +42,19 @@ mixin book(book, rss=false, embedded=false)
               | by  
               include ./author.pug
               +author(book.author)
+              |. 
             if book.editor 
-              if book.author 
-                |  
-              | #{book.editor} (ed.).
+              div.editor-translator Edited by #{book.editor}. 
+            if book.translator 
+              div.editor-translator Translated by #{book.translator}. 
+            if book.format == "audio"
+              div.format Audiobook. 
 
         .book-info
+          if book.publisher || book.formattedDate 
+            | Published 
           if book.publisher
-            |  #{book.publisher}
+            | by #{book.publisher}
             if !book.formattedDate
               | .
             else

@@ -7,6 +7,8 @@ export const BookSchema = new mongoose.Schema(
     subtitle: String,
     author: { type: String, required: true },
     editor: String,
+    translator: String,
+    format: { type: String, enum: ['print', 'digital', 'audio'] },
     date: { type: String, required: true, match: /^\d{4}(-\d{2}){0,2}$/ },
     publisher: String,
     imageSrc: String,

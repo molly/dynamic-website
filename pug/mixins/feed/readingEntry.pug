@@ -6,9 +6,9 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false, hasImage
         .post-icon.icon
           include ./icon.pug
           +icon(entry.icon)
-          .description #{entry.verb}:
+          .description #{entry.verb}: 
       else
-        .description #{entry.verb}:
+        .description #{entry.verb}: 
     .content.e-content
       if "book" in entry 
         include ../book.pug

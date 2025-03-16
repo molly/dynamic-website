@@ -213,6 +213,13 @@
   font-size: 1rem;
   line-height: 1.5rem;
 }
+.book .editor-translator {
+  font-size: 0.9rem;
+}
+.book .format {
+  font-size: 0.9rem;
+  font-style: italic;
+}
 .book .book-info,
 .book .series-info {
   font-size: 0.9rem;

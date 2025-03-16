@@ -14,9 +14,9 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false, hasImage=false
         .description Published an issue of 
           a(href="https://www.citationneeded.news/")
             i Citation Needed
-          |:
+          |: 
       h2.p-name
-        a.u-syndication(href=`https://www.citationneeded.news/${entry.slug}` rel="syndication") #{entry.title}
+        a.u-syndication(href=`https://www.citationneeded.news/${entry.slug}` rel="syndication") #{entry.title} 
     .content.e-content
       if entry.image
         .media-wrapper
