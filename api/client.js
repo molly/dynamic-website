@@ -89,10 +89,9 @@ export const getPaginatedAndFilteredFromDb = async (
 
     const allTags = await Tag.find({
       [`frequency.${collection}`]: { $gt: 0 },
-    }).lean();
-    allTags.sort((a, b) =>
-      a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
-    );
+    })
+      .sort({ [`frequency.${collection}`]: -1 })
+      .lean();
 
     const cursor = documentsCollection
       .find(query)
@@ -155,10 +154,9 @@ export const getPaginatedAndFilteredBooksFromDb = async (
 
     const allTags = await BookTag.find({
       'frequency.total': { $gt: 0 },
-    }).lean();
-    allTags.sort((a, b) =>
-      a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
-    );
+    })
+      .sort({ 'frequency.total': -1 })
+      .lean();
 
     const queryResult = await documentsCollection
       .aggregate([
