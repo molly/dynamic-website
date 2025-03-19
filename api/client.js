@@ -153,7 +153,9 @@ export const getPaginatedAndFilteredBooksFromDb = async (
   try {
     const documentsCollection = getDocumentsCollection(collection);
 
-    const allTags = await BookTag.find().lean();
+    const allTags = await BookTag.find({
+      'frequency.total': { $gt: 0 },
+    }).lean();
     allTags.sort((a, b) =>
       a.text.toLowerCase().localeCompare(b.text.toLowerCase()),
     );
