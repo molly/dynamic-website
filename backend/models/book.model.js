@@ -5,7 +5,7 @@ export const BookSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     subtitle: String,
-    author: { type: String, required: true },
+    author: String,
     editor: String,
     translator: String,
     format: { type: String, enum: ['print', 'digital', 'audio'] },
