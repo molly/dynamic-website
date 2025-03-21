@@ -34,9 +34,17 @@ router.post('/citationNeeded', validateGhostWebhook, async (req, res) => {
 
 router.get('/book', async (req, res) => {
   try {
+    const { title, author } = req.query;
+
+    // Necessary for books where translators/etc. are listed as authors
+    let firstAuthor = author;
+    if (author.includes(',')) {
+      firstAuthor = author.split(',')[0].trim();
+    }
+
     const bookEntry = await Book.findOne({
-      title: req.query.title,
-      author: req.query.author,
+      title: title,
+      author: { $regex: firstAuthor },
     });
     if (bookEntry) {
       res.json(bookEntry);
