@@ -78,9 +78,9 @@ mixin book(book, rss=false, embedded=false)
             .reading-dates 
               | Started #[time.dt-accessed.accessed(datetime=book.started) #{book.formattedStarted}]
               if !book.formattedCompleted
-                | .
+                | . 
               else 
-                | ; completed #{book.formattedCompleted}.
+                | ; completed #{book.formattedCompleted}. 
           
           if !shortForm && !embedded && !rss && book.status && book.status in READING_STATUSES_MAP
             div
