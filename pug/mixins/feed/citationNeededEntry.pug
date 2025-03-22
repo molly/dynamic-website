@@ -30,8 +30,16 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false, hasImage=false
     footer.footer
       .flex-row.post-meta
         .timestamp
+          if isRss
+            | Posted: 
           a(href=`https://www.citationneeded.news/${entry.slug}`)
-            time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
+            time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime)
+              if isRss
+                | #{entry.timestamps.createdAt.absoluteTime}
+              else
+                | #{entry.timestamps.createdAt.humanTime}
+            if isRss
+              | . 
           if isLoggedIn
             span.edit-icon.icon
               a(href=`${baseUrl}/feed/tagger/citationNeeded/${entry._id}`)
@@ -51,7 +59,11 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false, hasImage=false
       .bottomRow
         .tags
           if entry.tags && entry.tags.length
+            if isRss
+              | Tagged: 
             each tag, index in entry.tags 
               a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}`, title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
               if isRss && index !== entry.tags.length - 1
                 | , 
+            if isRss 
+              | .

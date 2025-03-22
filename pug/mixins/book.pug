@@ -56,7 +56,7 @@ mixin book(book, rss=false, embedded=false)
           if book.publisher
             | by #{book.publisher}
             if !book.formattedDate
-              | .
+              | . 
             else
               | , #[time.dt-published.published(datetime=book.date) #{book.formattedDate}].
           else 
@@ -82,7 +82,7 @@ mixin book(book, rss=false, embedded=false)
               else 
                 | ; completed #{book.formattedCompleted}.
           
-          if !shortForm && !embedded && book.status && book.status in READING_STATUSES_MAP
+          if !shortForm && !embedded && !rss && book.status && book.status in READING_STATUSES_MAP
             div
               div.p-category(class=['status', book.status])
                 != READING_STATUSES_MAP[book.status][0].toUpperCase() + READING_STATUSES_MAP[book.status].substr(1)

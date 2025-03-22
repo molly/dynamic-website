@@ -12,7 +12,7 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false, hasImage
     .content.e-content
       if "book" in entry 
         include ../book.pug
-        +book(readingEntry, false, true)
+        +book(readingEntry, isRss, true)
       else
         include ../shortformArticle.pug
         +shortformArticle(readingEntry, isRss, true)
@@ -21,7 +21,15 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false, hasImage
     footer.footer
       .flex-row.post-meta
         .timestamp
-          time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
+          if isRss
+            | Posted: 
+          time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime)
+            if isRss
+              | #{entry.timestamps.createdAt.absoluteTime}
+            else
+              | #{entry.timestamps.createdAt.humanTime}
+          if isRss
+            | . 
           if isLoggedIn && !("book" in entry)
             span.edit-icon.icon
               a(href=`${baseUrl}/feed/tagger/readingShortform/${entry._id}`)
@@ -36,14 +44,22 @@ mixin readingEntry(entry, readingEntry, {isLoggedIn=false, isRss=false, hasImage
       if "book" in entry && readingEntry.tags && readingEntry.tags.length
         .bottomRow
           .tags
+            if isRss
+              | Tagged: 
             each tag, index in readingEntry.tags
               a.tag.p-category(href=`${baseUrl}/reading/books?tags=${tag.value}` title=`See all books tagged "${tag.text}"` rel="category tag") #{tag.text}
               if isRss && index !== readingEntry.tags.length - 1
                 | , 
+            if isRss
+              | . 
       else if entry.tags && entry.tags.length
         .bottomRow
           .tags
+            if isRss
+              | Tagged: 
             each tag, index in entry.tags 
               a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}` title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
               if isRss && index !== entry.tags.length - 1
                 | , 
+            if isRss
+              | . 
