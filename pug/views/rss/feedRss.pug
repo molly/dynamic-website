@@ -38,7 +38,11 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
           slug = "blockchain";
         }
         url = `https://www.mollywhite.net/reading/${slug}?search=${encodeURIComponent(entry[type].title)}`;
-        title = `${entry.verb} "${entry[type].title}"`;
+        if ("book" in entry) {
+          title = `${entry.verb} ${entry[type].title}`;
+        } else {
+          title = `${entry.verb} "${entry[type].title}"`;
+        }
       } else if (entry.__t === 'FeedEntryCitationNeeded') {
         url = `https://citationneeded.news/${entry.slug}`;
         title = `Published on Citation Needed: "${entry.title}"`;
