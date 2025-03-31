@@ -38,7 +38,12 @@ export function hydrateAndSortSocialLinks(links) {
   ];
   links.sort((a, b) => order.indexOf(a.type) - order.indexOf(b.type));
   for (const link of links) {
-    link.href = `${SOCIAL_PREFIXES[link.type]}${link.postId}`;
+    if (link.postId.startsWith('https://')) {
+      // Already a full URL, no need to modify
+      link.href = link.postId;
+    } else {
+      link.href = `${SOCIAL_PREFIXES[link.type]}${link.postId}`;
+    }
   }
   return links;
 }
