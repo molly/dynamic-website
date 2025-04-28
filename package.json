@@ -48,6 +48,7 @@
     "fs": "0.0.1-security",
     "fslightbox": "^3.4.1",
     "https": "^1.0.0",
+    "image-size": "^2.0.2",
     "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.2",
     "lodash.debounce": "^4.0.8",

@@ -3,6 +3,7 @@ import * as cheerio from 'cheerio';
 import { NETWORK_LIMITS } from '../../frontend/js/helpers/editorHelpers.js';
 const { BskyAgent, RichText, UnicodeString } = Bsky;
 
+import imageSize from 'image-size';
 import auth from '../config/auth.config.js';
 
 export const createRichText = (post, $, $links) => {
@@ -107,17 +108,21 @@ export const postSkeets = async (posts, imagesMap) => {
   const promises = [];
   for (let image of imagesToUpload) {
     const imageBuffer = imagesMap[image.href].buffer;
+    const size = imageSize(imageBuffer);
+
     const mimeType = imagesMap[image.href].mimeType;
     promises.push(
       Promise.all([
         image.href,
         agent.uploadBlob(imageBuffer, { encoding: mimeType }),
+        { width: size.width, height: size.height },
       ]),
     );
   }
   const imageResults = await Promise.all(promises);
   for (let result of imageResults) {
     imagesMap[result[0]].blob = result[1].data.blob;
+    imagesMap[result[0]].aspectRatio = result[2];
   }
 
   const skeetsToPost = [];
@@ -129,6 +134,7 @@ export const postSkeets = async (posts, imagesMap) => {
         images: post.images.map((image) => ({
           image: imagesMap[image.href].blob,
           alt: image.alt.substring(0, NETWORK_LIMITS.bluesky.alt),
+          aspectRatio: imagesMap[image.href].aspectRatio,
         })),
       };
     }
