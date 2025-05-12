@@ -6,7 +6,7 @@ mixin shortformArticle(article, rss=false, feed=false, embedded=false)
 
     .title
       a.u-url.u-repost-of(class=embedded ? 'u-in-reply-to' : '', href=article.href, rel="bookmark")
-        |"#[span.p-name #{article.title}]"
+        |&ldquo;#[span.p-name #{article.title}]&rdquo;
 
       if article.parenthetical
         |  (#{article.parenthetical})
