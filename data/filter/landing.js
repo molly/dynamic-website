@@ -19,6 +19,7 @@ export const getCurrentlyReadingBooks = async () => {
   }
   return books.map((result) => ({
     ...result,
+    tags: result.tags.sort((a, b) => a.text.localeCompare(b.text)),
     ...formatArticleDate(result),
   }));
 };
