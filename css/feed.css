@@ -141,7 +141,7 @@ p.site-description {
   margin-bottom: 1em;
 }
 
-.entry .content .media-wrapper + .media-wrapper {
+.entry .content .media-wrapper:has(+ .media-wrapper) {
   margin-bottom: 0;
 }
 

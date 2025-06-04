@@ -1,4 +1,4 @@
-mixin titleAndDescription(title, description, path)
+mixin titleAndDescription(title, description, path, image)
   - var titleWithFallback = title || "Molly White";
   title= titleWithFallback
   meta(property='og:title', content=titleWithFallback)
@@ -10,3 +10,13 @@ mixin titleAndDescription(title, description, path)
   if path
     meta(property='og:url', content=`https://www.mollywhite.net${path}`)
     link(rel="canonical", href=`https://www.mollywhite.net${path}`)
+  if image
+    meta(property='og:image', content=image.file.url)
+    meta(property='og:image:alt', content=image.alt || "Image")
+    meta(name='twitter:image', content=image.file.url)
+    meta(property='twitter:image:alt', content=image.alt || "Image")
+  else
+      meta(property='og:image', content="https://www.mollywhite.net/assets/images/molly_illustration.png")
+      meta(property='og:image:alt', content='An illustration of Molly sitting crosslegged with a laptop on her lap')
+      meta(name='twitter:image', content="https://www.mollywhite.net/assets/images/molly_illustration.png")
+      meta(name='twitter:image:alt', content='An illustration of Molly sitting crosslegged with a laptop on her lap')

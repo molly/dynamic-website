@@ -90,8 +90,16 @@ router.get('/entry/:slug', async (req, res) => {
     }
   }
 
+  let image;
+  for (const block of entry.post.blocks) {
+    if (block.type === 'image') {
+      image = block.data;
+      break;
+    }
+  }
+
   res.render('micro/entry.pug', {
-    entry: { ...entry, webmentions },
+    entry: { ...entry, webmentions, image },
     options: { isLoggedIn: req.isAuthenticated() },
   });
 });
