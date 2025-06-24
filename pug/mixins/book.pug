@@ -52,7 +52,10 @@ mixin book(book, rss=false, embedded=false)
 
         .book-info
           if book.publisher || book.formattedDate 
-            | Published 
+            if book.formattedDate && new Date(book.date) > new Date()
+              | To be published 
+            else
+              | Published 
           if book.publisher
             | by #{book.publisher}
             if !book.formattedDate
