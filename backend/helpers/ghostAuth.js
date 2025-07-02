@@ -33,7 +33,7 @@ export function validateGhostWebhook(req, res, next) {
       const body = JSON.stringify(req.body || {});
       const expected = crypto
         .createHmac('sha256', config.ghostWebhookSecret)
-        .update(body)
+        .update(`${body}${timestampStr}`)
         .digest('hex');
       if (expected === signature) {
         next();
