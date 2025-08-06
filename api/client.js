@@ -187,6 +187,7 @@ export const getPaginatedAndFilteredBooksFromDb = async (
                 $sort: {
                   sortValue: sortOrder,
                   statusPriority: sortOrder,
+                  createdAt: sortOrder,
                   entryAdded: sortOrder,
                 },
               },
