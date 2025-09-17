@@ -131,7 +131,6 @@ export async function generateRssForReading() {
     const lastUpdated = last?.updatedAt;
 
     const entries = await getRssReadingFromDb();
-    console.log(entries);
     const results = await getRssResults(entries, 'rssArticle');
     const xml = pug.renderFile(
       new URL('../../pug/views/rss/readingRss.pug', import.meta.url).pathname,

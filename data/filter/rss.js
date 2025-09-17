@@ -76,7 +76,7 @@ const getRssResults = (data, template) => {
         article.entryAdded = DateTime.fromISO(article.started).toISO();
       }
     } else {
-      article.entryAdded = DateTime.fromISO(article.entryAdded).toISO();
+      article.entryAdded = DateTime.fromJSDate(article.entryAdded).toISO();
     }
 
     return article;
