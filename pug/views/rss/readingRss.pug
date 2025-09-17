@@ -19,7 +19,7 @@ feed(xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss
   each article, index in results
     - var entryUrl = `https://mollywhite.net/reading/${article.type === 'book' ? 'books' : 'shortform'}?search=${encodeURIComponent(article.title)}`
     - var created = article.createdAt || article.entryAdded || article.started
-    - var updated = article.updatedAt
+    - var updated = article.updatedAt || article.entryAdded
     entry
       title(type="html")= article.title 
       link(href=entryUrl rel="alternate" type="text/html" title=article.title)

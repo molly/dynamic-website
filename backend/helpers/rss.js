@@ -107,27 +107,38 @@ export async function generateRssForMicro() {
 
 export async function generateRssForReading() {
   try {
-    const lastUpdated = await ShortformEntry.aggregate([
-      { $match: { updatedAt: { $ne: null } } }, // Filter out shortform entries without an updatedAt
-      { $project: { updatedAt: 1 } },
+    const [last] = await ShortformEntry.aggregate([
+      // ShortformEntry side
+      { $match: { entryAdded: { $ne: null } } },
+      { $project: { updatedAt: { $toDate: '$entryAdded' } } },
+
+      // Union with Books
       {
         $unionWith: {
           coll: 'books',
-          pipeline: [{ $project: { updatedAt: 1 } }],
+          pipeline: [
+            { $match: { updatedAt: { $ne: null } } },
+            { $project: { updatedAt: { $toDate: '$updatedAt' } } },
+          ],
         },
       },
-      { $sort: { updatedAt: -1 } }, // Sort by updatedAt (descending)
-      { $limit: 1 }, // Get the most recent one
+
+      // Compare across both
+      { $sort: { updatedAt: -1 } },
+      { $limit: 1 },
     ]);
 
+    const lastUpdated = last?.updatedAt;
+
     const entries = await getRssReadingFromDb();
+    console.log(entries);
     const results = await getRssResults(entries, 'rssArticle');
     const xml = pug.renderFile(
       new URL('../../pug/views/rss/readingRss.pug', import.meta.url).pathname,
       {
         prefix: 'shortform',
         results,
-        lastUpdated: lastUpdated[0].updatedAt,
+        lastUpdated,
         toISOWithoutMillis,
       },
     );
