@@ -35,7 +35,7 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
             .timestamp
               if isRss
                 | Posted: 
-              a(href=`${baseUrl}/micro/entry/${entry.slug}`)
+              a(class="u-url", href=`${baseUrl}/micro/entry/${entry.slug}`)
                 time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime)
                   if isRss
                     | #{entry.timestamps.createdAt.absoluteTime}

@@ -32,7 +32,7 @@ mixin citationNeededEntry(entry,  {isLoggedIn=false, isRss=false, hasImage=false
         .timestamp
           if isRss
             | Posted: 
-          a(href=`https://www.citationneeded.news/${entry.slug}`)
+          a(class="u-url", href=`https://www.citationneeded.news/${entry.slug}`)
             time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime)
               if isRss
                 | #{entry.timestamps.createdAt.absoluteTime}

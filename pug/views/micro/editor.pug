@@ -59,7 +59,7 @@ html(class='feed-editor', lang='en')
         each network in ["twitter", "mastodon", "bluesky"]
           .social-editor-wrapper
             .input-group
-              input.social-network-toggle(id=`${network}-social` type="checkbox", checked="checked")
+              input.social-network-toggle(id=`${network}-social` type="checkbox" checked=network !== "twitter")
               label.social-network-toggle-label(for=`${network}-social`)
                 h3 #{network.charAt(0).toUpperCase() + network.slice(1)}
             if network == "mastodon"
