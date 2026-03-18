@@ -102,7 +102,10 @@ export const getFeedEntries = async ({
     });
   }
 
-  const hydrated = hydrateFeedEntries(entries);
+  const validEntries = entries.filter(
+    (entry) => entry.__t !== 'FeedEntryMicro' || entry.micro !== null,
+  );
+  const hydrated = hydrateFeedEntries(validEntries);
 
   const totalResults = await FeedEntry.countDocuments(query);
   let totalUnfilteredResults = totalResults;

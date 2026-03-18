@@ -167,12 +167,19 @@ figure {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .entry .content .media-wrapper-gallery .media-wrapper {
   aspect-ratio: 1 / 1;
   overflow: hidden;
+}
+
+.entry .content .media-wrapper-gallery figcaption {
+  font-family: var(--sans-serif-fonts);
+  font-size: 0.7em;
+  grid-column: 1 / -1;
+  font-style: italic;
 }
 
 /* Reading list */
