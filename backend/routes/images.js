@@ -2,7 +2,6 @@ import { Storage } from '@google-cloud/storage';
 import axios from 'axios';
 import express from 'express';
 import multer from 'multer';
-import MulterGoogleCloudStorage from 'multer-cloud-storage';
 
 import { getUniqueId } from '../../api/helpers/uniqueId.js';
 import { USER_AGENT } from '../config/requests.js';
@@ -14,19 +13,34 @@ const bucket = storage.bucket('storage.mollywhite.net');
 
 const router = express.Router();
 
+const uploadBucket = new Storage({
+  keyFilename: new URL('../config/service-account.json', import.meta.url)
+    .pathname,
+  projectId: 'mollywhite',
+}).bucket('storage.mollywhite.net');
+
+// Multer storage engine that streams uploaded files straight to the bucket.
 const uploadHandler = multer({
-  storage: MulterGoogleCloudStorage.storageEngine({
-    bucket: 'storage.mollywhite.net',
-    destination: 'micro',
-    keyFilename: new URL('../config/service-account.json', import.meta.url)
-      .pathname,
-    filename: (req, file, cb) =>
-      cb(
-        null,
-        `${getUniqueId(10)}_${file.originalname.replace(/[^a-zA-Z0-9_.]/g, '-')}`,
-      ),
-    projectId: 'mollywhite',
-  }),
+  storage: {
+    _handleFile(req, file, cb) {
+      const filename = `${getUniqueId(10)}_${file.originalname.replace(/[^a-zA-Z0-9_.]/g, '-')}`;
+      file.stream
+        .pipe(
+          uploadBucket.file(`micro/${filename}`).createWriteStream({
+            predefinedAcl: 'private',
+            metadata: { contentType: file.mimetype },
+          }),
+        )
+        .on('error', cb)
+        .on('finish', () => cb(null, { filename, contentType: file.mimetype }));
+    },
+    _removeFile(req, file, cb) {
+      uploadBucket
+        .file(`micro/${file.filename}`)
+        .delete({ ignoreNotFound: true })
+        .then(() => cb(), cb);
+    },
+  },
 });
 
 // Upload local file by multipart form.
