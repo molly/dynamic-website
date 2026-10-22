@@ -2,7 +2,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import { mergeSocialLinks } from '../../frontend/js/helpers/editorHelpers.js';
-import { validateGhostWebhook } from '../helpers/ghostAuth.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Book } from '../models/book.model.js';
 import { ShortformEntry } from '../models/entry.model.js';
@@ -14,23 +13,26 @@ import { authenticated } from './auth.js';
 
 const router = express.Router();
 
-router.post('/citationNeeded', validateGhostWebhook, async (req, res) => {
-  try {
-    const { post } = req.body;
-    const result = await new FeedEntryCitationNeeded({
-      entryType: 'citationNeeded',
-      title: post.current.title,
-      slug: post.current.slug,
-      excerpt: `<p>${post.current.excerpt}</p>`,
-      image: post.current.feature_image,
-      imageAlt: post.current.feature_image_alt,
-    }).save();
-    res.json(result);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: err });
-  }
-});
+router.post(
+  '/citationNeeded',
+  /*validateGhostWebhook,*/ async (req, res) => {
+    try {
+      const { post } = req.body;
+      const result = await new FeedEntryCitationNeeded({
+        entryType: 'citationNeeded',
+        title: post.current.title,
+        slug: post.current.slug,
+        excerpt: `<p>${post.current.excerpt}</p>`,
+        image: post.current.feature_image,
+        imageAlt: post.current.feature_image_alt,
+      }).save();
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({ error: err });
+    }
+  },
+);
 
 router.get('/book', async (req, res) => {
   try {

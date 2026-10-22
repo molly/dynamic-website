@@ -21,9 +21,10 @@ export const updateTagsOnCreate = async (tags, category, isBook = false) => {
         tagRecord = await tagModel.findById(tag);
         if (tagRecord) {
           if (!isBook) {
-            tagRecord.frequency[category] += 1;
+            tagRecord.frequency[category] =
+              (tagRecord.frequency[category] || 0) + 1;
           }
-          tagRecord.frequency.total += 1;
+          tagRecord.frequency.total = (tagRecord.frequency.total || 0) + 1;
           const savedTag = await tagRecord.save();
           tagIds.push(savedTag._id);
           continue;
@@ -37,6 +38,7 @@ export const updateTagsOnCreate = async (tags, category, isBook = false) => {
           shortform: 0,
           micro: 0,
           citationNeeded: 0,
+          press: 0,
           total: 1,
         };
       }
