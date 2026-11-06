@@ -4,7 +4,9 @@ import * as cheerio from 'cheerio';
 export const processText = (_text, network) => {
   // Replace whitespace
   let text = _text.replace(/\n{2,}/g, '\n\n');
-  text = text.replace(/[\u00A0\u2000-\u200B\u202F\u205F]/g, ' ');
+  // Replace unusual whitespace characters with regular spaces. Non-breaking spaces are intentionally
+  // kept (they arrive from the editor as &nbsp; and are decoded later).
+  text = text.replace(/[\u2000-\u200B\u202F\u205F]/g, ' ');
 
   const $ = cheerio.load(text, null, false);
 

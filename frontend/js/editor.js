@@ -38,6 +38,9 @@ const validation = {
   mastodon: true,
   bluesky: true,
 };
+// Local helper that composes Twitter posts in a browser (see backend/scripts/xComposeHelper.js)
+const X_HELPER_URL = 'http://localhost:5055';
+
 let savedPost = {};
 let tagSelect;
 let relatedPostsSelect;
@@ -254,6 +257,32 @@ async function onMastodonTagsChange(evt) {
 }
 const debouncedOnMastodonTagsChange = debounce(onMastodonTagsChange, 250);
 
+/**
+ * Send a Twitter thread to the local X compose helper (backend/scripts/xComposeHelper.js), which
+ * fills it in on x.com and waits for the post to be made by hand. Never rejects: failures are
+ * returned as { error } so they don't prevent the other networks' results from being saved.
+ * @param {Object} twitter Social post content, as returned by getSocialPostContent
+ * @returns {Promise<{postId?: string, error?: string}>}
+ */
+async function composeOnX(twitter) {
+  try {
+    const resp = await axios.post(`${X_HELPER_URL}/compose`, {
+      blocks: twitter.blocks,
+    });
+    for (const warning of resp.data.warnings || []) {
+      console.warn(warning);
+    }
+    return { postId: resp.data.postId };
+  } catch (err) {
+    if (!err.response) {
+      return {
+        error: `Couldn't reach the X compose helper at ${X_HELPER_URL}. Is \`npm run x-helper\` running on this computer?`,
+      };
+    }
+    return { error: err.response.data?.error || err.message };
+  }
+}
+
 // Save -------------------------------------------------------------------------------------------
 /**
  * Save the post and send social posts (if enabled).
@@ -286,10 +315,27 @@ function save() {
         getSocialPostContent('bluesky'),
       ]);
       promises.push(
-        axios.post('/dynamic-api/micro/social', {
-          twitter,
-          mastodon,
-          bluesky,
+        Promise.all([
+          mastodon || bluesky
+            ? axios
+                .post('/dynamic-api/micro/social', { mastodon, bluesky })
+                .then((resp) => resp.data)
+            : { postIds: {}, errors: {} },
+          twitter ? composeOnX(twitter) : null,
+        ]).then(([serverResult, xResult]) => {
+          const result = {
+            postIds: { ...serverResult.postIds },
+            errors: { ...serverResult.errors },
+          };
+          if (xResult) {
+            if (xResult.postId) {
+              result.postIds.twitter = xResult.postId;
+            }
+            if (xResult.error) {
+              result.errors.twitter = xResult.error;
+            }
+          }
+          return { data: result };
         }),
       );
     }
@@ -302,12 +348,27 @@ function save() {
 
         let postPromise;
         if (socialResp) {
-          // Update the post again with the social post links
+          const { postIds, errors } = socialResp.data;
+          const failedNetworks = Object.entries(errors);
+          if (failedNetworks.length) {
+            window.alert(
+              'Some social posts failed:\n\n' +
+                failedNetworks
+                  .map(([network, message]) => `${network}: ${message}`)
+                  .join('\n'),
+            );
+          }
+
+          // Update the post again with the social post links, keeping any existing links for
+          // networks that weren't posted to (or failed).
           postPromise = axios.post(
             `/dynamic-api/micro/entry/${postResp.data._id}`,
             {
               ...transformedPostMeta,
-              socialLinks: socialLinksToArray(socialResp.data),
+              socialLinks: socialLinksToArray({
+                ...postMeta.socialLinks,
+                ...postIds,
+              }),
             },
           );
         } else {
@@ -336,6 +397,18 @@ function save() {
           null,
           `/micro/editor/${postResp.data.slug}`,
         );
+      })
+      .catch((err) => {
+        console.error(err);
+        // The entry routes return the raw error object, so only use the response body if it's a
+        // readable string.
+        const responseError = err?.response?.data?.error;
+        const message =
+          typeof responseError === 'string'
+            ? responseError
+            : err?.message || String(err);
+        window.alert(`Failed to save: ${message}`);
+        saveButton.removeAttribute('disabled');
       });
   });
 }

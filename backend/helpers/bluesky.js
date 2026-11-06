@@ -6,78 +6,61 @@ const { BskyAgent, RichText, UnicodeString } = Bsky;
 import imageSize from 'image-size';
 import auth from '../config/auth.config.js';
 
-export const createRichText = (post, $, $links) => {
-  const facets = [];
-  const postText = $.text();
-  const postBytes = new UnicodeString(postText);
+/**
+ * Flatten a post's HTML (as produced by processText for Bluesky) into plain text, along with the
+ * positions of its links within that text. HTML entities (&nbsp;, &amp;, etc.) are decoded, and
+ * link positions are measured in the decoded text, not the HTML source.
+ * @param {string} html
+ * @returns {{ text: string, links: { href: string, start: number, end: number }[] }} Link
+ *   positions are UTF-16 indices into text.
+ */
+export const extractTextAndLinks = (html) => {
+  const $ = cheerio.load(html, null, false);
+  let text = '';
+  const links = [];
+  const walk = (nodes) => {
+    for (const node of nodes) {
+      if (node.type === 'text') {
+        text += node.data;
+      } else if (node.children) {
+        const start = text.length;
+        walk(node.children);
+        if (node.name === 'a') {
+          links.push({ href: node.attribs.href, start, end: text.length });
+        }
+      }
+    }
+  };
+  walk($.root()[0].children);
+  return { text, links };
+};
 
-  while ($links.length > 0) {
-    const $link = $($links[0]);
-    const facet = {
-      features: [
-        { uri: $link.attr('href'), $type: 'app.bsky.richtext.facet#link' },
-      ],
-      index: {},
-    };
-
-    // Extract indices, convert to UTF-8 indices
-    const startInd = $link[0].startIndex;
-    const endInd = startInd + $link.text().length;
-    facet.index.byteStart = postBytes.utf16IndexToUtf8Index(startInd);
-    facet.index.byteEnd = postBytes.utf16IndexToUtf8Index(endInd);
-    facets.push(facet);
-
-    // Remove link, recreate cheerio representation to move on with updated indices
-    $link.replaceWith($link.text());
-    $ = cheerio.load(
-      $.html(),
-      {
-        xmlMode: true,
-        withStartIndices: true,
-        withEndIndices: true,
-        decodeEntities: false,
-      },
-      false,
-    );
-    $links = $('a');
-  }
+export const createRichText = (text, links) => {
+  const postBytes = new UnicodeString(text);
+  const facets = links.map(({ href, start, end }) => ({
+    features: [{ uri: href, $type: 'app.bsky.richtext.facet#link' }],
+    // Bluesky facet indices are UTF-8 byte offsets
+    index: {
+      byteStart: postBytes.utf16IndexToUtf8Index(start),
+      byteEnd: postBytes.utf16IndexToUtf8Index(end),
+    },
+  }));
   return {
     $type: 'app.bsky.feed.post',
-    text: postBytes.toString(),
+    text,
     facets,
     createdAt: new Date().toISOString(),
   };
 };
 
 export const makeSkeet = async (post, agent) => {
-  const $ = cheerio.load(
-    post.text,
-    {
-      xmlMode: true,
-      withStartIndices: true,
-      withEndIndices: true,
-      decodeEntities: false,
-    },
-    false,
+  const { text, links } = extractTextAndLinks(post.text);
+  const needsCustomRichText = links.some(
+    ({ href, start, end }) => text.substring(start, end) !== href,
   );
-  const $links = $('a');
-  let needsCustomRichText = false;
-  $links.each((_, elem) => {
-    const $el = $(elem);
-    if ($el.text() !== $(elem).attr('href')) {
-      needsCustomRichText = true;
-      return false;
-    }
-  });
 
   if (!needsCustomRichText) {
-    // Replace any link with just the plain URL
-    $links.each((_, elem) => {
-      const $a = $(elem);
-      $a.replaceWith($a.attr('href'));
-    });
-    // Strip remaining HTML since processText doesn't do this for Bsky
-    const text = $.text();
+    // Any links are just plain URLs in the text, which detectFacets will pick up
     const rt = new RichText({ text });
     await rt.detectFacets(agent);
     return {
@@ -87,7 +70,7 @@ export const makeSkeet = async (post, agent) => {
       createdAt: new Date().toISOString(),
     };
   } else {
-    return createRichText(post, $, $links);
+    return createRichText(text, links);
   }
 };
 
