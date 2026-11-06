@@ -64,7 +64,7 @@ router.get('/entry/:slug', async (req, res) => {
       bookmarks: [],
     };
     entry.webmentions.forEach((mention) => {
-      if (!mention.approved) {
+      if (!mention.approved || !mention.body) {
         return;
       }
       if (mention.body.content || mention.body.summary) {
@@ -79,10 +79,10 @@ router.get('/entry/:slug', async (req, res) => {
     });
     for (const key in webmentions) {
       webmentions[key].sort((a, b) => {
-        if (a.published > b.published) {
+        if (a.body.published > b.body.published) {
           return -1;
         }
-        if (a.published < b.published) {
+        if (a.body.published < b.body.published) {
           return 1;
         }
         return 0;
@@ -147,8 +147,11 @@ router.get(
   '/webmentions',
   authenticated({ redirectTo: '/micro/login' }),
   async (_, res) => {
-    const webmention = await Webmention.findOne({ approved: false });
-    res.render('micro/webmentions.pug', { webmention });
+    const webmentions = await Webmention.find({
+      approved: false,
+      rejectedAt: null,
+    }).sort({ createdAt: 1 });
+    res.render('micro/webmentions.pug', { webmentions });
   },
 );
 

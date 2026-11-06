@@ -254,6 +254,14 @@ button:hover {
   margin: 1em 0;
 }
 
+.webmention-bulk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em 1em;
+  margin: 1em 0;
+}
+
 .webmention .result-box,
 .webmention .input-group textarea,
 .webmention .input-group input {

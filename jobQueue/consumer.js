@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { Queue, UnrecoverableError, Worker } from 'bullmq';
-import * as cheerio from 'cheerio';
 import IORedis from 'ioredis';
 import auth from '../backend/config/auth.config.js';
 
 import { discoverWebmentionEndpoint } from './discoverWebmentionEndpoint.js';
 import { processSaveWebmention } from './processSaveWebmention.js';
+import { processWebmentionDigest } from './processWebmentionDigest.js';
 import { makeExternalRequestConfig } from './requestConfig.js';
+import { sourceLinksToTarget } from './verifyWebmention.js';
 
 const connection = new IORedis(
   { port: 32856, password: auth.redisPassword },
@@ -22,6 +23,21 @@ const jobQueue = new Queue('jobQueue', {
     },
   },
 });
+
+// Daily reminder about webmentions waiting for moderation. Upserting is
+// idempotent, so this is safe to run every time the consumer starts.
+jobQueue
+  .upsertJobScheduler(
+    'webmention-digest',
+    {
+      pattern: auth.webmentionDigestCron || '0 9 * * *',
+      tz: auth.webmentionDigestTimezone,
+    },
+    { name: 'webmention-digest' },
+  )
+  .catch((err) => {
+    console.error('Failed to schedule webmention digest:', err);
+  });
 
 const processDiscoverWebMention = async ({ source, target }) => {
   try {
@@ -79,25 +95,24 @@ async function processReceiveWebmention({ source, target }) {
       ...makeExternalRequestConfig({
         headers: { Accept: 'text/html, application/json, text/plain' },
       }),
+      // Keep the raw body so JSON sources aren't parsed into objects
+      responseType: 'text',
     });
 
     // If the source links to the target, add a job to save the webmention
-    if (sourceResp.headers['content-type'].includes('text/html')) {
-      const $ = cheerio.load(sourceResp.data);
-      const links = $(
-        `a[href="${target.href}"], img[src="${target.href}"], video[src="${target.href}"]`,
-      );
-      if (links) {
-        await jobQueue.add('save-webmention', { source, target });
-      }
-      return;
-    } else if (
-      (sourceResp.headers['content-type'].includes('application/json') &&
-        new RegExp(`["']${target.href}["']`).test(sourceResp.data)) ||
-      (sourceResp.headers['content-type'].includes('text/plain') &&
-        sourceResp.data.includes(target.href))
+    if (
+      sourceLinksToTarget({
+        body: sourceResp.data,
+        contentType: sourceResp.headers['content-type'],
+        source,
+        target,
+      })
     ) {
       await jobQueue.add('save-webmention', { source, target });
+    } else {
+      throw new UnrecoverableError(
+        `Webmention source ${source} does not link to target ${target}`,
+      );
     }
   } catch (err) {
     if (err.response) {
@@ -127,6 +142,8 @@ new Worker(
       case 'save-webmention':
         await processSaveWebmention(job.data);
         break;
+      case 'webmention-digest':
+        return processWebmentionDigest();
     }
   },
   {

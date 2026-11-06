@@ -65,7 +65,7 @@ export const sendWebmentions = async (doc) => {
   }
 
   let urls = [];
-  const source = 'https://www.mollywhite.net/micro/' + doc.slug;
+  const source = 'https://www.mollywhite.net/micro/entry/' + doc.slug;
 
   if (!doc.deletedAt) {
     // Extract URLs from new version of post (if there is one -- deleted posts don't have this)

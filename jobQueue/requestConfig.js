@@ -3,7 +3,8 @@ export const WEBMENTION_USER_AGENT =
 
 export const makeExternalRequestConfig = ({ headers = {} } = {}) => ({
   timeout: 5000,
-  maxContentLength: 100000,
+  // Many ordinary blog/social pages exceed 100KB of HTML; cap at 5MB
+  maxContentLength: 5 * 1024 * 1024,
   maxRedirects: 5,
   headers: {
     'User-Agent': WEBMENTION_USER_AGENT,

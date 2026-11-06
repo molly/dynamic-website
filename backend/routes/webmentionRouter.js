@@ -2,8 +2,9 @@ import axios from 'axios';
 import { Queue } from 'bullmq';
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
-import { mf2 } from 'microformats-parser';
+import mongoose from 'mongoose';
 import { makeExternalRequestConfig } from '../../jobQueue/requestConfig.js';
+import { parseWebmentionSource } from '../helpers/parseWebmention.js';
 import db from '../models/db.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 import { Webmention } from '../models/webmention.model.js';
@@ -11,6 +12,10 @@ import logger from '../winston.js';
 import { authenticated } from './auth.js';
 
 const router = express.Router();
+
+// Pages are served from www.mollywhite.net, so that's what nearly all targets
+// will use; accept the bare domain too.
+const ACCEPTED_TARGET_HOSTNAMES = ['www.mollywhite.net', 'mollywhite.net'];
 
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
@@ -58,7 +63,10 @@ router.post('/', async (req, res) => {
       .json({ error: 'Source and target URLs should not be the same.' });
     return;
   }
-  if (process.argv[2] === 'prod' && target.hostname !== 'mollywhite.net') {
+  if (
+    process.argv[2] === 'prod' &&
+    !ACCEPTED_TARGET_HOSTNAMES.includes(target.hostname)
+  ) {
     res.status(400).json({ error: 'Target URL should be on mollywhite.net.' });
     return;
   }
@@ -148,6 +156,55 @@ router.post('/manual', limiter, async (req, res) => {
 });
 
 // Admin routes
+const BODY_FIELDS = [
+  'author',
+  'authorUrl',
+  'type',
+  'published',
+  'content',
+  'summary',
+];
+
+// Fetch a webmention's source page and extract display details from it.
+// Throws if the source can't be fetched.
+const fetchAndParse = async (webmention) => {
+  let html;
+  try {
+    ({ data: html } = await axios.get(webmention.source, {
+      ...makeExternalRequestConfig({
+        headers: {
+          Accept: 'text/html',
+        },
+      }),
+      responseType: 'text',
+    }));
+  } catch (err) {
+    throw new Error(`Couldn't fetch source: ${err.message}`);
+  }
+  return parseWebmentionSource({
+    html,
+    source: webmention.source,
+    target: webmention.target,
+  });
+};
+
+const approve = (webmention, body) => {
+  webmention.body = webmention.body || {};
+  for (const key of BODY_FIELDS) {
+    if (body[key]) {
+      webmention.body[key] = body[key];
+    }
+  }
+  webmention.approved = true;
+  webmention.rejectedAt = undefined;
+  return webmention.save();
+};
+
+const validIds = (ids) =>
+  Array.isArray(ids) &&
+  ids.length > 0 &&
+  ids.every((id) => mongoose.isValidObjectId(id));
+
 router.post(
   '/parse',
   authenticated({ redirectTo: '/micro/login' }),
@@ -156,74 +213,16 @@ router.post(
       res.status(400).json({ error: 'Webmention ID is required.' });
       return;
     }
-    const webmentionId = req.body.id;
-    const webmention = await Webmention.findById(webmentionId);
+    const webmention = await Webmention.findById(req.body.id);
     if (!webmention) {
       res.status(404).json({ error: 'Webmention not found.' });
       return;
     }
-    const { data } = await axios.get(
-      webmention.source,
-      makeExternalRequestConfig({
-        headers: {
-          Accept: 'text/html',
-        },
-      }),
-    );
-    const baseUrl = new URL(webmention.source).origin;
-    const parsed = mf2(data, { baseUrl });
-    const hEntry = parsed.items.find((item) => item.type.includes('h-entry'));
-    const result = {
-      mentionUrl: webmention.source,
-    };
-
-    // Author
-    result.author = hEntry.properties.author?.[0]?.properties?.name?.[0];
-    result.authorUrl = hEntry.properties.author?.[0]?.properties?.url?.[0];
-    if (!result.authorUrl) {
-      result.authorUrl = parsed.rels?.author?.[0];
+    try {
+      res.json(await fetchAndParse(webmention));
+    } catch (err) {
+      res.status(502).json({ error: err.message });
     }
-
-    // Date
-    result.published = hEntry.properties.published?.[0];
-
-    // Content
-    result.content = hEntry.properties.content[0]?.html;
-    result.summary = hEntry.properties.summary?.[0];
-
-    // Replies
-    if (hEntry.properties['in-reply-to']) {
-      const inReplyTo = hEntry.properties['in-reply-to'];
-      if (inReplyTo.some((irt) => irt.value === webmention.target)) {
-        result.type = 'reply';
-      }
-    }
-
-    // Likes
-    if (hEntry.properties['like-of']) {
-      const likeOf = hEntry.properties['like-of'];
-      if (likeOf.some((lo) => lo.value === webmention.target)) {
-        result.type = 'like';
-      }
-    }
-
-    // Bookmarks
-    if (hEntry.properties['bookmark-of']) {
-      const bookmarkOf = hEntry.properties['bookmark-of'];
-      if (bookmarkOf.some((bo) => bo === webmention.target)) {
-        result.type = 'bookmark';
-      }
-    }
-
-    // Reposts
-    if (hEntry.properties['repost-of']) {
-      const repostOf = hEntry.properties['repost-of'];
-      if (repostOf.some((ro) => ro.value === webmention.target)) {
-        result.type = 'repost';
-      }
-    }
-
-    res.json(result);
   },
 );
 
@@ -235,30 +234,80 @@ router.post(
       res.status(400).json({ error: 'Webmention ID and body are required.' });
       return;
     }
-    const webmentionId = req.body.id;
-    const webmention = await Webmention.findById(webmentionId);
+    const webmention = await Webmention.findById(req.body.id);
     if (!webmention) {
       res.status(404).json({ error: 'Webmention not found.' });
       return;
     }
-    for (const key of [
-      'author',
-      'authorUrl',
-      'type',
-      'published',
-      'content',
-      'summary',
-    ]) {
-      if (req.body.body[key]) {
-        if (!webmention.body) {
-          webmention.body = {};
-        }
-        webmention.body[key] = req.body.body[key];
-      }
+    res.json(await approve(webmention, req.body.body));
+  },
+);
+
+// Parse and approve several webmentions at once. Any that can't be fetched or
+// don't have an h-entry are left pending for manual review.
+router.post(
+  '/approve-bulk',
+  authenticated({ redirectTo: '/micro/login' }),
+  async (req, res) => {
+    if (!req.body || !validIds(req.body.ids)) {
+      res.status(400).json({ error: 'A list of webmention IDs is required.' });
+      return;
     }
-    webmention.approved = true;
-    const result = await webmention.save();
-    res.json(result);
+    const webmentions = await Webmention.find({
+      _id: { $in: req.body.ids },
+      approved: false,
+      rejectedAt: null,
+    });
+    const found = new Set(webmentions.map((w) => w._id.toString()));
+    const approved = [];
+    const skipped = req.body.ids
+      .filter((id) => !found.has(id))
+      .map((id) => ({ id, reason: 'Not found or no longer pending.' }));
+
+    await Promise.all(
+      webmentions.map(async (webmention) => {
+        const id = webmention._id.toString();
+        try {
+          const parsed = await fetchAndParse(webmention);
+          if (parsed.warning) {
+            skipped.push({ id, reason: parsed.warning });
+            return;
+          }
+          await approve(webmention, parsed);
+          approved.push(id);
+        } catch (err) {
+          skipped.push({ id, reason: err.message });
+        }
+      }),
+    );
+    res.json({ approved, skipped });
+  },
+);
+
+router.post(
+  '/reject',
+  authenticated({ redirectTo: '/micro/login' }),
+  async (req, res) => {
+    if (!req.body || !validIds(req.body.ids)) {
+      res.status(400).json({ error: 'A list of webmention IDs is required.' });
+      return;
+    }
+    // Keep the records (rather than deleting them) so that if a source re-sends
+    // a webmention, the existing record causes it to be ignored. The TTL index
+    // on rejectedAt removes them later.
+    const { matchedCount } = await Webmention.updateMany(
+      { _id: { $in: req.body.ids } },
+      { $set: { approved: false, rejectedAt: new Date() } },
+    );
+    if (matchedCount === 0) {
+      res.status(404).json({ error: 'Webmentions not found.' });
+      return;
+    }
+    await MicroEntry.updateMany(
+      { webmentions: { $in: req.body.ids } },
+      { $pull: { webmentions: { $in: req.body.ids } } },
+    );
+    res.sendStatus(204);
   },
 );
 
