@@ -55,15 +55,17 @@ describe('renderArticle', () => {
       data: {
         excerpts: ['Since 2024, the FEC has failed to rule.'],
         snapshot: { ...SNAPSHOT, title: 'Old title' },
-        entry: { ...SNAPSHOT, completed: '2026-10-30' },
+        entry: { ...SNAPSHOT, completed: '2025-10-30' },
       },
     });
     expect(html).toContain(
-      '<p class="article-card-meta">The Washington Sun · Taylor Giorno</p>',
+      '<p class="article-card-meta"><span class="article-card-outlet">The Washington Sun</span> · Taylor Giorno</p>',
     );
     expect(html).toContain(`<a href="${SNAPSHOT.href}">${SNAPSHOT.title}</a>`);
-    expect(html).toContain('Since 2024, the FEC has failed to rule.');
-    expect(html).toContain('read Oct 30, 2026');
+    expect(html).toContain(
+      '<blockquote class="article-card-excerpt"><p>Since 2024, the FEC has failed to rule.</p></blockquote>',
+    );
+    expect(html).toContain('read Oct 30, 2025');
   });
 
   it('falls back to the snapshot when the entry is gone', () => {

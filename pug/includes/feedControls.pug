@@ -1,0 +1,13 @@
+//- Filter chips and the rss link above the feed. Needs `filters` and `activeFilter`.
+include ../mixins/site/icon.pug
+.feed-controls
+  nav.feed-filters(aria-label="Show only")
+    ul
+      li
+        a.chip(href="/feed", aria-current=!activeFilter ? 'page' : false) all
+      each filter in filters
+        li
+          a.chip(href=`/feed?type=${filter.value}`, aria-current=activeFilter === filter.value ? 'page' : false)
+            +siteIcon(filter.icon)
+            |  #{filter.label}
+  a.feed-rss(href="/feed/feed.xml", rel="alternate", type="application/rss+xml") rss

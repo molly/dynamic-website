@@ -1,5 +1,6 @@
 import express from 'express';
 import { getMicroEntries, getMicroEntry } from '../../api/micro.js';
+import { attachFeedMeta } from '../../backend/helpers/feedMeta.js';
 import { Tag } from '../../backend/models/tag.model.js';
 import { Webmention } from '../../backend/models/webmention.model.js';
 import { authenticated } from '../../backend/routes/auth.js';
@@ -31,6 +32,7 @@ router.get('/', async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const start = (page - 1) * LIMIT;
   const result = await getMicroEntries({ query: {}, start, limit: LIMIT });
+  await attachFeedMeta(result.entries);
   res.render('micro/index.pug', {
     entries: result.entries,
     currentPage: page,
@@ -98,6 +100,7 @@ router.get('/entry/:slug', async (req, res) => {
     }
   }
 
+  await attachFeedMeta([entry]);
   res.render('micro/entry.pug', {
     entry: { ...entry, webmentions, image },
     options: { isLoggedIn: req.isAuthenticated() },
@@ -126,7 +129,7 @@ router.get('/tag/:tag', async (req, res) => {
       start,
       limit: LIMIT,
     });
-    results.entries = result.entries;
+    results.entries = await attachFeedMeta(result.entries);
     results.totalPages = Math.ceil(result.totalResults / LIMIT);
     results.totalResults = result.totalResults;
     results.totalUnfilteredResults = result.totalUnfilteredResults;

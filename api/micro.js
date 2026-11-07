@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import EditorJSHtml from 'editorjs-html';
 import {
+  RELATED_POPULATE,
   loadPostContext,
   preparePostForDisplay,
 } from '../backend/helpers/postContext.js';
@@ -11,6 +12,7 @@ import { Webmention } from '../backend/models/webmention.model.js';
 import {
   renderArticle,
   renderMedia,
+  renderQuote,
   renderRoundup,
   renderTable,
 } from './helpers/blocks.js';
@@ -30,13 +32,7 @@ import { hydrateUpdates, linkCorrections } from './helpers/updates.js';
 const edjsParser = EditorJSHtml({
   gallery: formatGallery,
   image: formatMedia,
-  quote: ({ data }) => {
-    let cite = '';
-    if (data.caption) {
-      cite = `<cite>– ${data.caption}</cite>`;
-    }
-    return `<div class="quote"><blockquote>${data.text}</blockquote>${cite}</div>`;
-  },
+  quote: renderQuote,
   embed: ({ data }) => {
     switch (data.service) {
       case 'youtube': {
@@ -104,6 +100,35 @@ const getEntryPlaintext = (entry) => {
 };
 
 /**
+ * The one article a post's quotes come from, if it links to exactly one: through an article card
+ * or as a related post.
+ * @param {Object} entry
+ * @param {{shortform?: Object}} context
+ * @returns {?string}
+ */
+export function quoteSource(entry, { shortform = {} } = {}) {
+  const hrefs = new Set([
+    ...(entry.post?.blocks || [])
+      .filter((block) => block.type === 'article')
+      .map(
+        (block) =>
+          (shortform[String(block.data.ref)] || block.data.snapshot)?.href,
+      ),
+    ...(entry.relatedPosts || [])
+      .filter((related) => related.model === 'ShortformEntry')
+      .map((related) => related.ref?.href),
+  ]);
+  hrefs.delete(undefined);
+  return hrefs.size === 1 ? [...hrefs][0] : null;
+}
+
+// Links shown with a post outside its blocks: its related posts.
+export const relatedUrls = (entry) =>
+  (entry.relatedPosts || [])
+    .map((related) => related.ref?.href)
+    .filter(Boolean);
+
+/**
  * Prepare a micro entry for display.
  * @param {Object} entry
  * @param {Object} [context] What the post refers to, from loadPostContext
@@ -111,8 +136,10 @@ const getEntryPlaintext = (entry) => {
 export const hydrateMicroEntry = (entry, context = {}) => {
   if (entry) {
     Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
+    const options = { quoteSource: quoteSource(entry, context) };
     const renderPost = (post) =>
-      edjsParser.parse(preparePostForDisplay(post, context));
+      edjsParser.parse(preparePostForDisplay(post, context, options));
+    entry.archived = context.archived || {}; // For the related-post cards
     entry.updates = hydrateUpdates(entry, renderPost);
     if (entry.post && entry.post.blocks) {
       entry.html = linkCorrections(
@@ -157,10 +184,12 @@ export const getMicroEntries = async ({
   }
   const entries = await q
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
-    .populate({ path: 'relatedPosts.ref' })
+    .populate(RELATED_POPULATE)
     .populate({ path: 'webmentions', model: Webmention })
     .lean();
-  const context = await loadPostContext(entries.flatMap(entryPosts));
+  const context = await loadPostContext(entries.flatMap(entryPosts), {
+    urls: entries.flatMap(relatedUrls),
+  });
   const hydrated = entries.map((entry) => hydrateMicroEntry(entry, context));
   const totalResults = await MicroEntry.countDocuments(query);
   let totalUnfilteredResults = totalResults;
@@ -174,10 +203,12 @@ export const getMicroEntries = async ({
 export const getMicroEntry = async (slug) => {
   const entry = await MicroEntry.findOne({ slug })
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
-    .populate({ path: 'relatedPosts.ref' })
+    .populate(RELATED_POPULATE)
     .populate({ path: 'webmentions', model: Webmention })
     .lean();
 
-  const context = entry ? await loadPostContext(entryPosts(entry)) : {};
+  const context = entry
+    ? await loadPostContext(entryPosts(entry), { urls: relatedUrls(entry) })
+    : {};
   return hydrateMicroEntry(entry, context);
 };

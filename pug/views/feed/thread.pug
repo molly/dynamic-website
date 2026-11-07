@@ -1,0 +1,23 @@
+extends ../../templates/site.pug
+
+block vars
+  - var htmlClass = 'feed thread'
+  - var navCurrent = 'feed'
+
+block head
+  include ../../templates/titleAndDescription.pug
+  +titleAndDescription(`Thread: ${thread.title}`, thread.description || `Molly White's posts in the thread “${thread.title}”`)
+
+block body
+  main#main.site-main.h-feed
+    h1.page-title.p-name Thread: #{thread.title}
+    p.page-subtitle
+      | #{totalResults} #{totalResults === 1 ? 'entry' : 'entries'}, oldest first · #[a(href="/feed") ← the feed]
+    if thread.description
+      p.page-description.p-summary #{thread.description}
+
+    include ../../mixins/site/entry.pug
+    +feedList(entries, options)
+
+    - var pageBase = `/feed/thread/${thread.slug}?`
+    include ../../includes/pager.pug

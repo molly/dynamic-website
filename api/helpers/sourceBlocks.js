@@ -26,7 +26,7 @@ const domainOf = (url) => {
 const pdfHref = ({ pdfUrl, pdfPage }) =>
   pdfUrl && pdfPage ? `${pdfUrl}#page=${pdfPage}` : pdfUrl;
 
-export function renderDocument({ data }) {
+export function renderDocument({ data, archived = {} }) {
   const isFiling = data.docType === 'filing';
   const paragraph = String(data.paragraph || '').trim();
   const excerpt = cleanHtml(data.excerptHtml, EXCERPT_TAGS);
@@ -45,6 +45,7 @@ export function renderDocument({ data }) {
     .join(' · ');
   const sourceLinks = [
     link(pdf, isFiling ? 'PDF' : 'full document (PDF)'),
+    link(archived[data.pdfUrl], 'archived'),
     link(data.docketUrl, 'docket'),
   ]
     .filter(Boolean)
@@ -118,14 +119,18 @@ function renderPostBody(post, screenshot) {
   return `<div class="social-text">${cleanHtml(post.textHtml)}</div>${renderSocialMedia(post.media, screenshot)}${card}${quoted}`;
 }
 
-function cardFooter(originalUrl, screenshot) {
-  const links = [link(originalUrl, 'original'), link(screenshot, 'screenshot')]
+function cardFooter(originalUrl, screenshot, archived = {}) {
+  const links = [
+    link(originalUrl, 'original'),
+    link(archived[originalUrl], 'archived'),
+    link(screenshot, 'screenshot'),
+  ]
     .filter(Boolean)
     .join(' · ');
   return links ? `<p class="social-footer">${links}</p>` : '';
 }
 
-export function renderSocialPost({ data }) {
+export function renderSocialPost({ data, archived = {} }) {
   const posts = data.posts || [];
   if (!posts.length) {
     return '';
@@ -137,7 +142,7 @@ export function renderSocialPost({ data }) {
     return `<figure class="social-card network-${escapeHtml(post.network)}">
 <header class="social-head">${authorLine(post)}<span class="social-network">${escapeHtml(network)}</span></header>
 ${renderPostBody(post, data.screenshot)}
-${when ? `<p class="social-meta">${escapeHtml(when)}</p>` : ''}${cardFooter(post.originalUrl, data.screenshot)}
+${when ? `<p class="social-meta">${escapeHtml(when)}</p>` : ''}${cardFooter(post.originalUrl, data.screenshot, archived)}
 </figure>`;
   }
   const items = posts
@@ -149,7 +154,7 @@ ${when ? `<p class="social-meta">${escapeHtml(when)}</p>` : ''}${cardFooter(post
   return `<figure class="social-card social-thread network-${escapeHtml(posts[0].network)}">
 <header class="social-head"><span>Thread · ${posts.length} posts</span><span class="social-network">${escapeHtml(network)}</span></header>
 <ol class="social-thread-posts">${items}</ol>
-${cardFooter(posts[0].originalUrl, data.screenshot)}
+${cardFooter(posts[0].originalUrl, data.screenshot, archived)}
 </figure>`;
 }
 

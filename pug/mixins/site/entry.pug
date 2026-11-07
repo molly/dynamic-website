@@ -1,0 +1,240 @@
+//- One entry on the redesigned pages: the post on the left, its metadata column on the right (on a
+//- phone, the verb line above the post and the rows below it). entryMeta (api/helpers/entryMeta.js)
+//- works out the verb, date and rows.
+include ./icon.pug
+include ../shortformArticle.pug
+include ../pressArticle.pug
+
+mixin entryRows(meta, options)
+  - var showEdit = options.isLoggedIn && meta.editUrl
+  if meta.rows.length || showEdit
+    dl.entry-rows
+      each row in meta.rows
+        .entry-row
+          dt #{row.label}
+          dd
+            each item, index in row.items
+              if index > 0
+                | #{row.separator || ' · '}
+              if item.html
+                != item.html
+              else if item.href
+                a(href=item.href, class=row.label === 'tags' ? 'p-category' : null, rel=row.label === 'tags' ? 'tag' : null)
+                  if item.italic
+                    i #{item.text}
+                  else
+                    | #{item.text}
+              else if item.italic
+                i #{item.text}
+              else
+                | #{item.text}
+      if showEdit
+        .entry-row
+          dt
+          dd
+            a.entry-edit(href=meta.editUrl) edit
+
+mixin microBody(micro, meta, options)
+  - var isLive = micro.live && micro.live.status
+  if isLive
+    p.entry-live(class=micro.live.status)
+      if micro.live.status === 'updating'
+        span.entry-live-dot(aria-hidden="true") ●
+        |  Updating
+        if micro.live.lastUpdateAt
+          |  · last #{updateTime(micro.live.lastUpdateAt, new Date())}
+      else
+        | Live coverage ended
+  if micro.title
+    h2.entry-title.p-name
+      if options.isPermalink
+        | #{micro.title}
+      else
+        a(href=meta.date.href) #{micro.title}
+  if meta.replyTo
+    p.entry-reply
+      +siteIcon('reply')
+      |  in reply to #[a.u-in-reply-to(href=meta.replyTo.url) #{meta.replyTo.name}]
+      if meta.replyTo.networkLabel
+        |  on #{meta.replyTo.networkLabel}
+      if meta.replyTo.date
+        |  · #{meta.replyTo.date}
+  if isLive
+    +liveBody(micro, meta, options)
+  else
+    //- In the feed a long post shows its start, then "continues →" (api/helpers/feedExcerpt.js).
+    - var excerpt = options.isPermalink ? { html: micro.html, truncated: false } : feedExcerpt(micro)
+    .entry-content.e-content
+      each block in excerpt.html
+        != block
+    if excerpt.truncated
+      p.entry-continues
+        a(href=meta.date.href) continues →
+    else
+      +microExtras(micro, micro.updates || [])
+
+//- A live post: its updates newest first, then the post that started it. In the feed, the latest
+//- two updates.
+mixin liveBody(micro, meta, options)
+  - var liveUpdates = (micro.updates || []).filter((u) => u.kind === 'live')
+  - var shown = options.isPermalink ? liveUpdates : liveUpdates.slice(0, 2)
+  if shown.length
+    section.live-updates
+      each update in shown
+        .live-update(id=`update-${update.id}`)
+          p.update-time
+            time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime) #{updateTime(update.at, micro.createdAt)}
+          if update.headline
+            h3.update-headline #{update.headline}
+          .entry-content
+            each block in update.html
+              != block
+  if shown.length < liveUpdates.length
+    p.entry-continues
+      a(href=meta.date.href) continues → #{liveUpdates.length - shown.length} earlier #{liveUpdates.length - shown.length === 1 ? 'update' : 'updates'}
+  else
+    .live-original
+      p.update-time #{updateTime(micro.createdAt, micro.createdAt)} · first post
+      .entry-content.e-content
+        each block in micro.html
+          != block
+    +microExtras(micro, (micro.updates || []).filter((u) => u.kind !== 'live'))
+
+//- After a post: the articles it's related to as cards, then its updates and corrections.
+mixin microExtras(micro, updates)
+  - var related = (micro.relatedPosts || []).filter((r) => r.ref)
+  if related.length
+    .entry-content
+      each item in related
+        != articleCard(item.ref, { archived: micro.archived || {} })
+  if updates.length
+    section.entry-updates
+      each update in updates
+        .entry-update(id=`update-${update.id}`, class=update.kind)
+          p.update-meta
+            span.update-label #{update.label}
+            |  · 
+            time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime) #{updateTime(update.at, micro.createdAt)}
+          if update.headline
+            h3.update-headline #{update.headline}
+          .entry-content
+            each block in update.html
+              != block
+
+//- "Followed up in Citation Needed": later newsletter issues in the entry's thread.
+mixin followUps(feedMeta)
+  - var issues = feedMeta.laterIssues
+  aside.followups(id=`followed-up-${feedMeta.key}`)
+    p.followups-head
+      +siteIcon('envelope')
+      |  Followed up in #[i Citation Needed] · #{issues.length} #{issues.length === 1 ? 'issue' : 'issues'} · #{shortDate(issues[0].createdAt)}
+    .followups-issues
+      each issue in issues
+        a.followup(href=issue.href)
+          if issue.image
+            img(src=issue.image, alt=issue.imageAlt, loading="lazy")
+          span.followup-text
+            span.followup-title #{issue.title}
+            if issue.dek
+              span.followup-dek #{issue.dek}
+
+mixin citationNeededBody(entry, meta)
+  .entry-cn
+    if entry.image
+      a.entry-cn-image(href=meta.date.href, tabindex="-1", aria-hidden="true")
+        img(src=entry.image, alt=entry.imageAlt || '', loading="lazy")
+    div
+      h2.entry-title.p-name
+        a.u-syndication(href=meta.date.href, rel="syndication") #{entry.title}
+      if entry.excerpt
+        .entry-dek.p-summary
+          != entry.excerpt
+
+//- A book: cover, series, title and "by Author · 2000 · 470 pages".
+mixin bookBody(book, meta)
+  .entry-book.h-cite
+    if book.imageSrc
+      a.entry-book-cover(href=meta.date.href, tabindex="-1", aria-hidden="true")
+        img(src=book.imageSrc, alt="", loading="lazy")
+    div
+      if book.series
+        p.entry-book-series
+          i #{book.series}
+          |  series
+          if Number.isFinite(book.seriesNumber)
+            | , book #{book.seriesNumber}
+      h2.entry-book-title.p-name
+        a(href=book.href || meta.date.href) #[i #{book.title}]
+      if book.subtitle
+        p.entry-book-subtitle #{book.subtitle}
+      - var details = [book.author ? `by ${book.author}` : null, book.date ? String(book.date).slice(0, 4) : null, book.pages ? `${book.pages} pages` : null].filter(Boolean)
+      if details.length
+        p.entry-book-byline #{details.join(' · ')}
+
+//- "Also read · Oct 28 · 3": articles read on one day, one line each, across the whole width.
+mixin readingGroup(group, options = {})
+  section.reading-group(aria-label=`Also read on ${group.dateText}`)
+    p.reading-group-head
+      +siteIcon('newspaper')
+      |  Also read · #{group.dateText}
+      if group.entries.length > 1
+        |  · #{group.entries.length}
+    ul.reading-group-items
+      each entry in group.entries
+        - var article = entry.shortform
+        - var archive = entry.feedMeta && entry.feedMeta.archived[article.href]
+        li.h-cite
+          if article.href
+            a.u-url.p-name(href=article.href) “#{article.title}”
+          else
+            span.p-name “#{article.title}”
+          if article.work
+            |  — #[i.p-publication #{article.work}]
+          else if article.author
+            |  — #[span.p-author #{article.author}]
+          span.reading-group-extra
+            each tag in (entry.tags || []).filter((t) => t && t.text)
+              |  · 
+              a.p-category(href=`${options.tagBase || '/feed/tag'}/${tag.value}`, rel="tag") ##{tag.text.trim().toLowerCase().replace(/\s+/g, '-')}
+            if archive
+              |  · #[a(href=archive) archived]
+            if options.isLoggedIn
+              |  · #[a.entry-edit(href=`/feed/tagger/readingShortform/${entry._id}`) edit]
+
+//- A page of the feed: entries, with neighbouring same-day reading grouped.
+mixin feedList(entries, options = {})
+  each item in groupReading(entries)
+    if item.entryType === 'readingGroup'
+      +readingGroup(item, options)
+    else
+      +siteEntry(item, options)
+
+mixin siteEntry(entry, options = {})
+  - var meta = entryMeta(entry, { tagBase: options.tagBase })
+  if meta
+    - var micro = entry.entryType === 'micro' ? entry.micro : (entry.entryType ? null : entry)
+    article.site-entry.h-entry(class=[`site-entry-${entry.entryType || 'micro'}`, meta.verb === 'Quoted' ? 'site-entry-quoted' : null])
+      p.entry-verb
+        +siteIcon(meta.icon)
+        span.entry-verb-word #{meta.verb}
+        |  
+        a.u-url(href=meta.date.href)
+          time.dt-published(datetime=meta.date.iso, title=meta.date.title) #{meta.date.text}
+      .entry-main
+        if micro
+          +microBody(micro, meta, options)
+        else
+          case entry.entryType
+            when 'citationNeeded'
+              +citationNeededBody(entry, meta)
+            when 'readingShortform'
+              .entry-content
+                +shortformArticle(entry.shortform, false, true)
+            when 'readingBook'
+              +bookBody(entry.book, meta)
+            when 'press'
+              .entry-content
+                +pressArticle(entry.press, false, true)
+        if entry.feedMeta && entry.feedMeta.laterIssues.length
+          +followUps(entry.feedMeta)
+      +entryRows(meta, options)

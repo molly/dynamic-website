@@ -9,9 +9,9 @@ import { ENTITY_SUMMARY_FIELDS } from './entities.js';
 // Populate options for labelFeedEntry, for any mix of feed entry types.
 export const FEED_ENTRY_LABEL_POPULATE = [
   { path: 'micro', model: MicroEntry, select: 'title slug post' },
-  { path: 'shortform', model: ShortformEntry, select: 'title' },
+  { path: 'shortform', model: ShortformEntry, select: 'title href' },
   { path: 'book', model: Book, select: 'title' },
-  { path: 'press', model: PressEntry, select: 'title' },
+  { path: 'press', model: PressEntry, select: 'title href' },
 ];
 
 const LABEL_LENGTH = 80;
@@ -50,6 +50,30 @@ function editUrl(entry) {
   }
   if (entry.__t === 'FeedEntryPress') {
     return `/feed/tagger/press/${entry._id}`;
+  }
+  return null;
+}
+
+/**
+ * Where a feed entry populated with FEED_ENTRY_LABEL_POPULATE is read on the site, or elsewhere.
+ * @param {Object} entry
+ * @returns {?string}
+ */
+export function feedEntryHref(entry) {
+  if (entry.micro) {
+    return `/micro/entry/${entry.micro.slug}`;
+  }
+  if (entry.__t === 'FeedEntryCitationNeeded') {
+    return `https://www.citationneeded.news/${entry.slug}`;
+  }
+  if (entry.shortform) {
+    return entry.shortform.href || null;
+  }
+  if (entry.press) {
+    return entry.press.href || null;
+  }
+  if (entry.book) {
+    return `/reading/books?search=${encodeURIComponent(entry.book.title)}`;
   }
   return null;
 }

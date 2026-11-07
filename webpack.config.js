@@ -13,12 +13,14 @@ export default [
       admin: './frontend/js/admin.js',
       editor: './frontend/js/editor.js',
       reading: './frontend/js/reading.js',
+      site: './frontend/js/site.js',
       feed: './frontend/js/feed.js',
       tagger: './frontend/js/tagger.js',
       webmentions: './frontend/js/webmentions.js',
     },
     output: {
       path: distPath,
+      publicPath: '/static/', // dist is served at /static
     },
     plugins: [new MiniCssExtractPlugin()],
     module: {
@@ -41,6 +43,11 @@ export default [
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         { test: /\.svg$/, loader: 'svg-inline-loader' },
+        {
+          test: /\.woff2?$/,
+          type: 'asset/resource',
+          generator: { filename: 'fonts/[name][ext]' },
+        },
       ],
     },
   },

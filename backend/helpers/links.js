@@ -53,6 +53,12 @@ export const extractUrlsFromBlocks = (blocks, { embeds = false } = {}) => {
         }
       }
     }
+    if (
+      ['image', 'gallery'].includes(block.type) &&
+      block.tunes?.imageSource?.sourceUrl
+    ) {
+      urls.push(block.tunes.imageSource.sourceUrl); // Where the image came from
+    }
     if (block.type === 'paragraph') {
       const text = block.data.text;
       urls.push(...extractUrlsFromText(text));

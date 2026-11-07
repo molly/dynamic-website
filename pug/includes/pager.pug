@@ -1,0 +1,10 @@
+//- "← older" and "newer →" between pages of a feed. Needs currentPage, totalPages and pageBase
+//- (the URL up to and including "?" or "&").
+if totalPages > 1
+  nav.pager(aria-label="Pages")
+    if currentPage < totalPages
+      a.pager-older(href=`${pageBase}page=${currentPage + 1}`, rel="next") ← older
+    else
+      span
+    if currentPage > 1
+      a.pager-newer(href=currentPage === 2 ? pageBase.replace(/[?&]$/, '') || '/' : `${pageBase}page=${currentPage - 1}`, rel="prev") newer →

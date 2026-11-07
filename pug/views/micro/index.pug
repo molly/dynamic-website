@@ -1,31 +1,28 @@
-extends ../../templates/base.pug
+extends ../../templates/site.pug
 
 block vars
-  - var htmlClass = 'feed micro';
-  - var importPrefix = 'https://www.mollywhite.net'
+  - var htmlClass = 'micro'
+  - var navCurrent = 'feed'
 
 block head
   include ../../templates/titleAndDescription.pug
   +titleAndDescription('Micro feed', "Feed of Molly White's microblog posts")
-  link(rel='stylesheet', href="/static/feed.css")
 
 block body
-  main.content-box.h-feed.hfeed
+  main#main.site-main.h-feed
     if options.tagQuery
-      hi.p-name.site-title Thoughts tagged "#{options.tag ? options.tag.text : options.tagQuery}"
+      h1.page-title.p-name Posts tagged #[span.page-title-tag ##{options.tag ? options.tag.text : options.tagQuery}]
+      p.page-subtitle #[a(href="/micro") ← all posts]
     else
-      h1.p-name.site-title Thoughts
-    p.p-summary.site-description Short thoughts, notes, links, and musings by #[a(href="https://www.mollywhite.net/about" class="p-author u-author" rel="author") Molly White]. 
-      a(rel="alternate", type="application/rss+xml", title="Molly White's microblog feed", href="https://www.mollywhite.net/micro/feed.xml")
-        span.no-wrap RSS #[img.icon.bw-icon(src="https://www.mollywhite.net/storage/rss.svg")]
-    
+      h1.page-title.p-name Posts
+      p.page-subtitle.p-summary Short thoughts, notes, links, and musings by #[a(href="https://www.mollywhite.net/about", class="p-author u-author", rel="author") Molly White]. #[a(href="https://www.mollywhite.net/micro/feed.xml", rel="alternate", type="application/rss+xml") rss]
+
     if options.hasResults === false
-      p No results found. 
-        a(href="/micro") View all thoughts
-    include ../../mixins/feed/microEntry.pug
-    each entry in entries
-      +microEntry(entry, {...options, isInMicroFeed: true})
+      p.empty No posts with that tag. #[a(href="/micro") See all posts].
+    else
+      include ../../mixins/site/entry.pug
+      each entry in entries
+        +siteEntry(entry, { ...options, tagBase: '/micro/tag' })
 
-    include ../../includes/paginator.pug
-
-  script(src="/static/feed.js")
+    - var pageBase = options.tagQuery ? `/micro/tag/${options.tagQuery}?` : '/micro?'
+    include ../../includes/pager.pug

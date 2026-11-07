@@ -1,31 +1,31 @@
-extends ../../templates/base.pug
+extends ../../templates/site.pug
 
 block vars
-  - var htmlClass = 'feed';
-  - var importPrefix = 'https://www.mollywhite.net'
+  - var htmlClass = 'feed'
+  - var navCurrent = 'feed'
 
 block head
   include ../../templates/titleAndDescription.pug
-  +titleAndDescription('Feed', "Molly White's activity feed")
-  link(rel='stylesheet', href="/static/feed.css")
+  if options.tagQuery
+    +titleAndDescription(`Feed: #${options.tag ? options.tag.text : options.tagQuery}`, "Molly White's activity feed")
+  else
+    +titleAndDescription('Feed', "Molly White's activity feed")
 
 block body
-  main.content-box.h-feed.hfeed
+  main#main.site-main.h-feed
+    a.hidden(href="https://www.mollywhite.net/about", class="p-author u-author", rel="author") Molly White
     if options.tagQuery
-      h1.p-name.site-title Activity tagged "#{options.tag ? options.tag.text : options.tagQuery}"
+      h1.page-title.p-name Tagged #[span.page-title-tag ##{options.tag ? options.tag.text : options.tagQuery}]
+      p.page-subtitle #[a(href="/feed") ← all of the feed]
     else
-      h1.p-name.site-title Activity
-    p.p-summary.site-description 
-      a.hidden(href="https://www.mollywhite.net/about" class="p-author u-author" rel="author") Molly White
+      h1.page-title.p-name.visually-hidden Feed
+      include ../../includes/feedControls.pug
 
     if options.hasResults === false
-      p No results found. 
-        a(href="/feed") View all activity
+      p.empty No entries with that tag. #[a(href="/feed") See the whole feed].
     else
-      include ../../mixins/feed/feedEntry.pug
-      each entry in entries
-        +feedEntry(entry, options)
+      include ../../mixins/site/entry.pug
+      +feedList(entries, options)
 
-    include ../../includes/paginator.pug
-
-  script(src="/static/feed.js")
+    - var pageBase = options.tagQuery ? `/feed/tag/${options.tagQuery}?` : (activeFilter ? `/feed?type=${activeFilter}&` : '/feed?')
+    include ../../includes/pager.pug

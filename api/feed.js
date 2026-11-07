@@ -1,5 +1,8 @@
 import { entryPosts } from '../backend/helpers/links.js';
-import { loadPostContext } from '../backend/helpers/postContext.js';
+import {
+  RELATED_POPULATE,
+  loadPostContext,
+} from '../backend/helpers/postContext.js';
 import { Book } from '../backend/models/book.model.js';
 import { PressEntry, ShortformEntry } from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
@@ -11,7 +14,7 @@ import { getPressDetails } from './helpers/press.js';
 import { getReadingDetails } from './helpers/reading.js';
 import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
 import { hydrateTimestamps } from './helpers/timestamps.js';
-import { hydrateMicroEntry } from './micro.js';
+import { hydrateMicroEntry, relatedUrls } from './micro.js';
 
 export const hydrateFeedEntries = (entries, context = {}) =>
   entries.map((entry) => hydrateFeedEntry(entry, context));
@@ -61,9 +64,10 @@ export const getFeedEntries = async ({
   query = {},
   start = 0,
   limit = 10,
+  oldestFirst = false,
 } = {}) => {
   let q = FeedEntry.find({ deletedAt: { $exists: false }, ...query }).sort({
-    createdAt: -1,
+    createdAt: oldestFirst ? 1 : -1,
   });
 
   if (start) {
@@ -84,7 +88,7 @@ export const getFeedEntries = async ({
       model: MicroEntry,
       populate: [
         { path: 'tags', model: Tag, options: { sort: { value: 1 } } },
-        { path: 'relatedPosts.ref' },
+        RELATED_POPULATE,
         { path: 'webmentions', model: Webmention },
       ],
     })
@@ -121,11 +125,12 @@ export const getFeedEntries = async ({
       (entry.__t !== 'FeedEntryMicro' || entry.micro !== null) &&
       (entry.__t !== 'FeedEntryPress' || entry.press !== null),
   );
-  const context = await loadPostContext(
-    validEntries
-      .filter((entry) => entry.micro)
-      .flatMap((entry) => entryPosts(entry.micro)),
-  );
+  const micros = validEntries
+    .filter((entry) => entry.micro)
+    .map((e) => e.micro);
+  const context = await loadPostContext(micros.flatMap(entryPosts), {
+    urls: micros.flatMap(relatedUrls),
+  });
   const hydrated = hydrateFeedEntries(validEntries, context);
 
   const totalResults = await FeedEntry.countDocuments(query);

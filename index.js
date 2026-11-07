@@ -15,6 +15,7 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from './backend/models/user.model.js';
 import { toISOWithoutMillis, webmentionTimestamp } from './pug/js/toISO.js';
+import { siteLocals } from './api/helpers/siteLocals.js';
 
 const PORT = process.env.PORT || 5001;
 
@@ -54,6 +55,7 @@ app.set('views', new URL('pug/views', import.meta.url).pathname);
 app.set('view engine', new URL('pug', import.meta.url).pathname);
 app.locals.toISOWithoutMillis = toISOWithoutMillis;
 app.locals.webmentionTimestamp = webmentionTimestamp;
+Object.assign(app.locals, siteLocals);
 
 app.use('/dynamic-api', backendRouter);
 app.use('/', frontendRouter);

@@ -1,0 +1,30 @@
+- var navLinks = [{ key: 'home', href: '/', text: 'Home' }, { key: 'feed', href: '/feed', text: 'Feed' }, { key: 'about', href: '/about', text: 'About' }, { key: 'support', href: '/support', text: 'Support', support: true }]
+
+mixin siteNav
+  nav.site-nav(aria-label="Main")
+    ul
+      each link in navLinks
+        li
+          a(href=link.href, class=link.support ? 'support' : '', aria-current=navCurrent === link.key ? 'page' : false) #{link.text}
+      li
+        button#site-menu-button.site-menu-button(type="button", aria-expanded="false", aria-controls="site-menu")
+          svg(viewBox="0 0 12 12", width="10", height="10", aria-hidden="true")
+            path(d="M1 3h10M1 6h10M1 9h10", stroke="currentColor", stroke-width="1.3")
+          |  Menu
+    include ./siteMenu.pug
+
+if headerVariant === 'home'
+  header.site-header.site-header-home.h-card
+    +siteNav
+    .site-intro
+      div
+        h1.site-wordmark
+          a.p-name.u-url.u-uid(href="https://www.mollywhite.net/", rel="me") Molly White
+        p.p-note I research and write critically about the cryptocurrency industry and technology more broadly in my independent publication, #[a(href="https://www.citationneeded.news/") #[i Citation Needed]]. I also run #[a(href="https://www.web3isgoinggreat.com/") #[i Web3 is Going Just Great]] and #[a(href="https://www.followthecrypto.org/") #[i Follow the Crypto]].
+      picture.site-photo
+        source(srcset="https://www.mollywhite.net/assets/images/molly_horizontal.webp", type="image/webp")
+        img.u-photo(src="https://www.mollywhite.net/assets/images/molly.jpeg", alt="Molly White, smiling, in a black and white striped shirt and black blazer, in front of a colorful cartoon background.")
+else
+  header.site-header
+    a.site-wordmark-small(href="/") Molly White
+    +siteNav

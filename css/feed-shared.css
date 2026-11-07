@@ -15,64 +15,121 @@
 }
 
 /* Post blocks: shared by the site and the editor, so blocks look the same in both ---------- */
-mark {
-  background-color: var(--note-background-color);
-  color: inherit;
-  box-shadow: inset 0 -0.35em 0 rgb(108 77 196 / 18%);
+/* The design's fonts where the page has them (site.css), with fallbacks for the editor. */
+.article-card,
+.roundup,
+.roundup-footer,
+.data-table,
+.media-block,
+.document-block,
+.comparison {
+  --block-mono: var(--mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  --block-quote: var(--quote-face, Georgia, 'Times New Roman', serif);
 }
 
+/* "highlight mine" and highlights in quotes */
+mark {
+  background-color: var(--highlight, #fdf0b5);
+  color: inherit;
+}
+
+/* A correction keeps the original wording visible, struck through */
 del.correction {
   color: var(--timestamp-color);
+  text-decoration-thickness: 1px;
 }
 
 ins.correction {
+  padding: 0 0.1em;
+  background: var(--accent-color-purple-background);
   text-decoration: none;
 }
 
 .article-card,
 .roundup {
   margin: 1.25em 0;
-  padding: 0.75em 1em;
+  padding: 0.8em 1em 0.75em;
   border-left: 3px solid var(--accent-color-purple);
   background-color: var(--note-background-color);
 }
 
 .article-card-meta {
   margin: 0;
-  font-size: 0.75em;
+  font-family: var(--block-mono);
+  font-size: 0.66rem;
+  color: var(--timestamp-color);
+}
+
+.article-card-outlet {
+  color: var(--accent-color-purple);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--accent-color-purple);
+}
+
+.article-card-lock {
+  vertical-align: -0.05em;
 }
 
 .article-card-title {
-  margin: 0.25em 0;
-  font-weight: 700;
+  margin: 0.25em 0 0.35em;
+  font-size: 1.02em;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
+.article-card-title a {
+  text-decoration: none;
+}
+
+.article-card-title a:hover {
+  text-decoration: underline;
+}
+
+/* Excerpts hang a large quote mark in the margin */
 .article-card-excerpt {
+  position: relative;
   margin: 0.5em 0;
-  padding: 0;
+  padding: 0 0 0 1.15em;
   border: none;
   font-size: 0.95em;
 }
 
-.article-card-excerpt p::before {
+.article-card-excerpt p {
+  margin: 0;
+}
+
+.article-card-excerpt::before {
   content: '\201C';
-  margin-left: -0.6em;
-  margin-right: 0.1em;
+  position: absolute;
+  left: 0;
+  top: -0.2em;
   color: var(--accent-color-purple);
+  font-family: var(--block-quote);
+  font-size: 1.9em;
+  line-height: 1;
 }
 
 .article-card-footer,
 .roundup-footer {
-  margin: 0.25em 0 0;
-  font-size: 0.75em;
+  margin: 0.4em 0 0;
+  font-family: var(--block-mono);
+  font-size: 0.66rem;
   color: var(--timestamp-color);
 }
 
+.article-card-gift {
+  color: var(--accent-color-purple);
+  font-weight: 600;
+}
+
+.roundup + .roundup-footer {
+  margin: -0.75em 0 1.25em;
+}
+
 .roundup-item + .roundup-item {
-  margin-top: 0.75em;
+  margin-top: 0.9em;
+  padding-top: 0.9em;
+  border-top: 1px solid var(--hr-color);
 }
 
 .roundup-line {
@@ -92,9 +149,29 @@ ins.correction {
 
 .data-table th,
 .data-table td {
-  padding: 0.35em 0.5em;
+  padding: 0.45em 0.5em;
   text-align: left;
   border-bottom: 1px solid var(--hr-color);
+}
+
+.data-table th {
+  border-bottom: 1.5px solid var(--main-text-color);
+  color: var(--timestamp-color);
+  font-family: var(--block-mono);
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.data-table th:first-child,
+.data-table td:first-child {
+  padding-left: 0;
+}
+
+.data-table th:last-child,
+.data-table td:last-child {
+  padding-right: 0;
 }
 
 .data-table .numeric {
@@ -102,15 +179,21 @@ ins.correction {
   font-variant-numeric: tabular-nums;
 }
 
+.data-table td.numeric {
+  font-family: var(--block-mono);
+  font-size: 0.85em;
+}
+
 .data-table tr.total td {
-  font-weight: 700;
-  border-top: 2px solid var(--hr-color);
+  font-weight: 600;
+  border-top: 1.5px solid var(--main-text-color);
 }
 
 .data-table figcaption,
 .media-block figcaption {
-  margin-top: 0.4em;
-  font-size: 0.75em;
+  margin-top: 0.5em;
+  font-family: var(--block-mono);
+  font-size: 0.66rem;
   color: var(--timestamp-color);
 }
 
@@ -151,7 +234,7 @@ ins.correction {
 .document-head,
 .document-meta,
 .document-notes {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--block-mono);
   font-size: 0.7em;
   color: var(--timestamp-color);
 }
@@ -189,12 +272,14 @@ ins.correction {
 
 /* Social post cards and threads: no avatars or branding, just the structure */
 .social-card {
+  max-width: 34rem;
   margin: 1.25em 0;
-  padding: 0.75em 1em;
+  padding: 0.85em 1em;
   border: 1px solid var(--hr-color);
-  border-radius: 6px;
+  border-radius: 10px;
   font-family: var(--sans-serif-fonts);
   font-size: 0.85em;
+  line-height: 1.45;
 }
 
 .social-head {
@@ -210,10 +295,12 @@ ins.correction {
 }
 
 .social-network {
-  padding: 0 0.4em;
-  font-size: 0.75em;
-  border: 1px solid var(--hr-color);
-  border-radius: 3px;
+  align-self: flex-start;
+  padding: 0.1em 0.5em;
+  font-size: 0.72em;
+  font-weight: 600;
+  border-radius: 999px;
+  background: var(--note-background-color);
   color: var(--timestamp-color);
 }
 
@@ -348,7 +435,7 @@ ins.correction {
 
 .comparison-label {
   margin: 0 0 0.4em;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--block-mono);
   font-size: 0.7em;
   letter-spacing: 0.06em;
   text-transform: uppercase;

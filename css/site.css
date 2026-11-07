@@ -1,0 +1,1156 @@
+/* Redesigned pages: homepage, feed, micro posts. See the Site plan tab of the redesign doc.
+   Newsreader for text, JetBrains Mono for metadata and interface, Instrument Serif for large quotes,
+   Inter only inside redrawn social posts. */
+@import './feed-shared.css';
+@import './prism.css';
+
+:root {
+  --text: #1b1b1b;
+  --text-muted: #6f6f6f;
+  --text-faint: #8d8d8d;
+  --bg: #ffffff;
+  --rule: #e6e6e6;
+  --rule-strong: #1b1b1b;
+  --accent: #5948a4;
+  --accent-strong: #4a3a93;
+  --accent-tint: #efedf8;
+  --accent-wash: #f6f5fa;
+  --quote-rule: #c9c1ea;
+  --highlight: #fdf0b5;
+  --chip-border: #d9d9d9;
+
+  --serif: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  --mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --quote-face: 'Instrument Serif', 'Newsreader Variable', Georgia, serif;
+  --social-face: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --main-width: 42rem;
+  --meta-width: 16rem;
+  --column-gap: 3.5rem;
+
+  /* Names the shared block styles (feed-shared.css) use. */
+  --hr-color: var(--rule);
+  --timestamp-color: var(--text-muted);
+  --timestamp-color-hover: var(--text);
+  --note-background-color: var(--accent-wash);
+  --main-text-color: var(--text);
+  --accent-color-purple: var(--accent);
+  --accent-color-purple-background: var(--accent-tint);
+  --sans-serif-fonts: var(--social-face);
+  --table-border-color: var(--rule);
+  --image-border-color: var(--rule);
+  --color-error: #c0392b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --text: #ededed;
+    --text-muted: #a9a9a9;
+    --text-faint: #8a8a8a;
+    --bg: #161616;
+    --rule: #333333;
+    --rule-strong: #ededed;
+    --accent: #b4abda;
+    --accent-strong: #cbc4ea;
+    --accent-tint: #2c2840;
+    --accent-wash: #1f1d29;
+    --quote-rule: #5b5185;
+    --highlight: #5c4f12;
+    --chip-border: #444444;
+  }
+}
+
+:root[data-theme='dark'] {
+  --text: #ededed;
+  --text-muted: #a9a9a9;
+  --text-faint: #8a8a8a;
+  --bg: #161616;
+  --rule: #333333;
+  --rule-strong: #ededed;
+  --accent: #b4abda;
+  --accent-strong: #cbc4ea;
+  --accent-tint: #2c2840;
+  --accent-wash: #1f1d29;
+  --quote-rule: #5b5185;
+  --highlight: #5c4f12;
+  --chip-border: #444444;
+}
+
+/* Base ----------------------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+mark {
+  background: var(--highlight);
+  color: inherit;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--bg);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+.skip-link:focus {
+  left: 0.5rem;
+  z-index: 10;
+}
+
+.site-page {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 4rem;
+}
+
+/* Header and nav ------------------------------------------------------------------------------- */
+
+.site-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--rule-strong);
+}
+
+.site-wordmark-small {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.site-header-home {
+  display: block;
+  padding-bottom: 1.5rem;
+}
+
+.site-header-home .site-nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.site-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16rem;
+  gap: 3rem;
+  align-items: end;
+  margin-top: 0.5rem;
+}
+
+.site-wordmark {
+  margin: 0 0 0.75rem;
+  font-size: clamp(3rem, 9vw, 5.25rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.site-wordmark a {
+  text-decoration: none;
+}
+
+.site-intro p {
+  max-width: 34rem;
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.55;
+}
+
+.site-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.site-nav > ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.site-nav a[aria-current='page'] {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.3em;
+}
+
+.site-nav a.support {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.site-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.5rem;
+  border: 0;
+  border-radius: 2px;
+  background: var(--accent-tint);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.site-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(10rem, 1fr));
+  gap: 1rem 2rem;
+  width: min(40rem, 100%);
+  margin-top: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.08);
+}
+
+.site-menu[hidden] {
+  display: none;
+}
+
+.site-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-menu li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.site-menu .nav-header {
+  margin-bottom: 0.25rem;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.site-menu a {
+  text-decoration: none;
+}
+
+.site-menu a:hover {
+  text-decoration: underline;
+}
+
+/* Page headings, filters, paging --------------------------------------------------------------- */
+
+.page-title {
+  margin: 1.75rem 0 0.25rem;
+  font-size: 1.9rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+.page-subtitle {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+.page-description {
+  max-width: var(--main-width);
+  margin: 0 0 1rem;
+}
+
+.feed-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-header-home + .site-main .feed-controls,
+.site-header + .site-main > .feed-controls:first-child,
+.site-header + .site-main > .visually-hidden + .feed-controls {
+  margin-top: 0.4rem;
+}
+
+.feed-filters ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--chip-border);
+  border-radius: 2px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.chip[aria-current='page'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.chip[aria-current='page'] .site-icon {
+  color: inherit;
+}
+
+.chip:hover:not([aria-current='page']) {
+  border-color: var(--accent);
+}
+
+.feed-rss,
+.pager a {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+.pager {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1.25rem;
+}
+
+.empty {
+  color: var(--text-muted);
+}
+
+/* Entries -------------------------------------------------------------------------------------- */
+
+.site-entry {
+  display: grid;
+  grid-template-columns: minmax(0, var(--main-width)) var(--meta-width);
+  grid-template-areas:
+    'main verb'
+    'main rows';
+  grid-template-rows: auto 1fr;
+  column-gap: var(--column-gap);
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.entry-main {
+  grid-area: main;
+  min-width: 0;
+}
+
+.entry-verb {
+  grid-area: verb;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 0.4rem;
+  margin: 0.2rem 0 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.entry-verb-word {
+  font-weight: 600;
+}
+
+.entry-verb a {
+  color: var(--accent);
+}
+
+.site-icon {
+  flex: none;
+  color: var(--accent);
+}
+
+.entry-rows {
+  grid-area: rows;
+  align-self: start;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.entry-row {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.entry-rows dt {
+  color: var(--text-faint);
+}
+
+.entry-rows dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.entry-rows .cdx-mention-social-group {
+  font-size: 0.85em;
+}
+
+.reading-group-extra .p-category,
+.entry-rows .p-category {
+  white-space: nowrap; /* "#us-politics" never breaks at its hyphen */
+}
+
+.entry-edit {
+  color: var(--text-faint);
+}
+
+.entry-title {
+  margin: 0 0 0.6rem;
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+.entry-title a {
+  text-decoration: none;
+}
+
+.entry-title a:hover {
+  text-decoration: underline;
+}
+
+.entry-reply,
+.entry-live {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0 0 0.6rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.entry-live {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+/* Citation Needed: image beside the headline */
+.entry-cn {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.entry-cn:not(:has(.entry-cn-image)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.entry-cn-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.entry-dek {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.entry-dek p {
+  margin: 0;
+}
+
+/* Post content --------------------------------------------------------------------------------- */
+
+.entry-content > :first-child {
+  margin-top: 0;
+}
+
+.entry-content > :last-child {
+  margin-bottom: 0;
+}
+
+.entry-content p {
+  margin: 0 0 0.85em;
+}
+
+.entry-content h2,
+.entry-content h3 {
+  margin: 1.2em 0 0.4em;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.entry-content ul,
+.entry-content ol {
+  margin: 0 0 0.85em;
+  padding-left: 1.4em;
+}
+
+.entry-content code,
+.entry-content kbd,
+.entry-content samp {
+  font-family: var(--mono);
+  font-size: 0.85em;
+}
+
+.entry-content pre {
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+/* Quotes: a step smaller than your own words, with a light purple rule. Highlighted words in a
+   quote are pulled out large; a post that's only a quote shows it large. */
+.entry-content .quote {
+  margin: 1.1em 0;
+}
+
+.entry-content blockquote {
+  margin: 0;
+  padding-left: 1em;
+  border-left: 2px solid var(--quote-rule);
+  font-size: 0.9em;
+  line-height: 1.55;
+}
+
+.entry-content blockquote p {
+  margin: 0 0 0.7em;
+}
+
+.entry-content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.entry-content .pull-quote,
+.site-entry-quoted .entry-content blockquote {
+  font-family: var(--quote-face);
+  font-size: 1.65rem;
+  line-height: 1.25;
+}
+
+.entry-content .has-pull blockquote,
+.site-entry-quoted .entry-content blockquote {
+  border-left: 3px solid var(--accent);
+}
+
+.entry-content .pull-quote {
+  margin-bottom: 0.5em;
+  font-size: calc(1.65rem / 0.9);
+}
+
+.site-entry-quoted .entry-content blockquote .pull-quote {
+  font-size: inherit;
+}
+
+.entry-content .quote figcaption,
+.entry-content .quote-context {
+  margin: 0.4em 0 0 1.1em;
+}
+
+.entry-content .quote figcaption {
+  font-family: var(--serif);
+}
+
+.entry-content .quote cite {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-style: normal;
+}
+
+/* An article card's excerpts hang their own quote mark instead of a rule (feed-shared.css) */
+.entry-content .article-card-excerpt {
+  margin: 0.6em 0;
+  padding: 0 0 0 1.15em;
+  border-left: 0;
+  font-size: 0.95em;
+}
+
+.entry-content .quote-context {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+}
+
+.entry-content .quote-context a {
+  color: var(--accent);
+}
+
+/* Images: your own files, in a consistent frame, with captions and source lines underneath */
+.entry-content .media-wrapper,
+.entry-content .media-gallery {
+  max-width: 100%;
+  margin: 1.1em 0;
+}
+
+.entry-content .media-wrapper img,
+.entry-content .media-wrapper video {
+  display: block;
+  width: 100%;
+}
+
+.entry-content .media-wrapper.vertical img {
+  max-height: 40rem;
+  object-fit: contain;
+}
+
+.entry-content .media-wrapper.bordered img {
+  border: 1px solid var(--rule);
+}
+
+.entry-content .media-wrapper.backgrounded > a {
+  display: block;
+  padding: 1em;
+  background: var(--accent-wash);
+}
+
+.entry-content iframe,
+.entry-content video {
+  max-width: 100%;
+}
+
+.entry-content .media-wrapper-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.entry-content .media-wrapper-gallery .media-wrapper {
+  margin: 0;
+}
+
+.entry-content .media-wrapper-gallery img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--accent-wash);
+}
+
+.entry-content figcaption,
+.entry-content .gallery-caption {
+  margin: 0.4rem 0 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  line-height: 1.5;
+}
+
+.entry-content .gallery-caption {
+  font-size: 0.72rem;
+}
+
+.entry-content .media-source,
+.entry-content .media-alt {
+  margin: 0.3rem 0 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+
+.entry-content .media-alt {
+  color: var(--text-faint);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .entry-content .invert-on-dark img {
+    filter: invert(0.88) hue-rotate(180deg);
+  }
+}
+
+:root[data-theme='dark'] .entry-content .invert-on-dark img {
+  filter: invert(0.88) hue-rotate(180deg);
+}
+
+/* Your own video and audio files */
+.entry-content .media-block video {
+  display: block;
+  background: #222;
+}
+
+.social-card,
+.social-thread {
+  font-family: var(--social-face);
+}
+
+.cdx-mention-social-group {
+  margin-left: 0.1em;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.6em;
+  white-space: nowrap;
+  vertical-align: 0.15em;
+}
+
+.cdx-mention-social-group::before {
+  content: '(';
+}
+
+.cdx-mention-social-group::after {
+  content: ')';
+}
+
+.cdx-social-link .cdx-mention-icon {
+  width: 10px;
+  height: auto;
+}
+
+.correction-note {
+  margin-left: 0.1em;
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+}
+
+/* "Also read · Oct 28 · 3": a day's reading, one line per article, across the whole width */
+.reading-group {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 0.25rem 1.5rem;
+  margin: 1.25rem 0;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-wash);
+}
+
+.reading-group + .site-entry {
+  border-top: 1px solid var(--rule);
+}
+
+.reading-group-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin: 0.2rem 0 0;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+}
+
+.reading-group-items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.reading-group-items li + li {
+  margin-top: 0.3rem;
+}
+
+.reading-group-items .p-name {
+  text-decoration-color: var(--quote-rule);
+}
+
+.reading-group-extra {
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+}
+
+/* Books: cover, series, title in italics, then author, year and length */
+.entry-book {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: end;
+}
+
+.entry-book:not(:has(.entry-book-cover)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.entry-book-cover img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  background: var(--accent-wash);
+}
+
+.entry-book-series,
+.entry-book-subtitle {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.entry-book-title {
+  margin: 0.1rem 0 0.2rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+.entry-book-title a {
+  text-decoration: none;
+}
+
+.entry-book-title a:hover {
+  text-decoration: underline;
+}
+
+.entry-book-byline {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Press lines (restyled with press in step 6) */
+.entry-content .article .title {
+  font-weight: 600;
+}
+
+.entry-content .article .byline,
+.entry-content .article .details,
+.entry-content .byline,
+.entry-content .details {
+  color: var(--text-muted);
+  font-size: 0.95em;
+}
+
+/* "continues →" after the start of a long post in the feed */
+.entry-continues {
+  margin: 0.9rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px dotted var(--rule);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.entry-continues a {
+  color: var(--accent);
+}
+
+/* Updates and corrections below a post: an update with its own time; a correction in a box */
+.entry-updates {
+  margin-top: 1.25em;
+  padding-top: 0.25em;
+  border-top: 1px solid var(--rule);
+}
+
+.entry-update {
+  margin-top: 0.9em;
+}
+
+.entry-update:target {
+  outline: 2px solid var(--quote-rule);
+  outline-offset: 0.4em;
+}
+
+.update-meta,
+.update-time {
+  margin: 0 0 0.25em;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+}
+
+.update-label {
+  font-weight: 600;
+}
+
+.entry-update.correction {
+  padding: 0.7em 1em;
+  border-left: 3px solid var(--rule-strong);
+  background: var(--accent-wash);
+}
+
+.entry-update.correction .update-meta {
+  color: var(--text);
+}
+
+.update-headline {
+  margin: 0.15em 0 0.35em;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+/* A live post: "● Updating · last 4:52 pm", updates newest first, then the first post */
+.entry-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.6rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--accent-tint);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+}
+
+.entry-live.ended {
+  background: var(--accent-wash);
+  color: var(--text-muted);
+}
+
+.entry-live-dot {
+  font-size: 0.6rem;
+}
+
+.live-update + .live-update,
+.live-original {
+  margin-top: 1.1em;
+}
+
+/* "Followed up in Citation Needed" */
+.followups {
+  margin-top: 1.25rem;
+  padding: 0.8rem 1rem 1rem;
+  border-top: 3px solid var(--accent);
+  background: var(--accent-wash);
+}
+
+.followups-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+}
+
+.followups-head i {
+  font-family: var(--serif);
+  font-size: 0.85rem;
+}
+
+.followups-issues {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+}
+
+.followup {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: start;
+  text-decoration: none;
+}
+
+.followup:not(:has(img)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.followup img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.followup-title {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.followup:hover .followup-title {
+  text-decoration: underline;
+}
+
+.followup-dek {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+/* Responses on a post page --------------------------------------------------------------------- */
+
+.entry-responses {
+  max-width: var(--main-width);
+  padding-top: 1.5rem;
+  font-size: 1rem;
+}
+
+.entry-responses .replies .u-comment {
+  margin: 0 0 1rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--accent);
+}
+
+.webmention-submit label,
+.webmention-note,
+#submit-error,
+#submit-success {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.webmention-note {
+  color: var(--text-muted);
+}
+
+#submit-error {
+  color: var(--color-error);
+}
+
+.submit-box {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.submit-box input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--chip-border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+.submit-box button {
+  padding: 0 1.1rem;
+  border: 0;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Phones --------------------------------------------------------------------------------------- */
+
+@media (max-width: 720px) {
+  .site-page {
+    padding: 1rem 1rem 3rem;
+  }
+
+  .site-intro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .site-photo {
+    display: none;
+  }
+
+  .site-header {
+    flex-wrap: wrap;
+  }
+
+  .site-menu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .feed-controls {
+    align-items: flex-start;
+  }
+
+  .site-entry {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'verb'
+      'main'
+      'rows';
+    grid-template-rows: auto;
+    padding: 1.4rem 0;
+  }
+
+  .entry-verb {
+    margin-top: 0;
+  }
+
+  .entry-rows {
+    margin-top: 0.9rem;
+  }
+
+  .entry-cn {
+    grid-template-columns: 5rem minmax(0, 1fr);
+  }
+
+  .reading-group {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
