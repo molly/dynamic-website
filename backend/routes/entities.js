@@ -19,7 +19,8 @@ import { authenticated } from './auth.js';
 
 const router = express.Router();
 
-// Search for pickers: names, aliases and handles. With ?ids=a,b, those entities instead.
+// Search for pickers: names, aliases and handles, optionally of one ?type=. With ?ids=a,b, those
+// entities instead.
 router.get('/', authenticated(), async (req, res) => {
   try {
     if (req.query.ids) {
@@ -31,7 +32,10 @@ router.get('/', authenticated(), async (req, res) => {
       );
       return;
     }
-    res.json(await searchEntities(req.query.q));
+    const type = ENTITY_TYPES.includes(req.query.type)
+      ? req.query.type
+      : undefined;
+    res.json(await searchEntities(req.query.q, { type }));
   } catch (err) {
     logger.error('Entity search failed', err);
     res.status(500).json({ error: err.message });

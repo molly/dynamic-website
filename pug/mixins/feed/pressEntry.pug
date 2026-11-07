@@ -1,0 +1,47 @@
+mixin pressEntry(entry, press, {isLoggedIn=false, isRss=false, hasImage=false} = {})
+  - var baseUrl = isRss ? 'https://www.mollywhite.net' : ''
+  article.entry.h-entry.hentry
+    header
+      if !isRss
+        .post-icon.icon
+          include ./icon.pug
+          +icon(entry.icon)
+          .description #{entry.verb}: 
+      else
+        .description #{entry.verb}: 
+    .content.e-content
+      include ../pressArticle.pug
+      +pressArticle(press, isRss, true)
+      if isRss && !hasImage
+        img(src="https://www.mollywhite.net/assets/images/placeholder_social.png", alt="Illustration of Molly White sitting and typing on a laptop, on a purple background with 'Molly White' in white serif.", style="display: none;")
+    footer.footer
+      .flex-row.post-meta
+        .timestamp
+          if isRss
+            | Posted: 
+          time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime)
+            if isRss
+              | #{entry.timestamps.createdAt.absoluteTime}
+            else
+              | #{entry.timestamps.createdAt.humanTime}
+          if isRss
+            | . 
+          if isLoggedIn
+            span.edit-icon.icon
+              a(href=`${baseUrl}/feed/tagger/press/${entry._id}`)
+                include ../../icons/pencil.svg
+          if !isRss
+            |  from the 
+            a(href=`${baseUrl}/press`) press list
+            |.
+      if entry.tags && entry.tags.length
+        .bottomRow
+          .tags
+            if isRss
+              | Tagged: 
+            each tag, index in entry.tags 
+              a.tag.p-category(href=`${baseUrl}/feed/tag/${tag.value}` title=`See all feed posts tagged "${tag.text}"` rel="category tag") #{tag.text}
+              if isRss && index !== entry.tags.length - 1
+                | , 
+            if isRss
+              | . 

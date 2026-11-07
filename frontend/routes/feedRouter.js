@@ -1,8 +1,12 @@
 import express from 'express';
 import { getFeedEntries, hydrateFeedEntry } from '../../api/feed.js';
-import { ShortformEntry } from '../../backend/models/entry.model.js';
+import {
+  PressEntry,
+  ShortformEntry,
+} from '../../backend/models/entry.model.js';
 import {
   FeedEntryCitationNeeded,
+  FeedEntryPress,
   FeedEntryReading,
 } from '../../backend/models/feed/feedEntry.model.js';
 import { populateTaggerFields } from '../../backend/helpers/feedEntries.js';
@@ -76,6 +80,7 @@ router.get('/tag/:tag', async (req, res) => {
 const TAGGER_MODELS = {
   citationNeeded: FeedEntryCitationNeeded,
   readingShortform: FeedEntryReading,
+  press: FeedEntryPress,
 };
 
 router.get(
@@ -100,6 +105,8 @@ router.get(
     await populateTaggerFields(entry);
     if (entryType === 'readingShortform') {
       await entry.populate({ path: 'shortform', model: ShortformEntry });
+    } else if (entryType === 'press') {
+      await entry.populate({ path: 'press', model: PressEntry });
     }
     // Captured before hydrateFeedEntry, which reshapes the entry for display.
     const pickerData = {

@@ -12,3 +12,6 @@ mixin feedEntry(entry, options)
     when "readingBook"
       include ./readingEntry.pug
       +readingEntry(entry, entry.book, options)
+    when "press"
+      include ./pressEntry.pug
+      +pressEntry(entry, entry.press, options)

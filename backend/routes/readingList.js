@@ -1,9 +1,15 @@
 import express from 'express';
+import { queueArchive } from '../helpers/archive.js';
+import { addOutletDomain, outletForUrl } from '../helpers/outlets.js';
 import { SHORTFORM_CARD_FIELDS } from '../helpers/postContext.js';
 import { updateTagsOnCreate } from '../helpers/tags.js';
 import { PressEntry, ShortformEntry } from '../models/entry.model.js';
-import { FeedEntryReading } from '../models/feed/feedEntry.model.js';
+import {
+  FeedEntryPress,
+  FeedEntryReading,
+} from '../models/feed/feedEntry.model.js';
 import { BookTag, Tag } from '../models/tag.model.js';
+import logger from '../winston.js';
 import { authenticated } from './auth.js';
 
 const router = express.Router();
@@ -46,26 +52,65 @@ router.get('/shortform/search', authenticated(), async (req, res) => {
   }
 });
 
-router.post('/entry', authenticated(), async (req, res) => {
-  const { type, entry } = req.body;
-  const postToFeed = entry.postToFeed;
-  delete entry.postToFeed;
+// The outlet a link would be matched to, for the extension to show before saving.
+router.get('/outlet', authenticated(), async (req, res) => {
   try {
-    const tagIds = await updateTagsOnCreate(entry.tags, type);
-    const model = new models[type]({ ...entry, tags: tagIds });
-    const result = await model.save();
+    res.json(await outletForUrl(String(req.query.url || '')));
+  } catch (err) {
+    logger.error('Outlet lookup failed', err);
+    res.status(500).send({ message: err.message });
+  }
+});
 
-    // Add to activity feed
-    if (postToFeed && type === 'shortform') {
-      await new FeedEntryReading({
-        [type]: result._id,
-        tags: tagIds,
-      }).save();
+// Fields the extension adds that aren't stored on the entry.
+//  - postToFeed: also make a feed entry (shortform and press).
+//  - archive: queue the link for the Wayback Machine.
+//  - addOutletDomain: match this link's domain to the chosen outlet from now on.
+// Without an `outlet`, the entry gets the outlet matched from its link, if there is one.
+router.post('/entry', authenticated(), async (req, res) => {
+  const { type } = req.body;
+  const {
+    postToFeed,
+    archive,
+    addOutletDomain: addDomain,
+    ...entry
+  } = req.body.entry || {};
+  const Model = models[type];
+  if (!Model) {
+    return res.status(400).send({ message: `Unknown entry type "${type}".` });
+  }
+  let result;
+  try {
+    if (entry.outlet) {
+      if (addDomain) {
+        await addOutletDomain(entry.outlet, entry.href);
+      }
+    } else {
+      entry.outlet = (await outletForUrl(entry.href))?._id;
     }
-    return res.status(204).send();
+    const tagIds = await updateTagsOnCreate(entry.tags, type);
+    result = await new Model({ ...entry, tags: tagIds }).save();
+
+    if (postToFeed) {
+      const FeedModel = type === 'press' ? FeedEntryPress : FeedEntryReading;
+      await new FeedModel({ [type]: result._id, tags: tagIds }).save();
+    }
   } catch (err) {
     return res.status(400).send({ message: err.message });
   }
+
+  // The entry is saved; a failure to queue archiving is reported without undoing it.
+  if (archive && result.href) {
+    try {
+      await queueArchive([result.href]);
+    } catch (err) {
+      logger.error('Failed to queue archiving', err);
+      return res.status(201).send({
+        warning: `Saved, but the link couldn’t be queued for archiving: ${err.message}`,
+      });
+    }
+  }
+  return res.status(201).send({});
 });
 
 export default router;

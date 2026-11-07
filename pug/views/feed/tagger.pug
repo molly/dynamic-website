@@ -25,6 +25,9 @@ html(class='feed-editor', lang='en')
           else if entryType == "readingShortform"
             include ../../mixins/feed/readingEntry.pug
             +readingEntry(entry, entry.shortform)
+          else if entryType == "press"
+            include ../../mixins/feed/pressEntry.pug
+            +pressEntry(entry, entry.press)
 
         .content-box
           .content-container

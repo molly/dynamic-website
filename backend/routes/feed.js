@@ -2,17 +2,64 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import { mergeSocialLinks } from '../../frontend/js/helpers/editorHelpers.js';
-import { populateTaggerFields } from '../helpers/feedEntries.js';
+import {
+  FEED_ENTRY_LABEL_POPULATE,
+  labelFeedEntry,
+  populateTaggerFields,
+} from '../helpers/feedEntries.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Book } from '../models/book.model.js';
-import { ShortformEntry } from '../models/entry.model.js';
+import { PressEntry, ShortformEntry } from '../models/entry.model.js';
 import {
+  FeedEntry,
   FeedEntryCitationNeeded,
+  FeedEntryPress,
   FeedEntryReading,
 } from '../models/feed/feedEntry.model.js';
+import MicroEntry from '../models/micro/microEntry.model.js';
+import logger from '../winston.js';
 import { authenticated } from './auth.js';
 
 const router = express.Router();
+
+// Search my own posts and Citation Needed issues, newest first, for picking what a press piece
+// drew on. With no query, the most recent ones.
+router.get('/entries/search', authenticated(), async (req, res) => {
+  try {
+    const query = String(req.query.q || '').trim();
+    let filter = {
+      __t: { $in: ['FeedEntryMicro', 'FeedEntryCitationNeeded'] },
+    };
+    if (query) {
+      const pattern = new RegExp(
+        query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+        'i',
+      );
+      const micro = await MicroEntry.find(
+        { $or: [{ title: pattern }, { 'post.blocks.data.text': pattern }] },
+        '_id',
+      )
+        .sort({ createdAt: -1 })
+        .limit(50)
+        .lean();
+      filter = {
+        $or: [
+          { __t: 'FeedEntryCitationNeeded', title: pattern },
+          { __t: 'FeedEntryMicro', micro: { $in: micro.map((m) => m._id) } },
+        ],
+      };
+    }
+    const entries = await FeedEntry.find({ ...filter, deletedAt: null })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .populate(FEED_ENTRY_LABEL_POPULATE)
+      .lean();
+    res.json(entries.map(labelFeedEntry));
+  } catch (err) {
+    logger.error('Feed entry search failed', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 router.post(
   '/citationNeeded',
@@ -186,6 +233,11 @@ const TAGGER_TYPES = {
     category: 'shortform',
     // The shortform entry keeps its own copy of the tags.
     content: { path: 'shortform', model: ShortformEntry },
+  },
+  press: {
+    model: FeedEntryPress,
+    category: 'press',
+    content: { path: 'press', model: PressEntry },
   },
 };
 

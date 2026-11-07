@@ -48,6 +48,9 @@ function editUrl(entry) {
   if (entry.__t === 'FeedEntryReading' && entry.shortform) {
     return `/feed/tagger/readingShortform/${entry._id}`;
   }
+  if (entry.__t === 'FeedEntryPress') {
+    return `/feed/tagger/press/${entry._id}`;
+  }
   return null;
 }
 

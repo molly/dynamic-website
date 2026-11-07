@@ -1,12 +1,13 @@
 import { entryPosts } from '../backend/helpers/links.js';
 import { loadPostContext } from '../backend/helpers/postContext.js';
 import { Book } from '../backend/models/book.model.js';
-import { ShortformEntry } from '../backend/models/entry.model.js';
+import { PressEntry, ShortformEntry } from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { BookTag, Tag } from '../backend/models/tag.model.js';
 import { Webmention } from '../backend/models/webmention.model.js';
 import { formatArticleDate } from '../data/filter/preprocess.js';
+import { getPressDetails } from './helpers/press.js';
 import { getReadingDetails } from './helpers/reading.js';
 import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
 import { hydrateTimestamps } from './helpers/timestamps.js';
@@ -48,6 +49,10 @@ export const hydrateFeedEntry = (entry, context = {}) => {
         ...formatArticleDate(entry.book),
       };
     }
+  } else if (entry.__t === 'FeedEntryPress' && entry.press) {
+    entry.entryType = 'press';
+    Object.assign(entry, getPressDetails(entry.press));
+    entry.press = { ...entry.press, ...formatArticleDate(entry.press) };
   }
   return entry;
 };
@@ -88,6 +93,7 @@ export const getFeedEntries = async ({
       model: ShortformEntry,
     })
     .populate({ path: 'book', model: Book })
+    .populate({ path: 'press', model: PressEntry })
     .lean();
 
   if (entries.some((entry) => 'book' in entry)) {
@@ -109,8 +115,11 @@ export const getFeedEntries = async ({
     });
   }
 
+  // Skip entries whose content has been deleted.
   const validEntries = entries.filter(
-    (entry) => entry.__t !== 'FeedEntryMicro' || entry.micro !== null,
+    (entry) =>
+      (entry.__t !== 'FeedEntryMicro' || entry.micro !== null) &&
+      (entry.__t !== 'FeedEntryPress' || entry.press !== null),
   );
   const context = await loadPostContext(
     validEntries
