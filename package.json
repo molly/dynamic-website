@@ -20,7 +20,8 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js ./test",
     "postinstall": "patch-package",
     "scripts": "node backend/scripts/syncTags.js",
-    "recountTags": "node backend/scripts/recountTags.js"
+    "recountTags": "node backend/scripts/recountTags.js",
+    "related": "node backend/scripts/rebuildRelated.js"
   },
   "dependencies": {
     "@atproto/api": "^0.10.4",

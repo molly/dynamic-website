@@ -878,7 +878,123 @@ mark {
   font-size: 0.95rem;
 }
 
-/* Press lines (restyled with press in step 6) */
+/* Press: a line for coverage of you; cards for your own pieces, talks and appearances */
+.press-line {
+  margin: 0;
+}
+
+.press-line-author {
+  color: var(--text-muted);
+}
+
+.press-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  padding: 0.85rem 1rem;
+}
+
+.press-freelance {
+  border: 1px solid var(--rule);
+}
+
+.press-freelance:has(.press-card-image) {
+  grid-template-columns: 7rem minmax(0, 1fr);
+}
+
+.press-card-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--accent-wash);
+}
+
+.press-appearance {
+  gap: 0.35rem;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-wash);
+}
+
+.press-card-meta,
+.press-card-foot,
+.press-links,
+.press-upcoming-location {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+}
+
+.press-card-outlet {
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.press-card-title,
+.press-talk-title {
+  margin: 0.15rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.press-card-title a,
+.press-talk-title a {
+  text-decoration: none;
+}
+
+.press-card-title a:hover,
+.press-talk-title a:hover {
+  text-decoration: underline;
+}
+
+.press-audio {
+  width: 100%;
+}
+
+.press-video {
+  position: relative;
+  margin-bottom: 0.6rem;
+}
+
+.press-video video {
+  display: block;
+  width: 100%;
+  background: #222;
+}
+
+.press-duration {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  padding: 0.05rem 0.35rem;
+  background: rgb(0 0 0 / 70%);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+}
+
+.press-upcoming {
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--chip-border);
+}
+
+.press-upcoming-label {
+  margin: 0 0 0.2rem;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+
+.press-upcoming-title {
+  margin: 0 0 0.2rem;
+}
+
+/* Press lines in the old markup (RSS and the tagger's preview) */
 .entry-content .article .title {
   font-weight: 600;
 }
@@ -979,7 +1095,6 @@ mark {
 .followups {
   margin-top: 1.25rem;
   padding: 0.8rem 1rem 1rem;
-  border-top: 3px solid var(--accent);
   background: var(--accent-wash);
 }
 
@@ -1041,18 +1156,181 @@ mark {
   line-height: 1.35;
 }
 
-/* Responses on a post page --------------------------------------------------------------------- */
+/* A post's own page ----------------------------------------------------------------------------- */
 
-.entry-responses {
-  max-width: var(--main-width);
-  padding-top: 1.5rem;
-  font-size: 1rem;
+.back-link {
+  margin: 0;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.72rem;
 }
 
-.entry-responses .replies .u-comment {
+/* The verb line sits over the post; the metadata column starts level with it. */
+.site-entry-permalink {
+  grid-template-areas:
+    'verb rows'
+    'main rows';
+  grid-template-rows: auto 1fr;
+  border-bottom: 0;
+}
+
+.site-entry-permalink .entry-verb {
+  margin: 0 0 0.9rem;
+}
+
+.entry-tag-count {
+  margin-left: 0.15rem;
+  color: var(--text-faint);
+}
+
+.post-page-after {
+  display: grid;
+  grid-template-columns: minmax(0, var(--main-width)) var(--meta-width);
+  column-gap: var(--column-gap);
+  padding-top: 1.75rem;
+  border-top: 2px solid var(--rule-strong);
+}
+
+.post-page-main > section + section {
+  margin-top: 2.25rem;
+}
+
+/* The thread box: every entry in the thread, oldest first */
+.thread-box h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.thread-box h2 a {
+  text-decoration: none;
+}
+
+.thread-box h2 a:hover {
+  text-decoration: underline;
+}
+
+.thread-box-count {
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+
+.thread-box-members {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.thread-box-members li {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.2rem 0;
+  font-size: 0.95rem;
+}
+
+.thread-box-month {
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  line-height: 2;
+}
+
+.thread-box-members li.current .thread-box-month {
+  color: var(--accent);
+}
+
+.thread-box-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thread-box-kind {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+}
+
+/* Responses */
+.responses h2 {
+  margin: 0 0 0.9rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.discuss-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.discuss-button {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--chip-border);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.discuss-button:hover {
+  border-color: var(--accent);
+}
+
+.response-people {
+  margin: 0 0 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.responses-subhead {
+  margin: 1.5rem 0 0.6rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.webmention-reply {
   margin: 0 0 1rem;
-  padding-left: 0.9rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--rule);
   border-left: 3px solid var(--accent);
+  font-size: 0.95rem;
+}
+
+.webmention-meta,
+.webmention-source {
+  margin: 0 0 0.3rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+}
+
+.webmention-meta .h-card {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.webmention-title {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.webmention-excerpt p {
+  margin: 0 0 0.5em;
+}
+
+.webmention-submit {
+  margin-top: 1.5rem;
 }
 
 .webmention-submit label,
@@ -1097,6 +1375,71 @@ mark {
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
+}
+
+/* Beside the responses: press that cited the post, sites linking to it, related entries */
+.post-page-side section {
+  margin-bottom: 1.5rem;
+}
+
+.side-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0 0 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.post-page-side ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.post-page-side li + li {
+  margin-top: 0.4rem;
+}
+
+.side-note {
+  display: block;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+}
+
+.post-pager {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.post-pager a {
+  display: flex;
+  flex-direction: column;
+  max-width: 45%;
+  text-decoration: none;
+}
+
+.post-pager .pager-older {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.pager-label {
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+}
+
+.pager-title {
+  font-family: var(--serif);
+  font-size: 1rem;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
 }
 
 /* Phones --------------------------------------------------------------------------------------- */
@@ -1152,5 +1495,21 @@ mark {
 
   .reading-group {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .site-entry-permalink {
+    grid-template-areas:
+      'verb'
+      'main'
+      'rows';
+  }
+
+  .post-page-after {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2rem;
+  }
+
+  .thread-box-members li {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
   }
 }

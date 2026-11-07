@@ -1,7 +1,9 @@
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import TomSelect from 'tom-select';
+import { parseDuration } from '../../api/helpers/duration.js';
 import { socialLinksToArray } from './helpers/editorHelpers.js';
+import { uploadFile } from './helpers/upload.js';
 import {
   createAboutPicker,
   createThreadPicker,
@@ -9,6 +11,114 @@ import {
 } from './helpers/pickers.js';
 
 let socialLinks = {};
+
+// Press card fields ----------------------------------------------------------------------------
+
+const PRESS_FIELDS = [
+  'leadImage',
+  'episode',
+  'location',
+  'slidesUrl',
+  'transcriptUrl',
+  'youtubeUrl',
+  'mediaUrl',
+  'posterUrl',
+  'audioUrl',
+];
+
+// Show only the fields that apply to the chosen kind.
+function showPressFieldsFor(kind) {
+  document.querySelectorAll('#press-fields [data-kinds]').forEach((el) => {
+    el.hidden = !el.dataset.kinds.split(' ').includes(kind);
+  });
+}
+
+// The length of an uploaded video or audio file, from the browser.
+function mediaDuration(url, kind) {
+  return new Promise((resolve) => {
+    const media = document.createElement(kind);
+    media.preload = 'metadata';
+    media.addEventListener('loadedmetadata', () => resolve(media.duration));
+    media.addEventListener('error', () => resolve(null));
+    media.src = url;
+  });
+}
+
+function formatLength(seconds) {
+  const total = Math.round(seconds);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = String(total % 60).padStart(2, '0');
+  return h ? `${h}:${String(m).padStart(2, '0')}:${s}` : `${m}:${s}`;
+}
+
+function initPressFields() {
+  const section = document.getElementById('press-fields');
+  if (!section) {
+    return;
+  }
+  const kindSelect = document.getElementById('press-kind');
+  showPressFieldsFor(kindSelect.value);
+  kindSelect.addEventListener('change', () =>
+    showPressFieldsFor(kindSelect.value),
+  );
+
+  const status = document.getElementById('press-upload-status');
+  section.querySelectorAll('.press-upload').forEach((input) => {
+    input.addEventListener('change', async () => {
+      const file = input.files[0];
+      if (!file) {
+        return;
+      }
+      status.hidden = false;
+      status.textContent = `Uploading ${file.name}…`;
+      try {
+        const { url } = await uploadFile(file);
+        document.getElementById(input.dataset.target).value = url;
+        const kind = file.type.split('/')[0];
+        if (kind === 'video' || kind === 'audio') {
+          const seconds = await mediaDuration(url, kind);
+          if (Number.isFinite(seconds)) {
+            document.getElementById('press-duration').value =
+              formatLength(seconds);
+          }
+        }
+        status.textContent = `Uploaded ${file.name}. Save to keep it.`;
+      } catch (err) {
+        status.textContent = `Upload failed: ${err.response?.data?.error || err.message}`;
+      }
+      input.value = '';
+    });
+  });
+}
+
+/**
+ * The press card fields as the server takes them, or throws if the length can't be read.
+ * @returns {?Object}
+ */
+function readPressFields() {
+  if (!document.getElementById('press-fields')) {
+    return null;
+  }
+  const duration = parseDuration(
+    document.getElementById('press-duration').value,
+  );
+  if (Number.isNaN(duration)) {
+    throw new Error(
+      'Length should look like 52:30 or 1:02:30, or a number of minutes.',
+    );
+  }
+  const fields = {
+    kind: document.getElementById('press-kind').value,
+    role: document.getElementById('press-role').value || null,
+    duration,
+  };
+  for (const name of PRESS_FIELDS) {
+    fields[name] =
+      document.getElementById(`press-${name}`).value.trim() || null;
+  }
+  return fields;
+}
 
 async function onFirstLoad() {
   const pickerData = JSON.parse(
@@ -37,6 +147,7 @@ async function onFirstLoad() {
   const aboutPicker = createAboutPicker('#about', {
     initial: pickerData.about,
   });
+  initPressFields();
 
   /**
    * Track social post IDs typed into the manual link fields
@@ -69,8 +180,13 @@ async function onFirstLoad() {
           threads: selectedValues(threadPicker),
           about: selectedValues(aboutPicker),
           socialLinks: socialLinksToArray(socialLinks),
+          press: readPressFields(),
         },
       );
+      const uploadStatus = document.getElementById('press-upload-status');
+      if (uploadStatus) {
+        uploadStatus.hidden = true; // Its "save to keep it" is done
+      }
       const { data: allTags } = await axios.get('/dynamic-api/tags');
       tagSelect.clearOptions();
       tagSelect.addOptions(allTags);

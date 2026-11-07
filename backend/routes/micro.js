@@ -4,11 +4,16 @@ import mongoose from 'mongoose';
 import { isProd } from '../env.js';
 import { queueArchive } from '../helpers/archive.js';
 import { ENTITY_SUMMARY_FIELDS } from '../helpers/entities.js';
+import {
+  FEED_ENTRY_LABEL_POPULATE,
+  labelFeedEntry,
+} from '../helpers/feedEntries.js';
+import { refreshRelatedInBackground } from '../helpers/related.js';
 import { fetchPostInfo, fetchSocialPost } from '../helpers/socialFetch.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Entity } from '../models/entity.model.js';
 import { ShortformEntry } from '../models/entry.model.js';
-import { FeedEntryMicro } from '../models/feed/feedEntry.model.js';
+import { FeedEntry, FeedEntryMicro } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 import { Thread } from '../models/thread.model.js';
 import { authenticated } from './auth.js';
@@ -20,11 +25,15 @@ const withoutNulls = (fields) =>
   Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== null));
 
 // What the editor gets back from every route: the entry, its related posts with titles, and the
-// feed entry's threads and about (which live on the feed entry, not the micro entry).
+// feed entry's threads, about and related entries (which live on the feed entry, not the micro
+// entry). Related entries come labelled, in their order, without any since deleted.
 async function editorResponse(entry) {
   const [populated, feedEntry] = await Promise.all([
     entry.populate({ path: 'relatedPosts.ref', select: 'title' }),
-    FeedEntryMicro.findOne({ micro: entry._id }, 'threads about createdAt')
+    FeedEntryMicro.findOne(
+      { micro: entry._id },
+      'threads about related createdAt',
+    )
       .populate({ path: 'threads', model: Thread, select: 'title slug' })
       .populate({
         path: 'about',
@@ -32,7 +41,25 @@ async function editorResponse(entry) {
         select: ENTITY_SUMMARY_FIELDS,
       }),
   ]);
-  return { ...populated.toJSON(), feed: feedEntry ? feedEntry.toJSON() : null };
+  if (!feedEntry) {
+    return { ...populated.toJSON(), feed: null };
+  }
+  const related = await FeedEntry.find({
+    _id: { $in: feedEntry.related },
+    deletedAt: null,
+  })
+    .populate(FEED_ENTRY_LABEL_POPULATE)
+    .lean();
+  const byId = new Map(related.map((e) => [String(e._id), labelFeedEntry(e)]));
+  return {
+    ...populated.toJSON(),
+    feed: {
+      ...feedEntry.toJSON(),
+      related: feedEntry.related
+        .map((id) => byId.get(String(id)))
+        .filter(Boolean),
+    },
+  };
 }
 
 router.post(
@@ -40,7 +67,13 @@ router.post(
   authenticated({ redirectTo: '/micro/login' }),
   async function (req, res) {
     try {
-      const { threads = [], about = [], tags: tagInput, ...fields } = req.body;
+      const {
+        threads = [],
+        about = [],
+        related = [],
+        tags: tagInput,
+        ...fields
+      } = req.body;
       // Tags first: the entry needs their IDs. Creates new tags and increments usage counts.
       const tags = await updateTagsOnCreate(tagInput, 'micro');
 
@@ -55,8 +88,10 @@ router.post(
         tags,
         threads,
         about,
+        related,
       });
       await Promise.all([entry.save(), feedEntry.save()]);
+      refreshRelatedInBackground(feedEntry._id);
       if (isProd) {
         // Archive the new post's own page once it's had a minute to be published everywhere.
         await queueArchive(
@@ -87,7 +122,7 @@ router.post(
         res.sendStatus(404);
         return;
       }
-      const { threads, about, tags: tagInput, ...fields } = req.body;
+      const { threads, about, related, tags: tagInput, ...fields } = req.body;
       const tags = await updateTagsOnEdit(entry.tags, tagInput || [], 'micro');
 
       Object.keys(fields)
@@ -113,8 +148,12 @@ router.post(
       if (about) {
         feedEntry.about = about;
       }
+      if (related) {
+        feedEntry.related = related;
+      }
 
       await Promise.all([entry.save(), feedEntry.save()]);
+      refreshRelatedInBackground(feedEntry._id);
       res.json(await editorResponse(entry));
     } catch (err) {
       console.log(err);

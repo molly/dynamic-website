@@ -53,23 +53,63 @@ export const ShortformEntry = db.connection.model(
   'shortform',
 );
 
+export const PRESS_KINDS = [
+  'article',
+  'podcast',
+  'radio',
+  'video',
+  'tv',
+  'talk',
+  'freelance',
+];
+export const PRESS_ROLES = ['quoted', 'cited', 'interviewed', 'profiled'];
+
 const PressSchema = new mongoose.Schema({
   ...EntrySchema,
   // The medium. The copy script sets this from parenthetical for existing entries.
   kind: {
     type: String,
-    enum: ['article', 'podcast', 'radio', 'video', 'tv', 'talk', 'freelance'],
+    enum: PRESS_KINDS,
     default: 'article',
   },
   // Your part in it, when known. Set by hand.
-  role: { type: String, enum: ['quoted', 'cited', 'interviewed', 'profiled'] },
+  role: { type: String, enum: PRESS_ROLES },
   // Your piece that this press cited; drives "drew on" and the reverse "Cited by".
   drewOn: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'FeedEntry',
     index: true,
   },
+  // The cards for your own pieces, talks and appearances (set on the tagger page). Most media is
+  // linked out to: href, youtubeUrl. mediaUrl/audioUrl are for the rare copy you host yourself,
+  // and only they get a player.
+  leadImage: { type: String, match: /^https?:\/\// }, // Freelance pieces
+  duration: Number, // Seconds; typed in for external media, read from a file you upload
+  episode: String, // Podcasts: "426"
+  location: String, // Upcoming talks
+  slidesUrl: { type: String, match: /^https?:\/\// },
+  transcriptUrl: { type: String, match: /^https?:\/\// },
+  youtubeUrl: { type: String, match: /^https?:\/\// },
+  mediaUrl: { type: String, match: /^https?:\/\// }, // Your own copy of a video
+  posterUrl: { type: String, match: /^https?:\/\// },
+  audioUrl: { type: String, match: /^https?:\/\// }, // Audio you've rehosted
 });
+
+// The press fields the tagger page edits.
+export const PRESS_CARD_FIELDS = [
+  'kind',
+  'role',
+  'leadImage',
+  'duration',
+  'episode',
+  'location',
+  'slidesUrl',
+  'transcriptUrl',
+  'youtubeUrl',
+  'mediaUrl',
+  'posterUrl',
+  'audioUrl',
+];
 
 export const PressEntry = db.connection.model(
   'PressEntry',

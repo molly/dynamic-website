@@ -2,6 +2,9 @@ import express from 'express';
 import { getFeedEntries, hydrateFeedEntry } from '../../api/feed.js';
 import { FEED_FILTERS, feedFilter } from '../../api/helpers/feedFilters.js';
 import {
+  PRESS_CARD_FIELDS,
+  PRESS_KINDS,
+  PRESS_ROLES,
   PressEntry,
   ShortformEntry,
 } from '../../backend/models/entry.model.js';
@@ -107,6 +110,13 @@ router.get('/thread/:slug', async (req, res) => {
   });
 });
 
+// The press card fields the tagger edits, as the form shows them.
+function pressCardFields(press) {
+  return Object.fromEntries(
+    PRESS_CARD_FIELDS.map((field) => [field, press?.[field] ?? null]),
+  );
+}
+
 // Metadata editor for feed entries that aren't micro posts: tags, threads, about
 const TAGGER_MODELS = {
   citationNeeded: FeedEntryCitationNeeded,
@@ -147,9 +157,13 @@ router.get(
       about: entry.about.map((e) => e.toJSON()),
     };
     res.render('feed/tagger.pug', {
-      entry: hydrateFeedEntry(entry),
+      // hydrateFeedEntry works on plain objects, as the feed's lean queries give it.
+      entry: hydrateFeedEntry(entry.toObject()),
       entryType,
       pickerData,
+      press: entryType === 'press' ? pressCardFields(entry.press) : null,
+      pressKinds: PRESS_KINDS,
+      pressRoles: PRESS_ROLES,
     });
   },
 );

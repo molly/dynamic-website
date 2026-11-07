@@ -92,8 +92,16 @@ html(class='feed-editor', lang='en')
               input#about(autocomplete="off")
 
             .side-section
-              label.side-label(for="related") Related posts
+              label.side-label(for="related")
+                | Related articles
+                span.side-hint  · shown as cards after the post
               select#related(multiple)
+
+            .side-section
+              label.side-label(for="related-entries")
+                | Related entries
+                span.side-hint  · listed first under Related, in this order
+              input#related-entries(autocomplete="off")
 
             .side-section
               .crosspost-header

@@ -1,4 +1,5 @@
-import { getPressDetails } from '../../../api/helpers/press';
+import { DateTime } from 'luxon';
+import { getPressDetails, isUpcoming } from '../../../api/helpers/press';
 import { candidateDomains, domainOf } from '../../../backend/helpers/outlets';
 
 describe('outlet domains', () => {
@@ -21,18 +22,40 @@ describe('outlet domains', () => {
 });
 
 describe('press in the feed', () => {
-  it('describes a piece by your role, then by its medium', () => {
+  const now = DateTime.fromISO('2026-11-07T12:00:00', {
+    zone: 'America/New_York',
+  });
+
+  it('takes its verb from the medium, and your role for the sentence', () => {
     expect(getPressDetails({ kind: 'podcast', role: 'interviewed' })).toEqual({
       icon: 'speaker',
-      verb: 'Interviewed in',
-    });
-    expect(getPressDetails({ kind: 'tv' })).toEqual({
-      icon: 'tv',
       verb: 'Appeared on',
+      rolePhrase: 'Interviewed in',
     });
+    expect(getPressDetails({ kind: 'article', role: 'quoted' })).toMatchObject({
+      verb: 'In the press',
+      rolePhrase: 'Quoted in',
+    });
+    expect(getPressDetails({ kind: 'freelance' }).verb).toEqual('Published');
     expect(getPressDetails({})).toEqual({
       icon: 'newspaper',
       verb: 'In the press',
+      rolePhrase: null,
     });
+  });
+
+  it('calls a talk that hasn’t happened yet upcoming', () => {
+    expect(isUpcoming({ kind: 'talk', date: '2026-11-20' }, { now })).toBe(
+      true,
+    );
+    expect(isUpcoming({ kind: 'talk', date: '2026-11-07' }, { now })).toBe(
+      false,
+    );
+    expect(isUpcoming({ kind: 'podcast', date: '2026-11-20' }, { now })).toBe(
+      false,
+    );
+    expect(
+      getPressDetails({ kind: 'talk', date: '2026-11-20' }, { now }).verb,
+    ).toEqual('Speaking');
   });
 });

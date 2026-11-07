@@ -27,6 +27,22 @@ const FeedEntrySchema = new mongoose.Schema(
         ref: 'Entity',
       },
     ],
+    // Related entries chosen by hand in the editor, in the order they show.
+    related: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'FeedEntry',
+      },
+    ],
+    // Related entries worked out from shared entities and tags (backend/helpers/related.js),
+    // best first. A few more than are shown, so ones already on the page can be skipped.
+    relatedAuto: [
+      {
+        _id: false,
+        entry: { type: mongoose.Schema.Types.ObjectId, ref: 'FeedEntry' },
+        score: Number,
+      },
+    ],
   },
   { timestamps: true },
 );

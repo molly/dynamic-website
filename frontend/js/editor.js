@@ -11,7 +11,11 @@ import {
 import EditorJS from '@editorjs/editorjs';
 import SocialPostDelimiter from './SocialPostDelimiter.js';
 import { NETWORK_LABELS } from '../../api/helpers/socialMedia.js';
-import { createAboutPicker, createThreadPicker } from './helpers/pickers.js';
+import {
+  createAboutPicker,
+  createEntryPicker,
+  createThreadPicker,
+} from './helpers/pickers.js';
 import { ArchivePanel } from './archivePanel.js';
 import {
   DataField,
@@ -32,6 +36,7 @@ const postMeta = {
   relatedPosts: [], // [{ ref, model }]
   threads: [], // Stored on the feed entry
   about: [], // Stored on the feed entry
+  related: [], // Related entries, in order; stored on the feed entry
   id: null,
   socialLinks: {},
 };
@@ -46,6 +51,7 @@ let tagSelect;
 let relatedPostsSelect;
 let threadPicker;
 let aboutPicker;
+let relatedEntriesPicker;
 let saveButton;
 let deleteButton;
 let threadEditors;
@@ -255,6 +261,7 @@ function updateModelFromDb(data) {
     .map(({ ref, model }) => ({ ref: ref._id, model }));
   postMeta.threads = (data.feed?.threads || []).map(({ _id }) => _id);
   postMeta.about = (data.feed?.about || []).map(({ _id }) => _id);
+  postMeta.related = (data.feed?.related || []).map(({ _id }) => _id);
   postMeta.socialLinks = socialLinksToMap(data.socialLinks);
 }
 
@@ -278,6 +285,8 @@ function setInputValues() {
   relatedPostsSelect.setValue(postMeta.relatedPosts.map(({ ref }) => ref));
   threadPicker.setValue(postMeta.threads, true);
   aboutPicker.setValue(postMeta.about, true);
+  relatedEntriesPicker.addOptions(savedPost.feed?.related || []);
+  relatedEntriesPicker.setValue(postMeta.related, true);
   Object.entries(postMeta.socialLinks).forEach(([key, value]) => {
     document.getElementById(key).value = value;
   });
@@ -592,6 +601,13 @@ async function onFirstLoad() {
     initial: savedPost.feed?.about || [],
     onChange: (ids) => {
       postMeta.about = ids;
+    },
+  });
+  relatedEntriesPicker = createEntryPicker('#related-entries', {
+    initial: savedPost.feed?.related || [],
+    getExclude: () => savedPost.feed?._id,
+    onChange: (ids) => {
+      postMeta.related = ids;
     },
   });
 

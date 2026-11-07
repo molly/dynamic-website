@@ -1,6 +1,7 @@
 import express from 'express';
 import { getMicroEntries, getMicroEntry } from '../../api/micro.js';
 import { attachFeedMeta } from '../../backend/helpers/feedMeta.js';
+import { loadPostPage } from '../../backend/helpers/postPage.js';
 import { Tag } from '../../backend/models/tag.model.js';
 import { Webmention } from '../../backend/models/webmention.model.js';
 import { authenticated } from '../../backend/routes/auth.js';
@@ -56,42 +57,6 @@ router.get('/entry/:slug', async (req, res) => {
     return;
   }
 
-  // Sort webmentions
-  let webmentions = null;
-  if (entry.webmentions && entry.webmentions.length > 0) {
-    webmentions = {
-      withContent: [],
-      likes: [],
-      reposts: [],
-      bookmarks: [],
-    };
-    entry.webmentions.forEach((mention) => {
-      if (!mention.approved || !mention.body) {
-        return;
-      }
-      if (mention.body.content || mention.body.summary) {
-        webmentions.withContent.push(mention);
-      } else if (mention.body.type === 'like') {
-        webmentions.likes.push(mention);
-      } else if (mention.body.type === 'repost') {
-        webmentions.reposts.push(mention);
-      } else if (mention.body.type === 'bookmark') {
-        webmentions.bookmarks.push(mention);
-      }
-    });
-    for (const key in webmentions) {
-      webmentions[key].sort((a, b) => {
-        if (a.body.published > b.body.published) {
-          return -1;
-        }
-        if (a.body.published < b.body.published) {
-          return 1;
-        }
-        return 0;
-      });
-    }
-  }
-
   let image;
   for (const block of entry.post.blocks) {
     if (block.type === 'image') {
@@ -101,8 +66,10 @@ router.get('/entry/:slug', async (req, res) => {
   }
 
   await attachFeedMeta([entry]);
+  const page = await loadPostPage(entry);
   res.render('micro/entry.pug', {
-    entry: { ...entry, webmentions, image },
+    entry: { ...entry, image },
+    page,
     options: { isLoggedIn: req.isAuthenticated() },
   });
 });

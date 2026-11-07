@@ -23,6 +23,63 @@ export function selectedValues(select) {
   return value ? value.split(',') : [];
 }
 
+// Feed entries -----------------------------------------------------------------------------------
+
+const KIND_LABELS = {
+  FeedEntryMicro: 'post',
+  FeedEntryCitationNeeded: 'Citation Needed',
+  FeedEntryPress: 'press',
+};
+
+/**
+ * Multi-select of feed entries (posts, newsletter issues, press), in the order they're picked.
+ * @param {string} selector Input element for the picker
+ * @param {Object} options
+ * @param {Object[]} options.initial Labelled entries already chosen: { _id, label, type, createdAt }
+ * @param {() => ?string} options.getExclude This entry's own feed entry id, to leave out
+ * @param {(ids: string[]) => void} [options.onChange]
+ * @returns {TomSelect}
+ */
+export function createEntryPicker(
+  selector,
+  { initial = [], getExclude = () => null, onChange = () => {} },
+) {
+  const picker = new TomSelect(selector, {
+    options: initial,
+    items: initial.map((entry) => entry._id),
+    valueField: '_id',
+    labelField: 'label',
+    searchField: ['label'],
+    maxItems: null,
+    closeAfterSelect: true,
+    preload: 'focus',
+    // The server already searched the posts' text; don't let the client filter on labels.
+    score: () => () => 1,
+    load(query, callback) {
+      axios
+        .get('/dynamic-api/feed/entries/search', {
+          params: {
+            q: query,
+            kinds: 'micro,citationNeeded,press',
+            exclude: getExclude() || undefined,
+          },
+        })
+        .then(({ data }) => callback(data))
+        .catch((err) => {
+          console.error(err);
+          callback();
+        });
+    },
+    render: {
+      option: (entry, escape) =>
+        `<div>${escape(entry.label)} <span class="picker-meta">${escape(KIND_LABELS[entry.type] || '')} · ${escape(String(entry.createdAt || '').slice(0, 10))}</span></div>`,
+      item: (entry, escape) => `<div>${escape(entry.label)}</div>`,
+    },
+  });
+  picker.on('change', () => onChange(selectedValues(picker)));
+  return picker;
+}
+
 // Threads ----------------------------------------------------------------------------------------
 
 const threadLabel = (thread) => thread.title || 'Untitled thread';

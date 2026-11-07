@@ -1,3 +1,4 @@
+import * as cheerio from 'cheerio';
 import { Book } from '../models/book.model.js';
 import { Entity } from '../models/entity.model.js';
 import { PressEntry, ShortformEntry } from '../models/entry.model.js';
@@ -31,9 +32,12 @@ function microLabel(micro) {
   if (!textBlock) {
     return 'Untitled post';
   }
-  return textBlock.data.text
-    .replace(/<[^>]+>/g, '')
-    .replace(/&nbsp;/g, ' ')
+  // Its text, not its markup: tags dropped and entities like &amp; decoded, since templates
+  // escape the label again.
+  return cheerio
+    .load(textBlock.data.text, null, false)
+    .text()
+    .replace(/\s+/g, ' ')
     .trim();
 }
 

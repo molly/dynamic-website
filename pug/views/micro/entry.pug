@@ -3,6 +3,8 @@ extends ../../templates/site.pug
 block vars
   - var htmlClass = 'micro micro-entry'
   - var navCurrent = 'feed'
+  - var NETWORK_NAMES = { twitter: 'Twitter', mastodon: 'Mastodon', bluesky: 'Bluesky', threads: 'Threads', youtube: 'YouTube', tiktok: 'TikTok' }
+  - var hostOf = (url) => { try { return new URL(url).hostname.replace(/^www\./, '') } catch (e) { return url } }
 
 block head
   include ../../templates/titleAndDescription.pug
@@ -10,44 +12,118 @@ block head
 
 block body
   main#main.site-main
+    p.back-link
+      a(href="/feed") ← Back to the feed
+
     include ../../mixins/site/entry.pug
     +siteEntry(entry, { ...options, isPermalink: true })
 
-    //- Responses keep their current form until the post page step.
-    section.entry-responses
-      - var webmentions = entry.webmentions
-      if webmentions
-        each type of ['likes', 'bookmarks', 'reposts']
-          - var webmentionsOfType = webmentions[type] || []
-          if webmentionsOfType.length
-            p(class=type)
-              | #{type.charAt(0).toUpperCase() + type.slice(1).replace(/e?s$/, 'ed')} by 
-              each webmention, index in webmentionsOfType
-                a(href=webmention.source, title=webmention.body.author, rel="nofollow") #{webmention.body.author}
-                if index !== webmentionsOfType.length - 1
-                  | , 
-        if webmentions.withContent && webmentions.withContent.length
-          .replies
-            each reply in webmentions.withContent
-              .u-comment.h-cite #[a.u-url(href=reply.source, rel="nofollow") #{reply.body.type ? reply.body.type.charAt(0).toUpperCase() + reply.body.type.slice(1) : "Reply"}] by #[a.u-author.h-card(href=reply.body.authorUrl, rel="nofollow") #{reply.body.author}]
-                if reply.body.published
-                  |  on #[time.dt-published(datetime=toISOWithoutMillis(reply.body.published)) #{webmentionTimestamp(reply.body.published)}]
-                if reply.body.summary
-                  .p-summary
+    .post-page-after
+      .post-page-main
+        each thread in page.threads
+          section.thread-box(aria-labelledby=`thread-${thread.slug}`)
+            h2(id=`thread-${thread.slug}`)
+              | Thread: #[a(href=`/feed/thread/${thread.slug}`) #{thread.title}]
+              span.thread-box-count  · #{thread.members.length} #{thread.members.length === 1 ? 'entry' : 'entries'}
+            ol.thread-box-members
+              each member in thread.members
+                li(class=member.current ? 'current' : null)
+                  span.thread-box-month #{member.month}
+                  span.thread-box-title
+                    if member.kind
+                      span.thread-box-kind #{member.kind}
+                      |  ·#{' '}
+                    if member.current
+                      strong this post
+                    else
+                      a(href=member.href) #{member.label}
+
+        section.responses(aria-labelledby="responses-heading")
+          h2#responses-heading Responses
+          - var discuss = (entry.socialLinks || []).filter((link) => link.href)
+          if discuss.length
+            .discuss-buttons
+              each link in discuss
+                a.discuss-button.u-syndication(href=link.href, rel="syndication") Discuss on #{NETWORK_NAMES[link.type] || link.type} →
+
+          - var responses = page.responses
+          - var RESPONSE_WORDS = { likes: 'Liked', reposts: 'Reposted', bookmarks: 'Bookmarked' }
+          each type of ['likes', 'reposts', 'bookmarks']
+            if responses[type].length
+              p.response-people(class=type)
+                | #{RESPONSE_WORDS[type]} by#{' '}
+                each mention, index in responses[type]
+                  a(href=mention.source, rel="nofollow") #{mention.body.author || hostOf(mention.source)}
+                  if index !== responses[type].length - 1
+                    | ,#{' '}
+          if responses.replies.length
+            h3.responses-subhead From other websites
+            each reply in responses.replies
+              article.webmention-reply.u-comment.h-cite
+                p.webmention-meta
+                  a.u-author.h-card(href=reply.body.authorUrl || reply.source, rel="nofollow") #{reply.body.author || hostOf(reply.source)}
+                  |  · #{reply.body.siteName || hostOf(reply.source)}
+                  if reply.body.published
+                    |  · #[time.dt-published(datetime=toISOWithoutMillis(reply.body.published)) #{webmentionTimestamp(reply.body.published)}]
+                  |  · #{reply.body.type || 'reply'}
+                if reply.body.title
+                  p.webmention-title
+                    a.u-url(href=reply.source, rel="nofollow") #{reply.body.title}
+                .webmention-excerpt.p-content
+                  if reply.body.summary
                     != reply.body.summary
-                    |  ...
-                else
-                  .p-content
+                  else
                     != reply.body.content
+                if !reply.body.title
+                  p.webmention-source #[a.u-url(href=reply.source, rel="nofollow") #{hostOf(reply.source)}]
 
-      .webmention-submit
-        label(for="webmention-manual") Wrote about this on your site? Send a #[a(href="https://indieweb.org/Webmention") webmention]:
-        .submit-box
-          input#webmention-manual(type="url", placeholder="https://your-site.example/post", name="source", required)
-          button#webmention-manual-submit(type="button") Send
-        p.webmention-note Webmentions are moderated, so they won’t appear right away.
-        #submit-error.hidden(role="alert")
-        #submit-success.hidden(role="status")
+          .webmention-submit
+            label(for="webmention-manual") Wrote about this on your site? Send a #[a(href="https://indieweb.org/Webmention") webmention]:
+            .submit-box
+              input#webmention-manual(type="url", placeholder="https://your-site.example/post", name="source", required)
+              button#webmention-manual-submit(type="button") Send
+            p.webmention-note Webmentions are moderated, so they won’t appear right away.
+            #submit-error.hidden(role="alert")
+            #submit-success.hidden(role="status")
 
-    nav.pager(aria-label="More")
-      a(href="/feed") ← the feed
+      aside.post-page-side
+        if page.citedBy.length
+          section
+            h2.side-heading
+              +siteIcon('quote')
+              |  Cited by
+            ul
+              each press in page.citedBy
+                li
+                  a(href=press.href)
+                    if press.work
+                      i #{press.work}
+                      |  –#{' '}
+                    | “#{press.title}”
+        if page.responses.mentions.length
+          section
+            h2.side-heading Linked from
+            ul
+              each mention in page.responses.mentions
+                li
+                  a(href=mention.source, rel="nofollow") #{mention.body.title || hostOf(mention.source)}
+                  span.side-note #{mention.body.siteName || hostOf(mention.source)} · webmention
+        if page.related.length
+          section
+            h2.side-heading Related
+            ul
+              each item in page.related
+                li
+                  a(href=item.href) #{item.label}
+
+    nav.pager.post-pager(aria-label="Newer and older entries")
+      if page.newer
+        a.pager-newer(href=page.newer.href, rel="prev")
+          span.pager-label ← newer
+          span.pager-title #{page.newer.label}
+      else
+        span
+      if page.older
+        a.pager-older(href=page.older.href, rel="next")
+          span.pager-label older →
+          span.pager-title #{page.older.label}

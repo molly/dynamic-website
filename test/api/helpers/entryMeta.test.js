@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon';
+import { parseDuration } from '../../../api/helpers/duration';
 import {
   entryMeta,
+  lengthText,
   shortDate,
   shortDateTime,
 } from '../../../api/helpers/entryMeta';
@@ -163,7 +165,11 @@ describe('entryMeta', () => {
       date: { href: 'https://example.com/ep' },
     });
     // The date links to the piece; "links" waits for an archived copy.
-    expect(press.rows).toEqual([]);
+    const ALSO_IN_PRESS = {
+      label: 'also in',
+      items: [{ text: 'Press', href: '/press' }],
+    };
+    expect(press.rows).toEqual([ALSO_IN_PRESS]);
     expect(
       entryMeta(
         {
@@ -177,11 +183,12 @@ describe('entryMeta', () => {
         { now },
       ).rows,
     ).toEqual([
+      ALSO_IN_PRESS,
       {
         label: 'links',
         items: [
           {
-            text: 'article',
+            text: 'link',
             href: 'https://example.com/ep',
             url: 'https://example.com/ep',
           },
@@ -369,5 +376,93 @@ describe('reading in the feed', () => {
         ],
       },
     ]);
+  });
+});
+
+describe('press cards', () => {
+  const pressEntry = (press, feedMeta) => ({
+    entryType: 'press',
+    _id: 'p',
+    createdAt: at,
+    tags: [],
+    press,
+    feedMeta,
+  });
+
+  it('names the show, its length and where else it’s listed', () => {
+    const meta = entryMeta(
+      pressEntry({
+        kind: 'podcast',
+        work: 'The Bunker',
+        duration: 3150,
+        href: 'https://x',
+      }),
+      { now },
+    );
+    expect(
+      meta.rows.map((r) => [r.label, r.items.map((i) => i.text).join()]),
+    ).toEqual([
+      ['show', 'The Bunker'],
+      ['length', '53 min'],
+      ['also in', 'Press'],
+    ]);
+  });
+
+  it('says what an article drew on, and keeps the role for the sentence', () => {
+    const meta = entryMeta(
+      pressEntry(
+        {
+          kind: 'article',
+          role: 'quoted',
+          work: 'The Atlantic',
+          href: 'https://x',
+        },
+        { drewOn: { label: 'Coinbase FEC complaint', href: '/micro/entry/c' } },
+      ),
+      { now },
+    );
+    expect(meta.verb).toEqual('In the press');
+    expect(meta.press).toEqual({ rolePhrase: 'Quoted in', upcoming: false });
+    expect(meta.rows).toEqual([
+      {
+        label: 'drew on',
+        items: [{ text: 'Coinbase FEC complaint', href: '/micro/entry/c' }],
+      },
+    ]);
+  });
+
+  it('lists your own pieces and talks with their pages', () => {
+    const freelance = entryMeta(
+      pressEntry({ kind: 'freelance', work: 'Bloomberg' }),
+      { now },
+    );
+    expect(freelance.verb).toEqual('Published');
+    expect(freelance.rows.map((r) => r.label)).toEqual(['in', 'also in']);
+    const talk = entryMeta(
+      pressEntry({
+        kind: 'talk',
+        work: 'Web Summit',
+        date: '2026-11-20',
+        duration: 2292,
+      }),
+      { now },
+    );
+    expect(talk).toMatchObject({ verb: 'Speaking', press: { upcoming: true } });
+    expect(talk.rows.map((r) => [r.label, r.items[0].text])).toEqual([
+      ['event', 'Web Summit'],
+      ['length', '38 min'],
+      ['also in', 'Speaking'],
+    ]);
+  });
+});
+
+describe('typed lengths', () => {
+  it('reads minutes:seconds, hours:minutes:seconds, or a number of minutes', () => {
+    expect(parseDuration('52:30')).toEqual(3150);
+    expect(parseDuration('1:02:30')).toEqual(3750);
+    expect(parseDuration('38')).toEqual(2280);
+    expect(parseDuration('')).toBeNull();
+    expect(parseDuration('52:75')).toBeNaN();
+    expect(lengthText(45)).toEqual('45 sec');
   });
 });

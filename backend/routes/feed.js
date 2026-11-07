@@ -9,7 +9,13 @@ import {
 } from '../helpers/feedEntries.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Book } from '../models/book.model.js';
-import { PressEntry, ShortformEntry } from '../models/entry.model.js';
+import {
+  PRESS_CARD_FIELDS,
+  PRESS_KINDS,
+  PRESS_ROLES,
+  PressEntry,
+  ShortformEntry,
+} from '../models/entry.model.js';
 import {
   FeedEntry,
   FeedEntryCitationNeeded,
@@ -22,32 +28,61 @@ import { authenticated } from './auth.js';
 
 const router = express.Router();
 
-// Search my own posts and Citation Needed issues, newest first, for picking what a press piece
-// drew on. With no query, the most recent ones.
+// Search entries by kind, newest first: posts (micro), newsletter issues (citationNeeded) and press.
+// With no query, the most recent ones. ?kinds=micro,citationNeeded,press picks the kinds (default:
+// posts and issues, for what a press piece drew on); ?exclude=<feed entry id> leaves one out.
+const SEARCH_KINDS = {
+  micro: 'FeedEntryMicro',
+  citationNeeded: 'FeedEntryCitationNeeded',
+  press: 'FeedEntryPress',
+};
+
 router.get('/entries/search', authenticated(), async (req, res) => {
   try {
     const query = String(req.query.q || '').trim();
-    let filter = {
-      __t: { $in: ['FeedEntryMicro', 'FeedEntryCitationNeeded'] },
-    };
+    const kinds = String(req.query.kinds || 'micro,citationNeeded')
+      .split(',')
+      .filter((kind) => SEARCH_KINDS[kind]);
+    let filter = { __t: { $in: kinds.map((kind) => SEARCH_KINDS[kind]) } };
     if (query) {
       const pattern = new RegExp(
         query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
         'i',
       );
-      const micro = await MicroEntry.find(
-        { $or: [{ title: pattern }, { 'post.blocks.data.text': pattern }] },
-        '_id',
-      )
-        .sort({ createdAt: -1 })
-        .limit(50)
-        .lean();
+      const [micro, press] = await Promise.all([
+        kinds.includes('micro')
+          ? MicroEntry.find(
+              {
+                $or: [{ title: pattern }, { 'post.blocks.data.text': pattern }],
+              },
+              '_id',
+            )
+              .sort({ createdAt: -1 })
+              .limit(50)
+              .lean()
+          : [],
+        kinds.includes('press')
+          ? PressEntry.find(
+              { $or: [{ title: pattern }, { work: pattern }] },
+              '_id',
+            )
+              .sort({ date: -1 })
+              .limit(50)
+              .lean()
+          : [],
+      ]);
       filter = {
         $or: [
-          { __t: 'FeedEntryCitationNeeded', title: pattern },
+          ...(kinds.includes('citationNeeded')
+            ? [{ __t: 'FeedEntryCitationNeeded', title: pattern }]
+            : []),
           { __t: 'FeedEntryMicro', micro: { $in: micro.map((m) => m._id) } },
+          { __t: 'FeedEntryPress', press: { $in: press.map((p) => p._id) } },
         ],
       };
+    }
+    if (mongoose.isValidObjectId(req.query.exclude)) {
+      filter._id = { $ne: req.query.exclude };
     }
     const entries = await FeedEntry.find({ ...filter, deletedAt: null })
       .sort({ createdAt: -1 })
@@ -241,6 +276,56 @@ const TAGGER_TYPES = {
   },
 };
 
+// The press fields that hold web addresses, by the label the tagger shows.
+const PRESS_URL_FIELDS = {
+  leadImage: 'Lead image',
+  slidesUrl: 'Slides',
+  transcriptUrl: 'Transcript',
+  youtubeUrl: 'YouTube',
+  mediaUrl: 'Video',
+  posterUrl: 'Poster',
+  audioUrl: 'Audio',
+};
+
+/**
+ * The press card fields from the tagger, checked: { fields } to set (null clears one), or
+ * { error } to send back.
+ * @param {Object} input
+ */
+export function checkPressFields(input) {
+  const fields = {};
+  for (const name of PRESS_CARD_FIELDS) {
+    if (!(name in input)) {
+      continue;
+    }
+    const value =
+      typeof input[name] === 'string' ? input[name].trim() : input[name];
+    fields[name] = value === '' || value === undefined ? null : value;
+  }
+  if (fields.kind !== undefined && !PRESS_KINDS.includes(fields.kind)) {
+    return { error: `Unknown kind "${fields.kind}".` };
+  }
+  if (fields.role && !PRESS_ROLES.includes(fields.role)) {
+    return { error: `Unknown role "${fields.role}".` };
+  }
+  if (
+    fields.duration !== undefined &&
+    fields.duration !== null &&
+    !(Number.isFinite(fields.duration) && fields.duration >= 0)
+  ) {
+    return { error: 'Length must be a number of seconds.' };
+  }
+  const badUrl = Object.keys(PRESS_URL_FIELDS).find(
+    (name) => fields[name] && !/^https?:\/\/\S+$/.test(fields[name]),
+  );
+  if (badUrl) {
+    return {
+      error: `${PRESS_URL_FIELDS[badUrl]} must be a web address starting with https://.`,
+    };
+  }
+  return { fields };
+}
+
 router.post('/meta/:entryType', authenticated(), async (req, res) => {
   const config = TAGGER_TYPES[req.params.entryType];
   if (!config) {
@@ -251,6 +336,14 @@ router.post('/meta/:entryType', authenticated(), async (req, res) => {
   }
   try {
     const { id, tags = [], threads = [], about = [], socialLinks } = req.body;
+    const press =
+      req.params.entryType === 'press' && req.body.press
+        ? checkPressFields(req.body.press)
+        : null;
+    if (press?.error) {
+      res.status(400).send({ error: press.error });
+      return;
+    }
     const feedEntry = await config.model.findById(id);
     if (!feedEntry) {
       res.sendStatus(404);
@@ -276,6 +369,14 @@ router.post('/meta/:entryType', authenticated(), async (req, res) => {
         feedEntry[config.content.path],
         { tags: tagIds },
       );
+    }
+    if (press) {
+      // Through the document, so the schema's checks run; null clears a field.
+      const pressEntry = await PressEntry.findById(feedEntry.press);
+      for (const [name, value] of Object.entries(press.fields)) {
+        pressEntry.set(name, value === null ? undefined : value);
+      }
+      await pressEntry.save();
     }
     res.json(await populateTaggerFields(feedEntry));
   } catch (err) {

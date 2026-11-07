@@ -135,35 +135,54 @@ export async function attachFeedMeta(entries) {
       Boolean,
     );
   const urls = entries.flatMap(linksOf);
+  const drewOnIds = [
+    ...new Set(
+      entries
+        .map((entry) => entry.press?.drewOn)
+        .filter(Boolean)
+        .map(idOf),
+    ),
+  ];
   const series = [
     ...new Set(entries.map((entry) => entry.book?.series).filter(Boolean)),
   ];
 
-  const [threads, members, entities, archivedLinks, seriesBooks] =
-    await Promise.all([
-      threadIds.length
-        ? Thread.find({ _id: { $in: threadIds } }, 'title slug').lean()
-        : [],
-      threadIds.length ? threadMembers(threadIds) : new Map(),
-      aboutIds.length
-        ? Entity.find(
-            { _id: { $in: aboutIds } },
-            `${ENTITY_SUMMARY_FIELDS} slug`,
-          ).lean()
-        : [],
-      urls.length
-        ? ArchivedLink.find(
-            { url: { $in: urls }, status: 'ok' },
-            'url archiveUrl',
-          ).lean()
-        : [],
-      series.length
-        ? Book.find(
-            { series: { $in: series } },
-            'title series seriesNumber',
-          ).lean()
-        : [],
-    ]);
+  const [
+    threads,
+    members,
+    entities,
+    archivedLinks,
+    seriesBooks,
+    drewOnEntries,
+  ] = await Promise.all([
+    threadIds.length
+      ? Thread.find({ _id: { $in: threadIds } }, 'title slug').lean()
+      : [],
+    threadIds.length ? threadMembers(threadIds) : new Map(),
+    aboutIds.length
+      ? Entity.find(
+          { _id: { $in: aboutIds } },
+          `${ENTITY_SUMMARY_FIELDS} slug`,
+        ).lean()
+      : [],
+    urls.length
+      ? ArchivedLink.find(
+          { url: { $in: urls }, status: 'ok' },
+          'url archiveUrl',
+        ).lean()
+      : [],
+    series.length
+      ? Book.find(
+          { series: { $in: series } },
+          'title series seriesNumber',
+        ).lean()
+      : [],
+    drewOnIds.length
+      ? FeedEntry.find({ _id: { $in: drewOnIds }, deletedAt: null })
+          .populate(FEED_ENTRY_LABEL_POPULATE)
+          .lean()
+      : [],
+  ]);
   const threadsById = new Map(threads.map((t) => [idOf(t), t]));
   const entitiesById = new Map(entities.map((e) => [idOf(e), e]));
   const archived = Object.fromEntries(
@@ -219,6 +238,11 @@ export async function attachFeedMeta(entries) {
         .map((url) => [url, archived[url]]),
     );
     meta.previousInSeries = previousInSeries(entry.book, seriesBooks);
+    // A press piece's "drew on": the post or issue of yours it cited.
+    const drewOn = entry.press?.drewOn
+      ? drewOnEntries.find((e) => idOf(e) === idOf(entry.press.drewOn))
+      : null;
+    meta.drewOn = drewOn ? neighbour(drewOn) : null;
     entry.feedMeta = meta;
   });
   return entries;

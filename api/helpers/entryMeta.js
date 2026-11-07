@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { getPressDetails } from './press.js';
+import { getPressDetails, isUpcoming } from './press.js';
 
 // The metadata column beside each entry on the redesigned pages: an icon, a verb and a linked date,
 // then label/value rows. Rows are left out when they'd be empty.
@@ -47,13 +47,20 @@ export function shortDate(date, { now = DateTime.now() } = {}) {
   );
 }
 
+// "Thursday, October 30, 2026 · 6:11 pm ET", at the top of a post's page.
+const fullDateTime = (date) => {
+  const dt = toDateTime(date);
+  return `${dt.toFormat('cccc, LLLL d, yyyy')} · ${dt.toFormat('h:mm a').toLowerCase()} ET`;
+};
+
 const fullTime = (date) =>
   toDateTime(date).toLocaleString(DateTime.DATETIME_FULL);
 
 const tagText = (tag) =>
   `#${tag.text.trim().toLowerCase().replace(/\s+/g, '-')}`;
 
-function tagsRow(tags, tagBase) {
+// Tags; on a post's page each with how many entries have it.
+function tagsRow(tags, tagBase, { counts = false } = {}) {
   const valid = (tags || []).filter((tag) => tag && tag.text);
   return valid.length
     ? {
@@ -62,6 +69,9 @@ function tagsRow(tags, tagBase) {
         items: valid.map((tag) => ({
           text: tagText(tag),
           href: `${tagBase}/${tag.value}`,
+          ...(counts && Number.isFinite(tag.frequency?.total)
+            ? { count: tag.frequency.total }
+            : {}),
         })),
       }
     : null;
@@ -69,10 +79,16 @@ function tagsRow(tags, tagBase) {
 
 // Rows appear in this order, whichever kind of entry they belong to.
 const ROW_ORDER = [
+  'permalink',
   'updated',
+  'from',
   'to',
   'quoting',
   'in',
+  'event',
+  'show',
+  'length',
+  'drew on',
   'started',
   'series',
   'sources',
@@ -83,8 +99,10 @@ const ROW_ORDER = [
   'later',
   'about',
   'tags',
+  'also in',
   'discuss',
   'links',
+  'archived',
 ];
 
 const SITE = 'https://www.mollywhite.net';
@@ -166,7 +184,45 @@ function microRows(micro, href, options) {
           { text: micro.data.label || micro.data.url, href: micro.data.url },
         ])
       : null,
-    tags: tagsRow(micro.tags, options.tagBase),
+    tags: tagsRow(micro.tags, options.tagBase, { counts: options.isPermalink }),
+    ...(options.isPermalink ? permalinkRows(micro, href) : {}),
+  };
+}
+
+// Rows only a post's own page has.
+function permalinkRows(micro, href) {
+  const fromReading = (micro.relatedPosts || []).some(
+    (related) => related.model === 'ShortformEntry' && related.ref,
+  );
+  const archive = micro.pageMeta?.archive;
+  const linkCount = archive?.total
+    ? archive.archived < archive.total
+      ? `${archive.archived} of ${plural(archive.total, 'link')}`
+      : archive.total === 1
+        ? '1 link'
+        : `all ${plural(archive.total, 'link')}`
+    : null;
+  return {
+    permalink: row('permalink', [{ text: href, href }]),
+    from: row(
+      'from',
+      [
+        { text: 'micro posts', href: '/micro' },
+        ...(fromReading
+          ? [{ text: 'shortform reading', href: '/reading/shortform' }]
+          : []),
+      ],
+      { separator: ' + ' },
+    ),
+    archived:
+      archive && (archive.page || archive.archived)
+        ? row('archived', [
+            ...(archive.page
+              ? [{ text: 'this page', href: archive.page }]
+              : []),
+            ...(archive.archived ? [{ text: linkCount }] : []),
+          ])
+        : null,
   };
 }
 
@@ -295,17 +351,78 @@ const PRESS_ICONS = {
   talk: 'tv',
 };
 
-function pressMeta(entry, { tagBase }) {
-  const { verb } = getPressDetails(entry.press);
+// Where else each kind of press is listed, and what its outlet is called.
+const PRESS_LISTS = {
+  freelance: { text: 'Freelance writing', href: '/freelance' },
+  talk: { text: 'Speaking', href: '/speaking' },
+  podcast: { text: 'Press', href: '/press' },
+  radio: { text: 'Press', href: '/press' },
+  video: { text: 'Press', href: '/press' },
+  tv: { text: 'Press', href: '/press' },
+};
+const PRESS_OUTLET_LABELS = {
+  freelance: 'in',
+  talk: 'event',
+  podcast: 'show',
+  radio: 'show',
+  video: 'show',
+  tv: 'show',
+};
+
+/**
+ * A length in words: "52 min", or "45 sec" under a minute.
+ * @param {number} seconds
+ */
+export function lengthText(seconds) {
+  if (!Number.isFinite(seconds) || seconds <= 0) {
+    return null;
+  }
+  return seconds < 60
+    ? `${Math.round(seconds)} sec`
+    : `${Math.round(seconds / 60)} min`;
+}
+
+function pressMeta(entry, { tagBase, now }) {
+  const { press } = entry;
+  const { verb, rolePhrase } = getPressDetails(press, { now });
+  const outletLabel = PRESS_OUTLET_LABELS[press.kind];
+  const length = lengthText(press.duration);
+  const drewOn = entry.feedMeta?.drewOn;
   return {
-    icon: PRESS_ICONS[entry.press.kind] || 'quote',
+    icon: PRESS_ICONS[press.kind] || 'quote',
     verb,
-    date: { at: entry.createdAt, href: entry.press.href || '/press' },
-    rows: { tags: tagsRow(entry.tags, tagBase) },
-    links: entry.press.href
-      ? [{ text: 'article', href: entry.press.href, url: entry.press.href }]
+    date: { at: entry.createdAt, href: press.href || '/press' },
+    rows: {
+      [outletLabel === 'in' ? 'in' : outletLabel]:
+        outletLabel && press.work
+          ? row(outletLabel, [
+              { text: press.work, italic: outletLabel === 'in' },
+            ])
+          : null,
+      length: length ? row('length', [{ text: length }]) : null,
+      'drew on': drewOn
+        ? row('drew on', [{ text: drewOn.label, href: drewOn.href }])
+        : null,
+      tags: tagsRow(entry.tags, tagBase),
+      'also in': PRESS_LISTS[press.kind]
+        ? row('also in', [PRESS_LISTS[press.kind]])
+        : null,
+    },
+    links: press.href
+      ? [
+          {
+            text:
+              press.kind === 'article' || press.kind === 'freelance'
+                ? 'article'
+                : 'link',
+            href: press.href,
+            url: press.href,
+          },
+        ]
       : [],
     editUrl: `/feed/tagger/press/${entry._id}`,
+    // For the card: "Quoted in", and whether a talk is still to come.
+    press: { rolePhrase, upcoming: isUpcoming(press, { now }) },
   };
 }
 
@@ -373,8 +490,11 @@ function linksRow(links, archived = {}) {
  * @param {{tagBase?: string, now?: DateTime}} [options] tagBase: where tag links go
  * @returns {{icon: string, verb: string, date: {text: string, iso: string, title: string, href: string}, rows: Object[], editUrl: ?string}}
  */
-export function entryMeta(entry, { tagBase = '/feed/tag', now } = {}) {
-  const options = { tagBase, now };
+export function entryMeta(
+  entry,
+  { tagBase = '/feed/tag', now, isPermalink = false } = {},
+) {
+  const options = { tagBase, now, isPermalink };
   let meta;
   if (entry.entryType === 'micro') {
     meta = microMeta(entry.micro, options);
@@ -405,14 +525,24 @@ export function entryMeta(entry, { tagBase = '/feed/tag', now } = {}) {
     discuss: discussRow(meta.socialLinks),
     links: linksRow(meta.links, entry.feedMeta?.archived),
   };
+  if (isPermalink) {
+    // The thread box below the post lists the thread; "archived" covers the page and its links.
+    delete rows.thread;
+    delete rows.links;
+  }
   const { at, href, withTime } = meta.date;
   return {
     icon: meta.icon,
     verb: meta.verb,
     replyTo: meta.replyTo || null,
+    press: meta.press || null,
     editUrl: meta.editUrl,
     date: {
-      text: withTime ? shortDateTime(at, { now }) : shortDate(at, { now }),
+      text: isPermalink
+        ? fullDateTime(at)
+        : withTime
+          ? shortDateTime(at, { now })
+          : shortDate(at, { now }),
       iso: toDateTime(at).toUTC().toISO({ suppressMilliseconds: true }),
       title: fullTime(at),
       href,

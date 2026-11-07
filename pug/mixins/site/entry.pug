@@ -24,6 +24,8 @@ mixin entryRows(meta, options)
                     i #{item.text}
                   else
                     | #{item.text}
+                if item.count
+                  span.entry-tag-count  #{item.count}
               else if item.italic
                 i #{item.text}
               else
@@ -150,6 +152,103 @@ mixin citationNeededBody(entry, meta)
         .entry-dek.p-summary
           != entry.excerpt
 
+//- Press: a line for coverage of you; cards for your own pieces, talks and appearances. Media is
+//- linked out to, with a player only for a copy you host yourself (mediaUrl, audioUrl).
+mixin pressBody(entry, meta)
+  - var press = entry.press
+  - var archive = entry.feedMeta && press.href ? entry.feedMeta.archived[press.href] : null
+  - var date = press.date ? readDate(press.date) : null
+  case press.kind
+    when 'freelance'
+      .press-card.press-freelance.h-cite
+        if press.leadImage
+          a.press-card-image(href=press.href, tabindex="-1", aria-hidden="true")
+            img(src=press.leadImage, alt="", loading="lazy")
+        div
+          p.press-card-meta
+            if press.work
+              span.press-card-outlet.p-publication #{press.work}
+              |  · 
+            | by me
+          p.press-card-title.p-name
+            a.u-url(href=press.href) #{press.title}
+          if archive
+            p.press-card-foot #[a(href=archive) archived]
+    when 'talk'
+      if meta.press && meta.press.upcoming
+        .press-upcoming.h-event
+          p.press-upcoming-label Upcoming talk
+          p.press-upcoming-title
+            if press.href
+              a.p-name.u-url(href=press.href) #{press.title}
+            else
+              span.p-name #{press.title}
+            if press.work
+              |  · #[span.p-location #{press.work}]
+            if date
+              |  · #{date}
+          if press.location
+            p.press-upcoming-location #{press.location}
+      else
+        +pressMedia(press)
+        p.press-talk-title.p-name
+          if press.href
+            a.u-url(href=press.href) #{press.title}
+          else
+            | #{press.title}
+        - var talkLinks = [press.work, date].filter(Boolean)
+        p.press-links
+          | #{talkLinks.join(' · ')}
+          each link in [['slides', press.slidesUrl], ['transcript', press.transcriptUrl], ['YouTube', press.youtubeUrl]]
+            if link[1]
+              |  · #[a(href=link[1]) #{link[0]}]
+    when 'podcast'
+    when 'radio'
+    when 'video'
+    when 'tv'
+      .press-card.press-appearance.h-cite
+        if press.audioUrl
+          audio.press-audio(controls, preload="none", src=press.audioUrl, aria-label=`Listen to ${press.title}`)
+        +pressMedia(press)
+        p.press-card-meta
+          if press.work
+            span.press-card-outlet.p-publication #{press.work}
+          if press.author
+            |  · with #{press.author}
+          if press.episode
+            |  · ep. #{press.episode}
+        p.press-card-title.p-name
+          a.u-url(href=press.href) #{press.title}
+        - var length = press.duration ? formatDuration(press.duration) : null
+        p.press-card-foot
+          if length
+            | #{length}
+          if press.href
+            | #{length ? ' · ' : ''}#[a(href=press.href) #{press.kind === 'podcast' || press.kind === 'radio' ? 'show page' : 'watch'}]
+          if press.youtubeUrl
+            |  · #[a(href=press.youtubeUrl) YouTube]
+          if press.transcriptUrl
+            |  · #[a(href=press.transcriptUrl) transcript]
+          if archive
+            |  · #[a(href=archive) archived]
+    default
+      p.press-line.h-cite
+        | #{(meta.press && meta.press.rolePhrase) || 'In'} 
+        if press.work
+          i.p-publication #{press.work}
+          | : 
+        | “#[a.u-url.p-name(href=press.href) #{press.title}]”
+        if press.author
+          span.press-line-author  — #{press.author}
+
+//- Your own copy of a talk or video, when there is one.
+mixin pressMedia(press)
+  if press.mediaUrl
+    .press-video
+      video(controls, preload="metadata", src=press.mediaUrl, poster=press.posterUrl, aria-label=press.title)
+      if press.duration
+        span.press-duration(aria-hidden="true") #{formatDuration(press.duration)}
+
 //- A book: cover, series, title and "by Author · 2000 · 470 pages".
 mixin bookBody(book, meta)
   .entry-book.h-cite
@@ -210,10 +309,10 @@ mixin feedList(entries, options = {})
       +siteEntry(item, options)
 
 mixin siteEntry(entry, options = {})
-  - var meta = entryMeta(entry, { tagBase: options.tagBase })
+  - var meta = entryMeta(entry, { tagBase: options.tagBase, isPermalink: options.isPermalink })
   if meta
     - var micro = entry.entryType === 'micro' ? entry.micro : (entry.entryType ? null : entry)
-    article.site-entry.h-entry(class=[`site-entry-${entry.entryType || 'micro'}`, meta.verb === 'Quoted' ? 'site-entry-quoted' : null])
+    article.site-entry.h-entry(class=[`site-entry-${entry.entryType || 'micro'}`, meta.verb === 'Quoted' ? 'site-entry-quoted' : null, options.isPermalink ? 'site-entry-permalink' : null])
       p.entry-verb
         +siteIcon(meta.icon)
         span.entry-verb-word #{meta.verb}
@@ -233,8 +332,7 @@ mixin siteEntry(entry, options = {})
             when 'readingBook'
               +bookBody(entry.book, meta)
             when 'press'
-              .entry-content
-                +pressArticle(entry.press, false, true)
+              +pressBody(entry, meta)
         if entry.feedMeta && entry.feedMeta.laterIssues.length
           +followUps(entry.feedMeta)
       +entryRows(meta, options)

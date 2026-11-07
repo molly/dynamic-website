@@ -46,6 +46,61 @@ html(class='feed-editor', lang='en')
 
             script#picker-data(type="application/json") !{JSON.stringify(pickerData).replace(/</g, '\\u003c')}
 
+        if entryType == "press"
+          - var KIND_NAMES = { article: 'Article', podcast: 'Podcast', radio: 'Radio', video: 'Video', tv: 'TV', talk: 'Talk', freelance: 'Freelance (I wrote it)' }
+          - var durationText = (seconds) => { if (!seconds && seconds !== 0) return ''; const t = Math.round(seconds); const h = Math.floor(t / 3600); const m = Math.floor((t % 3600) / 60); const sec = String(t % 60).padStart(2, '0'); return h ? `${h}:${String(m).padStart(2, '0')}:${sec}` : `${m}:${sec}` }
+          .content-box
+            .content-container.press-fields#press-fields
+              h3 Press card
+              .input-group
+                label(for="press-kind") Kind
+                select#press-kind.form-control-sm
+                  each kind in pressKinds
+                    option(value=kind, selected=press.kind === kind) #{KIND_NAMES[kind] || kind}
+              .input-group(data-kinds="article podcast radio video tv")
+                label(for="press-role") Your part
+                select#press-role.form-control-sm
+                  option(value="", selected=!press.role) —
+                  each role in pressRoles
+                    option(value=role, selected=press.role === role) #{role}
+              .input-group(data-kinds="freelance")
+                label(for="press-leadImage") Lead image
+                input#press-leadImage.form-control-sm(type="url", value=press.leadImage || '', placeholder="https://")
+                label.link-button.upload-button Upload#[input.press-upload(type="file", accept="image/*", data-target="press-leadImage", hidden)]
+              .input-group(data-kinds="talk podcast radio video tv")
+                label(for="press-duration") Length
+                input#press-duration.form-control-sm(type="text", value=durationText(press.duration), placeholder="52:30 or 1:02:30", inputmode="numeric")
+              .input-group(data-kinds="podcast radio")
+                label(for="press-episode") Episode
+                input#press-episode.form-control-sm(type="text", value=press.episode || '', placeholder="426")
+              .input-group(data-kinds="talk")
+                label(for="press-location") Location
+                input#press-location.form-control-sm(type="text", value=press.location || '', placeholder="For an upcoming talk")
+              .input-group(data-kinds="talk")
+                label(for="press-slidesUrl") Slides
+                input#press-slidesUrl.form-control-sm(type="url", value=press.slidesUrl || '', placeholder="https://")
+              .input-group(data-kinds="talk podcast radio video tv")
+                label(for="press-transcriptUrl") Transcript
+                input#press-transcriptUrl.form-control-sm(type="url", value=press.transcriptUrl || '', placeholder="https://")
+              .input-group(data-kinds="talk video tv")
+                label(for="press-youtubeUrl") YouTube
+                input#press-youtubeUrl.form-control-sm(type="url", value=press.youtubeUrl || '', placeholder="https://")
+              details.press-own-copy(data-kinds="talk podcast radio video tv", open=Boolean(press.mediaUrl || press.audioUrl))
+                summary Your own copy (gets a player on the site)
+                .input-group(data-kinds="talk video tv")
+                  label(for="press-mediaUrl") Video
+                  input#press-mediaUrl.form-control-sm(type="url", value=press.mediaUrl || '', placeholder="https://")
+                  label.link-button.upload-button Upload#[input.press-upload(type="file", accept="video/*", data-target="press-mediaUrl", hidden)]
+                .input-group(data-kinds="talk video tv")
+                  label(for="press-posterUrl") Poster
+                  input#press-posterUrl.form-control-sm(type="url", value=press.posterUrl || '', placeholder="https://")
+                  label.link-button.upload-button Upload#[input.press-upload(type="file", accept="image/*", data-target="press-posterUrl", hidden)]
+                .input-group(data-kinds="podcast radio")
+                  label(for="press-audioUrl") Audio
+                  input#press-audioUrl.form-control-sm(type="url", value=press.audioUrl || '', placeholder="https://")
+                  label.link-button.upload-button Upload#[input.press-upload(type="file", accept="audio/*", data-target="press-audioUrl", hidden)]
+              p#press-upload-status.press-upload-status(hidden)
+
         if entryType == "citationNeeded"
           .content-box
             .content-container
