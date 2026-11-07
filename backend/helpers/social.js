@@ -50,6 +50,13 @@ export const processText = (_text, network, entities = {}) => {
     }
   }
 
+  // Corrections: drop the old wording, keep the new. Highlights are just text.
+  $('del').remove();
+  $('ins, mark').each((_, elem) => {
+    const $tag = $(elem);
+    $tag.replaceWith($tag.html());
+  });
+
   // Replace breaks
   $('br').each((_, elem) => $(elem).replaceWith('\n\n'));
 

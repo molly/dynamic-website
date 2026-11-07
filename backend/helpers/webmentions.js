@@ -1,10 +1,15 @@
 import { Queue } from 'bullmq';
 import disallowList from '../config/webmentionDisallow.js';
 import { isProd } from '../env.js';
-import { extractUrlsFromBlocks } from './links.js';
+import { entryBlocks, entryPosts, extractUrlsFromBlocks } from './links.js';
 import { mentionedWebsites } from './mentions.js';
 import db from '../models/db.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
+
+const webmentionTargets = (entry) =>
+  [...extractUrlsFromBlocks(entryBlocks(entry)), entry.inReplyTo?.url].filter(
+    Boolean,
+  );
 
 // On save, queue jobs to send webmentions to all URLs in previous and new version of post
 export const sendWebmentions = async (doc) => {
@@ -12,22 +17,18 @@ export const sendWebmentions = async (doc) => {
     // Outside prod, posts point at a dev copy of the site; don't notify other sites about them.
     return;
   }
-  const changes = doc.getChanges();
   const old = await MicroEntry.findById(doc._id).lean();
+  // What webmentions are sent about: links in the post and its updates, and the post it replies to.
+  const linked = (entry) => ({
+    blocks: entryBlocks(entry),
+    inReplyTo: entry.inReplyTo?.url || null,
+  });
   if (
-    changes['$set'] &&
-    Object.keys(changes['$set']).length === 2 &&
-    changes['$set'].updatedAt &&
-    changes['$set'].post
+    old &&
+    !doc.deletedAt &&
+    JSON.stringify(linked(old)) === JSON.stringify(linked(doc.toObject()))
   ) {
-    if (
-      old &&
-      JSON.stringify(old.post.blocks) ===
-        JSON.stringify(changes['$set'].post.blocks)
-    ) {
-      // No changes to post, so no need to send webmentions
-      return;
-    }
+    return; // Nothing webmentions depend on has changed
   }
 
   let urls = [];
@@ -35,18 +36,19 @@ export const sendWebmentions = async (doc) => {
 
   if (!doc.deletedAt) {
     // Extract URLs from new version of post (if there is one -- deleted posts don't have this)
-    urls = extractUrlsFromBlocks(doc.post.blocks);
+    urls = webmentionTargets(doc.toObject());
   }
   if (old) {
     // Also get all URLs from the old version of the post, if this is an update
-    urls = urls.concat(extractUrlsFromBlocks(old.post.blocks));
+    urls = urls.concat(webmentionTargets(old));
   }
   // Mentioned entities' websites get webmentions too. (Old-format mentions had the link in the
   // post itself, so it's found above.)
   urls = urls.concat(
-    await mentionedWebsites(
-      [doc.deletedAt ? null : doc.post, old?.post].filter(Boolean),
-    ),
+    await mentionedWebsites([
+      ...(doc.deletedAt ? [] : entryPosts(doc.toObject())),
+      ...(old ? entryPosts(old) : []),
+    ]),
   );
 
   // Dedupe

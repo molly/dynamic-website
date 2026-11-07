@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { isProd } from '../env.js';
 import { queueArchive } from '../helpers/archive.js';
 import { ENTITY_SUMMARY_FIELDS } from '../helpers/entities.js';
+import { fetchPostInfo } from '../helpers/socialFetch.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Entity } from '../models/entity.model.js';
 import { ShortformEntry } from '../models/entry.model.js';
@@ -13,6 +14,10 @@ import { Thread } from '../models/thread.model.js';
 import { authenticated } from './auth.js';
 
 const router = express.Router();
+
+// Fields the editor has emptied arrive as null; a new entry simply doesn't get them.
+const withoutNulls = (fields) =>
+  Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== null));
 
 // What the editor gets back from every route: the entry, its related posts with titles, and the
 // feed entry's threads and about (which live on the feed entry, not the micro entry).
@@ -40,7 +45,11 @@ router.post(
       const tags = await updateTagsOnCreate(tagInput, 'micro');
 
       const microEntryId = new mongoose.Types.ObjectId();
-      const entry = new MicroEntry({ ...fields, tags, _id: microEntryId });
+      const entry = new MicroEntry({
+        ...withoutNulls(fields),
+        tags,
+        _id: microEntryId,
+      });
       const feedEntry = new FeedEntryMicro({
         micro: microEntryId,
         tags,
@@ -86,7 +95,11 @@ router.post(
           (key) => !['_id', 'createdAt', 'updatedAt', '__v'].includes(key),
         )
         .forEach((key) => {
-          if (entry[key] !== fields[key]) {
+          if (fields[key] === null) {
+            // The editor sends null for a field it has emptied (no data link, not a reply,
+            // not live), which removes it rather than storing null.
+            entry.set(key, undefined);
+          } else if (entry[key] !== fields[key]) {
             entry[key] = fields[key];
           }
         });
@@ -154,6 +167,26 @@ router.get('/entry/:slug', async (req, res) => {
     res.json(await editorResponse(entry));
   } else {
     res.sendStatus(404);
+  }
+});
+
+// Who wrote a Bluesky, Mastodon or Twitter post and when, for "in reply to"
+router.get('/replyInfo', authenticated(), async (req, res) => {
+  try {
+    res.json(await fetchPostInfo(String(req.query.url || '')));
+  } catch (err) {
+    if (err.response?.status === 404) {
+      res.status(422).json({
+        error:
+          'That post was not found; it may have been deleted or be private.',
+      });
+    } else if (err.isAxiosError) {
+      res
+        .status(502)
+        .json({ error: `Couldn't fetch the post: ${err.message}` });
+    } else {
+      res.status(422).json({ error: err.message }); // Not a post link
+    }
   }
 });
 

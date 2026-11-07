@@ -1,4 +1,5 @@
-import { loadMentionedEntities } from '../backend/helpers/mentions.js';
+import { entryPosts } from '../backend/helpers/links.js';
+import { loadPostContext } from '../backend/helpers/postContext.js';
 import { Book } from '../backend/models/book.model.js';
 import { ShortformEntry } from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
@@ -11,22 +12,22 @@ import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
 import { hydrateTimestamps } from './helpers/timestamps.js';
 import { hydrateMicroEntry } from './micro.js';
 
-export const hydrateFeedEntries = (entries, mentions = {}) =>
-  entries.map((entry) => hydrateFeedEntry(entry, mentions));
+export const hydrateFeedEntries = (entries, context = {}) =>
+  entries.map((entry) => hydrateFeedEntry(entry, context));
 
 /**
  * Prepare a feed entry for display.
  * @param {Object} entry
- * @param {Object} [mentions] Entities mentioned in micro posts, by id
+ * @param {Object} [context] What micro posts refer to, from loadPostContext
  */
-export const hydrateFeedEntry = (entry, mentions = {}) => {
+export const hydrateFeedEntry = (entry, context = {}) => {
   // Hydrate timestamps for all entries
   Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
 
   // Do additional hydration based on entry type
   if (entry.__t === 'FeedEntryMicro' && entry.micro) {
     entry.entryType = 'micro';
-    entry.micro = hydrateMicroEntry(entry.micro, mentions);
+    entry.micro = hydrateMicroEntry(entry.micro, context);
   } else if (entry.__t === 'FeedEntryCitationNeeded') {
     entry.entryType = 'citationNeeded';
     if ('socialLinks' in entry && entry.socialLinks.length > 0) {
@@ -111,12 +112,12 @@ export const getFeedEntries = async ({
   const validEntries = entries.filter(
     (entry) => entry.__t !== 'FeedEntryMicro' || entry.micro !== null,
   );
-  const mentions = await loadMentionedEntities(
+  const context = await loadPostContext(
     validEntries
       .filter((entry) => entry.micro)
-      .map((entry) => entry.micro.post),
+      .flatMap((entry) => entryPosts(entry.micro)),
   );
-  const hydrated = hydrateFeedEntries(validEntries, mentions);
+  const hydrated = hydrateFeedEntries(validEntries, context);
 
   const totalResults = await FeedEntry.countDocuments(query);
   let totalUnfilteredResults = totalResults;

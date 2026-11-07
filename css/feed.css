@@ -182,6 +182,64 @@ figure {
   font-style: italic;
 }
 
+/* Micro post metadata: replies, live status, sources, updates */
+.entry .in-reply-to,
+.entry .live-status,
+.entry .entry-sources,
+.entry .update-meta {
+  font-family: var(--sans-serif-fonts);
+  font-size: 0.8em;
+  color: var(--timestamp-color);
+}
+
+.entry .live-status.updating::before {
+  content: '';
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  margin-right: 0.4em;
+  border-radius: 50%;
+  background: var(--color-error, #c33);
+}
+
+.entry .entry-sources p {
+  margin: 0.25em 0;
+}
+
+.entry .entry-updates {
+  margin-top: 1.5em;
+  border-top: 1px solid var(--hr-color);
+}
+
+.entry .entry-update {
+  padding: 0.75em 0;
+  border-bottom: 1px solid var(--hr-color);
+}
+
+.entry .entry-update:target {
+  background: var(--note-background-color);
+}
+
+.entry .update-meta {
+  margin: 0 0 0.25em;
+}
+
+.entry .entry-update.correction .update-label {
+  font-weight: bold;
+}
+
+.entry .update-headline {
+  margin: 0.25em 0;
+  font-size: 1.1em;
+}
+
+.entry .correction-note {
+  margin-left: 0.1em;
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+}
+
 /* Reading list */
 .entry .byline,
 .entry .details {

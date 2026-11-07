@@ -27,6 +27,7 @@ export class ArchivePanel {
     this.statuses = [];
     this.checked = new Set();
     this.blocks = [];
+    this.urls = [];
 
     this.list.addEventListener('change', (evt) => {
       const url = evt.target.dataset?.url;
@@ -48,11 +49,16 @@ export class ArchivePanel {
 
   /**
    * Re-read the post's links and their status.
-   * @param {Object[]} blocks The post's EditorJS blocks as currently written
+   * @param {Object[]} blocks The post's EditorJS blocks as currently written, with its updates'
+   * @param {string[]} urls Other links on the post: sources, data, the post it replies to
    */
-  async refresh(blocks = this.blocks) {
+  async refresh(blocks = this.blocks, urls = this.urls) {
     this.blocks = blocks;
-    const { data } = await axios.post('/dynamic-api/archive/links', { blocks });
+    this.urls = urls;
+    const { data } = await axios.post('/dynamic-api/archive/links', {
+      blocks,
+      urls,
+    });
     this.statuses = data;
     // Forget ticks on links that are no longer in the post, or no longer need archiving.
     const tickable = new Set(data.filter(needsArchiving).map((l) => l.url));

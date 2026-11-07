@@ -13,3 +13,112 @@
   font-size: 0.7em;
   line-height: 1.2em;
 }
+
+/* Post blocks: shared by the site and the editor, so blocks look the same in both ---------- */
+mark {
+  background-color: var(--note-background-color);
+  color: inherit;
+  box-shadow: inset 0 -0.35em 0 rgb(108 77 196 / 18%);
+}
+
+del.correction {
+  color: var(--timestamp-color);
+}
+
+ins.correction {
+  text-decoration: none;
+}
+
+.article-card,
+.roundup {
+  margin: 1.25em 0;
+  padding: 0.75em 1em;
+  border-left: 3px solid var(--accent-color-purple);
+  background-color: var(--note-background-color);
+}
+
+.article-card-meta {
+  margin: 0;
+  font-size: 0.75em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-color-purple);
+}
+
+.article-card-title {
+  margin: 0.25em 0;
+  font-weight: 700;
+}
+
+.article-card-excerpt {
+  margin: 0.5em 0;
+  padding: 0;
+  border: none;
+  font-size: 0.95em;
+}
+
+.article-card-excerpt p::before {
+  content: '\201C';
+  margin-left: -0.6em;
+  margin-right: 0.1em;
+  color: var(--accent-color-purple);
+}
+
+.article-card-footer,
+.roundup-footer {
+  margin: 0.25em 0 0;
+  font-size: 0.75em;
+  color: var(--timestamp-color);
+}
+
+.roundup-item + .roundup-item {
+  margin-top: 0.75em;
+}
+
+.roundup-line {
+  margin: 0;
+}
+
+.data-table {
+  margin: 1.25em 0;
+  overflow-x: auto;
+}
+
+.data-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.35em 0.5em;
+  text-align: left;
+  border-bottom: 1px solid var(--hr-color);
+}
+
+.data-table .numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table tr.total td {
+  font-weight: 700;
+  border-top: 2px solid var(--hr-color);
+}
+
+.data-table figcaption,
+.media-block figcaption {
+  margin-top: 0.4em;
+  font-size: 0.75em;
+  color: var(--timestamp-color);
+}
+
+.media-block {
+  margin: 1.25em 0;
+}
+
+.media-block video,
+.media-block audio {
+  width: 100%;
+}

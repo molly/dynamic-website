@@ -9,6 +9,38 @@ import { processText } from '../../../backend/helpers/social.js';
 
 const TEXT_BLOCKS = ['paragraph', 'quote', 'embed'];
 
+const linkTo = (snapshot = {}) =>
+  snapshot.href
+    ? `<a href="${escapeText(snapshot.href).replace(/"/g, '&quot;')}">${escapeText(snapshot.title || snapshot.href)}</a>`
+    : escapeText(snapshot.title || '');
+
+/**
+ * Blocks that become thread text, as paragraphs: article cards become a link to the article,
+ * and each roundup item a link followed by your line. Tables and video/audio blocks aren't
+ * cross-posted.
+ * @param {Object[]} blocks
+ */
+function threadBlocks(blocks) {
+  return blocks.flatMap((block) => {
+    if (block.type === 'article') {
+      return [
+        { type: 'paragraph', data: { text: linkTo(block.data.snapshot) } },
+      ];
+    }
+    if (block.type === 'roundup') {
+      return (block.data.items || []).map((item) => ({
+        type: 'paragraph',
+        data: {
+          text: [linkTo(item.snapshot), escapeText(item.line || '')]
+            .filter(Boolean)
+            .join(' — '),
+        },
+      }));
+    }
+    return [block];
+  });
+}
+
 // One main-post block as thread text for a network: mentions become that network's handles,
 // emphasis is dropped, and links stay links (written out later for networks without rich text).
 function blockText(block, network, entities) {
@@ -42,7 +74,7 @@ export function buildThread(mainPost, network, tags = '', entities = {}) {
     current = { text: '', media: [] };
   };
 
-  for (const block of mainPost.blocks || []) {
+  for (const block of threadBlocks(mainPost.blocks || [])) {
     if (TEXT_BLOCKS.includes(block.type)) {
       const text = blockText(block, network, entities);
       if (!text) {
@@ -60,6 +92,13 @@ export function buildThread(mainPost, network, tags = '', entities = {}) {
         url: block.data.file.url,
         alt: block.data.alt || '',
       });
+    } else if (block.type === 'gallery') {
+      current.media.push(
+        ...(block.data.files || []).map((file) => ({
+          url: file.url,
+          alt: file.alt || '',
+        })),
+      );
     } else if (block.type === 'socialPostDelimiter') {
       finishPost();
     }

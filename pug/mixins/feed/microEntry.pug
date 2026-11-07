@@ -12,6 +12,19 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
           h2.p-name #{entry.title}
           if isRss
             br
+        if entry.live && entry.live.status
+          p.live-status(class=entry.live.status)
+            if entry.live.status === 'updating'
+              | Live · updating · last update #[time(datetime=toISOWithoutMillis(entry.live.lastUpdateAt || entry.updatedAt), title=entry.live.lastUpdate.absoluteTime) #{entry.live.lastUpdate.humanTime}]
+            else
+              | Live coverage has ended
+            if entry.live.started
+              |  · started #[time(title=entry.live.started.absoluteTime) #{entry.live.started.absoluteTime}]
+        if entry.inReplyTo && entry.inReplyTo.url
+          p.in-reply-to
+            | In reply to #[a.u-in-reply-to(href=entry.inReplyTo.url) #{entry.inReplyTo.name || 'a post'}]
+            if entry.inReplyTo.networkLabel
+              |  on #{entry.inReplyTo.networkLabel}
       .content.e-content
         each block in entry.html
           != block
@@ -26,6 +39,32 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
                 when "PressEntry"
                   include ../pressArticle.pug
                   +pressArticle(related.ref, isRss, true, true)
+
+        if (entry.sources && entry.sources.length) || (entry.data && entry.data.url)
+          .entry-sources
+            if entry.sources && entry.sources.length
+              p
+                | Sources: 
+                each source, index in entry.sources
+                  a(href=source.url) #{source.label}
+                  if index !== entry.sources.length - 1
+                    |  · 
+            if entry.data && entry.data.url
+              p
+                | Data: #[a(href=entry.data.url) #{entry.data.label || entry.data.url}]
+
+        if entry.updates && entry.updates.length
+          section.entry-updates
+            each update in entry.updates
+              .entry-update(id=`update-${update.id}`, class=update.kind)
+                p.update-meta
+                  span.update-label #{update.label}
+                  |  · 
+                  time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime) #{update.timestamps.absoluteTime}
+                if update.headline
+                  h3.update-headline #{update.headline}
+                each block in update.html
+                  != block
 
         if isRss && !hasImage
           img(src="https://www.mollywhite.net/assets/images/placeholder_social.png", alt="Illustration of Molly White sitting and typing on a laptop, on a purple background with 'Molly White' in white serif.", style="display: none;")

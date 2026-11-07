@@ -175,17 +175,46 @@ export function postParagraphs(post) {
  * @returns {string}
  */
 export function fingerprintPost(post) {
-  const relevant = (post.blocks || [])
-    .filter((block) =>
-      ['paragraph', 'quote', 'embed', 'image', 'socialPostDelimiter'].includes(
-        block.type,
-      ),
-    )
-    .map((block) => [
-      block.type,
-      block.data?.text ?? block.data?.source ?? block.data?.file?.url ?? '',
-      block.data?.alt ?? '',
-    ]);
+  // Paragraphs, quotes, embeds, images and post breaks keep their original [type, content, alt]
+  // shape so threads saved before galleries and cards counted don't all look out of date.
+  const relevant = (post.blocks || []).flatMap((block) => {
+    const data = block.data || {};
+    switch (block.type) {
+      case 'paragraph':
+      case 'quote':
+        return [[block.type, data.text ?? '', '']];
+      case 'embed':
+        return [[block.type, data.source ?? '', '']];
+      case 'image':
+        return [[block.type, data.file?.url ?? '', data.alt ?? '']];
+      case 'gallery':
+        return [
+          [
+            block.type,
+            ...(data.files || []).flatMap((f) => [f.url, f.alt ?? '']),
+          ],
+        ];
+      case 'article':
+        return [
+          [block.type, data.snapshot?.href ?? '', data.snapshot?.title ?? ''],
+        ];
+      case 'roundup':
+        return [
+          [
+            block.type,
+            ...(data.items || []).flatMap((item) => [
+              item.snapshot?.href ?? '',
+              item.snapshot?.title ?? '',
+              item.line ?? '',
+            ]),
+          ],
+        ];
+      case 'socialPostDelimiter':
+        return [[block.type, '', '']];
+      default:
+        return [];
+    }
+  });
   // djb2: stable and small; this only needs to notice changes, not resist tampering.
   let hash = 5381;
   for (const char of JSON.stringify(relevant)) {

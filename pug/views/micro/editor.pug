@@ -51,6 +51,16 @@ html(class='feed-editor', lang='en')
             #editorjs
             p#word-count.word-count
 
+            section.updates-section(aria-labelledby="updates-heading")
+              .updates-header
+                h2#updates-heading Updates and corrections
+                .updates-add
+                  button.link-button(type="button", data-add-update="update") + update
+                  button.link-button(type="button", data-add-update="correction") + correction
+                  button#add-live-update.link-button(type="button", data-add-update="live", hidden) + live update
+              p#corrections-prompt.corrections-prompt(hidden)
+              #updates-list
+
           section#panel-social.tab-panel(hidden)
             #platform-thread
             #side-by-side(hidden)
@@ -84,6 +94,45 @@ html(class='feed-editor', lang='en')
             .side-section
               label.side-label(for="related") Related posts
               select#related(multiple)
+
+            .side-section
+              .crosspost-header
+                span.side-label Sources
+                button#sources-suggest.link-button(type="button") suggest
+              ul#sources-list.meta-rows
+              #sources-suggestions.sources-suggestions
+              button#sources-add.link-button(type="button") + add source
+
+            .side-section
+              span.side-label Data
+              .meta-row
+                input#data-label(type="text", placeholder="label", aria-label="Data label")
+                input#data-url(type="url", placeholder="https://", aria-label="Data URL")
+
+            .side-section
+              .crosspost-header
+                label.side-label(for="reply-url") In reply to
+                button#reply-clear.link-button(type="button") clear
+              input#reply-url(type="url", placeholder="paste a Bluesky, Mastodon or Twitter post")
+              p#reply-status.side-hint
+              #reply-details.reply-details(hidden)
+                input#reply-name(type="text", placeholder="their name", aria-label="Their name")
+                select#reply-network(aria-label="Network")
+                input#reply-posted(type="datetime-local", aria-label="When they posted")
+
+            .side-section
+              .crosspost-header
+                span.side-label Live
+                label.switch
+                  input#live-toggle(type="checkbox", role="switch")
+                  span.switch-track(aria-hidden="true")
+                  span.switch-label live post
+              #live-details.live-details(hidden)
+                select#live-status(aria-label="Live status")
+                  option(value="updating") updating
+                  option(value="ended") ended
+                label.side-hint(for="live-started") started
+                input#live-started(type="datetime-local")
 
             .side-section.archive-links
               .crosspost-header

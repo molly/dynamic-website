@@ -88,7 +88,6 @@ input#related {
   background-color: var(--over-character-limit-background-color);
 }
 
-
 /* Error */
 .flex-column {
   flex-direction: column;
@@ -309,6 +308,12 @@ button:hover {
 
 /* Micro editor (designs/Editor@1x.png) ---------------------------------------- */
 .micro-editor {
+  /* The site's base styles fix the body at the window's height, and the editor runs longer than
+     that. Let the body grow with it, and keep room at its end for the fixed action bar as padding:
+     a margin on the last child would collapse through the body and not be scrollable. */
+  height: auto;
+  min-height: 100%;
+  padding-bottom: 5rem;
   --editor-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --editor-border: var(--hr-color);
   --editor-accent: var(--accent-color-purple);
@@ -318,7 +323,7 @@ button:hover {
 
 .editor-shell {
   max-width: 1320px;
-  margin: 1.5rem auto 5rem; /* Room for the fixed action bar */
+  margin: 1.5rem auto 0;
   border: 1px solid var(--editor-border);
 }
 
@@ -374,6 +379,9 @@ button:hover {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 22rem;
   gap: 3rem;
+  /* Columns size to their own content. Stretched columns get a fixed height, which blocks
+     using height: 100% (the table tool) then fill, overflowing the layout. */
+  align-items: start;
   padding: 1.5rem;
 }
 
@@ -474,7 +482,11 @@ button:hover {
 
 .post-text {
   min-height: 1.5em;
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   outline: none;
@@ -1158,4 +1170,456 @@ button.primary:disabled {
   input#title {
     margin-top: 0.5em;
   }
+}
+
+/* Block tools in the editor ---------------------------------------------------- */
+.shortform-search,
+.roundup-tool textarea,
+.article-new-excerpt,
+.data-table-footer input,
+.image-source-fields input[type='text'],
+.image-source-fields input[type='url'] {
+  width: 100%;
+  padding: 0.3em 0.5em;
+  font-size: 0.9rem;
+  border: 1px solid var(--hr-color);
+}
+
+.shortform-results {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shortform-results button {
+  display: block;
+  width: 100%;
+  padding: 0.3em 0.5em;
+  text-align: left;
+  background: none;
+  border: none;
+}
+
+.shortform-results button:hover {
+  background-color: var(--note-background-color);
+}
+
+.article-excerpt {
+  display: flex;
+  gap: 0.5em;
+  align-items: baseline;
+  font-size: 0.95em;
+}
+
+.article-actions,
+.media-meta,
+.data-table-footer label,
+.image-source-summary,
+.image-source-fields label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--timestamp-color);
+}
+
+.roundup-item {
+  padding: 0.5em 0;
+  border-bottom: 1px dashed var(--hr-color);
+}
+
+.data-table-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.data-table-footer label input {
+  width: auto;
+}
+
+/* The table plugin sizes its wrapper to height: 100%, which in the editor's grid layout loops
+   back on itself (the row's height depends on the table, the table's on the row) and inflates
+   the cells. Its natural height is what's wanted. */
+.micro-editor .tc-wrap {
+  height: auto;
+}
+
+.data-table--total .tc-row:last-child .tc-cell {
+  font-weight: 700;
+}
+
+.media-tool video,
+.media-tool audio {
+  width: 100%;
+}
+
+.media-meta {
+  display: flex;
+  gap: 1rem;
+  margin: 0.25rem 0;
+}
+
+.media-caption[data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: var(--timestamp-color);
+}
+
+.media-upload {
+  display: block;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px dashed var(--hr-color);
+  cursor: pointer;
+}
+
+.image-source-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 0.75rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.image-source-summary {
+  margin: 0 0 0.75rem;
+}
+
+.correction-label {
+  display: block;
+  font-size: 0.8rem;
+}
+
+.correction-input {
+  width: 100%;
+  border: 1px solid var(--hr-color);
+}
+
+.roundup-tool {
+  padding: 0.75em 1em;
+  border-left: 3px solid var(--accent-color-purple);
+  background-color: var(--note-background-color);
+}
+
+.roundup-tool .link-button,
+.article-tool .link-button {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--timestamp-color);
+}
+
+/* Gallery block (frontend/js/tools/gallery) */
+.image-gallery__items {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.image-gallery__items:empty {
+  display: none;
+}
+
+.image-gallery__image {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.image-gallery__image.sortable-ghost {
+  opacity: 0.5;
+}
+
+.image-gallery__thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--editor-border);
+  border-radius: 3px;
+  background: var(--note-background-color);
+  cursor: move;
+  user-select: none; /* Dragging from here mustn't select the fields' text */
+}
+
+.image-gallery__picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.image-gallery__thumb-button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  padding: 4px;
+  border: 0;
+  border-radius: 3px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+.image-gallery__thumb-button:not(:last-child) {
+  right: 34px;
+}
+
+.image-gallery__thumb-button:hover,
+.image-gallery__thumb-button.active {
+  background: var(--editor-accent);
+}
+
+.image-gallery__thumb-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.image-gallery .cdx-input.image-gallery__alt,
+.image-gallery .cdx-input.image-gallery__item-caption {
+  padding: 4px 6px;
+  font-size: 0.85em;
+}
+
+.image-gallery__alt {
+  font-family: var(--editor-mono);
+}
+
+.image-gallery__controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.image-gallery__controls .cdx-button {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.image-gallery__controls .cdx-button[hidden] {
+  display: none;
+}
+
+.image-gallery__preloaders {
+  display: flex;
+  gap: 8px;
+}
+
+.image-gallery__preloader {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--hr-color) center / cover;
+  animation: image-gallery-pulse 1s infinite alternate;
+}
+
+@keyframes image-gallery-pulse {
+  to {
+    opacity: 0.4;
+  }
+}
+
+.image-gallery [contenteditable='true'][data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: var(--timestamp-color);
+  pointer-events: none;
+}
+
+[data-theme='dark'] .image-gallery__image--white .image-gallery__picture {
+  filter: invert(0.85);
+}
+
+@media (prefers-color-scheme: dark) {
+  .image-gallery__image--white .image-gallery__picture {
+    filter: invert(0.85);
+  }
+}
+
+/* Metadata fields in the side panel: sources, data, in reply to, live */
+.meta-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.meta-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.side-section > .meta-row {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+}
+
+.editor-side-panel .meta-row input,
+#reply-url,
+.reply-details input,
+.reply-details select,
+.live-details select,
+.live-details input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.2em 0.5em;
+  font-size: 0.8rem;
+  color: var(--main-text-color);
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--editor-border);
+}
+
+.editor-side-panel .meta-row input[type='url'],
+#reply-url {
+  font-family: var(--editor-mono);
+}
+
+.editor-side-panel input:focus,
+.editor-side-panel select:focus {
+  outline: none;
+  border-color: var(--editor-accent);
+}
+
+.meta-remove {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.sources-suggestions ul {
+  margin: 0 0 0.5rem;
+  padding: 0.4rem 0.6rem;
+  list-style: none;
+  background: var(--editor-tint);
+}
+
+.sources-suggestions li {
+  display: flex;
+  gap: 0.5em;
+  align-items: baseline;
+  font-size: 0.8rem;
+}
+
+.sources-suggestions .suggestion-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sources-suggestions .link-button {
+  margin-left: auto;
+}
+
+#reply-status {
+  margin: 0.3rem 0;
+}
+
+.reply-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.4rem;
+}
+
+.reply-details[hidden],
+.live-details[hidden] {
+  display: none;
+}
+
+#reply-name {
+  grid-column: 1 / -1;
+}
+
+.live-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.4fr);
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+/* Updates and corrections, under the post */
+.updates-section {
+  margin-top: 2rem;
+}
+
+.updates-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.updates-header h2 {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.updates-add {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+}
+
+.updates-add .link-button[hidden] {
+  display: none;
+}
+
+.corrections-prompt {
+  margin: 0.75rem 0 0;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8rem;
+  background: var(--editor-tint);
+}
+
+.update-item {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--editor-border);
+  border-left: 3px solid var(--editor-border);
+}
+
+.update-item.correction {
+  border-left-color: var(--editor-accent);
+}
+
+.update-item.live {
+  border-left-color: var(--color-error, #c33);
+}
+
+.update-head {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.update-kind {
+  font-weight: 600;
+}
+
+.update-at {
+  padding: 0.1em 0.4em;
+  font-size: 0.8rem;
+  border: 1px solid var(--editor-border);
+}
+
+.update-remove {
+  margin-left: auto;
+}
+
+.update-headline {
+  width: 100%;
+  margin-top: 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-bottom: 1px solid var(--editor-border);
+}
+
+.update-body .codex-editor__redactor {
+  padding-bottom: 1rem !important;
 }

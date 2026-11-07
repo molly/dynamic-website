@@ -11,9 +11,10 @@ router.post('/links', authenticated(), async (req, res) => {
   try {
     const urls = [
       ...new Set(
-        extractUrlsFromBlocks(req.body.blocks || [], { embeds: true }).filter(
-          (url) => /^https?:\/\//.test(url),
-        ),
+        [
+          ...extractUrlsFromBlocks(req.body.blocks || [], { embeds: true }),
+          ...(req.body.urls || []),
+        ].filter((url) => /^https?:\/\//.test(url)),
       ),
     ];
     res.json(await linkStatuses(urls));

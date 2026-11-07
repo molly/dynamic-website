@@ -1,4 +1,5 @@
 import express from 'express';
+import { SHORTFORM_CARD_FIELDS } from '../helpers/postContext.js';
 import { updateTagsOnCreate } from '../helpers/tags.js';
 import { PressEntry, ShortformEntry } from '../models/entry.model.js';
 import { FeedEntryReading } from '../models/feed/feedEntry.model.js';
@@ -20,6 +21,29 @@ router.get('/tags', async (_, res) => {
 router.get('/bookTags', async (_, res) => {
   const bookTags = await BookTag.find({}, { __v: 0 }).lean();
   res.send(bookTags);
+});
+
+// Search shortform reading entries for the editor's article card and roundup blocks.
+router.get('/shortform/search', authenticated(), async (req, res) => {
+  try {
+    const query = String(req.query.q || '').trim();
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const filter = query
+      ? {
+          $or: ['title', 'work', 'author'].map((field) => ({
+            [field]: { $regex: escaped, $options: 'i' },
+          })),
+        }
+      : {};
+    res.json(
+      await ShortformEntry.find(filter, SHORTFORM_CARD_FIELDS)
+        .sort({ entryAdded: -1 })
+        .limit(10)
+        .lean(),
+    );
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
 });
 
 router.post('/entry', authenticated(), async (req, res) => {

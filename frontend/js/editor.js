@@ -13,6 +13,13 @@ import SocialPostDelimiter from './SocialPostDelimiter.js';
 import { NETWORK_LABELS } from '../../api/helpers/socialMedia.js';
 import { createAboutPicker, createThreadPicker } from './helpers/pickers.js';
 import { ArchivePanel } from './archivePanel.js';
+import {
+  DataField,
+  LiveField,
+  ReplyField,
+  SourcesField,
+} from './metadata/metadataFields.js';
+import { UpdatesEditor } from './metadata/updatesEditor.js';
 import { SOCIAL_NETWORKS, ThreadEditors } from './threads/threadEditor.js';
 
 import debounce from 'lodash.debounce';
@@ -43,6 +50,8 @@ let saveButton;
 let deleteButton;
 let threadEditors;
 let archivePanel;
+let updatesEditor;
+const metadata = {}; // The side panel's sources, data, inReplyTo and live fields
 
 const isSaved = () => Boolean(savedPost._id);
 const isCrosspostEnabled = (network) =>
@@ -189,11 +198,45 @@ async function updateWordCount() {
     `${words} word${words === 1 ? '' : 's'}`;
 }
 
+// Links on the post as currently written, for the archive panel: the post's and its updates', and
+// its sources, data and the post it replies to (even if not yet valid enough to save).
+async function refreshArchivePanel() {
+  const urls = [
+    ...metadata.sources.readRows().map((s) => s.url),
+    metadata.data.url.value.trim(),
+    metadata.inReplyTo.url.value.trim(),
+  ];
+  const blocks = [
+    ...threadEditors.mainPost.blocks,
+    ...(await updatesEditor.blocks()),
+  ];
+  await archivePanel.refresh(blocks, urls);
+}
+const debouncedRefreshArchivePanel = debounce(
+  () => refreshArchivePanel().catch(console.error),
+  500,
+);
+
 const debouncedOnPrimaryChange = debounce(async () => {
   updateWordCount();
+  updatesEditor.checkCorrections();
   await syncThreadsWithMainPost();
-  archivePanel.refresh(threadEditors.mainPost.blocks).catch(console.error);
+  refreshArchivePanel().catch(console.error);
 }, 500);
+
+/**
+ * The post's metadata and updates as the save route takes them. Throws with a message for the
+ * first field that can't be saved as it is.
+ */
+async function readMetadata() {
+  return {
+    sources: metadata.sources.getValue(),
+    data: metadata.data.getValue(),
+    inReplyTo: metadata.inReplyTo.getValue(),
+    live: metadata.live.getValue(),
+    updates: await updatesEditor.getValue(),
+  };
+}
 
 // Keep the form in sync with the database after a save -------------------------------------------
 /**
@@ -311,6 +354,8 @@ async function composeOnX(twitter) {
 async function save() {
   saveButton.disabled = true;
   try {
+    // Before anything is posted anywhere, so a field that can't be saved stops the whole save.
+    const postMetadata = await readMetadata();
     const alreadyPosted = SOCIAL_NETWORKS.filter(
       (network) => isCrosspostEnabled(network) && postMeta.socialLinks[network],
     );
@@ -335,6 +380,7 @@ async function save() {
       : '/dynamic-api/micro/entry';
     const transformedPostMeta = {
       ...postMeta,
+      ...postMetadata,
       socialLinks: socialLinksToArray(postMeta.socialLinks),
       socialThreads: threadEditors.toSave(),
     };
@@ -557,6 +603,31 @@ async function onFirstLoad() {
   threadEditors.attach();
   archivePanel = new ArchivePanel();
 
+  updatesEditor = new UpdatesEditor({
+    postHolder: document.getElementById('editorjs'),
+    onChange: debouncedRefreshArchivePanel,
+  });
+  metadata.sources = new SourcesField({
+    getBlocks: async () => [
+      ...(await editors.primary.save()).blocks,
+      ...(await updatesEditor.blocks()),
+    ],
+    onChange: debouncedRefreshArchivePanel,
+  });
+  metadata.data = new DataField({ onChange: debouncedRefreshArchivePanel });
+  metadata.inReplyTo = new ReplyField({
+    onChange: debouncedRefreshArchivePanel,
+  });
+  metadata.live = new LiveField({
+    onToggle: (isLive) => updatesEditor.setLive(isLive),
+  });
+  // Set once: after a save these already match what was saved, and updates keep their ids.
+  metadata.sources.setValue(savedPost.sources);
+  metadata.data.setValue(savedPost.data);
+  metadata.inReplyTo.setValue(savedPost.inReplyTo);
+  metadata.live.setValue(savedPost.live);
+  updatesEditor.setValue(savedPost.updates);
+
   // Set initial values
   setInputValues();
 
@@ -620,7 +691,8 @@ async function onFirstLoad() {
   // Initial counts once the editor has loaded the post
   await editors.primary.isReady;
   await Promise.all([updateWordCount(), syncThreadsWithMainPost()]);
-  archivePanel.refresh(threadEditors.mainPost.blocks).catch(console.error);
+  updatesEditor.checkCorrections();
+  refreshArchivePanel().catch(console.error);
 
   // Ready
   document.getElementById('loading-overlay').classList.add('hidden');

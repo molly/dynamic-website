@@ -38,6 +38,21 @@ export const extractUrlsFromBlocks = (blocks, { embeds = false } = {}) => {
     if (embeds && block.type === 'embed' && block.data.source) {
       urls.push(block.data.source);
     }
+    if (block.type === 'article' && block.data.snapshot?.href) {
+      urls.push(block.data.snapshot.href);
+    } else if (block.type === 'roundup') {
+      for (const item of block.data.items || []) {
+        if (item.snapshot?.href) {
+          urls.push(item.snapshot.href);
+        }
+      }
+    } else if (block.type === 'table') {
+      for (const row of block.data.content || []) {
+        for (const cell of row) {
+          urls.push(...extractUrlsFromText(cell));
+        }
+      }
+    }
     if (block.type === 'paragraph') {
       const text = block.data.text;
       urls.push(...extractUrlsFromText(text));
@@ -47,9 +62,44 @@ export const extractUrlsFromBlocks = (blocks, { embeds = false } = {}) => {
       }
     } else if (block.type === 'image') {
       urls.push(...extractUrlsFromText(block.data.caption));
+    } else if (block.type === 'gallery') {
+      urls.push(...extractUrlsFromText(block.data.caption));
+      for (const file of block.data.files || []) {
+        urls.push(...extractUrlsFromText(file.caption));
+      }
     } else if (block.type === 'raw') {
       urls.push(...extractUrlsFromText(block.data.html));
     }
   }
   return urls;
 };
+
+/**
+ * The posts within an entry: the main post, then each update's body.
+ * @param {{post?: Object, updates?: {body?: Object}[]}} entry
+ * @returns {{blocks: Object[]}[]}
+ */
+export const entryPosts = (entry) =>
+  [entry?.post, ...(entry?.updates || []).map((u) => u.body)].filter(
+    (post) => post?.blocks,
+  );
+
+/**
+ * Every block in an entry, the main post's and its updates', for finding links.
+ * @param {{post?: Object, updates?: {body?: Object}[]}} entry
+ * @returns {Object[]}
+ */
+export const entryBlocks = (entry) =>
+  entryPosts(entry).flatMap((p) => p.blocks);
+
+/**
+ * URLs an entry links to outside its text: sources, data and the post it replies to.
+ * @param {Object} entry
+ * @returns {string[]}
+ */
+export const entryMetadataUrls = (entry) =>
+  [
+    ...(entry?.sources || []).map((s) => s.url),
+    entry?.data?.url,
+    entry?.inReplyTo?.url,
+  ].filter((url) => /^https?:\/\//.test(url || ''));

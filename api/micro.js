@@ -1,15 +1,26 @@
 import * as cheerio from 'cheerio';
 import EditorJSHtml from 'editorjs-html';
 import {
-  expandMentionsInPost,
-  loadMentionedEntities,
-} from '../backend/helpers/mentions.js';
+  loadPostContext,
+  preparePostForDisplay,
+} from '../backend/helpers/postContext.js';
+import { entryPosts } from '../backend/helpers/links.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { Tag } from '../backend/models/tag.model.js';
 import { Webmention } from '../backend/models/webmention.model.js';
+import {
+  renderArticle,
+  renderMedia,
+  renderRoundup,
+  renderTable,
+} from './helpers/blocks.js';
 import { formatGallery, formatMedia } from './helpers/media.js';
-import { hydrateAndSortSocialLinks } from './helpers/socialMedia.js';
-import { hydrateTimestamps } from './helpers/timestamps.js';
+import {
+  NETWORK_LABELS,
+  hydrateAndSortSocialLinks,
+} from './helpers/socialMedia.js';
+import { formatTimestamp, hydrateTimestamps } from './helpers/timestamps.js';
+import { hydrateUpdates, linkCorrections } from './helpers/updates.js';
 
 const edjsParser = EditorJSHtml({
   gallery: formatGallery,
@@ -44,6 +55,10 @@ const edjsParser = EditorJSHtml({
     }
   },
   socialPostDelimiter: () => null, // Just used internally, should not display at all
+  article: renderArticle,
+  roundup: renderRoundup,
+  table: renderTable,
+  media: renderMedia,
   raw: ({ data }) => data.html,
   code: ({ data }) => {
     const languageClass = data.language
@@ -81,14 +96,32 @@ const getEntryPlaintext = (entry) => {
 /**
  * Prepare a micro entry for display.
  * @param {Object} entry
- * @param {Object} [mentions] Mentioned entities by id, from loadMentionedEntities
+ * @param {Object} [context] What the post refers to, from loadPostContext
  */
-export const hydrateMicroEntry = (entry, mentions = {}) => {
+export const hydrateMicroEntry = (entry, context = {}) => {
   if (entry) {
     Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
+    const renderPost = (post) =>
+      edjsParser.parse(preparePostForDisplay(post, context));
+    entry.updates = hydrateUpdates(entry, renderPost);
     if (entry.post && entry.post.blocks) {
-      entry.html = edjsParser.parse(expandMentionsInPost(entry.post, mentions));
+      entry.html = linkCorrections(
+        renderPost(entry.post),
+        new Set(entry.updates.map((u) => u.id)),
+      );
       entry.plainText = getEntryPlaintext(entry);
+    }
+    if (entry.inReplyTo?.url) {
+      entry.inReplyTo.networkLabel = NETWORK_LABELS[entry.inReplyTo.network];
+    }
+    if (entry.live?.status) {
+      // The newest live update, else the last edit, is when the post last changed.
+      const latest = entry.updates.find((u) => u.kind === 'live');
+      entry.live.lastUpdateAt = latest ? new Date(latest.at) : entry.updatedAt;
+      entry.live.lastUpdate = formatTimestamp(entry.live.lastUpdateAt);
+      if (entry.live.startedAt) {
+        entry.live.started = formatTimestamp(entry.live.startedAt);
+      }
     }
     if (entry.socialLinks?.length) {
       entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);
@@ -117,8 +150,8 @@ export const getMicroEntries = async ({
     .populate({ path: 'relatedPosts.ref' })
     .populate({ path: 'webmentions', model: Webmention })
     .lean();
-  const mentions = await loadMentionedEntities(entries.map((e) => e.post));
-  const hydrated = entries.map((entry) => hydrateMicroEntry(entry, mentions));
+  const context = await loadPostContext(entries.flatMap(entryPosts));
+  const hydrated = entries.map((entry) => hydrateMicroEntry(entry, context));
   const totalResults = await MicroEntry.countDocuments(query);
   let totalUnfilteredResults = totalResults;
   if (query) {
@@ -135,6 +168,6 @@ export const getMicroEntry = async (slug) => {
     .populate({ path: 'webmentions', model: Webmention })
     .lean();
 
-  const mentions = entry ? await loadMentionedEntities([entry.post]) : {};
-  return hydrateMicroEntry(entry, mentions);
+  const context = entry ? await loadPostContext(entryPosts(entry)) : {};
+  return hydrateMicroEntry(entry, context);
 };
