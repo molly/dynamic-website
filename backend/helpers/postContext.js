@@ -8,10 +8,23 @@ import { expandMentionsInPost, loadMentionedEntities } from './mentions.js';
 export const SHORTFORM_CARD_FIELDS =
   'title subtitle author work publisher href date excerpts completed started entryAdded';
 
+// A post's blocks, with the blocks inside comparisons.
+const withNestedBlocks = (blocks = []) =>
+  blocks.flatMap((block) =>
+    block.type === 'comparison'
+      ? [
+          block,
+          ...[block.data?.left?.block, block.data?.right?.block].filter(
+            Boolean,
+          ),
+        ]
+      : [block],
+  );
+
 function referencedShortformIds(posts) {
   const ids = new Set();
   for (const post of posts) {
-    for (const block of post?.blocks || []) {
+    for (const block of withNestedBlocks(post?.blocks)) {
       if (block.type === 'article' && block.data?.ref) {
         ids.add(String(block.data.ref));
       } else if (block.type === 'roundup') {
@@ -64,26 +77,43 @@ export function preparePostForDisplay(
   const expanded = expandMentionsInPost(post, mentions);
   return {
     ...expanded,
-    blocks: expanded.blocks.map((block) => {
-      if (block.type === 'article') {
-        return {
-          ...block,
-          data: { ...block.data, entry: shortform[String(block.data.ref)] },
-        };
-      }
-      if (block.type === 'roundup') {
-        return {
-          ...block,
-          data: {
-            ...block.data,
-            items: (block.data.items || []).map((item) => ({
-              ...item,
-              entry: shortform[String(item.ref)],
-            })),
-          },
-        };
-      }
-      return block;
-    }),
+    blocks: expanded.blocks.map((b) => attachEntries(b, shortform)),
   };
+}
+
+// Current reading entries for article cards and roundups, including those inside comparisons.
+function attachEntries(block, shortform) {
+  if (block.type === 'article') {
+    return {
+      ...block,
+      data: { ...block.data, entry: shortform[String(block.data.ref)] },
+    };
+  }
+  if (block.type === 'roundup') {
+    return {
+      ...block,
+      data: {
+        ...block.data,
+        items: (block.data.items || []).map((item) => ({
+          ...item,
+          entry: shortform[String(item.ref)],
+        })),
+      },
+    };
+  }
+  if (block.type === 'comparison') {
+    const side = (slot) =>
+      slot?.block
+        ? { ...slot, block: attachEntries(slot.block, shortform) }
+        : slot;
+    return {
+      ...block,
+      data: {
+        ...block.data,
+        left: side(block.data.left),
+        right: side(block.data.right),
+      },
+    };
+  }
+  return block;
 }

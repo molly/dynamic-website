@@ -91,7 +91,30 @@ function normalize(text) {
 export function suggestSources(blocks, existing = []) {
   const seen = new Set(existing.map((s) => normalize(s.url)));
   const suggestions = [];
+  const add = (label, url) => {
+    if (url && !seen.has(normalize(url))) {
+      seen.add(normalize(url));
+      suggestions.push({ label, url: normalize(url) });
+    }
+  };
   for (const block of blocks || []) {
+    if (block.type === 'comparison') {
+      suggestions.push(
+        ...suggestSources(
+          [block.data?.left?.block, block.data?.right?.block].filter(Boolean),
+          [...existing, ...suggestions],
+        ),
+      );
+      suggestions.forEach((s) => seen.add(s.url));
+      continue;
+    }
+    if (block.type === 'document') {
+      const { title, docType, pdfUrl, docketUrl } = block.data || {};
+      const name = title || (docType === 'letter' ? 'letter' : 'document');
+      add(`${name} (PDF)`, pdfUrl);
+      add('docket', docketUrl);
+      continue;
+    }
     for (const html of blockHtml(block)) {
       if (!html) {
         continue;

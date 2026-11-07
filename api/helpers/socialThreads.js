@@ -211,6 +211,12 @@ export function fingerprintPost(post) {
         ];
       case 'socialPostDelimiter':
         return [[block.type, '', '']];
+      case 'document':
+      case 'socialPost':
+      case 'comparison':
+        // What threads take from these (see threadBlocks in buildThread.js) is small; any change
+        // to them counts.
+        return [[block.type, JSON.stringify(data), '']];
       default:
         return [];
     }

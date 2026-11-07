@@ -1,33 +1,22 @@
-import { Storage } from '@google-cloud/storage';
-import axios from 'axios';
 import express from 'express';
 import multer from 'multer';
 
-import { getUniqueId } from '../../api/helpers/uniqueId.js';
-import { USER_AGENT } from '../config/requests.js';
-import { isProd } from '../env.js';
-
+import {
+  UPLOAD_FOLDER,
+  copyUrlToBucket,
+  publicUrl,
+  safeFilename,
+  uploadBucket,
+} from '../helpers/bucket.js';
 import { authenticated } from './auth.js';
 
-// Dev uploads go to their own folder so they never mix with the live site's files.
-const UPLOAD_FOLDER = isProd ? 'micro' : 'dev/micro';
-
-const storage = new Storage();
-const bucket = storage.bucket('storage.mollywhite.net');
-
 const router = express.Router();
-
-const uploadBucket = new Storage({
-  keyFilename: new URL('../config/service-account.json', import.meta.url)
-    .pathname,
-  projectId: 'mollywhite',
-}).bucket('storage.mollywhite.net');
 
 // Multer storage engine that streams uploaded files straight to the bucket.
 const uploadHandler = multer({
   storage: {
     _handleFile(req, file, cb) {
-      const filename = `${getUniqueId(10)}_${file.originalname.replace(/[^a-zA-Z0-9_.]/g, '-')}`;
+      const filename = safeFilename(file.originalname);
       file.stream
         .pipe(
           uploadBucket.file(`${UPLOAD_FOLDER}/${filename}`).createWriteStream({
@@ -56,7 +45,7 @@ router.post(
       res.json({
         success: 1,
         file: {
-          url: `https://storage.mollywhite.net/${UPLOAD_FOLDER}/${encodeURIComponent(req.file.filename)}`,
+          url: publicUrl(req.file.filename),
           contentType: req.file.contentType,
         },
       });
@@ -67,30 +56,14 @@ router.post(
   },
 );
 
-// Upload remote file by URL. Streams the file from the URL to the bucket.
+// Upload remote file by URL.
 router.post('/byURL', authenticated(), async (req, res) => {
-  const originalFilename = req.body.url.split('/').pop();
-  const targetFilename = `${getUniqueId(10)}_${originalFilename}`;
-  const file = bucket.file(`${UPLOAD_FOLDER}/${targetFilename}`);
-  const { data } = await axios.get(req.body.url, {
-    headers: { 'User-Agent': USER_AGENT },
-    decompress: false,
-    responseType: 'stream',
-  });
-  data
-    .pipe(file.createWriteStream())
-    .on('error', function (err) {
-      res.sendStatus(500).send({ error: err });
-    })
-    .on('finish', function () {
-      res.json({
-        success: 1,
-        file: {
-          url: `https://storage.mollywhite.net/${UPLOAD_FOLDER}/${encodeURIComponent(targetFilename)}`,
-          contentType: data.headers['content-type'],
-        },
-      });
-    });
+  try {
+    res.json({ success: 1, file: await copyUrlToBucket(req.body.url) });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: 0, error: err.message });
+  }
 });
 
 export default router;

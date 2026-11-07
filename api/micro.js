@@ -16,6 +16,11 @@ import {
 } from './helpers/blocks.js';
 import { formatGallery, formatMedia } from './helpers/media.js';
 import {
+  renderComparison,
+  renderDocument,
+  renderSocialPost,
+} from './helpers/sourceBlocks.js';
+import {
   NETWORK_LABELS,
   hydrateAndSortSocialLinks,
 } from './helpers/socialMedia.js';
@@ -59,6 +64,11 @@ const edjsParser = EditorJSHtml({
   roundup: renderRoundup,
   table: renderTable,
   media: renderMedia,
+  document: renderDocument,
+  socialPost: renderSocialPost,
+  // The block inside each side is rendered like any other.
+  comparison: (block) =>
+    renderComparison(block, (inner) => edjsParser.parseBlock(inner)),
   raw: ({ data }) => data.html,
   code: ({ data }) => {
     const languageClass = data.language

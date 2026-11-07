@@ -1,19 +1,10 @@
-import axios from 'axios';
 import { formatDuration } from '../../../api/helpers/blocks.js';
 import { escapeHtml } from '../helpers/escapeHtml.js';
+import { uploadFile as upload } from '../helpers/upload.js';
 
 // Block for your own copies of video and audio (talks, podcast appearances): uploaded to the
 // bucket and played with the browser's own player, never embedded from another site.
 // Data: { url, kind: 'video' | 'audio', contentType, duration (seconds), poster?, caption }
-
-const UPLOAD_URL = '/dynamic-api/micro/image/byFile';
-
-async function upload(file) {
-  const form = new FormData();
-  form.append('image', file); // The upload endpoint takes any file under this name
-  const { data } = await axios.post(UPLOAD_URL, form);
-  return data.file;
-}
 
 export default class MediaTool {
   static get toolbox() {

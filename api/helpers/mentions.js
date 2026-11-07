@@ -104,6 +104,24 @@ export function mapPostText(post, fn) {
   return {
     ...post,
     blocks: (post.blocks || []).map((block) => {
+      if (block.type === 'comparison') {
+        // Each side holds a block of its own
+        const side = (slot) =>
+          slot?.block
+            ? {
+                ...slot,
+                block: mapPostText({ blocks: [slot.block] }, fn).blocks[0],
+              }
+            : slot;
+        return {
+          ...block,
+          data: {
+            ...block.data,
+            left: side(block.data?.left),
+            right: side(block.data?.right),
+          },
+        };
+      }
       const data = { ...block.data };
       for (const key of ['text', 'caption']) {
         if (typeof data[key] === 'string') {

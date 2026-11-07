@@ -69,6 +69,22 @@ export const extractUrlsFromBlocks = (blocks, { embeds = false } = {}) => {
       }
     } else if (block.type === 'raw') {
       urls.push(...extractUrlsFromText(block.data.html));
+    } else if (block.type === 'document') {
+      const { pdfUrl, docketUrl, coverageUrl, excerptHtml } = block.data;
+      urls.push(
+        ...[pdfUrl, docketUrl, coverageUrl].filter(Boolean),
+        ...extractUrlsFromText(excerptHtml),
+      );
+    } else if (block.type === 'socialPost') {
+      // The posts themselves and what they link to as cards, not every link in their text
+      for (const post of block.data.posts || []) {
+        for (const p of [post, post.quoted].filter(Boolean)) {
+          urls.push(...[p.originalUrl, p.linkCard?.url].filter(Boolean));
+        }
+      }
+    } else if (block.type === 'comparison') {
+      const inner = [block.data.left?.block, block.data.right?.block];
+      urls.push(...extractUrlsFromBlocks(inner.filter(Boolean), { embeds }));
     }
   }
   return urls;

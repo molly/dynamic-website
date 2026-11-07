@@ -8,13 +8,16 @@ import Quote from '@editorjs/quote';
 import RawTool from '@editorjs/raw';
 import MentionsTool from '../MentionsTool.js';
 import ArticleTool from '../tools/ArticleTool.js';
+import ComparisonTool from '../tools/ComparisonTool.js';
 import CorrectionTool from '../tools/CorrectionTool.js';
 import DataTable from '../tools/DataTable.js';
+import DocumentTool from '../tools/DocumentTool.js';
 import ImageGallery from '../tools/gallery/index.js';
 import HighlightTool from '../tools/HighlightTool.js';
 import ImageSourceTune from '../tools/ImageSourceTune.js';
 import MediaTool from '../tools/MediaTool.js';
 import RoundupTool from '../tools/RoundupTool.js';
+import SocialPostTool from '../tools/SocialPostTool.js';
 
 export const editorToolConfig = {
   header: Header,
@@ -79,5 +82,25 @@ export const editorToolConfig = {
   roundup: RoundupTool,
   table: { class: DataTable, inlineToolbar: true },
   media: MediaTool,
+  // Highlight in the excerpt is "highlight mine"
+  document: {
+    class: DocumentTool,
+    inlineToolbar: ['highlight', 'link', 'bold', 'italic'],
+  },
+  socialPost: SocialPostTool,
+  comparison: {
+    class: ComparisonTool,
+    inlineToolbar: ['highlight', 'link', 'bold', 'italic'],
+  },
   imageSource: ImageSourceTune,
+};
+
+// What each side of a comparison can hold: the tools above, with their settings.
+editorToolConfig.comparison.config = {
+  tools: {
+    image: { ...editorToolConfig.image, title: 'Image' },
+    socialPost: { class: SocialPostTool, title: 'Social post' },
+    document: { ...editorToolConfig.document, title: 'Document' },
+    article: { class: ArticleTool, title: 'Linked article' },
+  },
 };

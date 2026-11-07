@@ -14,14 +14,58 @@ const linkTo = (snapshot = {}) =>
     ? `<a href="${escapeText(snapshot.href).replace(/"/g, '&quot;')}">${escapeText(snapshot.title || snapshot.href)}</a>`
     : escapeText(snapshot.title || '');
 
+const paragraph = (text) => ({ type: 'paragraph', data: { text } });
+
 /**
- * Blocks that become thread text, as paragraphs: article cards become a link to the article,
- * and each roundup item a link followed by your line. Tables and video/audio blocks aren't
- * cross-posted.
+ * Blocks that become thread text, as paragraphs: article cards become a link to the article, each
+ * roundup item a link followed by your line, a document a link to its PDF, and a social post a link
+ * to it (by name, not @handle, so it doesn't notify them). A comparison's two sides are each
+ * treated this way, after their labels. Tables and video/audio blocks aren't cross-posted.
  * @param {Object[]} blocks
  */
 function threadBlocks(blocks) {
   return blocks.flatMap((block) => {
+    if (block.type === 'document') {
+      const { title, pdfUrl, docketUrl } = block.data;
+      return [
+        paragraph(
+          linkTo({ href: pdfUrl || docketUrl, title: title || 'Document' }),
+        ),
+      ];
+    }
+    if (block.type === 'socialPost') {
+      const [first] = block.data.posts || [];
+      if (!first) {
+        return [];
+      }
+      const posts = block.data.posts.length;
+      const name = `${first.authorName || 'Post'}’s ${posts > 1 ? 'thread' : 'post'}`;
+      return [paragraph(linkTo({ href: first.originalUrl, title: name }))];
+    }
+    if (block.type === 'comparison') {
+      return [block.data.left, block.data.right].flatMap((slot) => {
+        if (!slot?.block) {
+          return [];
+        }
+        const inner = threadBlocks([slot.block]);
+        if (!slot.label) {
+          return inner;
+        }
+        const label = escapeText(slot.label);
+        return TEXT_BLOCKS.includes(inner[0]?.type) && inner[0].type !== 'embed'
+          ? [
+              {
+                ...inner[0],
+                data: {
+                  ...inner[0].data,
+                  text: `${label}: ${inner[0].data.text}`,
+                },
+              },
+              ...inner.slice(1),
+            ]
+          : [paragraph(label), ...inner];
+      });
+    }
     if (block.type === 'article') {
       return [
         { type: 'paragraph', data: { text: linkTo(block.data.snapshot) } },

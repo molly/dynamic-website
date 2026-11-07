@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { isProd } from '../env.js';
 import { queueArchive } from '../helpers/archive.js';
 import { ENTITY_SUMMARY_FIELDS } from '../helpers/entities.js';
-import { fetchPostInfo } from '../helpers/socialFetch.js';
+import { fetchPostInfo, fetchSocialPost } from '../helpers/socialFetch.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Entity } from '../models/entity.model.js';
 import { ShortformEntry } from '../models/entry.model.js';
@@ -170,23 +170,34 @@ router.get('/entry/:slug', async (req, res) => {
   }
 });
 
+// A post that couldn't be fetched: gone (422), the network failed (502), or not a post link (422).
+function sendFetchError(res, err) {
+  if (err.response?.status === 404) {
+    res.status(422).json({
+      error: 'That post was not found; it may have been deleted or be private.',
+    });
+  } else if (err.isAxiosError) {
+    res.status(502).json({ error: `Couldn't fetch the post: ${err.message}` });
+  } else {
+    res.status(422).json({ error: err.message });
+  }
+}
+
 // Who wrote a Bluesky, Mastodon or Twitter post and when, for "in reply to"
 router.get('/replyInfo', authenticated(), async (req, res) => {
   try {
     res.json(await fetchPostInfo(String(req.query.url || '')));
   } catch (err) {
-    if (err.response?.status === 404) {
-      res.status(422).json({
-        error:
-          'That post was not found; it may have been deleted or be private.',
-      });
-    } else if (err.isAxiosError) {
-      res
-        .status(502)
-        .json({ error: `Couldn't fetch the post: ${err.message}` });
-    } else {
-      res.status(422).json({ error: err.message }); // Not a post link
-    }
+    sendFetchError(res, err);
+  }
+});
+
+// A Bluesky or Mastodon post as a social post card, with its media copied to the bucket
+router.post('/socialPost', authenticated(), async (req, res) => {
+  try {
+    res.json(await fetchSocialPost(String(req.body.url || '')));
+  } catch (err) {
+    sendFetchError(res, err);
   }
 });
 
