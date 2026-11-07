@@ -1,0 +1,249 @@
+extends ../../templates/site.pug
+
+block vars
+  - var htmlClass = 'entities entity-page'
+  - var e = page.entity
+  - var ordinal = (n) => { const s = ['th', 'st', 'nd', 'rd']; const v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]) }
+  - var domainOf = (url) => { try { return new URL(/^https?:/.test(url) ? url : `https://${url}`).hostname.replace(/^www\./, '') } catch (err) { return url } }
+  - var asUrl = (url) => (/^https?:\/\//.test(url) ? url : `https://${url}`)
+  - var isCoverage = e.type === 'case' || e.type === 'bill'
+  //- Dates are shown in Eastern time; date-only fields are saved as midnight Eastern.
+
+block head
+  include ../../templates/titleAndDescription.pug
+  +titleAndDescription(e.name, e.description || `${page.typeName.one}: ${e.name}`)
+
+mixin rows(rows)
+  dl.entity-rows
+    each row in rows
+      if row && row.value
+        .entity-row
+          dt #{row.label}
+          dd
+            if row.href
+              a(href=row.href) #{row.value}
+            else
+              | #{row.value}
+            if row.extra
+              != row.extra
+
+mixin entryList(years)
+  each group in years
+    p.entity-year #{group.year}
+    ul.entity-entries
+      each row in group.rows
+        li
+          span.entity-entry-date #{row.date}
+          +siteIcon(row.icon)
+          a.entity-entry-label(href=row.href, class=row.italic ? 'italic' : null) #{row.label}
+
+block body
+  main#main.site-main
+    nav.breadcrumb(aria-label="Breadcrumb")
+      ol
+        li #[a(href="/entities") entities]
+        li #[a(href=`/entities/${segment}`) #{segment}]
+        li
+          span(aria-current="page") #{e.name}
+
+    include ../../mixins/site/icon.pug
+    .entity-layout
+      .entity-main
+        header.entity-head.h-card
+          p.entity-type-label #{page.typeName.one}
+          h1.entity-name.p-name(class=e.type === 'case' ? 'italic' : null) #{e.name}
+          if e.type === 'case' && (e.court || e.docketNumber)
+            p.entity-description #{[e.court, e.docketNumber].filter(Boolean).join(' · ')}
+          else if page.role
+            p.entity-description
+              | #{page.role.label},#{' '}
+              if page.role.href
+                a(href=page.role.href) #{page.role.name}
+              else
+                | #{page.role.name}
+          else if e.description
+            p.entity-description.p-note #{e.description}
+          if e.status && e.status.value && e.status.value !== 'active'
+            p.entity-status #{e.status.value}#{e.status.date ? ` as of ${new Date(e.status.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' })}` : ''}
+          if e.type === 'bill' && e.congressGovUrl
+            p.entity-callout #[a(href=e.congressGovUrl) Current status, text and votes on congress.gov →]
+          if e.type === 'committee'
+            each link in (e.elsewhere || [])
+              p.entity-callout #[a(href=link.url) #{link.label} →]
+          if e.note
+            p.entity-note #{e.note}
+
+        if page.parties.length
+          section.entity-section
+            h2.entity-section-heading Parties
+            +rows(page.parties.map((p) => ({ label: p.label, value: p.name, href: p.href })))
+
+        if page.documents.length
+          section.entity-section
+            h2.entity-section-heading Documents I’ve posted
+            ul.entity-entries
+              each doc in page.documents
+                li
+                  span.entity-entry-date #{doc.date}
+                  +siteIcon('newspaper')
+                  a.entity-entry-label(href=doc.href) #{doc.title}
+            if e.courtListenerUrl
+              p.entity-callout #[a(href=e.courtListenerUrl) current status and full docket on CourtListener →]
+
+        if e.type === 'bill' && e.versions && e.versions.length
+          section.entity-section
+            h2.entity-section-heading Versions I’ve covered
+            ul.entity-entries
+              each version in e.versions
+                li
+                  span.entity-entry-date #{version.date ? new Date(version.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' }) : ''}
+                  +siteIcon('newspaper')
+                  if version.textUrl
+                    a.entity-entry-label(href=version.textUrl) #{version.label}
+                  else
+                    span.entity-entry-label #{version.label}
+
+        if page.sponsors.length
+          section.entity-section
+            h2.entity-section-heading Sponsors
+            dl.entity-rows
+              each sponsor in page.sponsors
+                - var candidacy = (sponsor.entity.candidacies || []).slice(-1)[0]
+                .entity-row
+                  dt #{sponsor.label}
+                  dd
+                    if sponsor.href
+                      a(href=sponsor.href) #{sponsor.name}
+                    else
+                      | #{sponsor.name}
+                    if candidacy && candidacy.party
+                      span.entity-note-inline  #{candidacy.party}#{candidacy.state ? `-${candidacy.state}` : ''}
+
+        if page.threads.length && !isCoverage
+          section.entity-section
+            h2.entity-section-heading Threads
+            ul.entity-threads
+              each thread in page.threads
+                li
+                  a(href=thread.href) #{thread.title}
+                  span.entity-thread-meta  · #{thread.count} #{thread.count === 1 ? 'entry' : 'entries'}#{thread.from ? ` · ${thread.from} → ${thread.to}` : ''}
+
+        if page.glance.count
+          section.entity-section
+            h2.entity-section-heading #{isCoverage ? 'My coverage' : `Everything mentioning ${e.name}`}
+            if !isCoverage && page.kinds.length > 1
+              nav.feed-filters.entity-filters(aria-label="Show only")
+                ul
+                  li
+                    a.chip(href=`?`, aria-current=!page.activeFilter ? 'page' : false) all #{page.glance.count}
+                  each kind in page.kinds
+                    li
+                      a.chip(href=`?type=${kind.value}`, aria-current=page.activeFilter === kind.value ? 'page' : false) #{kind.label} #{kind.count}
+            +entryList(page.years)
+            if page.hasMore
+              p.entity-callout #[a(href=`?${page.activeFilter ? `type=${page.activeFilter}&` : ''}all=1`) show all #{page.entryCount} →]
+
+        if page.outlet.length
+          section.entity-section
+            h2.entity-section-heading From #{e.name}
+            ul.entity-entries
+              each item in page.outlet
+                li
+                  span.entity-entry-date #{item.date}
+                  +siteIcon(item.icon)
+                  a.entity-entry-label.italic(href=item.href) #{item.title}
+
+        if !page.glance.count && !page.documents.length && !page.outlet.length
+          p.empty Nothing posted about #{e.name} yet.
+
+      aside.entity-side
+        section
+          h2.entity-side-heading At a glance
+          +rows([
+            e.type === 'case' ? { label: 'court', value: e.court } : null,
+            e.type === 'case' ? { label: 'docket', value: e.docketNumber } : null,
+            e.type === 'case' ? { label: 'judge', value: e.judge } : null,
+            e.type === 'case' ? { label: 'status', value: e.caseStatus } : null,
+            e.type === 'bill' ? { label: 'number', value: e.number } : null,
+            e.type === 'bill' ? { label: 'congress', value: e.congress ? ordinal(e.congress) : null } : null,
+            e.type === 'bill' ? { label: 'status', value: e.billStatus } : null,
+            e.type === 'committee' ? { label: 'type', value: e.committeeType } : null,
+            { label: 'entries', value: page.glance.count ? `${page.glance.count} · since ${page.glance.since}` : null },
+            { label: 'latest', value: page.glance.latest },
+            page.role ? { label: 'role', value: `${page.role.label}, ${page.role.name}` } : null,
+            { label: 'tag', value: page.tag ? `#${page.tag.text.trim().toLowerCase().replace(/\s+/g, '-')}` : null, href: page.tag ? `/feed/tag/${page.tag.value}` : null },
+            e.type === 'organization' ? { label: 'type', value: e.kind } : null,
+            e.type === 'person' ? { label: 'type', value: 'person' } : null,
+          ])
+
+        - var candidacies = e.candidacies || []
+        - var identifiers = [{ label: 'Wikidata', value: e.ids && e.ids.wikidata, href: e.ids && e.ids.wikidata ? `https://www.wikidata.org/wiki/${e.ids.wikidata}` : null }, { label: 'SEC CIK', value: e.secCik, href: e.secCik ? `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${e.secCik}` : null }, { label: 'ticker', value: e.ticker }, { label: 'FEC ID', value: e.fecId, href: e.fecId ? `https://www.fec.gov/data/committee/${e.fecId}/` : null }].concat(candidacies.filter((c) => c.fecCandidateId).map((c) => ({ label: 'FEC', value: c.fecCandidateId, href: `https://www.fec.gov/data/candidate/${c.fecCandidateId}/` }))).concat([{ label: 'website', value: e.ids && e.ids.website ? domainOf(e.ids.website) : null, href: e.ids && e.ids.website ? asUrl(e.ids.website) : null }])
+        if identifiers.some((row) => row.value)
+          section
+            h2.entity-side-heading Identifiers
+            +rows(identifiers)
+
+        if e.type === 'case' && (e.courtListenerUrl || e.pacerUrl || (e.complaint && e.complaint.pdfUrl))
+          section
+            h2.entity-side-heading Links
+            dl.entity-rows
+              if e.courtListenerUrl || e.pacerUrl
+                .entity-row
+                  dt docket
+                  dd
+                    if e.courtListenerUrl
+                      a(href=e.courtListenerUrl) CourtListener
+                    if e.courtListenerUrl && e.pacerUrl
+                      |  ·#{' '}
+                    if e.pacerUrl
+                      a(href=e.pacerUrl) PACER
+              if e.complaint && e.complaint.pdfUrl
+                .entity-row
+                  dt complaint
+                  dd
+                    a(href=e.complaint.pdfUrl) PDF
+                    if page.complaintArchive
+                      |  · #[a(href=page.complaintArchive) archived]
+
+        if e.type === 'bill' && e.congressGovUrl
+          section
+            h2.entity-side-heading Links
+            +rows([{ label: 'text', value: 'congress.gov', href: e.congressGovUrl }])
+
+        - var wikipedia = (e.accounts || []).find((a) => a.network === 'wikipedia')
+        - var elsewhere = e.type === 'committee' ? [] : (e.elsewhere || [])
+        if elsewhere.length || wikipedia
+          section
+            h2.entity-side-heading Elsewhere
+            ul.entity-side-links
+              each link in elsewhere
+                li #[a(href=link.url) #{link.label}]
+              if wikipedia
+                li #[a(href=`https://en.wikipedia.org/wiki/${encodeURIComponent(wikipedia.handle.replace(/ /g, '_'))}`) Wikipedia]
+
+        if page.affiliated.length
+          section
+            h2.entity-side-heading Affiliated
+            ul.entity-side-links
+              each item in page.affiliated
+                li
+                  if item.href
+                    a(href=item.href) #{item.name}
+                  else
+                    | #{item.name}
+                  span.entity-side-note  #{item.label}
+
+        if page.related.length
+          section
+            h2.entity-side-heading Related
+            ul.entity-side-links
+              each item in page.related
+                li
+                  a(href=item.href) #{item.name}
+                  if item.label
+                    span.entity-side-note  #{item.label}
+                  else if item.count
+                    span.entity-side-note  #{item.count}
+
+        if options.isLoggedIn
+          p.entity-edit #[a(href=`/admin/entities/${e._id}`) edit]

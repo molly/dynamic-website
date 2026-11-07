@@ -2,7 +2,8 @@ import { Entity, EntityRelation } from '../models/entity.model.js';
 import { accountKey, nameKey, normalizeDomain } from './entityKeys.js';
 
 // Fields returned wherever an entity is shown as a choice (pickers, "Did you mean...?").
-export const ENTITY_SUMMARY_FIELDS = 'name type disambiguator hasPage accounts';
+export const ENTITY_SUMMARY_FIELDS =
+  'name slug type disambiguator hasPage accounts';
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -125,14 +126,17 @@ export async function findDuplicateEntities(candidate, excludeId) {
  * and `direction` says whether this entity is the relation's `from` or its `to`.
  * @param {import('mongoose').Types.ObjectId|string} entityId
  */
-export async function relationsFor(entityId) {
+export async function relationsFor(
+  entityId,
+  { fields = ENTITY_SUMMARY_FIELDS } = {},
+) {
   const id = String(entityId);
   const relations = await EntityRelation.find({
     $or: [{ from: entityId }, { to: entityId }],
   })
     .populate([
-      { path: 'from', select: ENTITY_SUMMARY_FIELDS },
-      { path: 'to', select: ENTITY_SUMMARY_FIELDS },
+      { path: 'from', select: fields },
+      { path: 'to', select: fields },
     ])
     .sort({ start: -1, createdAt: -1 })
     .lean();

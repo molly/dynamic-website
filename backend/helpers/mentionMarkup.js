@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import fs from 'fs';
+import { entityUrl } from '../../api/helpers/entityUrls.js';
 import { mapPostText } from '../../api/helpers/mentions.js';
 import {
   MENTION_NETWORKS,
@@ -43,9 +44,13 @@ export function renderMention(entity, innerHtml) {
   );
   const website = accounts.find((a) => a.network === 'website');
   const plain = `<span class="cdx-mention-plain">${innerHtml}</span>`;
-  const name = website
-    ? `<a class="website u-url p-name" href="${escapeAttribute(website.handle)}">${plain}</a>`
-    : plain;
+  // An entity with a page links to it; otherwise to its website, if it has one.
+  const page = entityUrl(entity);
+  const name = page
+    ? `<a class="entity-page p-name" href="${escapeAttribute(page)}">${plain}</a>`
+    : website
+      ? `<a class="website u-url p-name" href="${escapeAttribute(website.handle)}">${plain}</a>`
+      : plain;
   const links = accounts
     .filter((a) => a.network !== 'website')
     .map(

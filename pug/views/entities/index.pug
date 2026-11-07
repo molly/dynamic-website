@@ -1,0 +1,30 @@
+extends ../../templates/site.pug
+
+block vars
+  - var htmlClass = 'entities'
+
+block head
+  include ../../templates/titleAndDescription.pug
+  +titleAndDescription('Entities', "The people, organizations, committees, cases and bills Molly White covers")
+
+block body
+  main#main.site-main
+    nav.breadcrumb(aria-label="Breadcrumb")
+      ol
+        li
+          span(aria-current="page") entities
+    h1.page-title Entities
+    p.page-subtitle The people, organizations, committees, cases and bills I cover.
+    each group in groups
+      section.entity-index-group
+        h2.entity-section-heading
+          a(href=group.href) #{group.name}
+          span.entity-count  #{group.entities.length}
+        ul.entity-index-list
+          each entity in group.entities.slice(0, 12)
+            li
+              a(href=entity.href) #{entity.name}
+              if entity.count
+                span.entity-count  #{entity.count}
+        if group.entities.length > 12
+          p.entity-more #[a(href=group.href) all #{group.entities.length} →]

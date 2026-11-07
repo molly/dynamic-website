@@ -1,0 +1,29 @@
+extends ../../templates/site.pug
+
+block vars
+  - var htmlClass = 'entities'
+
+block head
+  include ../../templates/titleAndDescription.pug
+  +titleAndDescription(name, `${name} Molly White covers`)
+
+block body
+  main#main.site-main
+    nav.breadcrumb(aria-label="Breadcrumb")
+      ol
+        li #[a(href="/entities") entities]
+        li
+          span(aria-current="page") #{segment}
+    h1.page-title #{name}
+    if !entities.length
+      p.empty Nothing here yet.
+    ul.entity-type-list
+      each entity in entities
+        li
+          a(href=entity.href) #{entity.name}
+          if entity.disambiguator
+            span.entity-disambiguator  (#{entity.disambiguator})
+          if entity.count
+            span.entity-count  #{entity.count}
+          if entity.description
+            span.entity-description #{entity.description}

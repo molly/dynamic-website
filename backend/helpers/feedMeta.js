@@ -160,10 +160,7 @@ export async function attachFeedMeta(entries) {
       : [],
     threadIds.length ? threadMembers(threadIds) : new Map(),
     aboutIds.length
-      ? Entity.find(
-          { _id: { $in: aboutIds } },
-          `${ENTITY_SUMMARY_FIELDS} slug`,
-        ).lean()
+      ? Entity.find({ _id: { $in: aboutIds } }, ENTITY_SUMMARY_FIELDS).lean()
       : [],
     urls.length
       ? ArchivedLink.find(

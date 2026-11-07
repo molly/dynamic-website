@@ -10,6 +10,7 @@ import {
   OUTCOME_KINDS,
   RELATION_KINDS,
 } from '../../api/helpers/entityTypes.js';
+import { easternDate } from '../../api/helpers/easternDate.js';
 import { MENTION_NETWORKS } from '../../api/helpers/socialMedia.js';
 import {
   accountKey,
@@ -20,6 +21,9 @@ import {
 import db from './db.js';
 
 const { ObjectId } = mongoose.Schema.Types;
+
+// Dates typed without a time are days in Eastern time (api/helpers/easternDate.js).
+const Day = { type: Date, set: easternDate };
 
 const slugPattern = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -39,14 +43,14 @@ export const EntitySchema = new mongoose.Schema(
         _id: false,
         name: { type: String, required: true, trim: true },
         kind: { type: String, enum: ALIAS_KINDS, default: 'other' },
-        until: Date,
+        until: Day,
       },
     ],
     description: String,
     note: String,
     status: {
       value: { type: String, enum: ENTITY_STATUSES },
-      date: Date,
+      date: Day,
     },
     tag: { type: ObjectId, ref: 'Tag' },
     ids: {
@@ -73,7 +77,7 @@ export const EntitySchema = new mongoose.Schema(
         _id: false,
         field: { type: String, required: true },
         url: { type: String, required: true, match: /^https?:\/\// },
-        retrievedAt: Date,
+        retrievedAt: Day,
       },
     ],
     // People get no page by default: most are mention-only. Set in pre('validate') when unset.
@@ -162,7 +166,7 @@ export const ProjectEntity = Entity.discriminator(
     ],
     coingeckoId: String,
     cmcId: String,
-    launchedAt: Date,
+    launchedAt: Day,
   }),
 );
 
@@ -187,7 +191,7 @@ export const BillEntity = Entity.discriminator(
       {
         _id: false,
         label: { type: String, required: true }, // e.g. "Introduced"
-        date: Date,
+        date: Day,
         textUrl: String,
       },
     ],
@@ -200,7 +204,7 @@ export const CaseEntity = Entity.discriminator(
     court: String,
     docketNumber: String,
     judge: String,
-    filedAt: Date,
+    filedAt: Day,
     caseStatus: String,
     courtListenerUrl: String,
     pacerUrl: String,
@@ -212,7 +216,7 @@ export const EnforcementEntity = Entity.discriminator(
   'enforcement',
   new mongoose.Schema({
     releaseNumber: String,
-    date: Date,
+    date: Day,
     outcome: {
       kind: { type: String, enum: OUTCOME_KINDS },
       amountUsd: Number,
@@ -223,8 +227,8 @@ export const EnforcementEntity = Entity.discriminator(
 export const EventEntity = Entity.discriminator(
   'event',
   new mongoose.Schema({
-    startDate: Date,
-    endDate: Date,
+    startDate: Day,
+    endDate: Day,
     amounts: [
       {
         _id: false,
@@ -245,8 +249,8 @@ export const EntityRelationSchema = new mongoose.Schema(
     to: { type: ObjectId, ref: 'Entity', required: true, index: true },
     kind: { type: String, enum: RELATION_KINDS, required: true },
     role: String, // e.g. "Chief Legal Officer", "plaintiff"
-    start: Date,
-    end: Date, // The current role is the one with no end
+    start: Day,
+    end: Day, // The current role is the one with no end
     amountUsd: Number,
     source: { type: String, match: /^https?:\/\// },
   },
