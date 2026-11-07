@@ -12,6 +12,7 @@ import EditorJS from '@editorjs/editorjs';
 import SocialPostDelimiter from './SocialPostDelimiter.js';
 import { NETWORK_LABELS } from '../../api/helpers/socialMedia.js';
 import { createAboutPicker, createThreadPicker } from './helpers/pickers.js';
+import { ArchivePanel } from './archivePanel.js';
 import { SOCIAL_NETWORKS, ThreadEditors } from './threads/threadEditor.js';
 
 import debounce from 'lodash.debounce';
@@ -41,6 +42,7 @@ let aboutPicker;
 let saveButton;
 let deleteButton;
 let threadEditors;
+let archivePanel;
 
 const isSaved = () => Boolean(savedPost._id);
 const isCrosspostEnabled = (network) =>
@@ -111,7 +113,7 @@ function renderSocialSummary() {
  * Rebuild threads that haven't been edited from the current main post.
  */
 async function syncThreadsWithMainPost() {
-  threadEditors.updateMainPost(await editors.primary.save());
+  await threadEditors.updateMainPost(await editors.primary.save());
   renderSocialSummary();
 }
 
@@ -187,9 +189,10 @@ async function updateWordCount() {
     `${words} word${words === 1 ? '' : 's'}`;
 }
 
-const debouncedOnPrimaryChange = debounce(() => {
+const debouncedOnPrimaryChange = debounce(async () => {
   updateWordCount();
-  syncThreadsWithMainPost();
+  await syncThreadsWithMainPost();
+  archivePanel.refresh(threadEditors.mainPost.blocks).catch(console.error);
 }, 500);
 
 // Keep the form in sync with the database after a save -------------------------------------------
@@ -404,6 +407,14 @@ async function save() {
     updateModelFromDb(finalResp.data);
     setInputValues();
 
+    // Archive the links that were ticked. Failing to queue them doesn't undo the save.
+    archivePanel.queueChecked().catch((err) => {
+      console.error(err);
+      window.alert(
+        `The post saved, but its links couldn't be queued for archiving: ${err.message}`,
+      );
+    });
+
     // Add slug to URL now that the post has been created
     window.history.pushState({}, null, `/micro/editor/${finalResp.data.slug}`);
   } catch (err) {
@@ -544,6 +555,7 @@ async function onFirstLoad() {
     showTab,
   });
   threadEditors.attach();
+  archivePanel = new ArchivePanel();
 
   // Set initial values
   setInputValues();
@@ -608,6 +620,7 @@ async function onFirstLoad() {
   // Initial counts once the editor has loaded the post
   await editors.primary.isReady;
   await Promise.all([updateWordCount(), syncThreadsWithMainPost()]);
+  archivePanel.refresh(threadEditors.mainPost.blocks).catch(console.error);
 
   // Ready
   document.getElementById('loading-overlay').classList.add('hidden');

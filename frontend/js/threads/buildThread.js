@@ -11,12 +11,12 @@ const TEXT_BLOCKS = ['paragraph', 'quote', 'embed'];
 
 // One main-post block as thread text for a network: mentions become that network's handles,
 // emphasis is dropped, and links stay links (written out later for networks without rich text).
-function blockText(block, network) {
+function blockText(block, network, entities) {
   let text = block.type === 'embed' ? block.data.source : block.data.text;
   if (block.type === 'quote') {
     text = `"${text}"`;
   }
-  const processed = processText(text || '', network).text;
+  const processed = processText(text || '', network, entities).text;
   const html = network === 'bluesky' ? processed : escapeText(processed);
   return html.trim().replace(/\n/g, '<br>');
 }
@@ -28,9 +28,10 @@ function blockText(block, network) {
  * @param {{blocks: Object[]}} mainPost EditorJS data
  * @param {string} network
  * @param {string} [tags] Mastodon tags, which count against every post
+ * @param {Object} [entities] Mentioned entities by id, so mentions become this network's handles
  * @returns {Object} A thread, not yet edited
  */
-export function buildThread(mainPost, network, tags = '') {
+export function buildThread(mainPost, network, tags = '', entities = {}) {
   const limit = NETWORK_LIMITS[network].post;
   const posts = [];
   let current = { text: '', media: [] };
@@ -43,7 +44,7 @@ export function buildThread(mainPost, network, tags = '') {
 
   for (const block of mainPost.blocks || []) {
     if (TEXT_BLOCKS.includes(block.type)) {
-      const text = blockText(block, network);
+      const text = blockText(block, network, entities);
       if (!text) {
         continue;
       }

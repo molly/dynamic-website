@@ -15,14 +15,53 @@
 //   until cutover: edits to them in the site database are overwritten on the next run.
 
 import mongoose from 'mongoose';
+import {
+  mapPostText,
+  parseLegacyMentions,
+} from '../../api/helpers/mentions.js';
+import { resolveLegacyMentions } from '../helpers/legacyMentions.js';
+import db from '../models/db.js';
 import { mongoOptions, mongoUri, siteDbName } from '../models/mongoUri.js';
 import { transformMicroEntry, transformPressEntry } from './copyTransforms.js';
+
+// Old-format mentions are turned into entities before micro entries are copied, so the copies can
+// point at them. Prints what it did.
+async function prepareMicroMentions(fromCollection) {
+  const mentions = [];
+  for await (const doc of fromCollection.find({ post: { $exists: true } })) {
+    mapPostText(doc.post, (html) => {
+      for (const mention of parseLegacyMentions(html)) {
+        mentions.push({ ...mention, where: doc.slug });
+      }
+      return html;
+    });
+  }
+  const { ids, created, updated, ambiguous } = await resolveLegacyMentions(
+    mentions,
+    { dryRun },
+  );
+  console.log(
+    `Mentions: ${mentions.length} old-format, ${ids.size} distinct; ${created.length} ${dryRun ? 'would be created' : 'created'} as mention-only people, ${updated.length} existing entities given more accounts, ${ambiguous.length} ambiguous`,
+  );
+  if (created.length) {
+    console.log(
+      `  ${dryRun ? 'would create' : 'created'} (all as people; change the type in the entity admin if needed): ${created.join(', ')}`,
+    );
+  }
+  for (const { where, name, candidates } of ambiguous) {
+    console.log(
+      `  ambiguous in ${where}: "${name}" could be ${candidates.join(' or ')} (left in the old format)`,
+    );
+  }
+  return ids;
+}
 
 const SOURCES = [
   {
     db: 'micro',
     collection: 'entries',
     target: 'microEntries',
+    prepare: prepareMicroMentions,
     transform: transformMicroEntry,
   },
   { db: 'feed', collection: 'entries', target: 'feedEntries' },
@@ -83,6 +122,7 @@ async function copyCollection(source, sourceDb, targetDb) {
   const stats = { upserted: 0, modified: 0, unchanged: 0, missingFromOld: 0 };
   const seenIds = new Set();
 
+  const context = source.prepare ? await source.prepare(from) : undefined;
   const cursor = from.find({}).batchSize(BATCH_SIZE);
   let batch = [];
   const flush = async () => {
@@ -97,7 +137,9 @@ async function copyCollection(source, sourceDb, targetDb) {
     const stateWrites = [];
     for (const doc of batch) {
       const stateId = `${source.target}:${doc._id}`;
-      const { _id, ...fields } = source.transform ? source.transform(doc) : doc;
+      const { _id, ...fields } = source.transform
+        ? source.transform(doc, context)
+        : doc;
       const fieldNames = Object.keys(fields);
       const removed = (previousFields.get(stateId) || []).filter(
         (name) => !(name in fields),
@@ -152,6 +194,8 @@ async function copyCollection(source, sourceDb, targetDb) {
 
 async function main() {
   assertSafeTarget();
+  // Models (for entities) use the site database through db.js
+  await db.initialize();
 
   const sourceDbs = {};
   for (const dbName of OLD_DATABASES) {
@@ -188,8 +232,10 @@ async function main() {
   } finally {
     await Promise.all([
       target.close(),
+      db.connection.close(),
       ...Object.values(sourceDbs).map((conn) => conn.close()),
     ]);
+    db.redis.disconnect();
   }
 }
 

@@ -19,9 +19,18 @@ import { authenticated } from './auth.js';
 
 const router = express.Router();
 
-// Search for pickers: names, aliases and handles.
+// Search for pickers: names, aliases and handles. With ?ids=a,b, those entities instead.
 router.get('/', authenticated(), async (req, res) => {
   try {
+    if (req.query.ids) {
+      const ids = String(req.query.ids)
+        .split(',')
+        .filter((id) => mongoose.isValidObjectId(id));
+      res.json(
+        await Entity.find({ _id: { $in: ids } }, ENTITY_SUMMARY_FIELDS).lean(),
+      );
+      return;
+    }
     res.json(await searchEntities(req.query.q));
   } catch (err) {
     logger.error('Entity search failed', err);

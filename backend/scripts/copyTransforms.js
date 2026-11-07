@@ -1,10 +1,35 @@
 // How copyToSite.js reshapes old documents. Kept separate so they can be tested without
 // running the copy.
+import {
+  mapPostText,
+  mentionSignature,
+  replaceLegacyMentions,
+} from '../../api/helpers/mentions.js';
 
-// relatedPost/relatedPostModel (one article or press piece) became a list.
-export function transformMicroEntry({ relatedPost, relatedPostModel, ...doc }) {
+/**
+ * Micro entries:
+ * - relatedPost/relatedPostModel (one article or press piece) became a list.
+ * - Old-format mentions become current-format ones, using the entity ids resolved beforehand
+ *   (see resolveLegacyMentions). Mentions without an id are left as they are.
+ * @param {Object} doc
+ * @param {Map<string, ?string>} [mentionIds] Entity ids by mentionSignature
+ */
+export function transformMicroEntry(
+  { relatedPost, relatedPostModel, ...doc },
+  mentionIds = new Map(),
+) {
   return {
     ...doc,
+    ...(doc.post
+      ? {
+          post: mapPostText(doc.post, (html) =>
+            replaceLegacyMentions(
+              html,
+              (mention) => mentionIds.get(mentionSignature(mention)) || null,
+            ),
+          ),
+        }
+      : {}),
     relatedPosts: relatedPost
       ? [{ ref: relatedPost, model: relatedPostModel }]
       : [],

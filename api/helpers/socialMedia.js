@@ -79,5 +79,5 @@ export function getSocialLinkFromHandle(handle, network) {
   } else if (network === 'wikipedia') {
     return `${GENERIC_SOCIAL_PREFIXES.wikipedia}${handle.replace(/ /g, '_')}`;
   }
-  return `${GENERIC_SOCIAL_PREFIXES[network]}${handle}`;
+  return `${GENERIC_SOCIAL_PREFIXES[network]}${strippedHandle}`;
 }

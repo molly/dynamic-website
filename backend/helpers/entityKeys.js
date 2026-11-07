@@ -24,12 +24,15 @@ const LEGAL_SUFFIXES = new Set([
 
 /**
  * Normalize a name for comparison: lowercase, no accents or punctuation, "&" read as "and", and
- * no leading "the" or trailing legal suffixes ("Coinbase Global, Inc." -> "coinbase global").
+ * no leading "the", trailing possessive or trailing legal suffixes ("Coinbase Global, Inc." ->
+ * "coinbase global", "Taylor Lorenz’s" -> "taylor lorenz").
  * @param {string} name
  * @returns {string}
  */
 export function nameKey(name) {
   const words = name
+    .trim()
+    .replace(/['\u2019]s$/i, '')
     .normalize('NFKD')
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()

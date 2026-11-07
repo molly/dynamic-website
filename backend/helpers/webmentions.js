@@ -1,49 +1,10 @@
 import { Queue } from 'bullmq';
-import * as cheerio from 'cheerio';
 import disallowList from '../config/webmentionDisallow.js';
 import { isProd } from '../env.js';
+import { extractUrlsFromBlocks } from './links.js';
+import { mentionedWebsites } from './mentions.js';
 import db from '../models/db.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
-
-// Extract all URLs from a block of text
-const extractUrlsFromText = (text) => {
-  if (text.includes('cdx-mention')) {
-    // Use heavier processing if mentions are used
-    const links = [];
-    const $ = cheerio.load(text, null, false);
-    for (let link of $('a')) {
-      const $link = $(link);
-      if (!$link.data('username') && $link.attr('href').startsWith('http')) {
-        links.push($link.attr('href'));
-      }
-    }
-    return links;
-  } else {
-    // Otherwise a simple regex should suffice
-    const matches = text.matchAll(/<a.*?href=['"](http.*?)["']/g);
-    return Array.from(matches).map((match) => match[1]);
-  }
-};
-
-// Extracts URLs from a list of blocks that may or may not contain links
-const extractUrlsFromBlocks = (blocks) => {
-  const urls = [];
-  for (let block of blocks) {
-    if (block.type === 'paragraph') {
-      const text = block.data.text;
-      urls.push(...extractUrlsFromText(text));
-    } else if (block.type === 'list') {
-      for (let item of block.data.items) {
-        urls.push(...extractUrlsFromText(item));
-      }
-    } else if (block.type === 'image') {
-      urls.push(...extractUrlsFromText(block.data.caption));
-    } else if (block.type === 'raw') {
-      urls.push(...extractUrlsFromText(block.data.html));
-    }
-  }
-  return urls;
-};
 
 // On save, queue jobs to send webmentions to all URLs in previous and new version of post
 export const sendWebmentions = async (doc) => {
@@ -80,6 +41,13 @@ export const sendWebmentions = async (doc) => {
     // Also get all URLs from the old version of the post, if this is an update
     urls = urls.concat(extractUrlsFromBlocks(old.post.blocks));
   }
+  // Mentioned entities' websites get webmentions too. (Old-format mentions had the link in the
+  // post itself, so it's found above.)
+  urls = urls.concat(
+    await mentionedWebsites(
+      [doc.deletedAt ? null : doc.post, old?.post].filter(Boolean),
+    ),
+  );
 
   // Dedupe
   urls = new Set(urls);

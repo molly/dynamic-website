@@ -1,6 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 
+import { isProd } from '../env.js';
+import { queueArchive } from '../helpers/archive.js';
 import { ENTITY_SUMMARY_FIELDS } from '../helpers/entities.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Entity } from '../models/entity.model.js';
@@ -46,6 +48,15 @@ router.post(
         about,
       });
       await Promise.all([entry.save(), feedEntry.save()]);
+      if (isProd) {
+        // Archive the new post's own page once it's had a minute to be published everywhere.
+        await queueArchive(
+          [`https://www.mollywhite.net/micro/entry/${entry.slug}`],
+          {
+            delay: 60 * 1000,
+          },
+        );
+      }
       res.json(await editorResponse(entry));
     } catch (err) {
       console.log(err);

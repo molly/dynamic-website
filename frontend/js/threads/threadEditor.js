@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { collectMentionIds } from '../../../api/helpers/mentions.js';
 import { NETWORK_LABELS } from '../../../api/helpers/socialMedia.js';
 import {
   MEDIA_LIMIT,
@@ -68,6 +69,25 @@ export class ThreadEditors {
     this.showTab = showTab;
     this.view = null; // The network shown in a platform tab, 'side-by-side', or null
     this.showDiff = false;
+    this.entities = {}; // Mentioned entities by id, for turning mentions into handles
+  }
+
+  /**
+   * Fetch any mentioned entities not loaded yet.
+   * @param {{blocks: Object[]}} mainPost
+   */
+  async loadMentions(mainPost) {
+    const missing = collectMentionIds([mainPost]).filter(
+      (id) => !this.entities[id],
+    );
+    if (missing.length) {
+      const { data } = await axios.get('/dynamic-api/entities', {
+        params: { ids: missing.join(',') },
+      });
+      for (const entity of data) {
+        this.entities[entity._id] = entity;
+      }
+    }
   }
 
   /**
@@ -75,7 +95,8 @@ export class ThreadEditors {
    * everything else is rebuilt, keeping its Mastodon tags.
    * @param {{blocks: Object[]}} mainPost
    */
-  updateMainPost(mainPost) {
+  async updateMainPost(mainPost) {
+    await this.loadMentions(mainPost);
     this.mainPost = mainPost;
     for (const network of SOCIAL_NETWORKS) {
       const existing = this.threads[network] || this.saved[network];
@@ -86,6 +107,7 @@ export class ThreadEditors {
           mainPost,
           network,
           existing?.tags || '',
+          this.entities,
         );
       }
     }
@@ -136,6 +158,7 @@ export class ThreadEditors {
       this.mainPost,
       network,
       this.threads[network]?.tags || '',
+      this.entities,
     );
     this.showDiff = false;
     this.render();

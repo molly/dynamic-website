@@ -1,5 +1,9 @@
 import * as cheerio from 'cheerio';
 import EditorJSHtml from 'editorjs-html';
+import {
+  expandMentionsInPost,
+  loadMentionedEntities,
+} from '../backend/helpers/mentions.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { Tag } from '../backend/models/tag.model.js';
 import { Webmention } from '../backend/models/webmention.model.js';
@@ -74,11 +78,16 @@ const getEntryPlaintext = (entry) => {
     .join(' ');
 };
 
-export const hydrateMicroEntry = (entry) => {
+/**
+ * Prepare a micro entry for display.
+ * @param {Object} entry
+ * @param {Object} [mentions] Mentioned entities by id, from loadMentionedEntities
+ */
+export const hydrateMicroEntry = (entry, mentions = {}) => {
   if (entry) {
     Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
     if (entry.post && entry.post.blocks) {
-      entry.html = edjsParser.parse(entry.post);
+      entry.html = edjsParser.parse(expandMentionsInPost(entry.post, mentions));
       entry.plainText = getEntryPlaintext(entry);
     }
     if (entry.socialLinks?.length) {
@@ -108,7 +117,8 @@ export const getMicroEntries = async ({
     .populate({ path: 'relatedPosts.ref' })
     .populate({ path: 'webmentions', model: Webmention })
     .lean();
-  const hydrated = entries.map(hydrateMicroEntry);
+  const mentions = await loadMentionedEntities(entries.map((e) => e.post));
+  const hydrated = entries.map((entry) => hydrateMicroEntry(entry, mentions));
   const totalResults = await MicroEntry.countDocuments(query);
   let totalUnfilteredResults = totalResults;
   if (query) {
@@ -125,5 +135,6 @@ export const getMicroEntry = async (slug) => {
     .populate({ path: 'webmentions', model: Webmention })
     .lean();
 
-  return hydrateMicroEntry(entry);
+  const mentions = entry ? await loadMentionedEntities([entry.post]) : {};
+  return hydrateMicroEntry(entry, mentions);
 };

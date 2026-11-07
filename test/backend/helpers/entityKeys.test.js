@@ -16,6 +16,11 @@ describe('nameKey', () => {
     expect(nameKey('Johnson & Johnson')).toEqual('johnson and johnson');
   });
 
+  it('ignores a trailing possessive', () => {
+    expect(nameKey('Taylor Lorenz’s')).toEqual('taylor lorenz');
+    expect(nameKey("Casey Newton's")).toEqual('casey newton');
+  });
+
   it('drops a leading "the"', () => {
     expect(nameKey('The Verge')).toEqual(nameKey('Verge'));
   });

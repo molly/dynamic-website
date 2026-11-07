@@ -1,4 +1,5 @@
 import express from 'express';
+import archiveRouter from './archive.js';
 import authRouter from './auth.js';
 import entityRouter from './entities.js';
 import feedRouter from './feed.js';
@@ -22,6 +23,7 @@ app.use('/micro/social', socialRouter);
 app.use('/feed', feedRouter);
 app.use('/threads', threadRouter);
 app.use('/entities', entityRouter);
+app.use('/archive', archiveRouter);
 app.use('/rss', rssRouter);
 
 export default app;

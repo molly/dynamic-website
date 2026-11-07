@@ -3,7 +3,9 @@ import { Queue, UnrecoverableError, Worker } from 'bullmq';
 import IORedis from 'ioredis';
 import auth from '../backend/config/auth.config.js';
 
+import { ARCHIVE_QUEUE } from '../backend/helpers/archiveQueue.js';
 import { discoverWebmentionEndpoint } from './discoverWebmentionEndpoint.js';
+import { processArchiveUrl } from './processArchiveUrl.js';
 import { processSaveWebmention } from './processSaveWebmention.js';
 import { processWebmentionDigest } from './processWebmentionDigest.js';
 import { makeExternalRequestConfig } from './requestConfig.js';
@@ -152,3 +154,12 @@ new Worker(
     removeOnFail: { count: 1000 },
   },
 );
+
+// Archiving links with the Wayback Machine: one at a time, at most one every 15 seconds.
+new Worker(ARCHIVE_QUEUE, processArchiveUrl, {
+  connection,
+  concurrency: 1,
+  limiter: { max: 1, duration: 15 * 1000 },
+  removeOnComplete: { count: 100 },
+  removeOnFail: { count: 500 },
+});

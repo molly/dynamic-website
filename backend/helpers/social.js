@@ -5,7 +5,14 @@ import {
   postToNetworkText,
 } from '../../api/helpers/socialThreads.js';
 
-export const processText = (_text, network) => {
+/**
+ * Turn post HTML into a platform's text: mentions become that platform's @handles, line breaks
+ * become newlines, emphasis is dropped, and links are written out (except on Bluesky).
+ * @param {string} _text
+ * @param {string} network
+ * @param {Object} [entities] Mentioned entities by id, for current-format mentions
+ */
+export const processText = (_text, network, entities = {}) => {
   // Replace whitespace
   let text = _text.replace(/\n{2,}/g, '\n\n');
   // Replace unusual whitespace characters with regular spaces. Non-breaking spaces are intentionally
@@ -14,7 +21,21 @@ export const processText = (_text, network) => {
 
   const $ = cheerio.load(text, null, false);
 
-  // Replace mentions
+  // Replace current-format mentions with the entity's handle on this network, or the words as
+  // written if it has none there
+  $('span[data-entity]').each((_, elem) => {
+    const $mention = $(elem);
+    const account = entities[$mention.attr('data-entity')]?.accounts?.find(
+      (a) => a.network === network,
+    );
+    $mention.replaceWith(
+      account
+        ? `${account.handle.startsWith('@') ? '' : '@'}${account.handle}`
+        : $mention.text(),
+    );
+  });
+
+  // Replace legacy mentions
   const $mentions = $('.cdx-mention');
   for (let mention of $mentions) {
     const $mention = $(mention);

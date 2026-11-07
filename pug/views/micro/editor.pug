@@ -85,6 +85,13 @@ html(class='feed-editor', lang='en')
               label.side-label(for="related") Related posts
               select#related(multiple)
 
+            .side-section.archive-links
+              .crosspost-header
+                span.side-label Links
+                button#archive-all.link-button(type="button", hidden) archive all
+              ul#archive-list
+              p.side-hint ticked links are archived when you save
+
             .side-section.crosspost-box
               .crosspost-header
                 span.side-label Cross-post
