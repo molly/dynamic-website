@@ -1,5 +1,5 @@
 import { createRestAPIClient } from 'masto';
-import { NETWORK_LIMITS } from '../../frontend/js/helpers/editorHelpers.js';
+import { NETWORK_LIMITS } from '../../api/helpers/socialThreads.js';
 import auth from '../config/auth.config.js';
 
 export const postToots = async (posts, imagesMap) => {

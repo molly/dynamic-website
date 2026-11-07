@@ -1,5 +1,9 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import {
+  formatTags,
+  postToNetworkText,
+} from '../../api/helpers/socialThreads.js';
 
 export const processText = (_text, network) => {
   // Replace whitespace
@@ -56,36 +60,28 @@ export const processText = (_text, network) => {
   return { text: $.text() };
 };
 
-const EMPTY_POST = { text: '', images: [] };
-
-// Format post to be posted to social media
-export const processSocialPost = (blocks, network, tags = null) => {
-  const posts = [];
-  let currentPost = JSON.parse(JSON.stringify(EMPTY_POST));
-  for (let block of blocks) {
-    switch (block.type) {
-      case 'paragraph':
-        if (currentPost.text.length > 0) {
-          currentPost.text += '\n\n';
-        }
-        currentPost.text += processText(block.data.text, network).text;
-        break;
-      case 'socialPostDelimiter':
-        if (tags && tags.length > 0) {
-          currentPost.text += '\n\n' + tags;
-        }
-        posts.push(currentPost);
-        currentPost = JSON.parse(JSON.stringify(EMPTY_POST));
-        break;
-      case 'image':
-        currentPost.images.push({
-          href: block.data.file.url,
-          alt: block.data.alt,
-        });
-        break;
+/**
+ * Turn a saved thread's posts into what the posters take: text in the platform's format (Mastodon
+ * tags added to each post) and images as { href, alt }.
+ * @param {{text: string, media: {url: string, alt?: string}[]}[]} posts
+ * @param {string} network
+ * @param {string} [tags] Mastodon tags as typed
+ */
+export const processThread = (posts, network, tags = '') => {
+  const formattedTags = network === 'mastodon' ? formatTags(tags) : '';
+  return posts.map((post) => {
+    let text = postToNetworkText(post.text, network).trim();
+    if (formattedTags) {
+      text += `\n\n${formattedTags}`;
     }
-  }
-  return posts;
+    return {
+      text,
+      images: post.media.map((item) => ({
+        href: item.url,
+        alt: item.alt || '',
+      })),
+    };
+  });
 };
 
 // Get all images from posts and store in an object so they can be reused

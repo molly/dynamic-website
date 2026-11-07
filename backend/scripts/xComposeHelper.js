@@ -14,8 +14,8 @@ import os from 'os';
 import path from 'path';
 import { chromium } from 'playwright';
 
-import { NETWORK_LIMITS } from '../../frontend/js/helpers/editorHelpers.js';
-import { getImages, processSocialPost } from '../helpers/social.js';
+import { NETWORK_LIMITS } from '../../api/helpers/socialThreads.js';
+import { getImages, processThread } from '../helpers/social.js';
 
 const PORT = Number(process.env.X_HELPER_PORT) || 5055;
 const PROFILE_DIR =
@@ -225,8 +225,8 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '1mb' }));
 
 app.post('/compose', async (req, res) => {
-  if (!req.is('application/json') || !Array.isArray(req.body?.blocks)) {
-    res.status(400).json({ error: 'Expected a JSON body with "blocks"' });
+  if (!req.is('application/json') || !Array.isArray(req.body?.posts)) {
+    res.status(400).json({ error: 'Expected a JSON body with "posts"' });
     return;
   }
   if (busy) {
@@ -235,7 +235,7 @@ app.post('/compose', async (req, res) => {
   }
   busy = true;
   try {
-    const posts = processSocialPost(req.body.blocks, 'twitter');
+    const posts = processThread(req.body.posts, 'twitter');
     const images = await getImages({ twitter: posts });
     const { postId, warnings } = await composeThread(posts, images);
     console.log(`Posted to X: https://x.com/i/status/${postId}`);

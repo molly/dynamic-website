@@ -1,6 +1,6 @@
 import Bsky from '@atproto/api';
 import * as cheerio from 'cheerio';
-import { NETWORK_LIMITS } from '../../frontend/js/helpers/editorHelpers.js';
+import { NETWORK_LIMITS } from '../../api/helpers/socialThreads.js';
 const { BskyAgent, RichText, UnicodeString } = Bsky;
 
 import imageSize from 'image-size';

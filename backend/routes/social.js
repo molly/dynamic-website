@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getImages, processSocialPost } from '../helpers/social.js';
+import { getImages, processThread } from '../helpers/social.js';
 import { isProd } from '../env.js';
 import logger from '../winston.js';
 import { authenticated } from './auth.js';
@@ -33,13 +33,10 @@ router.post('/', authenticated(), async function (req, res) {
     // Process posts to proper format
     const socialPosts = {};
     for (const network of Object.keys(POSTERS)) {
-      const content = req.body[network];
-      socialPosts[network] = content
-        ? processSocialPost(
-            content.blocks,
-            network,
-            network === 'mastodon' ? content.tags : undefined,
-          )
+      // Each network's thread as saved in the editor: { posts, tags? }
+      const thread = req.body[network];
+      socialPosts[network] = thread?.posts?.length
+        ? processThread(thread.posts, network, thread.tags)
         : null;
     }
 

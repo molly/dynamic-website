@@ -52,65 +52,58 @@ html(class='feed-editor', lang='en')
             p#word-count.word-count
 
           section#panel-social.tab-panel(hidden)
-            .social-editors
-              each network in socialNetworks
-                .social-editor-wrapper(data-network=network.id)
-                  h3.social-editor-heading
-                    | #{network.label}
-                    span.social-limit(id=`${network.id}-limit`)
-                  if network.id == "mastodon"
-                    .input-group
-                      label.side-label(for="mastodon-tags") Mastodon tags
-                      input#mastodon-tags(type="text")
-                  .social-editor(id=`${network.id}-editor`)
+            #platform-thread
+            #side-by-side(hidden)
 
         aside.editor-side-panel
-          .side-section
-            span.side-label Address
-            p.address
-              | /micro/entry/
-              span#slug-display
-              button#slug-edit.link-button(type="button") edit
-            input#slug(type="text", hidden, aria-label="Slug")
+          #platform-panel(hidden)
+          #post-panel
+            .side-section
+              span.side-label Address
+              p.address
+                | /micro/entry/
+                span#slug-display
+                button#slug-edit.link-button(type="button") edit
+              input#slug(type="text", hidden, aria-label="Slug")
 
-          .side-section
-            label.side-label(for="tags") Tags
-            input#tags(autocomplete="off")
+            .side-section
+              label.side-label(for="tags") Tags
+              input#tags(autocomplete="off")
 
-          .side-section
-            label.side-label(for="threads") Threads
-            input#threads(autocomplete="off")
-            #threads-preview.picker-preview
+            .side-section
+              label.side-label(for="threads") Threads
+              input#threads(autocomplete="off")
+              #threads-preview.picker-preview
 
-          .side-section
-            label.side-label(for="about")
-              | About
-              span.side-hint  · people & things mentioned
-            input#about(autocomplete="off")
+            .side-section
+              label.side-label(for="about")
+                | About
+                span.side-hint  · people & things mentioned
+              input#about(autocomplete="off")
 
-          .side-section
-            label.side-label(for="related") Related posts
-            select#related(multiple)
+            .side-section
+              label.side-label(for="related") Related posts
+              select#related(multiple)
 
-          .side-section.crosspost-box
-            .crosspost-header
-              span.side-label Cross-post
-              label.switch
-                input#crosspost-all(type="checkbox", role="switch")
-                span.switch-track(aria-hidden="true")
-                span.switch-label all platforms
-            each network in socialNetworks
-              label.crosspost-row
-                input.crosspost-toggle(type="checkbox", id=`${network.id}-social`, data-network=network.id)
-                span.crosspost-name #{network.label}
-                span.crosspost-status(id=`${network.id}-status`)
-            p.side-hint edit each in its tab above the text
-            details.social-links
-              summary.side-hint Already posted? Link existing post IDs
-              each network in [{ id: 'bluesky', label: 'Bluesky' }, { id: 'mastodon', label: 'Mastodon' }, { id: 'twitter', label: 'Twitter' }, { id: 'threads', label: 'Threads' }, { id: 'youtube', label: 'YouTube' }, { id: 'tiktok', label: 'TikTok' }]
-                .post-id-row
-                  label(for=network.id) #{network.label}
-                  input.social-post-id(id=network.id, type="text", placeholder="post ID", autocomplete="off")
+            .side-section.crosspost-box
+              .crosspost-header
+                span.side-label Cross-post
+                label.switch
+                  input#crosspost-all(type="checkbox", role="switch")
+                  span.switch-track(aria-hidden="true")
+                  span.switch-label all platforms
+              each network in socialNetworks
+                label.crosspost-row
+                  input.crosspost-toggle(type="checkbox", id=`${network.id}-social`, data-network=network.id)
+                  span.crosspost-name #{network.label}
+                  span.crosspost-status(id=`${network.id}-status`)
+              p.side-hint edit each in its tab above the text
+              details.social-links
+                summary.side-hint Already posted? Link existing post IDs
+                each network in [{ id: 'bluesky', label: 'Bluesky' }, { id: 'mastodon', label: 'Mastodon' }, { id: 'twitter', label: 'Twitter' }, { id: 'threads', label: 'Threads' }, { id: 'youtube', label: 'YouTube' }, { id: 'tiktok', label: 'TikTok' }]
+                  .post-id-row
+                    label(for=network.id) #{network.label}
+                    input.social-post-id(id=network.id, type="text", placeholder="post ID", autocomplete="off")
 
       footer.editor-actionbar
         button#delete-button.link-button(type="button", hidden) delete post

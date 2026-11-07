@@ -3,23 +3,19 @@ import { DateTime } from 'luxon';
 import '../../css/feed-editor.css';
 import { editorToolConfig } from './helpers/editorConfig.js';
 import {
-  NETWORK_LIMITS,
   getSlugFromTitle,
-  parseAndInsertDelimiters,
   socialLinksToArray,
   socialLinksToMap,
-  updateDelimiters,
 } from './helpers/editorHelpers.js';
 
 import EditorJS from '@editorjs/editorjs';
 import SocialPostDelimiter from './SocialPostDelimiter.js';
 import { NETWORK_LABELS } from '../../api/helpers/socialMedia.js';
 import { createAboutPicker, createThreadPicker } from './helpers/pickers.js';
+import { SOCIAL_NETWORKS, ThreadEditors } from './threads/threadEditor.js';
 
 import debounce from 'lodash.debounce';
 import TomSelect from 'tom-select';
-
-const SOCIAL_NETWORKS = ['bluesky', 'mastodon', 'twitter'];
 
 const postMeta = {
   title: '',
@@ -33,14 +29,7 @@ const postMeta = {
 };
 const editors = {
   primary: null,
-  twitter: null,
-  mastodon: null,
-  bluesky: null,
 };
-// Per network: number of posts in its thread, and whether every post fits the limit.
-const socialSummary = Object.fromEntries(
-  SOCIAL_NETWORKS.map((network) => [network, { posts: 0, ok: true }]),
-);
 // Local helper that composes Twitter posts in a browser (see backend/scripts/xComposeHelper.js)
 const X_HELPER_URL = 'http://localhost:5055';
 
@@ -51,6 +40,7 @@ let threadPicker;
 let aboutPicker;
 let saveButton;
 let deleteButton;
+let threadEditors;
 
 const isSaved = () => Boolean(savedPost._id);
 const isCrosspostEnabled = (network) =>
@@ -83,124 +73,46 @@ const debouncedOnSlugChange = debounce(onSlugChange, 250);
  * panel so the columns get the full width.
  * @param {string} tab "post", a network, or "side-by-side"
  */
-async function showTab(tab) {
+function showTab(tab) {
   for (const button of document.querySelectorAll('.editor-tab')) {
     button.setAttribute('aria-selected', String(button.dataset.tab === tab));
   }
   const isPost = tab === 'post';
+  const isPlatform = SOCIAL_NETWORKS.includes(tab);
   document.getElementById('panel-post').hidden = !isPost;
   document.getElementById('panel-social').hidden = isPost;
+  document.getElementById('platform-thread').hidden = !isPlatform;
+  document.getElementById('side-by-side').hidden = tab !== 'side-by-side';
+  document.getElementById('post-panel').hidden = !isPost;
+  document.getElementById('platform-panel').hidden = !isPlatform;
   document.body.classList.toggle('side-by-side', tab === 'side-by-side');
-  for (const wrapper of document.querySelectorAll('.social-editor-wrapper')) {
-    wrapper.hidden = tab !== 'side-by-side' && wrapper.dataset.network !== tab;
-  }
-  if (!isPost) {
-    await ensureSocialEditors();
-  }
+  threadEditors.setView(isPost ? null : tab);
 }
 
-// Social threads ---------------------------------------------------------------------------------
+// Platform threads -------------------------------------------------------------------------------
 /**
- * Count the posts in a thread (each ends in a delimiter) and check them against the limit.
- * @param {Object[]} blocks
+ * Post counts on the tabs, and each platform's status in the cross-post box.
  */
-function summarizeThread(blocks) {
-  const delimiters = blocks.filter(
-    (block) => block.type === 'socialPostDelimiter',
-  );
-  return {
-    posts: delimiters.length,
-    ok: delimiters.every((block) => !block.data.limitExceeded),
-  };
-}
-
-function renderSocialSummary(network) {
-  const { posts, ok } = socialSummary[network];
-  document.getElementById(`${network}-count`).textContent = posts || '';
-  const status = document.getElementById(`${network}-status`);
-  status.textContent = posts
-    ? `${posts} post${posts === 1 ? '' : 's'} · ${ok ? 'ok' : 'over limit'}`
-    : '';
-  status.classList.toggle('over-limit', !ok);
-}
-
-/**
- * Until a platform's thread editor exists, its summary comes from splitting the main post.
- */
-async function summarizeFromMainPost() {
-  const post = await editors.primary.save();
+function renderSocialSummary() {
   for (const network of SOCIAL_NETWORKS) {
-    if (!editors[network]) {
-      socialSummary[network] = summarizeThread(
-        parseAndInsertDelimiters(post, network).blocks,
-      );
-      renderSocialSummary(network);
-    }
+    const { posts, problems } = threadEditors.summary(network);
+    document.getElementById(`${network}-count`).textContent = posts || '';
+    const status = document.getElementById(`${network}-status`);
+    status.textContent = posts
+      ? `${posts} post${posts === 1 ? '' : 's'} · ${problems.length ? 'needs fixing' : 'ok'}`
+      : '';
+    status.title = problems.join('; ');
+    status.classList.toggle('over-limit', problems.length > 0);
   }
   validate();
 }
 
-function mastodonTags() {
-  return document.getElementById('mastodon-tags').value;
-}
-
 /**
- * Recount a platform thread's characters per post, update its delimiters, and revalidate.
- * @param {string} network
+ * Rebuild threads that haven't been edited from the current main post.
  */
-async function recheckThread(network) {
-  const post = await editors[network].save();
-  const ok = updateDelimiters(
-    editors[network],
-    post,
-    network,
-    network === 'mastodon' ? mastodonTags() : null,
-  );
-  socialSummary[network] = { posts: summarizeThread(post.blocks).posts, ok };
-  renderSocialSummary(network);
-  validate();
-}
-// One debounced check per network, so edits to two threads in quick succession both get checked.
-const debouncedRecheck = Object.fromEntries(
-  SOCIAL_NETWORKS.map((network) => [
-    network,
-    debounce(() => recheckThread(network), 500),
-  ]),
-);
-
-/**
- * Create the platform thread editors from the main post, once. They're edited separately after
- * that; changes to the main post don't flow into them.
- */
-let socialEditorsReady;
-function ensureSocialEditors() {
-  if (!socialEditorsReady) {
-    socialEditorsReady = (async () => {
-      const post = await editors.primary.save();
-      await Promise.all(
-        SOCIAL_NETWORKS.map((network) => {
-          const postWithDelimiters = parseAndInsertDelimiters(post, network);
-          editors[network] = new EditorJS({
-            holder: `${network}-editor`,
-            tools: {
-              ...editorToolConfig,
-              socialPostDelimiter: {
-                class: SocialPostDelimiter,
-                config: { limit: NETWORK_LIMITS[network].post },
-              },
-            },
-            onChange: () => debouncedRecheck[network](),
-            data: postWithDelimiters,
-          });
-          socialSummary[network] = summarizeThread(postWithDelimiters.blocks);
-          renderSocialSummary(network);
-          return editors[network].isReady;
-        }),
-      );
-      validate();
-    })();
-  }
-  return socialEditorsReady;
+async function syncThreadsWithMainPost() {
+  threadEditors.updateMainPost(await editors.primary.save());
+  renderSocialSummary();
 }
 
 /**
@@ -215,14 +127,11 @@ function syncAllToggle() {
     enabled.length > 0 && enabled.length < SOCIAL_NETWORKS.length;
 }
 
-async function setAllCrossposting(enabled) {
+function setAllCrossposting(enabled) {
   for (const network of SOCIAL_NETWORKS) {
     document.getElementById(`${network}-social`).checked = enabled;
   }
   syncAllToggle();
-  if (enabled) {
-    await ensureSocialEditors();
-  }
   validate();
 }
 
@@ -280,7 +189,7 @@ async function updateWordCount() {
 
 const debouncedOnPrimaryChange = debounce(() => {
   updateWordCount();
-  summarizeFromMainPost();
+  syncThreadsWithMainPost();
 }, 500);
 
 // Keep the form in sync with the database after a save -------------------------------------------
@@ -349,40 +258,21 @@ function setInputValues() {
  */
 function validate() {
   const isValid = SOCIAL_NETWORKS.every(
-    (network) => socialSummary[network].ok || !isCrosspostEnabled(network),
+    (network) =>
+      !isCrosspostEnabled(network) ||
+      threadEditors.summary(network).problems.length === 0,
   );
   saveButton.disabled = !isValid;
 }
 
 // Social helpers --------------------------------------------------------------------------------
 /**
- * Get the content of a social post editor.
+ * A platform's thread as the cross-posting endpoints take it, if it's ticked.
  * @param {string} network
- * @returns {Promise<null|Object>}
+ * @returns {null|{posts: Object[], tags?: string}}
  */
-async function getSocialPostContent(network) {
-  if (!isCrosspostEnabled(network)) {
-    return null;
-  }
-  const resp = {};
-  if (network === 'mastodon') {
-    let tags = mastodonTags();
-    if (tags) {
-      tags = tags.split(/, ?/g);
-      resp.tags = tags
-        .map((tag) => {
-          let trimmed = tag.trim();
-          if (!tag.startsWith('#')) {
-            return `#${trimmed}`;
-          }
-          return trimmed;
-        })
-        .join(' ');
-    }
-  }
-  const post = await editors[network].save();
-  resp.blocks = post.blocks;
-  return resp;
+function getSocialPostContent(network) {
+  return isCrosspostEnabled(network) ? threadEditors.forPosting(network) : null;
 }
 
 /**
@@ -395,7 +285,7 @@ async function getSocialPostContent(network) {
 async function composeOnX(twitter) {
   try {
     const resp = await axios.post(`${X_HELPER_URL}/compose`, {
-      blocks: twitter.blocks,
+      posts: twitter.posts,
     });
     for (const warning of resp.data.warnings || []) {
       console.warn(warning);
@@ -435,9 +325,6 @@ async function save() {
     }
 
     const savedData = await editors.primary.save();
-    if (SOCIAL_NETWORKS.some(isCrosspostEnabled)) {
-      await ensureSocialEditors();
-    }
 
     // Select update or create endpoint
     const endpoint = isSaved()
@@ -446,10 +333,11 @@ async function save() {
     const transformedPostMeta = {
       ...postMeta,
       socialLinks: socialLinksToArray(postMeta.socialLinks),
+      socialThreads: threadEditors.toSave(),
     };
 
-    const [twitter, mastodon, bluesky] = await Promise.all(
-      ['twitter', 'mastodon', 'bluesky'].map(getSocialPostContent),
+    const [twitter, mastodon, bluesky] = ['twitter', 'mastodon', 'bluesky'].map(
+      getSocialPostContent,
     );
     const [postResp, socialResult] = await Promise.all([
       axios.post(endpoint, { ...transformedPostMeta, post: savedData }),
@@ -650,11 +538,12 @@ async function onFirstLoad() {
     },
   });
 
-  // Platform limits shown in each thread's heading
-  for (const network of SOCIAL_NETWORKS) {
-    document.getElementById(`${network}-limit`).textContent =
-      `${NETWORK_LIMITS[network].post.toLocaleString()} per post`;
-  }
+  threadEditors = new ThreadEditors({
+    saved: savedPost.socialThreads,
+    onChange: renderSocialSummary,
+    showTab,
+  });
+  threadEditors.attach();
 
   // Set initial values
   setInputValues();
@@ -671,21 +560,18 @@ async function onFirstLoad() {
   document.querySelector('.editor-tabs').addEventListener('click', (evt) => {
     const tab = evt.target.closest('.editor-tab')?.dataset.tab;
     if (tab) {
-      showTab(tab).catch(console.error);
+      showTab(tab);
     }
   });
   for (const toggle of document.querySelectorAll('.crosspost-toggle')) {
-    toggle.addEventListener('change', async () => {
+    toggle.addEventListener('change', () => {
       syncAllToggle();
-      if (toggle.checked) {
-        await ensureSocialEditors();
-      }
       validate();
     });
   }
   const allToggle = document.getElementById('crosspost-all');
   allToggle.addEventListener('change', () =>
-    setAllCrossposting(allToggle.checked).catch(console.error),
+    setAllCrossposting(allToggle.checked),
   );
   // New posts cross-post everywhere by default. Existing posts start with nothing ticked, so
   // editing an old post never posts it by accident.
@@ -695,9 +581,6 @@ async function onFirstLoad() {
     }
   }
   syncAllToggle();
-  document
-    .getElementById('mastodon-tags')
-    .addEventListener('input', () => debouncedRecheck.mastodon());
 
   document
     .querySelectorAll('.social-post-id')
@@ -724,7 +607,7 @@ async function onFirstLoad() {
 
   // Initial counts once the editor has loaded the post
   await editors.primary.isReady;
-  await Promise.all([updateWordCount(), summarizeFromMainPost()]);
+  await Promise.all([updateWordCount(), syncThreadsWithMainPost()]);
 
   // Ready
   document.getElementById('loading-overlay').classList.add('hidden');

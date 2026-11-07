@@ -88,14 +88,6 @@ input#related {
   background-color: var(--over-character-limit-background-color);
 }
 
-.social-editor .image-tool__caption,
-.social-editor .image-tool__alt {
-  display: none;
-}
-
-#mastodon-tags {
-  width: 100%;
-}
 
 /* Error */
 .flex-column {
@@ -396,8 +388,9 @@ button:hover {
   font-size: 0.8rem;
 }
 
-.micro-editor input#mastodon-tags {
+.micro-editor input.mastodon-tags {
   width: 100%;
+  margin-bottom: 0.5rem;
   border: 1px solid var(--editor-border);
 }
 
@@ -416,18 +409,150 @@ button:hover {
 }
 
 /* Platform threads */
-.social-editors {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 1.5rem;
+.thread-intro {
+  margin: 0 0 1rem;
+  font-family: var(--editor-mono);
+  font-size: 0.8rem;
+  color: var(--timestamp-color);
 }
 
-.social-editor-heading {
+.thread-post {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--editor-border);
+}
+
+.post-number {
+  padding-top: 0.2rem;
+  font-family: var(--editor-mono);
+  font-size: 0.75rem;
+  color: var(--timestamp-color);
+}
+
+.post-text {
+  min-height: 1.5em;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  outline: none;
+  overflow-wrap: anywhere;
+}
+
+.post-text:focus {
+  box-shadow: -2px 0 0 var(--editor-accent);
+}
+
+.post-media {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin: 0 0 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.post-image {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  align-items: flex-end;
+  margin: 0.5rem 0 0;
+}
+
+.post-image img {
+  width: 7.5rem;
+  height: 4.5rem;
+  object-fit: cover;
+  border: 1px solid var(--editor-border);
+}
+
+.post-image .link-button {
+  font-size: 0.75rem;
+}
+
+.image-moves {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.image-moves .link-button {
+  text-decoration: none;
+  color: var(--timestamp-color);
+}
+
+.image-moves .link-button:hover {
+  color: var(--editor-accent);
+}
+
+.post-image .alt-input {
+  flex-basis: 100%;
+  min-height: 4em;
+  font-size: 0.85rem;
+  border: 1px solid var(--editor-border);
+}
+
+.post-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin-top: 0.5rem;
+  font-family: var(--editor-mono);
+  font-size: 0.75rem;
+  color: var(--timestamp-color);
+}
+
+.post-actions .link-button {
+  text-decoration: none;
+}
+
+.post-actions .link-button:hover {
+  text-decoration: underline;
+}
+
+.chars-left.over-limit,
+.over-limit {
+  color: var(--color-error);
+}
+
+.add-post {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--editor-accent);
+  text-decoration: none;
+}
+
+/* Side by side: one column per platform, rows lined up by post number */
+.side-by-side-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--editor-border);
+}
+
+.side-by-side-grid > * {
+  padding: 0.75rem 1rem;
+  border-right: 1px solid var(--editor-border);
+  border-bottom: 1px solid var(--editor-border);
+}
+
+.side-by-side-grid > :nth-child(3n) {
+  border-right: none;
+}
+
+.side-by-side-grid .thread-post {
+  grid-template-columns: minmax(0, 1fr);
+  display: block;
+}
+
+.side-by-side-grid .post-number {
+  display: none;
+}
+
+.side-by-side-grid .add-post {
+  margin: 0;
+  text-align: left;
+}
+
+.column-header h3 {
+  margin: 0;
 }
 
 .social-limit {
@@ -436,9 +561,43 @@ button:hover {
   color: var(--timestamp-color);
 }
 
-.side-by-side .social-editor-wrapper {
-  padding: 0 1rem;
-  border-left: 1px solid var(--editor-border);
+/* Platform side panel */
+.changed-notice {
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--editor-tint);
+}
+
+.changed-notice .side-label {
+  color: var(--editor-accent);
+}
+
+.changed-notice p {
+  margin: 0;
+}
+
+.post-diff {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.post-diff del,
+.post-diff ins {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.post-diff del {
+  color: var(--timestamp-color);
+}
+
+.post-diff ins {
+  text-decoration: none;
+  background-color: var(--card-bg-color);
+}
+
+.other-platform {
+  margin: 0.25rem 0;
 }
 
 /* Side panel */
@@ -916,8 +1075,8 @@ button.primary:disabled {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .social-editors {
-    grid-auto-flow: row;
+  .side-by-side-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   input#title {

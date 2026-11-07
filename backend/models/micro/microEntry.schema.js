@@ -6,6 +6,24 @@ import {
 // Shared with the job queue, which registers its own copy of the model.
 export const MICRO_ENTRY_COLLECTION = 'microEntries';
 
+const ThreadSchema = new mongoose.Schema(
+  {
+    posts: [
+      {
+        _id: false,
+        text: { type: String, default: '' }, // Plain text, <br> and <a href> only
+        media: [{ _id: false, url: String, alt: String }],
+      },
+    ],
+    tags: String, // Mastodon only, as typed
+    // Edited threads are kept when the main post changes; unedited ones follow it.
+    edited: { type: Boolean, default: false },
+    // The main post this thread was built from, for "main post changed since this was written".
+    basedOn: { hash: String, paragraphs: [String] },
+  },
+  { _id: false },
+);
+
 export const MicroEntrySchema = new mongoose.Schema(
   {
     title: String,
@@ -82,6 +100,12 @@ export const MicroEntrySchema = new mongoose.Schema(
         ref: 'Webmention',
       },
     ],
+    // Each platform's thread as edited in the editor; see api/helpers/socialThreads.js.
+    socialThreads: {
+      bluesky: ThreadSchema,
+      mastodon: ThreadSchema,
+      twitter: ThreadSchema,
+    },
     _id: { type: mongoose.Schema.Types.ObjectId, required: true },
     deletedAt: Date,
   },
