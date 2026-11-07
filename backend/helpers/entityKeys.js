@@ -70,3 +70,12 @@ export function normalizeDomain(domain) {
     .replace(/\/.*$/, '')
     .replace(/^www\./, '');
 }
+
+/**
+ * URL slug from a name: "Coinbase Global, Inc." -> "coinbase-global".
+ * @param {string} text
+ * @returns {string}
+ */
+export function slugify(text) {
+  return nameKey(text).replace(/ /g, '-');
+}

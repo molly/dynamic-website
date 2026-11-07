@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import { mergeSocialLinks } from '../../frontend/js/helpers/editorHelpers.js';
+import { populateTaggerFields } from '../helpers/feedEntries.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Book } from '../models/book.model.js';
 import { ShortformEntry } from '../models/entry.model.js';
@@ -174,37 +175,61 @@ router.post(
   },
 );
 
-// Tagger
-router.post('/tags/:entryType', authenticated(), async (req, res) => {
-  let FeedEntryModel;
-  let ReadingEntryModel;
-  let category;
-  if (req.params.entryType === 'citationNeeded') {
-    FeedEntryModel = FeedEntryCitationNeeded;
-    category = 'citationNeeded';
-  } else if (req.params.entryType === 'readingShortform') {
-    FeedEntryModel = FeedEntryReading;
-    ReadingEntryModel = ShortformEntry;
-    category = 'shortform';
+// Metadata for feed entries that aren't edited in the micro editor (tagger page).
+const TAGGER_TYPES = {
+  citationNeeded: {
+    model: FeedEntryCitationNeeded,
+    category: 'citationNeeded',
+  },
+  readingShortform: {
+    model: FeedEntryReading,
+    category: 'shortform',
+    // The shortform entry keeps its own copy of the tags.
+    content: { path: 'shortform', model: ShortformEntry },
+  },
+};
+
+router.post('/meta/:entryType', authenticated(), async (req, res) => {
+  const config = TAGGER_TYPES[req.params.entryType];
+  if (!config) {
+    res
+      .status(400)
+      .send({ error: `Unknown entry type "${req.params.entryType}".` });
+    return;
   }
-  const { id, tags, socialLinks } = req.body;
-  let tagIds = null;
-  const feedEntry = await FeedEntryModel.findById(id);
-  if (tags && tags.length) {
-    const tagIds = await updateTagsOnEdit(feedEntry.tags, tags, category);
-    feedEntry.tags = tagIds;
-  }
-  if (socialLinks && Object.keys(socialLinks).length) {
-    feedEntry.socialLinks = mergeSocialLinks(
-      feedEntry.socialLinks,
-      socialLinks,
+  try {
+    const { id, tags = [], threads = [], about = [], socialLinks } = req.body;
+    const feedEntry = await config.model.findById(id);
+    if (!feedEntry) {
+      res.sendStatus(404);
+      return;
+    }
+    const tagIds = await updateTagsOnEdit(
+      feedEntry.tags,
+      tags,
+      config.category,
     );
+    feedEntry.tags = tagIds;
+    feedEntry.threads = threads;
+    feedEntry.about = about;
+    if (socialLinks && socialLinks.length) {
+      feedEntry.socialLinks = mergeSocialLinks(
+        feedEntry.socialLinks,
+        socialLinks,
+      );
+    }
+    await feedEntry.save();
+    if (config.content) {
+      await config.content.model.findByIdAndUpdate(
+        feedEntry[config.content.path],
+        { tags: tagIds },
+      );
+    }
+    res.json(await populateTaggerFields(feedEntry));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: err.message });
   }
-  const resp = await feedEntry.save();
-  if (tagIds && ReadingEntryModel) {
-    await ReadingEntryModel.findByIdAndUpdate(id, { tags: tagIds });
-  }
-  res.json(resp);
 });
 
 export default router;

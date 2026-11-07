@@ -5,6 +5,7 @@ import {
   FeedEntryCitationNeeded,
   FeedEntryReading,
 } from '../../backend/models/feed/feedEntry.model.js';
+import { populateTaggerFields } from '../../backend/helpers/feedEntries.js';
 import { Tag } from '../../backend/models/tag.model.js';
 import { authenticated } from '../../backend/routes/auth.js';
 import { sanitizeTag } from '../js/helpers/sanitize.js';
@@ -71,43 +72,47 @@ router.get('/tag/:tag', async (req, res) => {
   });
 });
 
-// Tag editor
+// Metadata editor for feed entries that aren't micro posts: tags, threads, about
+const TAGGER_MODELS = {
+  citationNeeded: FeedEntryCitationNeeded,
+  readingShortform: FeedEntryReading,
+};
+
 router.get(
   '/tagger/:type/:id',
   authenticated({ redirectTo: '/micro/login' }),
   async (req, res) => {
     const entryType = req.params.type;
-    const entryId = req.params.id;
-    let entry;
     if (entryType === 'micro') {
       res.status(400).send('Use the micro editor.');
-    } else if (entryType === 'citationNeeded') {
-      entry = await FeedEntryCitationNeeded.findById(entryId).populate({
-        path: 'tags',
-        model: Tag,
-      });
-      res.render('feed/tagger.pug', {
-        entry: hydrateFeedEntry(entry),
-        entryType: 'citationNeeded',
-      });
-    } else if (entryType === 'readingShortform') {
-      entry = await FeedEntryReading.findById(entryId)
-        .populate({
-          path: 'tags',
-          model: Tag,
-          options: { sort: { value: 1 } },
-        })
-        .populate({
-          path: 'shortform',
-          model: ShortformEntry,
-        });
-      res.render('feed/tagger.pug', {
-        entry: hydrateFeedEntry(entry),
-        entryType,
-      });
-    } else {
-      res.statusCode(400);
+      return;
     }
+    const Model = TAGGER_MODELS[entryType];
+    if (!Model) {
+      res.status(400).send(`Unknown entry type "${entryType}".`);
+      return;
+    }
+    const entry = await Model.findById(req.params.id);
+    if (!entry) {
+      res.sendStatus(404);
+      return;
+    }
+    await populateTaggerFields(entry);
+    if (entryType === 'readingShortform') {
+      await entry.populate({ path: 'shortform', model: ShortformEntry });
+    }
+    // Captured before hydrateFeedEntry, which reshapes the entry for display.
+    const pickerData = {
+      feedEntryId: entry._id,
+      createdAt: entry.createdAt,
+      threads: entry.threads.map((t) => t.toJSON()),
+      about: entry.about.map((e) => e.toJSON()),
+    };
+    res.render('feed/tagger.pug', {
+      entry: hydrateFeedEntry(entry),
+      entryType,
+      pickerData,
+    });
   },
 );
 

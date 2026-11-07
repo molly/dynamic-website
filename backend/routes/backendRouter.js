@@ -1,11 +1,13 @@
 import express from 'express';
 import authRouter from './auth.js';
+import entityRouter from './entities.js';
 import feedRouter from './feed.js';
 import imageRouter from './images.js';
 import microRouter from './micro.js';
 import readingListRouter from './readingList.js';
 import rssRouter from './rss.js';
 import socialRouter from './social.js';
+import threadRouter from './threads.js';
 
 const app = express.Router();
 
@@ -18,6 +20,8 @@ app.use('/micro', microRouter);
 app.use('/micro/image', imageRouter);
 app.use('/micro/social', socialRouter);
 app.use('/feed', feedRouter);
+app.use('/threads', threadRouter);
+app.use('/entities', entityRouter);
 app.use('/rss', rssRouter);
 
 export default app;

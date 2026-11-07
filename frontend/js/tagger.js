@@ -2,12 +2,20 @@ import axios from 'axios';
 import debounce from 'lodash.debounce';
 import TomSelect from 'tom-select';
 import { socialLinksToArray } from './helpers/editorHelpers.js';
+import {
+  createAboutPicker,
+  createThreadPicker,
+  selectedValues,
+} from './helpers/pickers.js';
 
-let tags = [];
 let socialLinks = {};
 
 async function onFirstLoad() {
-  // Load TomSelect for tags editor
+  const pickerData = JSON.parse(
+    document.getElementById('picker-data').textContent,
+  );
+
+  // Tags: the input's initial value holds the entry's current tag IDs.
   const { data: tagOptions } = await axios.get('/dynamic-api/tags');
   const tagSelect = new TomSelect('#tags', {
     create: true,
@@ -18,17 +26,20 @@ async function onFirstLoad() {
     closeAfterSelect: true,
   });
 
-  // TomSelect uses .on
-  tagSelect.on('change', function (value) {
-    if (value) {
-      tags = value.split(',');
-    } else {
-      tags = [];
-    }
+  const threadPicker = await createThreadPicker('#threads', {
+    initial: pickerData.threads,
+    preview: document.getElementById('threads-preview'),
+    getPosition: () => ({
+      at: pickerData.createdAt,
+      feedEntryId: pickerData.feedEntryId,
+    }),
+  });
+  const aboutPicker = createAboutPicker('#about', {
+    initial: pickerData.about,
   });
 
   /**
-   * Update the postMeta.socialLinks when the social post link changes
+   * Track social post IDs typed into the manual link fields
    */
   function onSocialPostLinkChange() {
     if (this.value) {
@@ -45,35 +56,38 @@ async function onFirstLoad() {
 
   const saveButton = document.getElementById('save-button');
   saveButton.addEventListener('click', async function () {
+    saveButton.setAttribute('disabled', true);
     const pathParts = window.location.pathname.split('/');
     const entryType = pathParts[3];
-    const entryId = pathParts[4];
-    await axios
-      .post(`/dynamic-api/feed/tags/${entryType}`, {
-        id: entryId,
-        tags,
-        socialLinks: socialLinksToArray(socialLinks),
-      })
-      .then((resp) => {
-        return Promise.all([
-          Promise.resolve(resp),
-          axios.get('/dynamic-api/tags'),
-        ]);
-      })
-      .then(([resp, tags]) => {
-        tagSelect.clearOptions();
-        tagSelect.addOptions(tags.data);
-        tags = resp.data.tags;
-        tagSelect.setValue(tags);
-        for (let link of resp.data.socialLinks) {
-          document.getElementById(link.type).value = link.postId;
-        }
-        socialLinks = {};
-        saveButton.removeAttribute('disabled');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    try {
+      // Every field is read from its control, so saving never clears a field that wasn't touched.
+      const { data: entry } = await axios.post(
+        `/dynamic-api/feed/meta/${entryType}`,
+        {
+          id: pickerData.feedEntryId,
+          tags: selectedValues(tagSelect),
+          threads: selectedValues(threadPicker),
+          about: selectedValues(aboutPicker),
+          socialLinks: socialLinksToArray(socialLinks),
+        },
+      );
+      const { data: allTags } = await axios.get('/dynamic-api/tags');
+      tagSelect.clearOptions();
+      tagSelect.addOptions(allTags);
+      tagSelect.setValue(
+        entry.tags.map((tag) => tag._id),
+        true,
+      );
+      for (const link of entry.socialLinks || []) {
+        document.getElementById(link.type).value = link.postId;
+      }
+      socialLinks = {};
+    } catch (err) {
+      console.error(err);
+      window.alert(`Save failed: ${err.response?.data?.error || err.message}`);
+    } finally {
+      saveButton.removeAttribute('disabled');
+    }
   });
 }
 

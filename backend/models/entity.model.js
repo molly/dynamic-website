@@ -1,20 +1,15 @@
 import mongoose from 'mongoose';
+import { ENTITY_TYPES } from '../../api/helpers/entityTypes.js';
 import { NETWORKS } from '../../api/helpers/socialMedia.js';
-import { accountKey, nameKey, normalizeDomain } from '../helpers/entityKeys.js';
+import {
+  accountKey,
+  nameKey,
+  normalizeDomain,
+  slugify,
+} from '../helpers/entityKeys.js';
 import db from './db.js';
 
 const { ObjectId } = mongoose.Schema.Types;
-
-const ENTITY_TYPES = [
-  'person',
-  'organization',
-  'project',
-  'committee',
-  'bill',
-  'case',
-  'enforcement',
-  'event',
-];
 
 const RELATION_KINDS = [
   'works_at',
@@ -30,10 +25,6 @@ const RELATION_KINDS = [
 ];
 
 const slugPattern = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-
-function slugify(text) {
-  return nameKey(text).replace(/ /g, '-');
-}
 
 // Unique only among documents that have the field, so entities without it don't collide.
 const uniqueWhenSet = (path) => [

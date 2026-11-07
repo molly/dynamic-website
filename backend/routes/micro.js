@@ -1,40 +1,52 @@
 import express from 'express';
 import mongoose from 'mongoose';
 
+import { ENTITY_SUMMARY_FIELDS } from '../helpers/entities.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
+import { Entity } from '../models/entity.model.js';
 import { ShortformEntry } from '../models/entry.model.js';
 import { FeedEntryMicro } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
+import { Thread } from '../models/thread.model.js';
 import { authenticated } from './auth.js';
 
 const router = express.Router();
+
+// What the editor gets back from every route: the entry, its related posts with titles, and the
+// feed entry's threads and about (which live on the feed entry, not the micro entry).
+async function editorResponse(entry) {
+  const [populated, feedEntry] = await Promise.all([
+    entry.populate({ path: 'relatedPosts.ref', select: 'title' }),
+    FeedEntryMicro.findOne({ micro: entry._id }, 'threads about createdAt')
+      .populate({ path: 'threads', model: Thread, select: 'title slug' })
+      .populate({
+        path: 'about',
+        model: Entity,
+        select: ENTITY_SUMMARY_FIELDS,
+      }),
+  ]);
+  return { ...populated.toJSON(), feed: feedEntry ? feedEntry.toJSON() : null };
+}
 
 router.post(
   '/entry',
   authenticated({ redirectTo: '/micro/login' }),
   async function (req, res) {
     try {
-      // Update tags (create new ones if necessary, increment usage frequency)
-      // Has to happen before the entry is created, or else we don't have the tag IDs to reference
-      const tags = await updateTagsOnCreate(req.body.tags, 'micro');
+      const { threads = [], about = [], tags: tagInput, ...fields } = req.body;
+      // Tags first: the entry needs their IDs. Creates new tags and increments usage counts.
+      const tags = await updateTagsOnCreate(tagInput, 'micro');
 
-      // Make entry
       const microEntryId = new mongoose.Types.ObjectId();
-      const entryPromise = new MicroEntry({
-        ...req.body,
-        tags,
-        _id: microEntryId,
-      }).save();
-
-      // Add entry to feed
-      const feedEntryPromise = new FeedEntryMicro({
-        type: 'micro',
+      const entry = new MicroEntry({ ...fields, tags, _id: microEntryId });
+      const feedEntry = new FeedEntryMicro({
         micro: microEntryId,
         tags,
-      }).save();
-
-      const [entryResult] = await Promise.all([entryPromise, feedEntryPromise]);
-      res.json(entryResult);
+        threads,
+        about,
+      });
+      await Promise.all([entry.save(), feedEntry.save()]);
+      res.json(await editorResponse(entry));
     } catch (err) {
       console.log(err);
       res.status(500).send({ error: err });
@@ -47,28 +59,39 @@ router.post(
   authenticated({ redirectTo: '/micro/login' }),
   async function (req, res) {
     try {
-      const entry = await MicroEntry.findById(req.params.id);
-      const newEntry = req.body;
-      newEntry.tags = await updateTagsOnEdit(
-        entry.tags,
-        req.body.tags,
-        'micro',
-      );
-      if (!entry) {
+      const [entry, feedEntry] = await Promise.all([
+        MicroEntry.findById(req.params.id),
+        FeedEntryMicro.findOne({ micro: req.params.id }),
+      ]);
+      if (!entry || !feedEntry) {
         res.sendStatus(404);
         return;
       }
-      Object.keys(newEntry)
+      const { threads, about, tags: tagInput, ...fields } = req.body;
+      const tags = await updateTagsOnEdit(entry.tags, tagInput || [], 'micro');
+
+      Object.keys(fields)
         .filter(
           (key) => !['_id', 'createdAt', 'updatedAt', '__v'].includes(key),
         )
         .forEach((key) => {
-          if (entry[key] !== newEntry[key]) {
-            entry[key] = newEntry[key];
+          if (entry[key] !== fields[key]) {
+            entry[key] = fields[key];
           }
         });
-      const entryResult = await entry.save();
-      res.json(entryResult);
+      entry.tags = tags;
+
+      // The feed entry keeps its own copy of the tags, which must follow the post's.
+      feedEntry.tags = tags;
+      if (threads) {
+        feedEntry.threads = threads;
+      }
+      if (about) {
+        feedEntry.about = about;
+      }
+
+      await Promise.all([entry.save(), feedEntry.save()]);
+      res.json(await editorResponse(entry));
     } catch (err) {
       console.log(err);
       res.status(500).send({ error: err });
@@ -103,6 +126,8 @@ router.delete(
 
       // Clear feed entry
       feedEntry.tags = undefined;
+      feedEntry.threads = undefined;
+      feedEntry.about = undefined;
       feedEntry.deletedAt = new Date();
 
       await Promise.all([microEntry.save(), feedEntry.save()]);
@@ -113,14 +138,9 @@ router.delete(
 
 // Get a single entry
 router.get('/entry/:slug', async (req, res) => {
-  // Related posts come with their titles, so the editor can show them even when they aren't
-  // among the recent options from /relatedPosts.
-  const entry = await MicroEntry.findOne({ slug: req.params.slug }).populate({
-    path: 'relatedPosts.ref',
-    select: 'title',
-  });
+  const entry = await MicroEntry.findOne({ slug: req.params.slug });
   if (entry) {
-    res.json(entry);
+    res.json(await editorResponse(entry));
   } else {
     res.sendStatus(404);
   }

@@ -32,6 +32,17 @@ html(class='feed-editor', lang='en')
               label(for="tags") Tags
               input#tags.form-control-sm(autocomplete="off", value=entry.tags.map(e => e._id).join(','))
 
+            .input-group
+              label(for="threads") Threads
+              input#threads.form-control-sm(autocomplete="off")
+            #threads-preview.picker-preview
+
+            .input-group
+              label(for="about") About
+              input#about.form-control-sm(autocomplete="off")
+
+            script#picker-data(type="application/json") !{JSON.stringify(pickerData).replace(/</g, '\\u003c')}
+
         if entryType == "citationNeeded"
           .content-box
             .content-container

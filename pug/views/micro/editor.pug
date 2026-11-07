@@ -45,6 +45,15 @@ html(class='feed-editor', lang='en')
               label(for="tags") Tags
               input#tags.form-control-sm(autocomplete="off")
 
+            .input-group
+              label(for="threads") Threads
+              input#threads.form-control-sm(autocomplete="off")
+            #threads-preview.picker-preview
+
+            .input-group
+              label(for="about") About
+              input#about.form-control-sm(autocomplete="off")
+
             .input-group 
               label(for="related") Related posts
               select#related.form-control-sm(multiple)

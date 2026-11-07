@@ -299,6 +299,70 @@ button:hover {
   }
 }
 
+/* Pickers (threads, about) ----------------------------------------------------- */
+.picker-meta {
+  margin-left: 0.5em;
+  font-size: 0.8em;
+  color: var(--timestamp-color);
+}
+
+.picker-preview ul {
+  margin: 0 0 1em;
+  padding-left: 1.25em;
+  font-size: 0.85em;
+  color: var(--timestamp-color);
+}
+
+.entity-dialog {
+  width: min(32rem, calc(100vw - 2rem));
+  color: var(--main-text-color);
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--hr-color);
+  border-radius: 4px;
+}
+
+.entity-dialog::backdrop {
+  background-color: rgb(0 0 0 / 40%);
+}
+
+.entity-dialog h2 {
+  margin-top: 0;
+}
+
+.entity-dialog fieldset {
+  margin: 1em 0;
+  border: 1px solid var(--hr-color);
+}
+
+.entity-account-row {
+  display: flex;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.entity-account-row input {
+  flex-grow: 1;
+}
+
+.entity-matches {
+  padding: 0.5em 1em;
+  background-color: var(--note-background-color);
+}
+
+.entity-matches ul {
+  padding-left: 1.25em;
+}
+
+.entity-error {
+  color: var(--over-character-limit-background-color);
+}
+
+.dialog-buttons {
+  display: flex;
+  gap: 0.5em;
+  justify-content: flex-end;
+}
+
 /* Mobile --------------------------------------------------------------------- */
 @media screen and (max-width: 768px) {
   .editor-container {

@@ -14,6 +14,7 @@ import {
 
 import EditorJS from '@editorjs/editorjs';
 import SocialPostDelimiter from './SocialPostDelimiter.js';
+import { createAboutPicker, createThreadPicker } from './helpers/pickers.js';
 
 import debounce from 'lodash.debounce';
 import TomSelect from 'tom-select';
@@ -23,6 +24,8 @@ const postMeta = {
   slug: DateTime.now().toFormat('yyyyMMddHHmm'),
   tags: [],
   relatedPosts: [], // [{ ref, model }]
+  threads: [], // Stored on the feed entry
+  about: [], // Stored on the feed entry
   id: null,
   socialLinks: {},
 };
@@ -43,6 +46,8 @@ const X_HELPER_URL = 'http://localhost:5055';
 let savedPost = {};
 let tagSelect;
 let relatedPostsSelect;
+let threadPicker;
+let aboutPicker;
 let socialPostsCheckbox;
 let saveButton;
 let deleteButton;
@@ -165,11 +170,12 @@ function updateModelFromDb(data) {
   postMeta.slug = data.slug;
   postMeta.tags = data.tags;
   postMeta.id = data.id;
-  // The entry endpoint populates related posts with their titles; the save endpoints don't.
-  postMeta.relatedPosts = (data.relatedPosts || []).map(({ ref, model }) => ({
-    ref: typeof ref === 'object' ? ref._id : ref,
-    model,
-  }));
+  // Related posts come populated with titles; a null ref is a post that's since been deleted.
+  postMeta.relatedPosts = (data.relatedPosts || [])
+    .filter(({ ref }) => ref)
+    .map(({ ref, model }) => ({ ref: ref._id, model }));
+  postMeta.threads = (data.feed?.threads || []).map(({ _id }) => _id);
+  postMeta.about = (data.feed?.about || []).map(({ _id }) => _id);
   postMeta.socialLinks = socialLinksToMap(data.socialLinks);
 }
 
@@ -185,6 +191,8 @@ function setInputValues() {
   slugEl.value = postMeta.slug;
   tagSelect.setValue(postMeta.tags);
   relatedPostsSelect.setValue(postMeta.relatedPosts.map(({ ref }) => ref));
+  threadPicker.setValue(postMeta.threads, true);
+  aboutPicker.setValue(postMeta.about, true);
   Object.entries(postMeta.socialLinks).forEach(([key, value]) => {
     document.getElementById(key).value = value;
   });
@@ -367,6 +375,8 @@ function save() {
             `/dynamic-api/micro/entry/${postResp.data._id}`,
             {
               ...transformedPostMeta,
+              // New tags were created by the first save; send their IDs, not their names again.
+              tags: postResp.data.tags,
               socialLinks: socialLinksToArray({
                 ...postMeta.socialLinks,
                 ...postIds,
@@ -485,7 +495,7 @@ async function onFirstLoad() {
   );
   // Recent options don't necessarily include this post's current related posts, so add those.
   const currentRelated = (savedPost.relatedPosts || [])
-    .filter(({ ref }) => ref && typeof ref === 'object')
+    .filter(({ ref }) => ref)
     .map(({ ref, model }) => ({ _id: ref._id, title: ref.title, type: model }));
   const allRelatedOptions = [
     ...currentRelated,
@@ -500,6 +510,24 @@ async function onFirstLoad() {
     searchField: ['title'],
     options: allRelatedOptions,
     maxItems: null,
+  });
+
+  threadPicker = await createThreadPicker('#threads', {
+    initial: savedPost.feed?.threads || [],
+    preview: document.getElementById('threads-preview'),
+    getPosition: () => ({
+      at: savedPost.feed?.createdAt,
+      feedEntryId: savedPost.feed?._id,
+    }),
+    onChange: (ids) => {
+      postMeta.threads = ids;
+    },
+  });
+  aboutPicker = createAboutPicker('#about', {
+    initial: savedPost.feed?.about || [],
+    onChange: (ids) => {
+      postMeta.about = ids;
+    },
   });
 
   // Selectors
