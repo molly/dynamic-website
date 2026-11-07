@@ -22,11 +22,12 @@ export const BookSchema = new mongoose.Schema(
     pages: Number,
     series: String,
     seriesNumber: Number,
+    seriesLength: Number, // Books in the series, when known
     stars: Number,
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tag',
+        ref: 'BookTag',
       },
     ],
     fiction: Boolean,
@@ -36,4 +37,4 @@ export const BookSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const Book = db.readingListConnection.model('Book', BookSchema, 'books');
+export const Book = db.connection.model('Book', BookSchema, 'books');

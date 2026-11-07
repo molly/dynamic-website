@@ -12,6 +12,7 @@ dist/
 backend/config/
 frontend/config/
 rss/
+designs/
 
 # Symlinks
 pug/symlinks

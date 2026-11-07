@@ -8,4 +8,4 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.plugin(passportLocalMongoose);
 
-export default db.authConnection.model('User', UserSchema);
+export default db.connection.model('User', UserSchema);

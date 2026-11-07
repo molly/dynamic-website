@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { getImages, processSocialPost } from '../helpers/social.js';
+import { isProd } from '../env.js';
 import logger from '../winston.js';
 import { authenticated } from './auth.js';
 
@@ -17,6 +18,10 @@ const POSTERS = {
 };
 
 router.post('/', authenticated(), async function (req, res) {
+  if (!isProd) {
+    res.status(403).send({ error: 'Cross-posting is disabled outside prod.' });
+    return;
+  }
   try {
     // Process posts to proper format
     const socialPosts = {};

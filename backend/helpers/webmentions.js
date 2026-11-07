@@ -1,6 +1,7 @@
 import { Queue } from 'bullmq';
 import * as cheerio from 'cheerio';
 import disallowList from '../config/webmentionDisallow.js';
+import { isProd } from '../env.js';
 import db from '../models/db.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 
@@ -46,6 +47,10 @@ const extractUrlsFromBlocks = (blocks) => {
 
 // On save, queue jobs to send webmentions to all URLs in previous and new version of post
 export const sendWebmentions = async (doc) => {
+  if (!isProd) {
+    // Outside prod, posts point at a dev copy of the site; don't notify other sites about them.
+    return;
+  }
   const changes = doc.getChanges();
   const old = await MicroEntry.findById(doc._id).lean();
   if (

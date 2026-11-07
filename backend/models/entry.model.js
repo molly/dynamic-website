@@ -19,6 +19,8 @@ export const EntrySchema = {
     },
   ],
   entryAdded: Date,
+  // Outlet entity, matched from href's domain when the entry is added.
+  outlet: { type: mongoose.Schema.Types.ObjectId, ref: 'Entity' },
 };
 
 const ShortformBaseSchema = {
@@ -34,21 +36,43 @@ const ShortformBaseSchema = {
 
 const ShortformSchema = new mongoose.Schema({
   ...ShortformBaseSchema,
-  summary: String,
+  summary: String, // Your own commentary
+  subtitle: String,
+  excerpts: [String], // Quoted passages; "read in context" links are derived from these
+  paywalled: Boolean, // Unset means use the outlet's paywalledByDefault
+  giftLink: { type: String, match: /^https?:\/\// },
 });
 
 ShortformSchema.post('save', async () => {
   await generateRssForReading();
 });
 
-export const ShortformEntry = db.readingListConnection.model(
+export const ShortformEntry = db.connection.model(
   'ShortformEntry',
   ShortformSchema,
   'shortform',
 );
 
-export const PressEntry = db.readingListConnection.model(
+const PressSchema = new mongoose.Schema({
+  ...EntrySchema,
+  // The medium. The copy script sets this from parenthetical for existing entries.
+  kind: {
+    type: String,
+    enum: ['article', 'podcast', 'radio', 'video', 'tv', 'talk', 'freelance'],
+    default: 'article',
+  },
+  // Your part in it, when known. Set by hand.
+  role: { type: String, enum: ['quoted', 'cited', 'interviewed', 'profiled'] },
+  // Your piece that this press cited; drives "drew on" and the reverse "Cited by".
+  drewOn: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'FeedEntry',
+    index: true,
+  },
+});
+
+export const PressEntry = db.connection.model(
   'PressEntry',
-  new mongoose.Schema(EntrySchema),
+  PressSchema,
   'press',
 );

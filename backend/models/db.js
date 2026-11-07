@@ -1,46 +1,11 @@
 import IORedis from 'ioredis';
-import { ServerApiVersion } from 'mongodb';
 import mongoose from 'mongoose';
 import auth from '../config/auth.config.js';
+import { mongoOptions, mongoUri } from './mongoUri.js';
 
 const db = {
   mongoose,
-  authConnection: mongoose.createConnection(
-    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/auth?retryWrites=true&w=majority`,
-    {
-      serverApi: ServerApiVersion.v1,
-    },
-  ),
-  readingListConnection: mongoose.createConnection(
-    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/reading-list?retryWrites=true&w=majority`,
-    {
-      serverApi: ServerApiVersion.v1,
-    },
-  ),
-  microConnection: mongoose.createConnection(
-    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/micro?retryWrites=true&w=majority`,
-    {
-      serverApi: ServerApiVersion.v1,
-    },
-  ),
-  feedConnection: mongoose.createConnection(
-    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/feed?retryWrites=true&w=majority`,
-    {
-      serverApi: ServerApiVersion.v1,
-    },
-  ),
-  tagConnection: mongoose.createConnection(
-    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/tags?retryWrites=true&w=majority`,
-    {
-      serverApi: ServerApiVersion.v1,
-    },
-  ),
-  webmentionConnection: mongoose.createConnection(
-    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/webmentions?retryWrites=true&w=majority`,
-    {
-      serverApi: ServerApiVersion.v1,
-    },
-  ),
+  connection: mongoose.createConnection(mongoUri(), mongoOptions),
   redis: new IORedis(
     { port: 32856, password: auth.redisPassword },
     { maxRetriesPerRequest: null },
@@ -48,26 +13,12 @@ const db = {
 };
 
 db.initialize = async function () {
-  await Promise.all([
-    db.authConnection.asPromise(),
-    db.readingListConnection.asPromise(),
-    db.microConnection.asPromise(),
-    db.feedConnection.asPromise(),
-    db.tagConnection.asPromise(),
-    db.webmentionConnection.asPromise(),
-  ]);
+  await db.connection.asPromise();
   console.log('initialized');
 };
 
 db.gracefulClose = async function () {
-  await Promise.all([
-    db.authConnection.close(),
-    db.readingListConnection.close(),
-    db.microConnection.close(),
-    db.feedConnection.close(),
-    db.tagConnection.close(),
-    db.webmentionConnection.close(),
-  ]);
+  await db.connection.close();
   console.log('db connections closed');
   process.exit(0);
 };

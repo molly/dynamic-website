@@ -94,8 +94,7 @@ router.delete(
         'title',
         'post',
         'tags',
-        'relatedPost',
-        'relatedPostModel',
+        'relatedPosts',
         'socialLinks',
       ]) {
         microEntry[key] = undefined;
@@ -114,7 +113,12 @@ router.delete(
 
 // Get a single entry
 router.get('/entry/:slug', async (req, res) => {
-  const entry = await MicroEntry.findOne({ slug: req.params.slug });
+  // Related posts come with their titles, so the editor can show them even when they aren't
+  // among the recent options from /relatedPosts.
+  const entry = await MicroEntry.findOne({ slug: req.params.slug }).populate({
+    path: 'relatedPosts.ref',
+    select: 'title',
+  });
   if (entry) {
     res.json(entry);
   } else {

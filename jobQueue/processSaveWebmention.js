@@ -1,26 +1,21 @@
-import { ServerApiVersion } from 'mongodb';
 import mongoose from 'mongoose';
-import { MicroEntrySchema } from '../backend/models/micro/microEntry.schema.js';
+import {
+  MICRO_ENTRY_COLLECTION,
+  MicroEntrySchema,
+} from '../backend/models/micro/microEntry.schema.js';
+import { mongoOptions, mongoUri } from '../backend/models/mongoUri.js';
 import { WebmentionSchema } from '../backend/models/webmention.schema.js';
 
 // Already validated, so just save
 export async function processSaveWebmention({ source, target }) {
-  const webmentionConnection = mongoose.createConnection(
-    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/webmentions?retryWrites=true&w=majority`,
-    {
-      serverApi: ServerApiVersion.v1,
-    },
-  );
-  const Webmention = webmentionConnection.model(
+  const connection = mongoose.createConnection(mongoUri(), mongoOptions);
+  const Webmention = connection.model(
     'Webmention',
     WebmentionSchema,
     'webmentions',
   );
 
-  let microConnection;
   try {
-    let MicroEntry;
-
     const existingWebmention = await Webmention.findOne({ source, target });
     if (existingWebmention) {
       // No need to do anything, because this is an update to a webmention I've already stored.
@@ -40,16 +35,10 @@ export async function processSaveWebmention({ source, target }) {
     if (targetUrl.pathname.startsWith('/micro/entry')) {
       const slug = targetUrl.pathname.split('/')[3];
       if (slug) {
-        microConnection = mongoose.createConnection(
-          `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/micro?retryWrites=true&w=majority`,
-          {
-            serverApi: ServerApiVersion.v1,
-          },
-        );
-        MicroEntry = microConnection.model(
+        const MicroEntry = connection.model(
           'MicroEntry',
           MicroEntrySchema,
-          'entries',
+          MICRO_ENTRY_COLLECTION,
         );
         const entry = await MicroEntry.findOne({ slug });
         if (entry) {
@@ -59,7 +48,6 @@ export async function processSaveWebmention({ source, target }) {
       }
     }
   } finally {
-    await microConnection?.close();
-    await webmentionConnection.close();
+    await connection.close();
   }
 }

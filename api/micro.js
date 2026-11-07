@@ -1,6 +1,5 @@
 import * as cheerio from 'cheerio';
 import EditorJSHtml from 'editorjs-html';
-import db from '../backend/models/db.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { Tag } from '../backend/models/tag.model.js';
 import { Webmention } from '../backend/models/webmention.model.js';
@@ -106,7 +105,7 @@ export const getMicroEntries = async ({
   }
   const entries = await q
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
-    .populate({ path: 'relatedPost', connection: db.readingListConnection })
+    .populate({ path: 'relatedPosts.ref' })
     .populate({ path: 'webmentions', model: Webmention })
     .lean();
   const hydrated = entries.map(hydrateMicroEntry);
@@ -122,7 +121,7 @@ export const getMicroEntries = async ({
 export const getMicroEntry = async (slug) => {
   const entry = await MicroEntry.findOne({ slug })
     .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
-    .populate({ path: 'relatedPost', connection: db.readingListConnection })
+    .populate({ path: 'relatedPosts.ref' })
     .populate({ path: 'webmentions', model: Webmention })
     .lean();
 

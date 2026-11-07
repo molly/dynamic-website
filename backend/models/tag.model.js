@@ -12,5 +12,5 @@ export const TagSchema = new mongoose.Schema({
     total: Number,
   },
 });
-export const Tag = db.tagConnection.model('Tag', TagSchema, 'tags');
-export const BookTag = db.tagConnection.model('Tag', TagSchema, 'bookTags');
+export const Tag = db.connection.model('Tag', TagSchema, 'tags');
+export const BookTag = db.connection.model('BookTag', TagSchema, 'bookTags');

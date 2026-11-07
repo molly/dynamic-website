@@ -22,8 +22,7 @@ const postMeta = {
   title: '',
   slug: DateTime.now().toFormat('yyyyMMddHHmm'),
   tags: [],
-  relatedPost: null,
-  relatedPostModel: null,
+  relatedPosts: [], // [{ ref, model }]
   id: null,
   socialLinks: {},
 };
@@ -166,8 +165,11 @@ function updateModelFromDb(data) {
   postMeta.slug = data.slug;
   postMeta.tags = data.tags;
   postMeta.id = data.id;
-  postMeta.relatedPost = data.relatedPost;
-  postMeta.relatedPostModel = data.relatedPostModel;
+  // The entry endpoint populates related posts with their titles; the save endpoints don't.
+  postMeta.relatedPosts = (data.relatedPosts || []).map(({ ref, model }) => ({
+    ref: typeof ref === 'object' ? ref._id : ref,
+    model,
+  }));
   postMeta.socialLinks = socialLinksToMap(data.socialLinks);
 }
 
@@ -182,7 +184,7 @@ function setInputValues() {
   titleEl.value = postMeta.title;
   slugEl.value = postMeta.slug;
   tagSelect.setValue(postMeta.tags);
-  relatedPostsSelect.setValue(postMeta.relatedPost);
+  relatedPostsSelect.setValue(postMeta.relatedPosts.map(({ ref }) => ref));
   Object.entries(postMeta.socialLinks).forEach(([key, value]) => {
     document.getElementById(key).value = value;
   });
@@ -481,13 +483,23 @@ async function onFirstLoad() {
   const { data: relatedOptions } = await axios.get(
     '/dynamic-api/micro/relatedPosts',
   );
+  // Recent options don't necessarily include this post's current related posts, so add those.
+  const currentRelated = (savedPost.relatedPosts || [])
+    .filter(({ ref }) => ref && typeof ref === 'object')
+    .map(({ ref, model }) => ({ _id: ref._id, title: ref.title, type: model }));
+  const allRelatedOptions = [
+    ...currentRelated,
+    ...relatedOptions.filter(
+      (opt) => !currentRelated.some((current) => current._id === opt._id),
+    ),
+  ];
   relatedPostsSelect = new TomSelect('#related', {
-    items: postMeta.relatedPost,
+    items: postMeta.relatedPosts.map(({ ref }) => ref),
     valueField: '_id',
     labelField: 'title',
     searchField: ['title'],
-    options: relatedOptions,
-    allowEmptyOption: true,
+    options: allRelatedOptions,
+    maxItems: null,
   });
 
   // Selectors
@@ -522,16 +534,11 @@ async function onFirstLoad() {
       postMeta.tags = [];
     }
   });
-  relatedPostsSelect.on('change', function (value) {
-    if (value) {
-      postMeta.relatedPost = value;
-      postMeta.relatedPostModel = relatedOptions.find(
-        (opt) => opt._id === value,
-      ).type;
-    } else {
-      postMeta.relatedPost = null;
-      postMeta.relatedPostModel = null;
-    }
+  relatedPostsSelect.on('change', function () {
+    postMeta.relatedPosts = relatedPostsSelect.getValue().map((id) => ({
+      ref: id,
+      model: allRelatedOptions.find((opt) => opt._id === id).type,
+    }));
   });
 
   saveButton.addEventListener('click', save);

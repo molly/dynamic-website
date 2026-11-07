@@ -12,16 +12,33 @@ const FeedEntrySchema = new mongoose.Schema(
         ref: 'Tag',
       },
     ],
+    // Groups of related entries. Previous/next within a thread are worked out from createdAt,
+    // never stored. An entry can be in several threads.
+    threads: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Thread',
+      },
+    ],
+    // Entities this entry is about: drives the "about" sidebar and entity pages.
+    about: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Entity',
+      },
+    ],
   },
   { timestamps: true },
 );
+FeedEntrySchema.index({ threads: 1, createdAt: 1 });
+FeedEntrySchema.index({ about: 1, createdAt: -1 });
 
 // Generate RSS on each save
 FeedEntrySchema.post('save', generateRssForFeed);
-export const FeedEntry = db.feedConnection.model(
+export const FeedEntry = db.connection.model(
   'FeedEntry',
   FeedEntrySchema,
-  'entries',
+  'feedEntries',
 );
 
 export const FeedEntryMicro = FeedEntry.discriminator(
@@ -70,6 +87,17 @@ export const FeedEntryReading = FeedEntry.discriminator(
     status: {
       type: String,
       enum: ['read', 'currentlyReading', 'dnf', 'reference', 'toRead'],
+    },
+  }),
+);
+
+export const FeedEntryPress = FeedEntry.discriminator(
+  'FeedEntryPress',
+  new mongoose.Schema({
+    press: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'PressEntry',
+      required: true,
     },
   }),
 );

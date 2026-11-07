@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
-import { NETWORKS } from '../../../api/helpers/socialMedia.js';
+import {
+  MENTION_NETWORKS,
+  NETWORKS,
+} from '../../../api/helpers/socialMedia.js';
+// Shared with the job queue, which registers its own copy of the model.
+export const MICRO_ENTRY_COLLECTION = 'microEntries';
+
 export const MicroEntrySchema = new mongoose.Schema(
   {
     title: String,
@@ -11,13 +17,55 @@ export const MicroEntrySchema = new mongoose.Schema(
         ref: 'Tag',
       },
     ],
-    relatedPost: {
-      type: mongoose.Schema.Types.ObjectId,
-      refPath: 'relatedPostModel',
+    // Articles and press pieces this post discusses, shown as cards.
+    relatedPosts: [
+      {
+        _id: false,
+        ref: {
+          type: mongoose.Schema.Types.ObjectId,
+          refPath: 'relatedPosts.model',
+          required: true,
+        },
+        model: {
+          type: String,
+          enum: ['ShortformEntry', 'PressEntry'],
+          required: true,
+        },
+      },
+    ],
+    sources: [
+      {
+        _id: false,
+        label: { type: String, required: true },
+        url: { type: String, required: true, match: /^https?:\/\// },
+      },
+    ],
+    data: {
+      label: String,
+      url: { type: String, match: /^https?:\/\// },
     },
-    relatedPostModel: {
-      type: String,
-      enum: ['ShortformEntry', 'PressEntry'],
+    // Someone else's post this replies to. Their words aren't copied in.
+    inReplyTo: {
+      name: String,
+      network: { type: String, enum: MENTION_NETWORKS },
+      url: { type: String, match: /^https?:\/\// },
+      postedAt: Date,
+    },
+    updates: [
+      {
+        kind: {
+          type: String,
+          enum: ['update', 'correction', 'live'],
+          required: true,
+        },
+        at: { type: Date, required: true },
+        headline: String, // Live updates only
+        body: { type: Object, required: true }, // EditorJS data
+      },
+    ],
+    live: {
+      status: { type: String, enum: ['updating', 'ended'] },
+      startedAt: Date,
     },
     socialLinks: [
       {

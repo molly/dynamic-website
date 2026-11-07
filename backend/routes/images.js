@@ -5,8 +5,12 @@ import multer from 'multer';
 
 import { getUniqueId } from '../../api/helpers/uniqueId.js';
 import { USER_AGENT } from '../config/requests.js';
+import { isProd } from '../env.js';
 
 import { authenticated } from './auth.js';
+
+// Dev uploads go to their own folder so they never mix with the live site's files.
+const UPLOAD_FOLDER = isProd ? 'micro' : 'dev/micro';
 
 const storage = new Storage();
 const bucket = storage.bucket('storage.mollywhite.net');
@@ -26,7 +30,7 @@ const uploadHandler = multer({
       const filename = `${getUniqueId(10)}_${file.originalname.replace(/[^a-zA-Z0-9_.]/g, '-')}`;
       file.stream
         .pipe(
-          uploadBucket.file(`micro/${filename}`).createWriteStream({
+          uploadBucket.file(`${UPLOAD_FOLDER}/${filename}`).createWriteStream({
             predefinedAcl: 'private',
             metadata: { contentType: file.mimetype },
           }),
@@ -36,7 +40,7 @@ const uploadHandler = multer({
     },
     _removeFile(req, file, cb) {
       uploadBucket
-        .file(`micro/${file.filename}`)
+        .file(`${UPLOAD_FOLDER}/${file.filename}`)
         .delete({ ignoreNotFound: true })
         .then(() => cb(), cb);
     },
@@ -52,7 +56,7 @@ router.post(
       res.json({
         success: 1,
         file: {
-          url: `https://storage.mollywhite.net/micro/${encodeURIComponent(req.file.filename)}`,
+          url: `https://storage.mollywhite.net/${UPLOAD_FOLDER}/${encodeURIComponent(req.file.filename)}`,
           contentType: req.file.contentType,
         },
       });
@@ -67,7 +71,7 @@ router.post(
 router.post('/byURL', authenticated(), async (req, res) => {
   const originalFilename = req.body.url.split('/').pop();
   const targetFilename = `${getUniqueId(10)}_${originalFilename}`;
-  const file = bucket.file(`micro/${targetFilename}`);
+  const file = bucket.file(`${UPLOAD_FOLDER}/${targetFilename}`);
   const { data } = await axios.get(req.body.url, {
     headers: { 'User-Agent': USER_AGENT },
     decompress: false,
@@ -82,7 +86,7 @@ router.post('/byURL', authenticated(), async (req, res) => {
       res.json({
         success: 1,
         file: {
-          url: `https://storage.mollywhite.net/micro/${encodeURIComponent(targetFilename)}`,
+          url: `https://storage.mollywhite.net/${UPLOAD_FOLDER}/${encodeURIComponent(targetFilename)}`,
           contentType: data.headers['content-type'],
         },
       });

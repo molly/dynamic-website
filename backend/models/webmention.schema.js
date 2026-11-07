@@ -11,8 +11,10 @@ export const WebmentionSchema = new mongoose.Schema(
     body: {
       type: {
         type: String,
-        enum: ['reply', 'like', 'repost', 'bookmark'],
+        enum: ['reply', 'like', 'repost', 'bookmark', 'mention'],
       },
+      title: { type: String },
+      siteName: { type: String },
       content: { type: String },
       summary: { type: String },
       author: { type: String },

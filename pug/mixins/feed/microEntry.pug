@@ -16,15 +16,16 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
         each block in entry.html
           != block
 
-        if entry.relatedPostModel 
-          .related-post
-            case entry.relatedPostModel
-              when "ShortformEntry"
-                include ../shortformArticle.pug
-                +shortformArticle(entry.relatedPost, isRss, true, true)
-              when "PressEntry"
-                include ../pressArticle.pug
-                +pressArticle(entry.relatedPost, isRss, true, true)
+        each related in (entry.relatedPosts || [])
+          if related.ref
+            .related-post
+              case related.model
+                when "ShortformEntry"
+                  include ../shortformArticle.pug
+                  +shortformArticle(related.ref, isRss, true, true)
+                when "PressEntry"
+                  include ../pressArticle.pug
+                  +pressArticle(related.ref, isRss, true, true)
 
         if isRss && !hasImage
           img(src="https://www.mollywhite.net/assets/images/placeholder_social.png", alt="Illustration of Molly White sitting and typing on a laptop, on a purple background with 'Molly White' in white serif.", style="display: none;")
@@ -50,10 +51,10 @@ mixin microEntry(entry, {isLoggedIn=false, isInFeed=false, isInMicroFeed=false, 
                     include ../../icons/pencil.svg
               if !isRss
                 |  from the #[a(href=`${baseUrl}/micro`) micro posts] feed
-                if !entry.relatedPostModel
-                  | .
-                else if entry.relatedPostModel == "ShortformEntry"
+                if (entry.relatedPosts || []).some(related => related.model == "ShortformEntry")
                   |  and the #[a(href=`${baseUrl}/reading/shortform`) shortform reading list].
+                else
+                  | .
             if entry.updatedAt && entry.updatedAt - entry.createdAt > 5 * 60 * 1000
               .timestamp
                 | Updated 

@@ -1,7 +1,10 @@
 import { generateRssForFeed, generateRssForMicro } from '../../helpers/rss.js';
 import { sendWebmentions } from '../../helpers/webmentions.js';
 import db from '../db.js';
-import { MicroEntrySchema } from './microEntry.schema.js';
+import {
+  MICRO_ENTRY_COLLECTION,
+  MicroEntrySchema,
+} from './microEntry.schema.js';
 
 MicroEntrySchema.pre('save', async function () {
   await sendWebmentions(this);
@@ -14,8 +17,8 @@ MicroEntrySchema.post('save', function () {
   generateRssForMicro();
 });
 
-export default db.microConnection.model(
+export default db.connection.model(
   'MicroEntry',
   MicroEntrySchema,
-  'entries',
+  MICRO_ENTRY_COLLECTION,
 );

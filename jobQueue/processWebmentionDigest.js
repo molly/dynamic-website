@@ -1,5 +1,5 @@
-import { ServerApiVersion } from 'mongodb';
 import mongoose from 'mongoose';
+import { mongoOptions, mongoUri } from '../backend/models/mongoUri.js';
 import { WebmentionSchema } from '../backend/models/webmention.schema.js';
 import { sendNotification } from './notify.js';
 
@@ -7,14 +7,9 @@ const ADMIN_URL = 'https://www.mollywhite.net/micro/webmentions';
 
 // Notify if any webmentions are waiting for moderation
 export async function processWebmentionDigest() {
-  const webmentionConnection = mongoose.createConnection(
-    `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/webmentions?retryWrites=true&w=majority`,
-    {
-      serverApi: ServerApiVersion.v1,
-    },
-  );
+  const connection = mongoose.createConnection(mongoUri(), mongoOptions);
   try {
-    const Webmention = webmentionConnection.model(
+    const Webmention = connection.model(
       'Webmention',
       WebmentionSchema,
       'webmentions',
@@ -34,6 +29,6 @@ export async function processWebmentionDigest() {
     });
     return { pending };
   } finally {
-    await webmentionConnection.close();
+    await connection.close();
   }
 }

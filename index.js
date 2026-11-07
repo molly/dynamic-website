@@ -4,6 +4,7 @@ import https from 'https';
 import config from './backend/config/auth.config.js';
 
 import db from './backend/models/db.js';
+import { mongoUri } from './backend/models/mongoUri.js';
 import backendRouter from './backend/routes/backendRouter.js';
 import webmentionRouter from './backend/routes/webmentionRouter.js';
 import frontendRouter from './frontend/routes/frontendRouter.js';
@@ -28,7 +29,7 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({
-    uri: `mongodb+srv://reading-list:${process.env.PASSWORD}@cluster0.ptjwk.mongodb.net/auth?retryWrites=true&w=majority`,
+    uri: mongoUri(),
     collection: 'sessions',
   }),
 };

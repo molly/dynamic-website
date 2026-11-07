@@ -1,5 +1,4 @@
 import { Book } from '../backend/models/book.model.js';
-import db from '../backend/models/db.js';
 import { ShortformEntry } from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
@@ -72,7 +71,7 @@ export const getFeedEntries = async ({
       model: MicroEntry,
       populate: [
         { path: 'tags', model: Tag, options: { sort: { value: 1 } } },
-        { path: 'relatedPost', connection: db.readingListConnection },
+        { path: 'relatedPosts.ref' },
         { path: 'webmentions', model: Webmention },
       ],
     })

@@ -1,0 +1,72 @@
+// Keys used to spot duplicate entities before they're created. See "Avoiding duplicate entities"
+// in the editor plan.
+
+const LEGAL_SUFFIXES = new Set([
+  'inc',
+  'incorporated',
+  'llc',
+  'ltd',
+  'limited',
+  'corp',
+  'corporation',
+  'co',
+  'company',
+  'plc',
+  'pbc',
+  'lp',
+  'llp',
+  'gmbh',
+  'ag',
+  'sa',
+  'nv',
+  'bv',
+]);
+
+/**
+ * Normalize a name for comparison: lowercase, no accents or punctuation, "&" read as "and", and
+ * no leading "the" or trailing legal suffixes ("Coinbase Global, Inc." -> "coinbase global").
+ * @param {string} name
+ * @returns {string}
+ */
+export function nameKey(name) {
+  const words = name
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(' ')
+    .filter(Boolean);
+  if (words.length > 1 && words[0] === 'the') {
+    words.shift();
+  }
+  while (words.length > 1 && LEGAL_SUFFIXES.has(words[words.length - 1])) {
+    words.pop();
+  }
+  return words.join(' ');
+}
+
+/**
+ * One key per social account, so the same handle can't belong to two entities.
+ * @param {string} network
+ * @param {string} handle
+ * @returns {string}
+ */
+export function accountKey(network, handle) {
+  return `${network}:${handle.trim().replace(/^@/, '').toLowerCase()}`;
+}
+
+/**
+ * Normalize a website domain: lowercase, no protocol, path or leading "www.".
+ * @param {string} domain
+ * @returns {string}
+ */
+export function normalizeDomain(domain) {
+  return domain
+    .trim()
+    .toLowerCase()
+    .replace(/^[a-z]+:\/\//, '')
+    .replace(/\/.*$/, '')
+    .replace(/^www\./, '');
+}
