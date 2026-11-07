@@ -10,6 +10,7 @@ export default [
       modules: [modulesPath],
     },
     entry: {
+      admin: './frontend/js/admin.js',
       editor: './frontend/js/editor.js',
       reading: './frontend/js/reading.js',
       feed: './frontend/js/feed.js',

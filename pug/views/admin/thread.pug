@@ -1,0 +1,31 @@
+extends layout.pug
+
+block content
+  p
+    a(href="/admin/threads") ← All threads
+  h1= thread.title || 'Untitled thread'
+  form#thread-form
+    .input-group
+      label(for="thread-title") Title
+      input#thread-title(type="text", value=thread.title || '', placeholder="Leave empty for an untitled thread")
+    .input-group
+      label(for="thread-description") Description
+      input#thread-description(type="text", value=thread.description || '')
+    p.entity-error(hidden)
+    p.admin-status(hidden)
+    .dialog-buttons
+      button(type="submit") Save
+
+  h2 Entries, oldest first
+  if entries.length
+    ol.thread-entries
+      each entry in entries
+        li
+          time(datetime=entry.createdAt.toISOString())= entry.createdAt.toISOString().slice(0, 10)
+          |  
+          if entry.editUrl
+            a(href=entry.editUrl)= entry.label
+          else
+            span= entry.label
+  else
+    p No entries in this thread yet.

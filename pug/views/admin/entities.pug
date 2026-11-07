@@ -1,0 +1,44 @@
+extends layout.pug
+
+block content
+  h1 Entities
+
+  form.admin-filters(method="get", action="/admin/entities")
+    input(type="search", name="q", value=q, placeholder="Search names, aliases and handles", aria-label="Search")
+    select(name="type", aria-label="Type")
+      option(value="") All types
+      each t in ENTITY_TYPES
+        option(value=t, selected=(t === type)) #{t}
+    button(type="submit") Filter
+
+  form.admin-filters(method="get", action="/admin/entities/new")
+    select(name="type", aria-label="Type for new entity")
+      each t in ENTITY_TYPES
+        option(value=t, selected=(t === type)) #{t}
+    button(type="submit") New entity
+
+  if entities.length
+    table.admin-table
+      thead
+        tr
+          th Name
+          th Type
+          th Page
+      tbody
+        each entity in entities
+          tr
+            td
+              a(href=`/admin/entities/${entity._id}`) #{entity.name}
+              if entity.disambiguator
+                span.picker-meta (#{entity.disambiguator})
+            td= entity.type
+            td= entity.hasPage ? 'yes' : 'mention only'
+  else
+    p No entities found.
+
+  - var params = (p) => new URLSearchParams({ ...(q ? { q } : {}), ...(type ? { type } : {}), page: p }).toString()
+  nav.admin-pagination
+    if page > 1
+      a(href=`/admin/entities?${params(page - 1)}`) ← Previous
+    if hasMore
+      a(href=`/admin/entities?${params(page + 1)}`) Next →

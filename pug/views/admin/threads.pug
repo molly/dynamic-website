@@ -1,0 +1,21 @@
+extends layout.pug
+
+block content
+  h1 Threads
+  p New threads are created from the Threads field in the post editor or the tagger.
+  if threads.length
+    table.admin-table
+      thead
+        tr
+          th Title
+          th Entries
+      tbody
+        each thread in threads
+          tr
+            td
+              a(href=`/admin/threads/${thread._id}`) #{thread.title || 'Untitled thread'}
+              if thread.description
+                span.picker-meta= thread.description
+            td= thread.count
+  else
+    p No threads yet.

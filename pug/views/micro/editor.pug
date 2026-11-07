@@ -1,4 +1,5 @@
 - var importPrefix = 'https://www.mollywhite.net'
+- var socialNetworks = [{ id: 'bluesky', label: 'Bluesky' }, { id: 'mastodon', label: 'Mastodon' }, { id: 'twitter', label: 'Twitter' }]
 
 html(class='feed-editor', lang='en')
   head
@@ -16,84 +17,115 @@ html(class='feed-editor', lang='en')
     +titleAndDescription('Editor', "Micro post editor")
     block head
 
-  body
-    .editor-container
-      #loading-overlay.overlay
-        include ../../includes/loadingSpinner
-      #error-overlay.overlay.hidden
-        .flex-column
-          h1 Error
-          p.error-message
-      main
-        .content-box
-          .content-container
-            .back-links
-              div
-                a(href="/feed") &laquo; Back to the activity feed
-              div
-                a(href="/micro") &laquo; Back to the microblog feed
-            input#title(type="text", placeholder="Post title")
-          #editorjs
-          
-          .content-container
-            hr
-            .input-group
-              label(for="slug") Slug
-              input#slug(type="text", placeholder="post-title")
+  body.micro-editor
+    #loading-overlay.overlay
+      include ../../includes/loadingSpinner
+    #error-overlay.overlay.hidden
+      .flex-column
+        h1 Error
+        p.error-message
 
-            .input-group
-              label(for="tags") Tags
-              input#tags.form-control-sm(autocomplete="off")
+    .editor-shell
+      header.editor-topbar
+        .topbar-group
+          a(href="/feed") ← all posts
+          span.topbar-separator ·
+          span#editing-label new post
+        .topbar-group
+          span#last-saved
+          a#preview-link(href="#", target="_blank", hidden) preview
+          button#signOut.link-button(type="button") sign out
 
-            .input-group
-              label(for="threads") Threads
-              input#threads.form-control-sm(autocomplete="off")
+      .editor-body
+        main.editor-writing
+          div.editor-tabs(role="tablist", aria-label="Post and platform threads")
+            button.editor-tab(type="button", role="tab", data-tab="post", aria-selected="true") Post
+            each network in socialNetworks
+              button.editor-tab(type="button", role="tab", data-tab=network.id, aria-selected="false")
+                | #{network.label}
+                span.tab-count(id=`${network.id}-count`)
+            button.editor-tab.side-by-side-tab(type="button", role="tab", data-tab="side-by-side", aria-selected="false") side by side
+
+          section#panel-post.tab-panel
+            input#title(type="text", placeholder="Post title", aria-label="Title")
+            #editorjs
+            p#word-count.word-count
+
+          section#panel-social.tab-panel(hidden)
+            .social-editors
+              each network in socialNetworks
+                .social-editor-wrapper(data-network=network.id)
+                  h3.social-editor-heading
+                    | #{network.label}
+                    span.social-limit(id=`${network.id}-limit`)
+                  if network.id == "mastodon"
+                    .input-group
+                      label.side-label(for="mastodon-tags") Mastodon tags
+                      input#mastodon-tags(type="text")
+                  .social-editor(id=`${network.id}-editor`)
+
+        aside.editor-side-panel
+          .side-section
+            span.side-label Address
+            p.address
+              | /micro/entry/
+              span#slug-display
+              button#slug-edit.link-button(type="button") edit
+            input#slug(type="text", hidden, aria-label="Slug")
+
+          .side-section
+            label.side-label(for="tags") Tags
+            input#tags(autocomplete="off")
+
+          .side-section
+            label.side-label(for="threads") Threads
+            input#threads(autocomplete="off")
             #threads-preview.picker-preview
 
-            .input-group
-              label(for="about") About
-              input#about.form-control-sm(autocomplete="off")
+          .side-section
+            label.side-label(for="about")
+              | About
+              span.side-hint  · people & things mentioned
+            input#about(autocomplete="off")
 
-            .input-group 
-              label(for="related") Related posts
-              select#related.form-control-sm(multiple)
-    .social-container
-      .content-box
-        .content-container
-          .input-group
-            input#social-posts(type="checkbox")
-            label(for="social-posts")
-              h2 Social posts
-      .social-editors.hidden
-        each network in ["twitter", "mastodon", "bluesky"]
-          .social-editor-wrapper
-            .input-group
-              input.social-network-toggle(id=`${network}-social` type="checkbox" checked)
-              label.social-network-toggle-label(for=`${network}-social`)
-                h3 #{network.charAt(0).toUpperCase() + network.slice(1)}
-            if network == "mastodon"
-              .input-group
-                label(for="mastodon-tags") Mastodon tags
-                input#mastodon-tags(type="text")
-            .social-editor(id=`${network}-editor`)
+          .side-section
+            label.side-label(for="related") Related posts
+            select#related(multiple)
 
-      .content-box
-        .content-container
-          details.social-links
-            summary Manually link social post IDs
-            each network in ["twitter", "mastodon", "bluesky", "threads", "youtube", "tiktok"]
-              .input-group
-                label(for=network) #{network.charAt(0).toUpperCase() + network.slice(1)}
-                input.social-post-id(id=network, type="text")
+          .side-section.crosspost-box
+            .crosspost-header
+              span.side-label Cross-post
+              label.switch
+                input#crosspost-all(type="checkbox", role="switch")
+                span.switch-track(aria-hidden="true")
+                span.switch-label all platforms
+            each network in socialNetworks
+              label.crosspost-row
+                input.crosspost-toggle(type="checkbox", id=`${network.id}-social`, data-network=network.id)
+                span.crosspost-name #{network.label}
+                span.crosspost-status(id=`${network.id}-status`)
+            p.side-hint edit each in its tab above the text
+            details.social-links
+              summary.side-hint Already posted? Link existing post IDs
+              each network in [{ id: 'bluesky', label: 'Bluesky' }, { id: 'mastodon', label: 'Mastodon' }, { id: 'twitter', label: 'Twitter' }, { id: 'threads', label: 'Threads' }, { id: 'youtube', label: 'YouTube' }, { id: 'tiktok', label: 'TikTok' }]
+                .post-id-row
+                  label(for=network.id) #{network.label}
+                  input.social-post-id(id=network.id, type="text", placeholder="post ID", autocomplete="off")
 
-    footer.editor-footer
-      .footer-group
-        #last-edited
-      .footer-group.footer-controls
-        .left-group
-          button#save-button Save
+      footer.editor-actionbar
+        button#delete-button.link-button(type="button", hidden) delete post
+        button#save-button.primary(type="button") Publish
 
-        .right-group
-          button#delete-button.hidden Delete
-          button#signOut Sign out
+    dialog#repost-dialog.confirm-dialog
+      form(method="dialog")
+        h2 Already posted
+        p
+          | This post is already on 
+          strong#repost-networks
+          | . Saving with them ticked will post it there again.
+        .dialog-buttons
+          button.link-button(type="submit", value="cancel") Cancel
+          button(type="submit", value="skip") Save without re-posting
+          button.primary(type="submit", value="repost") Post again
+
     script(src="/static/editor.js")

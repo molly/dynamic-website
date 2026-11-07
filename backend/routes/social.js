@@ -19,7 +19,14 @@ const POSTERS = {
 
 router.post('/', authenticated(), async function (req, res) {
   if (!isProd) {
-    res.status(403).send({ error: 'Cross-posting is disabled outside prod.' });
+    // Reported like a per-network failure, so the editor still finishes saving the post.
+    const requested = Object.keys(POSTERS).filter((n) => req.body[n]);
+    res.json({
+      postIds: {},
+      errors: Object.fromEntries(
+        requested.map((n) => [n, 'Cross-posting is disabled outside prod.']),
+      ),
+    });
     return;
   }
   try {

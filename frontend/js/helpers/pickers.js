@@ -1,22 +1,14 @@
 import axios from 'axios';
 import TomSelect from 'tom-select';
 import { ENTITY_TYPES } from '../../../api/helpers/entityTypes.js';
-import { NETWORKS } from '../../../api/helpers/socialMedia.js';
+import { parseProfileUrl } from '../../../api/helpers/profileUrl.js';
+import {
+  MENTION_NETWORKS,
+  NETWORK_LABELS,
+} from '../../../api/helpers/socialMedia.js';
+import { escapeHtml } from './escapeHtml.js';
 
 // Shared by the micro editor and the tagger page.
-
-const escapeHtml = (text) =>
-  String(text ?? '').replace(
-    /[&<>"']/g,
-    (char) =>
-      ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-      })[char],
-  );
 
 /**
  * Selected values of a multi-select TomSelect, always as an array of ids.
@@ -140,11 +132,12 @@ const entityLabel = (entity) =>
  * @param {Object} options
  * @param {Object[]} options.initial Populated entities already on the entry
  * @param {(ids: string[]) => void} [options.onChange]
+ * @param {?number} [options.maxItems] 1 for a single entity; unlimited by default
  * @returns {TomSelect}
  */
 export function createAboutPicker(
   selector,
-  { initial = [], onChange = () => {} },
+  { initial = [], onChange = () => {}, maxItems = null },
 ) {
   const picker = new TomSelect(selector, {
     options: initial,
@@ -152,7 +145,7 @@ export function createAboutPicker(
     valueField: '_id',
     labelField: 'name',
     searchField: ['name'],
-    maxItems: null,
+    maxItems,
     closeAfterSelect: true,
     // The server already matched aliases and handles; don't let the client filter those out.
     score: () => () => 1,
@@ -174,11 +167,16 @@ export function createAboutPicker(
         });
     },
     render: {
-      option: (entity, escape) =>
-        `<div>${escape(entityLabel(entity))} <span class="picker-meta">${escape(entity.type)}</span></div>`,
-      item: (entity, escape) => `<div>${escape(entityLabel(entity))}</div>`,
+      option: (entity, escape) => {
+        const accounts = entity.accounts?.length
+          ? ` · ${entity.accounts.length} account${entity.accounts.length === 1 ? '' : 's'}`
+          : '';
+        return `<div><span class="entity-at">@</span>${escape(entityLabel(entity))} <span class="picker-meta">${escape(entity.type)}${accounts}</span></div>`;
+      },
+      item: (entity, escape) =>
+        `<div><span class="entity-at">@</span>${escape(entityLabel(entity))}</div>`,
       option_create: (data, escape) =>
-        `<div class="create">New entity: <strong>${escape(data.input)}</strong>…</div>`,
+        `<div class="create">+ new entity “${escape(data.input)}”</div>`,
     },
   });
   picker.on('change', () => onChange(selectedValues(picker)));
@@ -187,81 +185,97 @@ export function createAboutPicker(
 
 // New entity dialog ------------------------------------------------------------------------------
 
+// Type is one click; "other" reveals the less common types.
+const MAIN_TYPES = [
+  { value: 'person', label: 'person' },
+  { value: 'organization', label: 'org' },
+  { value: 'committee', label: 'committee' },
+  { value: 'case', label: 'case' },
+  { value: 'bill', label: 'bill' },
+];
+const OTHER_TYPES = ENTITY_TYPES.filter(
+  (type) => !MAIN_TYPES.some((main) => main.value === type),
+);
+// Wikipedia first: it's the most common account for people mentioned.
+const ACCOUNT_NETWORKS = [
+  'wikipedia',
+  ...MENTION_NETWORKS.filter((network) => network !== 'wikipedia'),
+];
+
 let dialog;
+
+function accountRow({ network = 'wikipedia', handle = '' } = {}) {
+  const row = document.createElement('div');
+  row.className = 'entity-account-row';
+  row.innerHTML = `
+    <select name="network" aria-label="Network">
+      ${ACCOUNT_NETWORKS.map(
+        (n) =>
+          `<option value="${n}"${n === network ? ' selected' : ''}>${NETWORK_LABELS[n]}</option>`,
+      ).join('')}
+    </select>
+    <input name="handle" type="text" placeholder="handle" aria-label="Handle" value="${escapeHtml(handle)}">
+    <button type="button" class="remove-account link-button" aria-label="Remove account">×</button>`;
+  return row;
+}
 
 function buildDialog() {
   dialog = document.createElement('dialog');
   dialog.className = 'entity-dialog';
   dialog.innerHTML = `
-    <form method="dialog">
+    <form method="dialog" novalidate>
       <h2>New entity</h2>
-      <div class="input-group">
-        <label for="entity-name">Name</label>
-        <input id="entity-name" name="name" type="text" required>
+      <p class="dialog-subtitle">will be mentioned as <span class="mentioned-as"></span></p>
+
+      <label class="field-label" for="entity-name">Name</label>
+      <input id="entity-name" name="name" type="text" required>
+
+      <span class="field-label" id="entity-type-label">Type</span>
+      <div class="segmented" role="group" aria-labelledby="entity-type-label">
+        ${MAIN_TYPES.map(
+          (t) =>
+            `<button type="button" data-type="${t.value}">${t.label}</button>`,
+        ).join('')}
+        <button type="button" data-type="other">other</button>
       </div>
-      <div class="input-group">
-        <label for="entity-type">Type</label>
-        <select id="entity-type" name="type">
-          ${ENTITY_TYPES.map((t) => `<option value="${t}">${t}</option>`).join('')}
-        </select>
-      </div>
-      <div class="input-group">
-        <label for="entity-disambiguator">Disambiguator</label>
+      <select name="otherType" class="entity-other-type" aria-label="Other type" hidden>
+        ${OTHER_TYPES.map((t) => `<option value="${t}">${t}</option>`).join('')}
+      </select>
+
+      <p class="entity-similar" hidden>
+        similar name exists: <span class="similar-names"></span> ·
+        <button type="button" class="link-button tell-apart">add a note to tell them apart</button>
+      </p>
+      <div class="entity-disambiguator" hidden>
+        <label class="field-label" for="entity-disambiguator">Note to tell them apart</label>
         <input id="entity-disambiguator" name="disambiguator" type="text"
-          placeholder="Only needed if another entity has the same name">
+          placeholder="e.g. journalist, or the company's full name">
       </div>
-      <fieldset class="entity-accounts">
-        <legend>Accounts</legend>
-        <div class="entity-account-rows"></div>
-        <button type="button" class="add-account">Add account</button>
-      </fieldset>
+
+      <span class="field-label">Accounts <span class="field-hint">· paste a profile URL and the platform fills in</span></span>
+      <div class="entity-account-rows"></div>
+      <input class="entity-paste" type="text" placeholder="paste URL or handle…" aria-label="Paste a profile URL or handle">
+
+      <label class="checkbox-label">
+        <input type="checkbox" name="hasPage"> give them a public entity page
+      </label>
+
       <div class="entity-matches" hidden></div>
       <p class="entity-error" hidden></p>
       <div class="dialog-buttons">
-        <button type="submit" value="create">Create</button>
-        <button type="button" class="cancel">Cancel</button>
+        <button type="button" class="cancel link-button">Cancel</button>
+        <button type="submit" class="primary">Create &amp; add</button>
       </div>
-    </form>
-    <template class="entity-account-row">
-      <div class="entity-account-row">
-        <select name="network">
-          ${NETWORKS.map((n) => `<option value="${n}">${n}</option>`).join('')}
-        </select>
-        <input name="handle" type="text" placeholder="handle">
-        <button type="button" class="remove-account" aria-label="Remove account">×</button>
-      </div>
-    </template>`;
+    </form>`;
   document.body.appendChild(dialog);
 
-  const rows = dialog.querySelector('.entity-account-rows');
-  dialog.querySelector('.add-account').addEventListener('click', () => {
-    rows.appendChild(
-      dialog
-        .querySelector('template.entity-account-row')
-        .content.cloneNode(true),
-    );
-  });
-  rows.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('remove-account')) {
-      evt.target.closest('.entity-account-row').remove();
-    }
-  });
-}
-
-function readDialogFields() {
-  const form = dialog.querySelector('form');
-  const accounts = [...dialog.querySelectorAll('.entity-account-row')]
-    .map((row) => ({
-      network: row.querySelector('[name=network]').value,
-      handle: row.querySelector('[name=handle]').value.trim(),
-    }))
-    .filter((account) => account.handle);
-  return {
-    name: form.elements.name.value.trim(),
-    type: form.elements.type.value,
-    disambiguator: form.elements.disambiguator.value.trim() || undefined,
-    accounts,
-  };
+  dialog
+    .querySelector('.entity-account-rows')
+    .addEventListener('click', (evt) => {
+      if (evt.target.classList.contains('remove-account')) {
+        evt.target.closest('.entity-account-row').remove();
+      }
+    });
 }
 
 /**
@@ -274,51 +288,179 @@ export function openEntityDialog({ name = '' } = {}) {
     buildDialog();
   }
   const form = dialog.querySelector('form');
+  const nameInput = form.elements.name;
+  const mentionedAs = dialog.querySelector('.mentioned-as');
+  const segmented = dialog.querySelector('.segmented');
+  const otherType = dialog.querySelector('.entity-other-type');
+  const similar = dialog.querySelector('.entity-similar');
+  const disambiguator = dialog.querySelector('.entity-disambiguator');
+  const rows = dialog.querySelector('.entity-account-rows');
+  const paste = dialog.querySelector('.entity-paste');
+  const hasPage = form.elements.hasPage;
   const matches = dialog.querySelector('.entity-matches');
   const error = dialog.querySelector('.entity-error');
+
   form.reset();
-  form.elements.name.value = name;
-  dialog.querySelector('.entity-account-rows').innerHTML = '';
-  matches.hidden = true;
-  error.hidden = true;
+  nameInput.value = name;
+  rows.innerHTML = '';
+  for (const element of [similar, disambiguator, matches, error, otherType]) {
+    element.hidden = true;
+  }
+
+  let type = 'person';
+  let hasPageTouched = false;
+  const selectType = (value) => {
+    type = value;
+    for (const button of segmented.querySelectorAll('button')) {
+      button.setAttribute(
+        'aria-pressed',
+        String(button.dataset.type === value),
+      );
+    }
+    otherType.hidden = value !== 'other';
+    if (!hasPageTouched) {
+      // Same default as the model: people are mention-only, everything else gets a page.
+      hasPage.checked = value !== 'person';
+    }
+  };
+  selectType('person');
+
+  const updateMentionedAs = () => {
+    mentionedAs.textContent = `@${nameInput.value.trim() || '…'}`;
+  };
+  updateMentionedAs();
+
+  // Warn about similar names as you type, before anything is submitted.
+  let checkTimeout;
+  let checkSequence = 0;
+  const checkSimilar = () => {
+    clearTimeout(checkTimeout);
+    const value = nameInput.value.trim();
+    if (!value) {
+      similar.hidden = true;
+      return;
+    }
+    checkTimeout = setTimeout(async () => {
+      const sequence = ++checkSequence;
+      try {
+        const { data } = await axios.get('/dynamic-api/entities/check', {
+          params: { name: value },
+        });
+        if (sequence !== checkSequence) {
+          return; // A newer check has started
+        }
+        similar.querySelector('.similar-names').textContent = data.similar
+          .map(entityLabel)
+          .join(', ');
+        similar.hidden = data.similar.length === 0;
+      } catch (err) {
+        console.error(err);
+      }
+    }, 300);
+  };
+  checkSimilar();
+
+  const addPastedAccount = () => {
+    const value = paste.value.trim();
+    if (!value) {
+      return;
+    }
+    // Unrecognized text still becomes a row, so the network can be picked by hand.
+    rows.appendChild(accountRow(parseProfileUrl(value) || { handle: value }));
+    paste.value = '';
+  };
+
+  const readFields = () => ({
+    name: nameInput.value.trim(),
+    type: type === 'other' ? otherType.value : type,
+    disambiguator: form.elements.disambiguator.value.trim() || undefined,
+    hasPage: hasPage.checked,
+    accounts: [...rows.querySelectorAll('.entity-account-row')]
+      .map((row) => ({
+        network: row.querySelector('[name=network]').value,
+        handle: row.querySelector('[name=handle]').value.trim(),
+      }))
+      .filter((account) => account.handle),
+  });
 
   return new Promise((resolve) => {
     let shownMatches = [];
+    const listeners = [];
+    const listen = (element, event, handler) => {
+      element.addEventListener(event, handler);
+      listeners.push([element, event, handler]);
+    };
     const finish = (result) => {
-      form.removeEventListener('submit', onSubmit);
-      matches.removeEventListener('click', onUseExisting);
-      dialog.querySelector('.cancel').removeEventListener('click', onCancel);
-      dialog.removeEventListener('cancel', onCancel);
+      clearTimeout(checkTimeout);
+      for (const [element, event, handler] of listeners) {
+        element.removeEventListener(event, handler);
+      }
       dialog.close();
       resolve(result);
+    };
+
+    const showDisambiguator = () => {
+      disambiguator.hidden = false;
+      form.elements.disambiguator.focus();
     };
 
     const showMatches = (reason, entities) => {
       const intro =
         reason === 'id'
-          ? 'One of these IDs or accounts already belongs to:'
-          : 'Did you mean one of these? To create a separate entity anyway, add a disambiguator.';
+          ? 'One of these accounts or IDs already belongs to:'
+          : 'An entity with this name exists. Add a note to tell them apart, or use the existing one:';
       matches.innerHTML = `<p>${intro}</p><ul>${entities
         .map(
           (entity) =>
-            `<li>${escapeHtml(entityLabel(entity))} <span class="picker-meta">${escapeHtml(entity.type)}</span> <button type="button" data-id="${escapeHtml(entity._id)}">Use this</button></li>`,
+            `<li>${escapeHtml(entityLabel(entity))} <span class="picker-meta">${escapeHtml(entity.type)}</span> <button type="button" class="link-button" data-id="${escapeHtml(entity._id)}">use this</button></li>`,
         )
         .join('')}</ul>`;
       matches.hidden = false;
       shownMatches = entities;
       if (reason === 'name') {
-        form.elements.disambiguator.focus();
+        showDisambiguator();
       }
     };
 
-    const onSubmit = async (evt) => {
+    listen(nameInput, 'input', () => {
+      updateMentionedAs();
+      checkSimilar();
+    });
+    listen(segmented, 'click', (evt) => {
+      if (evt.target.dataset?.type) {
+        selectType(evt.target.dataset.type);
+      }
+    });
+    listen(hasPage, 'change', () => {
+      hasPageTouched = true;
+    });
+    listen(similar.querySelector('.tell-apart'), 'click', showDisambiguator);
+    listen(paste, 'paste', () => setTimeout(addPastedAccount)); // After the text lands
+    listen(paste, 'keydown', (evt) => {
+      if (evt.key === 'Enter') {
+        evt.preventDefault();
+        addPastedAccount();
+      }
+    });
+    listen(paste, 'change', addPastedAccount);
+    listen(matches, 'click', (evt) => {
+      const id = evt.target.dataset?.id;
+      if (id) {
+        finish(shownMatches.find((entity) => entity._id === id));
+      }
+    });
+    listen(form, 'submit', async (evt) => {
       evt.preventDefault();
       error.hidden = true;
+      addPastedAccount();
+      const fields = readFields();
+      if (!fields.name) {
+        error.textContent = 'A name is required.';
+        error.hidden = false;
+        return;
+      }
       try {
-        const { data } = await axios.post(
-          '/dynamic-api/entities',
-          readDialogFields(),
-        );
+        const { data } = await axios.post('/dynamic-api/entities', fields);
         finish(data);
       } catch (err) {
         if (err.response?.status === 409) {
@@ -328,23 +470,15 @@ export function openEntityDialog({ name = '' } = {}) {
           error.hidden = false;
         }
       }
-    };
-    const onUseExisting = (evt) => {
-      const id = evt.target.dataset?.id;
-      if (id) {
-        finish(shownMatches.find((entity) => entity._id === id));
-      }
-    };
+    });
     const onCancel = (evt) => {
       evt?.preventDefault();
       finish(null);
     };
+    listen(dialog.querySelector('.cancel'), 'click', onCancel);
+    listen(dialog, 'cancel', onCancel);
 
-    form.addEventListener('submit', onSubmit);
-    matches.addEventListener('click', onUseExisting);
-    dialog.querySelector('.cancel').addEventListener('click', onCancel);
-    dialog.addEventListener('cancel', onCancel);
     dialog.showModal();
-    form.elements.name.focus();
+    nameInput.focus();
   });
 }

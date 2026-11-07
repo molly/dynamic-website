@@ -1,6 +1,16 @@
 import mongoose from 'mongoose';
-import { ENTITY_TYPES } from '../../api/helpers/entityTypes.js';
-import { NETWORKS } from '../../api/helpers/socialMedia.js';
+import {
+  ALIAS_KINDS,
+  CHAMBERS,
+  COMMITTEE_TYPES,
+  ENTITY_STATUSES,
+  ENTITY_TYPES,
+  OFFICES,
+  ORGANIZATION_KINDS,
+  OUTCOME_KINDS,
+  RELATION_KINDS,
+} from '../../api/helpers/entityTypes.js';
+import { MENTION_NETWORKS } from '../../api/helpers/socialMedia.js';
 import {
   accountKey,
   nameKey,
@@ -10,19 +20,6 @@ import {
 import db from './db.js';
 
 const { ObjectId } = mongoose.Schema.Types;
-
-const RELATION_KINDS = [
-  'works_at',
-  'owns',
-  'subsidiary_of',
-  'funds',
-  'gave_to',
-  'affiliated',
-  'party_to',
-  'sponsored',
-  'companion',
-  'referred_to',
-];
 
 const slugPattern = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -41,17 +38,14 @@ export const EntitySchema = new mongoose.Schema(
       {
         _id: false,
         name: { type: String, required: true, trim: true },
-        kind: { type: String, enum: ['other', 'former'], default: 'other' },
+        kind: { type: String, enum: ALIAS_KINDS, default: 'other' },
         until: Date,
       },
     ],
     description: String,
     note: String,
     status: {
-      value: {
-        type: String,
-        enum: ['active', 'defunct', 'merged', 'acquired', 'bankrupt'],
-      },
+      value: { type: String, enum: ENTITY_STATUSES },
       date: Date,
     },
     tag: { type: ObjectId, ref: 'Tag' },
@@ -62,7 +56,8 @@ export const EntitySchema = new mongoose.Schema(
     accounts: [
       {
         _id: false,
-        network: { type: String, enum: NETWORKS, required: true },
+        // Social networks plus wikipedia (article title) and website (URL)
+        network: { type: String, enum: MENTION_NETWORKS, required: true },
         handle: { type: String, required: true, trim: true },
       },
     ],
@@ -131,7 +126,7 @@ export const PersonEntity = Entity.discriminator(
       {
         _id: false,
         fecCandidateId: String,
-        office: { type: String, enum: ['house', 'senate', 'president'] },
+        office: { type: String, enum: OFFICES },
         state: String,
         district: String,
         party: String,
@@ -144,11 +139,7 @@ export const PersonEntity = Entity.discriminator(
 export const OrganizationEntity = Entity.discriminator(
   'organization',
   new mongoose.Schema({
-    kind: {
-      type: String,
-      enum: ['company', 'agency', 'nonprofit', 'outlet', 'other'],
-      default: 'company',
-    },
+    kind: { type: String, enum: ORGANIZATION_KINDS, default: 'company' },
     secCik: { type: String, match: /^\d{1,10}$/ },
     ticker: String,
     // Outlets: articles from these domains get this outlet, and its paywall default.
@@ -179,17 +170,7 @@ export const CommitteeEntity = Entity.discriminator(
   'committee',
   new mongoose.Schema({
     fecId: { type: String, match: /^C\d{8}$/ },
-    committeeType: {
-      type: String,
-      enum: [
-        'super PAC',
-        'PAC',
-        'hybrid PAC',
-        'leadership PAC',
-        'party committee',
-        'candidate committee',
-      ],
-    },
+    committeeType: { type: String, enum: COMMITTEE_TYPES },
     treasurer: String,
   }),
 );
@@ -199,7 +180,7 @@ export const BillEntity = Entity.discriminator(
   new mongoose.Schema({
     number: String, // e.g. "H.R. 3633"
     congress: Number,
-    chamber: { type: String, enum: ['house', 'senate'] },
+    chamber: { type: String, enum: CHAMBERS },
     billStatus: String,
     congressGovUrl: String,
     versions: [
@@ -233,7 +214,7 @@ export const EnforcementEntity = Entity.discriminator(
     releaseNumber: String,
     date: Date,
     outcome: {
-      kind: { type: String, enum: ['penalty', 'settlement', 'dismissal'] },
+      kind: { type: String, enum: OUTCOME_KINDS },
       amountUsd: Number,
     },
   }),

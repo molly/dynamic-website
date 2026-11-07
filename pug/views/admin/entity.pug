@@ -1,0 +1,23 @@
+extends layout.pug
+
+block content
+  p
+    a(href="/admin/entities") ← All entities
+  h1#entity-title= title
+  form#entity-form(novalidate)
+    #entity-fields
+    .entity-matches(hidden)
+    p.entity-error(hidden)
+    p.admin-status(hidden)
+    .dialog-buttons
+      button(type="submit") Save
+  section#relations(hidden)
+    h2 Relations
+    ul#relation-list
+    form#relation-form
+      h3#relation-form-title Add a relation
+      #relation-fields
+      p.relation-error(hidden)
+      .dialog-buttons
+        button(type="submit") Save relation
+        button#relation-cancel(type="button", hidden) Cancel edit

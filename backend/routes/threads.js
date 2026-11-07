@@ -5,6 +5,7 @@ import {
   FEED_ENTRY_LABEL_POPULATE,
   labelFeedEntry,
 } from '../helpers/feedEntries.js';
+import { listThreads } from '../helpers/threads.js';
 import { FeedEntry } from '../models/feed/feedEntry.model.js';
 import { Thread } from '../models/thread.model.js';
 import logger from '../winston.js';
@@ -15,21 +16,7 @@ const router = express.Router();
 // All threads with their entry counts, newest first, for the thread picker.
 router.get('/', authenticated(), async (req, res) => {
   try {
-    const [threads, counts] = await Promise.all([
-      Thread.find({}, 'title slug description').sort({ updatedAt: -1 }).lean(),
-      FeedEntry.aggregate([
-        { $match: { 'threads.0': { $exists: true }, deletedAt: null } },
-        { $unwind: '$threads' },
-        { $group: { _id: '$threads', count: { $sum: 1 } } },
-      ]),
-    ]);
-    const countById = new Map(counts.map((c) => [c._id.toString(), c.count]));
-    res.json(
-      threads.map((thread) => ({
-        ...thread,
-        count: countById.get(thread._id.toString()) || 0,
-      })),
-    );
+    res.json(await listThreads());
   } catch (err) {
     logger.error('Failed to list threads', err);
     res.status(500).json({ error: err.message });
@@ -54,6 +41,33 @@ router.post('/', authenticated(), async (req, res) => {
         .json({ error: 'A thread with that title exists.', existing });
     } else {
       logger.error('Failed to create thread', err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+});
+
+// Rename a thread, or add or clear its title and description. Clearing the title makes it an
+// untitled thread, which only drives previous/next links.
+router.put('/:id', authenticated(), async (req, res) => {
+  const title = req.body.title?.trim() || undefined;
+  try {
+    const thread = await Thread.findById(req.params.id);
+    if (!thread) {
+      res.sendStatus(404);
+      return;
+    }
+    thread.set({
+      title,
+      slug: title ? slugify(title) : undefined,
+      description: req.body.description?.trim() || undefined,
+    });
+    await thread.save();
+    res.json(thread);
+  } catch (err) {
+    if (err.code === 11000) {
+      res.status(409).json({ error: 'Another thread has that title.' });
+    } else {
+      logger.error('Failed to update thread', err);
       res.status(500).json({ error: err.message });
     }
   }

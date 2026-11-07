@@ -4,7 +4,6 @@ import '../../css/feed-editor.css';
 import { editorToolConfig } from './helpers/editorConfig.js';
 import {
   NETWORK_LIMITS,
-  debouncedUpdateDelimiters,
   getSlugFromTitle,
   parseAndInsertDelimiters,
   socialLinksToArray,
@@ -14,10 +13,13 @@ import {
 
 import EditorJS from '@editorjs/editorjs';
 import SocialPostDelimiter from './SocialPostDelimiter.js';
+import { NETWORK_LABELS } from '../../api/helpers/socialMedia.js';
 import { createAboutPicker, createThreadPicker } from './helpers/pickers.js';
 
 import debounce from 'lodash.debounce';
 import TomSelect from 'tom-select';
+
+const SOCIAL_NETWORKS = ['bluesky', 'mastodon', 'twitter'];
 
 const postMeta = {
   title: '',
@@ -35,11 +37,10 @@ const editors = {
   mastodon: null,
   bluesky: null,
 };
-const validation = {
-  twitter: true,
-  mastodon: true,
-  bluesky: true,
-};
+// Per network: number of posts in its thread, and whether every post fits the limit.
+const socialSummary = Object.fromEntries(
+  SOCIAL_NETWORKS.map((network) => [network, { posts: 0, ok: true }]),
+);
 // Local helper that composes Twitter posts in a browser (see backend/scripts/xComposeHelper.js)
 const X_HELPER_URL = 'http://localhost:5055';
 
@@ -48,107 +49,212 @@ let tagSelect;
 let relatedPostsSelect;
 let threadPicker;
 let aboutPicker;
-let socialPostsCheckbox;
 let saveButton;
 let deleteButton;
 
-// Change handlers -------------------------------------------------------------------------------
+const isSaved = () => Boolean(savedPost._id);
+const isCrosspostEnabled = (network) =>
+  document.getElementById(`${network}-social`).checked;
+
+// Title and slug ---------------------------------------------------------------------------------
 /**
- * When the title changes:
- *  - Autogenerate the new slug if it's not manually set.
- *  - Update the postMeta.slug
- *  - Update the postMeta.title
+ * Keep the slug following the title until it's set by hand, then store the title.
  */
 function onTitleChange() {
   const slugElement = document.getElementById('slug');
-  if (postMeta.slug === getSlugFromTitle(postMeta.title)) {
+  if (!isSaved() && postMeta.slug === getSlugFromTitle(postMeta.title)) {
     postMeta.slug = getSlugFromTitle(this.value);
     slugElement.value = postMeta.slug;
+    document.getElementById('slug-display').textContent = postMeta.slug;
   }
   postMeta.title = this.value;
 }
 const debouncedOnTitleChange = debounce(onTitleChange, 250);
 
-/**
- * Update the postMeta.slug when the title changes
- */
 function onSlugChange() {
   postMeta.slug = this.value;
+  document.getElementById('slug-display').textContent = this.value;
 }
 const debouncedOnSlugChange = debounce(onSlugChange, 250);
 
+// Tabs -------------------------------------------------------------------------------------------
 /**
- * Toggle the social post editors when the social post checkbox is toggled.
- * This initializes the editors if they've not already been initialized; otherwise, it shows/hides them.
- * This also handles taking care of the initial post validation to determine if the social posts can be saved.
- * @param {Event} evt
+ * Show the post, one platform's thread, or all three side by side. Side by side hides the side
+ * panel so the columns get the full width.
+ * @param {string} tab "post", a network, or "side-by-side"
  */
-async function toggleSocialPosts({ target: { checked } }) {
-  const editorsWrapper = document.querySelector('.social-editors');
-  if (checked) {
-    editorsWrapper.classList.remove('hidden');
-
-    // Initialize once
-    if (!editors.twitter) {
-      const post = await editors.primary.save();
-      for (const network of ['twitter', 'mastodon', 'bluesky']) {
-        const postWithDelimiters = parseAndInsertDelimiters(post, network);
-        editors[network] = new EditorJS({
-          holder: `${network}-editor`,
-          tools: {
-            ...editorToolConfig,
-            socialPostDelimiter: {
-              class: SocialPostDelimiter,
-              config: {
-                limit: NETWORK_LIMITS[network].post,
-              },
-            },
-          },
-          onChange: async (api) => {
-            const post = await api.saver.save();
-            validation[network] = debouncedUpdateDelimiters(
-              editors[network],
-              post,
-              network,
-              network === 'mastodon'
-                ? document.getElementById('mastodon-tags').value
-                : null,
-            );
-            validate();
-          },
-          data: postWithDelimiters,
-        });
-
-        // Check initial validity
-        validation[network] = postWithDelimiters.blocks.every(
-          (block) =>
-            block.type !== 'socialPostDelimiter' ||
-            block.data.limitExceeded === false,
-        );
-      }
-      validate();
-    }
-  } else {
-    editorsWrapper.classList.add('hidden');
-    saveButton.removeAttribute('disabled');
+async function showTab(tab) {
+  for (const button of document.querySelectorAll('.editor-tab')) {
+    button.setAttribute('aria-selected', String(button.dataset.tab === tab));
+  }
+  const isPost = tab === 'post';
+  document.getElementById('panel-post').hidden = !isPost;
+  document.getElementById('panel-social').hidden = isPost;
+  document.body.classList.toggle('side-by-side', tab === 'side-by-side');
+  for (const wrapper of document.querySelectorAll('.social-editor-wrapper')) {
+    wrapper.hidden = tab !== 'side-by-side' && wrapper.dataset.network !== tab;
+  }
+  if (!isPost) {
+    await ensureSocialEditors();
   }
 }
+
+// Social threads ---------------------------------------------------------------------------------
 /**
- * Toggle whether the post will be posted to a given network, then revalidate.
- * @param {Event} evt
+ * Count the posts in a thread (each ends in a delimiter) and check them against the limit.
+ * @param {Object[]} blocks
  */
-function toggleSocialPostForNetwork(evt) {
-  const network = evt.target.id.split('-')[0];
-  if (!evt.target.checked) {
-    document.getElementById(`${network}-editor`).classList.add('hidden');
-  } else {
-    document.getElementById(`${network}-editor`).classList.remove('hidden');
+function summarizeThread(blocks) {
+  const delimiters = blocks.filter(
+    (block) => block.type === 'socialPostDelimiter',
+  );
+  return {
+    posts: delimiters.length,
+    ok: delimiters.every((block) => !block.data.limitExceeded),
+  };
+}
+
+function renderSocialSummary(network) {
+  const { posts, ok } = socialSummary[network];
+  document.getElementById(`${network}-count`).textContent = posts || '';
+  const status = document.getElementById(`${network}-status`);
+  status.textContent = posts
+    ? `${posts} post${posts === 1 ? '' : 's'} · ${ok ? 'ok' : 'over limit'}`
+    : '';
+  status.classList.toggle('over-limit', !ok);
+}
+
+/**
+ * Until a platform's thread editor exists, its summary comes from splitting the main post.
+ */
+async function summarizeFromMainPost() {
+  const post = await editors.primary.save();
+  for (const network of SOCIAL_NETWORKS) {
+    if (!editors[network]) {
+      socialSummary[network] = summarizeThread(
+        parseAndInsertDelimiters(post, network).blocks,
+      );
+      renderSocialSummary(network);
+    }
+  }
+  validate();
+}
+
+function mastodonTags() {
+  return document.getElementById('mastodon-tags').value;
+}
+
+/**
+ * Recount a platform thread's characters per post, update its delimiters, and revalidate.
+ * @param {string} network
+ */
+async function recheckThread(network) {
+  const post = await editors[network].save();
+  const ok = updateDelimiters(
+    editors[network],
+    post,
+    network,
+    network === 'mastodon' ? mastodonTags() : null,
+  );
+  socialSummary[network] = { posts: summarizeThread(post.blocks).posts, ok };
+  renderSocialSummary(network);
+  validate();
+}
+// One debounced check per network, so edits to two threads in quick succession both get checked.
+const debouncedRecheck = Object.fromEntries(
+  SOCIAL_NETWORKS.map((network) => [
+    network,
+    debounce(() => recheckThread(network), 500),
+  ]),
+);
+
+/**
+ * Create the platform thread editors from the main post, once. They're edited separately after
+ * that; changes to the main post don't flow into them.
+ */
+let socialEditorsReady;
+function ensureSocialEditors() {
+  if (!socialEditorsReady) {
+    socialEditorsReady = (async () => {
+      const post = await editors.primary.save();
+      await Promise.all(
+        SOCIAL_NETWORKS.map((network) => {
+          const postWithDelimiters = parseAndInsertDelimiters(post, network);
+          editors[network] = new EditorJS({
+            holder: `${network}-editor`,
+            tools: {
+              ...editorToolConfig,
+              socialPostDelimiter: {
+                class: SocialPostDelimiter,
+                config: { limit: NETWORK_LIMITS[network].post },
+              },
+            },
+            onChange: () => debouncedRecheck[network](),
+            data: postWithDelimiters,
+          });
+          socialSummary[network] = summarizeThread(postWithDelimiters.blocks);
+          renderSocialSummary(network);
+          return editors[network].isReady;
+        }),
+      );
+      validate();
+    })();
+  }
+  return socialEditorsReady;
+}
+
+/**
+ * The "all platforms" switch is on when every platform is ticked, off when none are, and mixed
+ * in between.
+ */
+function syncAllToggle() {
+  const enabled = SOCIAL_NETWORKS.filter(isCrosspostEnabled);
+  const allToggle = document.getElementById('crosspost-all');
+  allToggle.checked = enabled.length === SOCIAL_NETWORKS.length;
+  allToggle.indeterminate =
+    enabled.length > 0 && enabled.length < SOCIAL_NETWORKS.length;
+}
+
+async function setAllCrossposting(enabled) {
+  for (const network of SOCIAL_NETWORKS) {
+    document.getElementById(`${network}-social`).checked = enabled;
+  }
+  syncAllToggle();
+  if (enabled) {
+    await ensureSocialEditors();
   }
   validate();
 }
 
 /**
- * Update the postMeta.socialLinks when the social post link changes
+ * Before posting somewhere this post is already on, ask: post again, save without re-posting
+ * there, or cancel the save.
+ * @param {string[]} networks Ticked networks the post already has links for
+ * @returns {Promise<'repost'|'skip'|'cancel'>}
+ */
+function confirmRepost(networks) {
+  const dialog = document.getElementById('repost-dialog');
+  document.getElementById('repost-networks').textContent = networks
+    .map((network) => NETWORK_LABELS[network])
+    .join(' and ');
+  return new Promise((resolve) => {
+    dialog.addEventListener(
+      'close',
+      () =>
+        resolve(
+          ['repost', 'skip'].includes(dialog.returnValue)
+            ? dialog.returnValue
+            : 'cancel', // Includes closing with Escape
+        ),
+      { once: true },
+    );
+    dialog.returnValue = '';
+    dialog.showModal();
+  });
+}
+
+/**
+ * Update postMeta.socialLinks when a manually entered post ID changes
  */
 function onSocialPostLinkChange() {
   if (this.value) {
@@ -159,7 +265,25 @@ function onSocialPostLinkChange() {
 }
 const debouncedOnSocialChange = debounce(onSocialPostLinkChange, 250);
 
-// Helpers to keep form in sync with DB after save ----------------------------------------------
+// Word count -------------------------------------------------------------------------------------
+async function updateWordCount() {
+  const post = await editors.primary.save();
+  const text = post.blocks
+    .map((block) => block.data?.text || '')
+    .join(' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ');
+  const words = text.split(/\s+/).filter(Boolean).length;
+  document.getElementById('word-count').textContent =
+    `${words} word${words === 1 ? '' : 's'}`;
+}
+
+const debouncedOnPrimaryChange = debounce(() => {
+  updateWordCount();
+  summarizeFromMainPost();
+}, 500);
+
+// Keep the form in sync with the database after a save -------------------------------------------
 /**
  * Save relevant data from the backend to the postMeta copy.
  * @param {Object} data
@@ -179,16 +303,22 @@ function updateModelFromDb(data) {
   postMeta.socialLinks = socialLinksToMap(data.socialLinks);
 }
 
+function formatSavedTime(iso) {
+  const time = DateTime.fromISO(iso);
+  const sameDay = time.hasSame(DateTime.now(), 'day');
+  const formatted = sameDay
+    ? time.toFormat('h:mm a')
+    : time.toFormat('LLL d, h:mm a');
+  return `saved ${formatted.replace('AM', 'am').replace('PM', 'pm')}`;
+}
+
 /**
  * Set the form inputs to the values in the postMeta copy.
  */
 function setInputValues() {
-  const titleEl = document.getElementById('title');
-  const slugEl = document.getElementById('slug');
-  const lastEdited = document.getElementById('last-edited');
-
-  titleEl.value = postMeta.title;
-  slugEl.value = postMeta.slug;
+  document.getElementById('title').value = postMeta.title;
+  document.getElementById('slug').value = postMeta.slug;
+  document.getElementById('slug-display').textContent = postMeta.slug;
   tagSelect.setValue(postMeta.tags);
   relatedPostsSelect.setValue(postMeta.relatedPosts.map(({ ref }) => ref));
   threadPicker.setValue(postMeta.threads, true);
@@ -196,27 +326,32 @@ function setInputValues() {
   Object.entries(postMeta.socialLinks).forEach(([key, value]) => {
     document.getElementById(key).value = value;
   });
-  if (savedPost.updatedAt) {
-    slugEl.setAttribute('disabled', true);
-    lastEdited.textContent = `Last edited: ${DateTime.fromISO(savedPost.updatedAt).toLocaleString(DateTime.DATETIME_FULL)}`;
+
+  // Once saved, the slug is the post's permanent address.
+  if (isSaved()) {
+    document.getElementById('slug').hidden = true;
+    document.getElementById('slug-edit').hidden = true;
+    document.getElementById('editing-label').textContent = 'editing post';
+    document.getElementById('last-saved').textContent = formatSavedTime(
+      savedPost.updatedAt,
+    );
+    const preview = document.getElementById('preview-link');
+    preview.href = `/micro/entry/${savedPost.slug}`;
+    preview.hidden = false;
+    saveButton.textContent = 'Save';
+    deleteButton.hidden = false;
   }
 }
 
 // Validate ---------------------------------------------------------------------------------------
 /**
- * Validate the social posts and enable/disable the save button accordingly.
+ * Saving is blocked while a platform that's ticked for cross-posting has a post over its limit.
  */
 function validate() {
-  const isValid = Object.entries(validation).every(
-    ([network, value]) =>
-      // Check that each entry is either valid OR not selected to be posted
-      value || !document.getElementById(`${network}-social`).checked,
+  const isValid = SOCIAL_NETWORKS.every(
+    (network) => socialSummary[network].ok || !isCrosspostEnabled(network),
   );
-  if (!isValid) {
-    saveButton.setAttribute('disabled', true);
-  } else {
-    saveButton.removeAttribute('disabled');
-  }
+  saveButton.disabled = !isValid;
 }
 
 // Social helpers --------------------------------------------------------------------------------
@@ -226,12 +361,12 @@ function validate() {
  * @returns {Promise<null|Object>}
  */
 async function getSocialPostContent(network) {
-  if (!document.getElementById(`${network}-social`).checked) {
+  if (!isCrosspostEnabled(network)) {
     return null;
   }
   const resp = {};
   if (network === 'mastodon') {
-    let tags = document.getElementById('mastodon-tags').value;
+    let tags = mastodonTags();
     if (tags) {
       tags = tags.split(/, ?/g);
       resp.tags = tags
@@ -249,23 +384,6 @@ async function getSocialPostContent(network) {
   resp.blocks = post.blocks;
   return resp;
 }
-
-/**
- * Update delimiters based on Mastodon tag change and revalidate, since it affects character count.
- * @param {Event} evt
- */
-async function onMastodonTagsChange(evt) {
-  // Use the non-debounced update since this function is debounced.
-  const post = await editors.mastodon.save();
-  validation.mastodon = await updateDelimiters(
-    editors.mastodon,
-    post,
-    'mastodon',
-    evt.target.value,
-  );
-  validate();
-}
-const debouncedOnMastodonTagsChange = debounce(onMastodonTagsChange, 250);
 
 /**
  * Send a Twitter thread to the local X compose helper (backend/scripts/xComposeHelper.js), which
@@ -295,13 +413,34 @@ async function composeOnX(twitter) {
 
 // Save -------------------------------------------------------------------------------------------
 /**
- * Save the post and send social posts (if enabled).
+ * Save the post, and cross-post to the platforms that are ticked.
  */
-function save() {
-  saveButton.setAttribute('disabled', true);
-  editors.primary.save().then(async (savedData) => {
+async function save() {
+  saveButton.disabled = true;
+  try {
+    const alreadyPosted = SOCIAL_NETWORKS.filter(
+      (network) => isCrosspostEnabled(network) && postMeta.socialLinks[network],
+    );
+    if (alreadyPosted.length) {
+      const choice = await confirmRepost(alreadyPosted);
+      if (choice === 'cancel') {
+        return;
+      }
+      if (choice === 'skip') {
+        for (const network of alreadyPosted) {
+          document.getElementById(`${network}-social`).checked = false;
+        }
+        syncAllToggle();
+      }
+    }
+
+    const savedData = await editors.primary.save();
+    if (SOCIAL_NETWORKS.some(isCrosspostEnabled)) {
+      await ensureSocialEditors();
+    }
+
     // Select update or create endpoint
-    const endpoint = savedPost._id
+    const endpoint = isSaved()
       ? `/dynamic-api/micro/entry/${savedPost._id}`
       : '/dynamic-api/micro/entry';
     const transformedPostMeta = {
@@ -309,131 +448,105 @@ function save() {
       socialLinks: socialLinksToArray(postMeta.socialLinks),
     };
 
-    // Update or create micro post
-    const promises = [
-      axios.post(endpoint, {
-        ...transformedPostMeta,
-        post: savedData,
-      }),
-    ];
+    const [twitter, mastodon, bluesky] = await Promise.all(
+      ['twitter', 'mastodon', 'bluesky'].map(getSocialPostContent),
+    );
+    const [postResp, socialResult] = await Promise.all([
+      axios.post(endpoint, { ...transformedPostMeta, post: savedData }),
+      mastodon || bluesky || twitter
+        ? Promise.all([
+            mastodon || bluesky
+              ? axios
+                  .post('/dynamic-api/micro/social', { mastodon, bluesky })
+                  .then((resp) => resp.data)
+              : { postIds: {}, errors: {} },
+            twitter ? composeOnX(twitter) : null,
+          ]).then(([serverResult, xResult]) => ({
+            postIds: {
+              ...serverResult.postIds,
+              ...(xResult?.postId ? { twitter: xResult.postId } : {}),
+            },
+            errors: {
+              ...serverResult.errors,
+              ...(xResult?.error ? { twitter: xResult.error } : {}),
+            },
+          }))
+        : null,
+    ]);
 
-    // If social posts are enabled, also hit the social endpoint
-    if (socialPostsCheckbox.checked) {
-      const [twitter, mastodon, bluesky] = await Promise.all([
-        getSocialPostContent('twitter'),
-        getSocialPostContent('mastodon'),
-        getSocialPostContent('bluesky'),
-      ]);
-      promises.push(
-        Promise.all([
-          mastodon || bluesky
-            ? axios
-                .post('/dynamic-api/micro/social', { mastodon, bluesky })
-                .then((resp) => resp.data)
-            : { postIds: {}, errors: {} },
-          twitter ? composeOnX(twitter) : null,
-        ]).then(([serverResult, xResult]) => {
-          const result = {
-            postIds: { ...serverResult.postIds },
-            errors: { ...serverResult.errors },
-          };
-          if (xResult) {
-            if (xResult.postId) {
-              result.postIds.twitter = xResult.postId;
-            }
-            if (xResult.error) {
-              result.errors.twitter = xResult.error;
-            }
-          }
-          return { data: result };
-        }),
+    let finalResp = postResp;
+    if (socialResult) {
+      const { postIds, errors } = socialResult;
+      const failedNetworks = Object.entries(errors);
+      if (failedNetworks.length) {
+        window.alert(
+          'Some social posts failed:\n\n' +
+            failedNetworks
+              .map(([network, message]) => `${network}: ${message}`)
+              .join('\n'),
+        );
+      }
+      // Posted networks are unticked, so saving again doesn't post them twice.
+      for (const network of Object.keys(postIds)) {
+        document.getElementById(`${network}-social`).checked = false;
+      }
+      syncAllToggle();
+
+      // Update the post again with the social post links, keeping any existing links for
+      // networks that weren't posted to (or failed).
+      finalResp = await axios.post(
+        `/dynamic-api/micro/entry/${postResp.data._id}`,
+        {
+          ...transformedPostMeta,
+          // New tags were created by the first save; send their IDs, not their names again.
+          tags: postResp.data.tags,
+          socialLinks: socialLinksToArray({
+            ...postMeta.socialLinks,
+            ...postIds,
+          }),
+        },
       );
     }
 
-    // Wait for the post and social post promises to resolve
-    Promise.all(promises)
-      .then(([postResp, socialResp]) => {
-        // Hit the tags endpoint to fetch new tags with their IDs
-        const tagsPromise = axios.get('/dynamic-api/tags');
+    // Refresh tag options so newly created tags show with their IDs.
+    const { data: allTags } = await axios.get('/dynamic-api/tags');
+    tagSelect.clearOptions();
+    tagSelect.addOptions(allTags);
 
-        let postPromise;
-        if (socialResp) {
-          const { postIds, errors } = socialResp.data;
-          const failedNetworks = Object.entries(errors);
-          if (failedNetworks.length) {
-            window.alert(
-              'Some social posts failed:\n\n' +
-                failedNetworks
-                  .map(([network, message]) => `${network}: ${message}`)
-                  .join('\n'),
-            );
-          }
+    updateModelFromDb(finalResp.data);
+    setInputValues();
 
-          // Update the post again with the social post links, keeping any existing links for
-          // networks that weren't posted to (or failed).
-          postPromise = axios.post(
-            `/dynamic-api/micro/entry/${postResp.data._id}`,
-            {
-              ...transformedPostMeta,
-              // New tags were created by the first save; send their IDs, not their names again.
-              tags: postResp.data.tags,
-              socialLinks: socialLinksToArray({
-                ...postMeta.socialLinks,
-                ...postIds,
-              }),
-            },
-          );
-        } else {
-          postPromise = Promise.resolve(postResp);
-        }
-
-        // Pass the post and tags responses to the next block
-        return Promise.all([postPromise, tagsPromise]);
-      })
-      .then(([postResp, tags]) => {
-        // Update tags select
-        tagSelect.clearOptions();
-        tagSelect.addOptions(tags.data);
-
-        // Update postMeta and form to reflect backend changes
-        updateModelFromDb(postResp.data);
-        setInputValues();
-
-        deleteButton.classList.remove('hidden');
-        // Re-enable save button
-        saveButton.removeAttribute('disabled');
-
-        // Add slug to URL now that the post has been created
-        window.history.pushState(
-          {},
-          null,
-          `/micro/editor/${postResp.data.slug}`,
-        );
-      })
-      .catch((err) => {
-        console.error(err);
-        // The entry routes return the raw error object, so only use the response body if it's a
-        // readable string.
-        const responseError = err?.response?.data?.error;
-        const message =
-          typeof responseError === 'string'
-            ? responseError
-            : err?.message || String(err);
-        window.alert(`Failed to save: ${message}`);
-        saveButton.removeAttribute('disabled');
-      });
-  });
+    // Add slug to URL now that the post has been created
+    window.history.pushState({}, null, `/micro/editor/${finalResp.data.slug}`);
+  } catch (err) {
+    console.error(err);
+    // The entry routes return the raw error object, so only use the response body if it's a
+    // readable string.
+    const responseError = err?.response?.data?.error;
+    const message =
+      typeof responseError === 'string'
+        ? responseError
+        : err?.message || String(err);
+    window.alert(`Failed to save: ${message}`);
+  } finally {
+    validate();
+  }
 }
 
 // Delete -----------------------------------------------------------------------------------------
-/**
- * Delete a saved post.
- */
 function deletePost() {
-  deleteButton.setAttribute('disabled', true);
+  if (!window.confirm('Delete this post?')) {
+    return;
+  }
+  deleteButton.disabled = true;
   axios.delete(`/dynamic-api/micro/entry/${savedPost._id}`).then(() => {
     window.location = '/feed';
   });
+}
+
+async function signOut() {
+  await axios.post('/dynamic-api/auth/logout');
+  window.location = '/micro/login';
 }
 
 // On first load --------------------------------------------------------------------------------
@@ -461,10 +574,14 @@ async function onFirstLoad() {
     }
   }
 
+  saveButton = document.getElementById('save-button');
+  deleteButton = document.getElementById('delete-button');
+
   // Load editor
   editors.primary = new EditorJS({
     holder: 'editorjs',
     autofocus: true,
+    placeholder: 'Tab or + to add a block',
     tools: {
       ...editorToolConfig,
       socialPostDelimiter: {
@@ -474,6 +591,7 @@ async function onFirstLoad() {
         },
       },
     },
+    onChange: () => debouncedOnPrimaryChange(),
     data: savedPost.post || {},
   });
 
@@ -487,6 +605,7 @@ async function onFirstLoad() {
     options: tagOptions,
     maxOptions: null,
     closeAfterSelect: true,
+    placeholder: 'add tag',
   });
 
   // Load TomSelect for related posts
@@ -510,6 +629,7 @@ async function onFirstLoad() {
     searchField: ['title'],
     options: allRelatedOptions,
     maxItems: null,
+    placeholder: 'search your posts',
   });
 
   threadPicker = await createThreadPicker('#threads', {
@@ -530,29 +650,58 @@ async function onFirstLoad() {
     },
   });
 
-  // Selectors
-  const titleEl = document.getElementById('title');
-  const slugEl = document.getElementById('slug');
-  socialPostsCheckbox = document.getElementById('social-posts');
-  const mastodonTags = document.getElementById('mastodon-tags');
-  saveButton = document.getElementById('save-button');
-  deleteButton = document.getElementById('delete-button');
+  // Platform limits shown in each thread's heading
+  for (const network of SOCIAL_NETWORKS) {
+    document.getElementById(`${network}-limit`).textContent =
+      `${NETWORK_LIMITS[network].post.toLocaleString()} per post`;
+  }
 
   // Set initial values
   setInputValues();
 
   // Attach handlers
-  titleEl.addEventListener('keydown', debouncedOnTitleChange);
-  slugEl.addEventListener('keydown', debouncedOnSlugChange);
-  socialPostsCheckbox.addEventListener('change', toggleSocialPosts);
+  const titleEl = document.getElementById('title');
+  const slugEl = document.getElementById('slug');
+  titleEl.addEventListener('input', debouncedOnTitleChange);
+  slugEl.addEventListener('input', debouncedOnSlugChange);
+  document.getElementById('slug-edit').addEventListener('click', () => {
+    slugEl.hidden = false;
+    slugEl.focus();
+  });
+  document.querySelector('.editor-tabs').addEventListener('click', (evt) => {
+    const tab = evt.target.closest('.editor-tab')?.dataset.tab;
+    if (tab) {
+      showTab(tab).catch(console.error);
+    }
+  });
+  for (const toggle of document.querySelectorAll('.crosspost-toggle')) {
+    toggle.addEventListener('change', async () => {
+      syncAllToggle();
+      if (toggle.checked) {
+        await ensureSocialEditors();
+      }
+      validate();
+    });
+  }
+  const allToggle = document.getElementById('crosspost-all');
+  allToggle.addEventListener('change', () =>
+    setAllCrossposting(allToggle.checked).catch(console.error),
+  );
+  // New posts cross-post everywhere by default. Existing posts start with nothing ticked, so
+  // editing an old post never posts it by accident.
+  if (!isSaved()) {
+    for (const network of SOCIAL_NETWORKS) {
+      document.getElementById(`${network}-social`).checked = true;
+    }
+  }
+  syncAllToggle();
   document
-    .querySelectorAll('.social-network-toggle')
-    .forEach((el) => el.addEventListener('change', toggleSocialPostForNetwork));
-  mastodonTags.addEventListener('keydown', debouncedOnMastodonTagsChange);
+    .getElementById('mastodon-tags')
+    .addEventListener('input', () => debouncedRecheck.mastodon());
 
   document
     .querySelectorAll('.social-post-id')
-    .forEach((el) => el.addEventListener('keydown', debouncedOnSocialChange));
+    .forEach((el) => el.addEventListener('input', debouncedOnSocialChange));
 
   // TomSelect uses .on instead of .addEventListener, attach those handlers
   tagSelect.on('change', function (value) {
@@ -571,9 +720,11 @@ async function onFirstLoad() {
 
   saveButton.addEventListener('click', save);
   deleteButton.addEventListener('click', deletePost);
-  if (savedPost._id) {
-    deleteButton.classList.remove('hidden');
-  }
+  document.getElementById('signOut').addEventListener('click', signOut);
+
+  // Initial counts once the editor has loaded the post
+  await editors.primary.isReady;
+  await Promise.all([updateWordCount(), summarizeFromMainPost()]);
 
   // Ready
   document.getElementById('loading-overlay').classList.add('hidden');

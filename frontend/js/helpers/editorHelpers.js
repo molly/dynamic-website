@@ -34,7 +34,7 @@ export const mergeSocialLinks = (oldLinks, newLinks) => {
 
 export const NETWORK_LIMITS = {
   twitter: { post: 280, alt: 1000 },
-  mastodon: { post: 500, alt: 1500 },
+  mastodon: { post: 2263, alt: 1500 }, // hachyderm.io's limit
   bluesky: { post: 300, alt: 1000 },
 };
 

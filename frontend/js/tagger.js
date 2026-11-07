@@ -52,7 +52,7 @@ async function onFirstLoad() {
 
   document
     .querySelectorAll('.social-post-id')
-    .forEach((el) => el.addEventListener('keydown', debouncedOnSocialChange));
+    .forEach((el) => el.addEventListener('input', debouncedOnSocialChange));
 
   const saveButton = document.getElementById('save-button');
   saveButton.addEventListener('click', async function () {

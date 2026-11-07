@@ -8,6 +8,18 @@ export const NETWORKS = [
 ];
 export const MENTION_NETWORKS = ['website', 'wikipedia', ...NETWORKS];
 
+// How each network is named in the admin and editor.
+export const NETWORK_LABELS = {
+  website: 'Website',
+  wikipedia: 'Wikipedia',
+  twitter: 'Twitter',
+  mastodon: 'Mastodon',
+  bluesky: 'Bluesky',
+  threads: 'Threads',
+  tiktok: 'TikTok',
+  youtube: 'YouTube',
+};
+
 const SOCIAL_PREFIXES = {
   twitter: 'https://twitter.com/molly0xFFF/status/',
   mastodon: 'https://hachyderm.io/@molly0xfff/',

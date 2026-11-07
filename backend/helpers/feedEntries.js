@@ -37,10 +37,24 @@ function microLabel(micro) {
     .trim();
 }
 
+// Where an entry's metadata is edited; null for entry types without an editor yet.
+function editUrl(entry) {
+  if (entry.micro) {
+    return `/micro/editor/${entry.micro.slug}`;
+  }
+  if (entry.__t === 'FeedEntryCitationNeeded') {
+    return `/feed/tagger/citationNeeded/${entry._id}`;
+  }
+  if (entry.__t === 'FeedEntryReading' && entry.shortform) {
+    return `/feed/tagger/readingShortform/${entry._id}`;
+  }
+  return null;
+}
+
 /**
  * A short human-readable label for a feed entry populated with FEED_ENTRY_LABEL_POPULATE.
  * @param {Object} entry
- * @returns {{ _id: string, type: string, label: string, createdAt: Date }}
+ * @returns {{ _id: string, type: string, label: string, createdAt: Date, editUrl: ?string }}
  */
 export function labelFeedEntry(entry) {
   let label;
@@ -60,6 +74,7 @@ export function labelFeedEntry(entry) {
     type: entry.__t,
     label: truncate(label),
     createdAt: entry.createdAt,
+    editUrl: editUrl(entry),
   };
 }
 
