@@ -498,6 +498,9 @@ function usageLines(usage, { merging }) {
     usage.outletOf
       ? `the outlet of ${plural(usage.outletOf, 'reading entry', 'reading entries')}`
       : null,
+    usage.inPress
+      ? `the author of or in ${plural(usage.inPress, 'press entry', 'press entries')}${merging ? '' : ' (removed from them)'}`
+      : null,
   ].filter(Boolean);
 }
 

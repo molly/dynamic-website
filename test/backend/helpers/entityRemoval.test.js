@@ -75,9 +75,11 @@ describe('merging entities', () => {
       type: 'person',
       name: 'Taylor Lorenz',
       description: 'Journalist',
-      accounts: [{ network: 'bluesky', handle: 'taylorlorenz.bsky.social' }],
+      accounts: [
+        { network: 'bluesky', handle: 'taylorlorenz.bsky.social' },
+        { network: 'website', handle: 'https://www.usermag.co' },
+      ],
       aliases: [],
-      ids: { website: 'https://www.usermag.co' },
     };
     const duplicate = {
       type: 'person',
@@ -86,6 +88,7 @@ describe('merging entities', () => {
       accounts: [
         { network: 'bluesky', handle: '@TaylorLorenz.bsky.social' }, // Same account
         { network: 'twitter', handle: 'TaylorLorenz' },
+        { network: 'website', handle: 'usermag.co/' }, // Same site
       ],
       aliases: [{ name: 'Taylor Lorenz', kind: 'other' }],
       ids: { wikipedia: 'https://en.wikipedia.org/wiki/Taylor_Lorenz' },
@@ -100,7 +103,6 @@ describe('merging entities', () => {
     expect(set['ids.wikipedia']).toBe(
       'https://en.wikipedia.org/wiki/Taylor_Lorenz',
     );
-    expect(set['ids.website']).toBeUndefined();
     expect(set.note).toBe('From the migration');
     // The duplicate's name becomes another name; its alias is the kept entity's own name
     expect(set.aliases).toEqual([{ name: 'Ms. Lorenz', kind: 'other' }]);

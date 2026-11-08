@@ -73,7 +73,7 @@ router.get('/', async (req, res) => {
 router.get('/entry/:slug', async (req, res) => {
   const entry = await getMicroEntry(req.params.slug);
   if (!entry) {
-    res.status(400).render('micro/404.pug');
+    res.status(404).render('404.pug');
     return;
   }
   if (entry.deletedAt) {

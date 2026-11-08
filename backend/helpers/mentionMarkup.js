@@ -17,15 +17,15 @@ const escapeAttribute = (text) =>
     .replace(/"/g, '&quot;')
     .replace(/</g, '&lt;');
 
-// Where an entity's name links: its page if it has one, otherwise its website, if any.
+// Where an entity's name links: its page if it has one, otherwise its (first) website, if any.
 function entityLinkTarget(entity) {
   const page = entityUrl(entity);
   if (page) {
     return { href: page, className: 'entity-page p-name' };
   }
-  const website =
-    (entity.accounts || []).find((a) => a.network === 'website')?.handle ||
-    entity.ids?.website;
+  const website = (entity.accounts || []).find(
+    (a) => a.network === 'website',
+  )?.handle;
   return website ? { href: website, className: 'website u-url p-name' } : null;
 }
 
@@ -48,24 +48,38 @@ export function entityNameLink(entity) {
     : name;
 }
 
+// Names as a list: "A", "A and B", "A, B and C"
+const nameList = (names) =>
+  names.length > 1
+    ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`
+    : names[0] || null;
+
 /**
- * Who else was in a talk or appearance, as HTML: the host as written (a press entry's author), then
- * the entities, each linked like a name beside a post. "Jane Doe, Paul Grewal and Coinbase".
- * @param {?string} author
- * @param {Object[]} [people] Entities
+ * Who wrote or hosted a press piece, as HTML: its author entities, each linked like a name beside
+ * a post, or else its author as written.
+ * @param {{author?: string, authors?: Object[]}} press authors populated
  * @returns {?string}
  */
-export function pressWithHtml(author, people = []) {
-  const names = [
-    ...(author ? [escapeHtml(author)] : []),
-    ...people.filter(Boolean).map(entityNameLink),
-  ];
-  if (!names.length) {
-    return null;
+export function pressAuthorHtml(press) {
+  const entities = (press.authors || []).filter((e) => e?.name);
+  if (entities.length) {
+    return nameList(entities.map(entityNameLink));
   }
-  return names.length === 1
-    ? names[0]
-    : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+  return press.author ? escapeHtml(press.author) : null;
+}
+
+/**
+ * Who was in a talk or appearance, as HTML: the host (pressAuthorHtml), then the others, linked.
+ * "Ezra Klein, Paul Grewal and Jo".
+ * @param {{author?: string, authors?: Object[], people?: Object[]}} press populated
+ * @returns {?string}
+ */
+export function pressWithHtml(press) {
+  const host = pressAuthorHtml(press);
+  return nameList([
+    ...(host ? [host] : []),
+    ...(press.people || []).filter((e) => e?.name).map(entityNameLink),
+  ]);
 }
 
 /**

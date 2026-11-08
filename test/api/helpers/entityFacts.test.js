@@ -21,13 +21,12 @@ describe('entity page details', () => {
     const entity = {
       name: 'Elizabeth Warren',
       ids: {
-        website: 'https://www.warren.senate.gov/',
         wikipedia: 'https://en.wikipedia.org/wiki/Elizabeth_Warren',
       },
       accounts: [
         { network: 'twitter', handle: 'SenWarren' },
         { network: 'bluesky', handle: 'elizabeth-warren.bsky.social' },
-        { network: 'website', handle: 'https://warren.senate.gov' }, // The main site
+        { network: 'website', handle: 'https://www.warren.senate.gov/' },
         { network: 'website', handle: 'https://elizabethwarren.com/' },
         { network: 'youtube', handle: 'UCTH9zV8Imw09J5bOoTR18_A' },
       ],
@@ -38,8 +37,13 @@ describe('entity page details', () => {
         },
       ],
     };
-    // Their own accounts and other sites
+    // Their websites, all of them, then their accounts
     expect(accountRows(entity)).toEqual([
+      {
+        label: 'website',
+        value: 'warren.senate.gov',
+        href: 'https://www.warren.senate.gov/',
+      },
       {
         label: 'website',
         value: 'elizabethwarren.com',

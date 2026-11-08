@@ -1,35 +1,28 @@
-extends ../../templates/base.pug
+extends ../../templates/site.pug
+
+//- A micro post that's been deleted: when it was published and when it went, with its address
+//- kept so links to it still say what happened.
 
 block vars
-  - var htmlClass = 'micro';
-  - var importPrefix = 'https://www.mollywhite.net'
+  - var htmlClass = 'status-page'
+  - var navCurrent = 'feed'
 
 block head
   include ../../templates/titleAndDescription.pug
-  +titleAndDescription(entry.title, "Entry in Molly White's microblog")
-  link(rel='stylesheet', href="/static/feed.css")
-  meta(http-equiv="Status", content="410 Gone")
+  +titleAndDescription('Post deleted', 'This post has been deleted.')
+  meta(name="robots", content="noindex")
 
 block body
-  main
-    .content-box
-      .entries
-        #entryContainer.standalone
-          article.entry.h-entry.hentry
-            .content.p-content This post is gone.
-
-            footer.footer
-              .flex-row.post-meta
-                .timestamp
-                  | Originally published 
-                  a(href=`${baseUrl}/micro/entry/${entry.slug}`)
-                    time.dt-published(datetime=toISOWithoutMillis(entry.createdAt), title=entry.timestamps.createdAt.absoluteTime) #{entry.timestamps.createdAt.humanTime}
-                  | . Deleted 
-                  time.dt-deleted(datetime=toISOWithoutMillis(entry.deletedAt), title=entry.timestamps.deletedAt.absoluteTime) #{entry.timestamps.deletedAt.humanTime}
-                  | .
-                
-      .back-links
-        div
-          a(href="/feed") &laquo; Back to the activity feed
-        div
-          a(href="/micro") &laquo; Back to the microblog feed
+  main#main.site-main.status-main.h-entry
+    p.entity-type-label Deleted post
+    h1.list-title This post is gone
+    p.list-intro
+      | It was published
+      |  #[a.u-url(href=`/micro/entry/${entry.slug}`) #[time.dt-published(datetime=new Date(entry.createdAt).toISOString()) #{shortDate(entry.createdAt)}]]
+      if entry.deletedAt
+        |  and deleted
+        |  #[time.dt-deleted(datetime=new Date(entry.deletedAt).toISOString()) #{shortDate(entry.deletedAt)}]
+      | .
+    ul.status-links
+      li #[a(href="/feed") Feed]
+      li #[a(href="/micro") Microblog]

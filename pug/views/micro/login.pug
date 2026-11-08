@@ -1,24 +1,23 @@
-extends ../../templates/base.pug
+extends ../../templates/site.pug
+
+//- Logging in to post (the editor is behind it).
 
 block vars
-  - var htmlClass = 'micro';
-  - var importPrefix = 'https://www.mollywhite.net'
+  - var htmlClass = 'status-page'
 
 block head
   include ../../templates/titleAndDescription.pug
-  +titleAndDescription('Microblog login', 'Molly White microblog login')
+  +titleAndDescription('Log in', 'Log in to post.')
+  meta(name="robots", content="noindex")
 
 block body
-  main
-    .content-box
-      h1 Log in
-      form(action="/dynamic-api/auth/login", method="POST")
-        section
-          label(for="username") Username
-          input(type="text", id="username", name="username", autocomplete="username", required=true, autofocus=true)
-        section
-          label(for="password") Password
-          input(type="password", id="password", name="password", autocomplete="current-password", required=true)
-        section
-          input(type="hidden", id="redirect", name="redirect", value="/micro/editor")
-          button(type="submit") Log in
+  main#main.site-main.status-main
+    p.entity-type-label Microblog
+    h1.list-title Log in
+    form.login-form(action="/dynamic-api/auth/login", method="POST")
+      label(for="username") Username
+      input#username(type="text", name="username", autocomplete="username", required, autofocus)
+      label(for="password") Password
+      input#password(type="password", name="password", autocomplete="current-password", required)
+      input(type="hidden", name="redirect", value="/micro/editor")
+      button(type="submit") Log in

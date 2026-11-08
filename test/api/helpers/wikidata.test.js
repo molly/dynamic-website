@@ -63,9 +63,10 @@ describe('wikidataSuggestions', () => {
     expect(s.ids).toEqual({
       wikidata: 'Q434706',
       wikipedia: 'https://en.wikipedia.org/wiki/Elizabeth_Warren',
-      website: 'https://www.warren.senate.gov/',
     });
+    // The website is an account, first
     expect(s.accounts).toEqual([
+      { network: 'website', handle: 'https://www.warren.senate.gov/' },
       { network: 'twitter', handle: 'ewarren' },
       { network: 'twitter', handle: 'SenWarren' },
       { network: 'bluesky', handle: 'elizabeth-warren.bsky.social' },
@@ -94,8 +95,12 @@ describe('fillFromWikidata', () => {
     const current = {
       name: 'Elizabeth Warren',
       description: 'Senator from Massachusetts',
-      ids: { website: 'https://elizabethwarren.com/' },
-      accounts: [{ network: 'twitter', handle: '@senwarren' }],
+      accounts: [
+        { network: 'website', handle: 'https://elizabethwarren.com/' },
+        // The same site as Wikidata's, written differently
+        { network: 'website', handle: 'http://warren.senate.gov' },
+        { network: 'twitter', handle: '@senwarren' },
+      ],
       aliases: [{ name: 'Sen. Warren' }],
     };
     const { entity, added } = fillFromWikidata(
@@ -103,9 +108,10 @@ describe('fillFromWikidata', () => {
       wikidataSuggestions(WARREN, 'person'),
     );
     expect(entity.description).toBe('Senator from Massachusetts');
-    expect(entity.ids.website).toBe('https://elizabethwarren.com/'); // Kept
     expect(entity.ids.wikidata).toBe('Q434706');
     expect(entity.accounts.map((a) => a.handle)).toEqual([
+      'https://elizabethwarren.com/',
+      'http://warren.senate.gov',
       '@senwarren',
       'ewarren',
       'elizabeth-warren.bsky.social',
@@ -121,7 +127,7 @@ describe('fillFromWikidata', () => {
       '1 other name',
       '1 candidacy',
     ]);
-    expect(current.accounts).toHaveLength(1); // Original untouched
+    expect(current.accounts).toHaveLength(3); // Original untouched
   });
 
   it('names a new entity from its Wikidata label, and the same names count once', () => {

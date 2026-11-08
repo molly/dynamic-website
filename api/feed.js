@@ -4,10 +4,17 @@ import {
   loadPostContext,
 } from '../backend/helpers/postContext.js';
 import { ENTITY_SUMMARY_FIELDS } from '../backend/helpers/entities.js';
-import { pressWithHtml } from '../backend/helpers/mentionMarkup.js';
+import {
+  pressAuthorHtml,
+  pressWithHtml,
+} from '../backend/helpers/mentionMarkup.js';
 import { Book } from '../backend/models/book.model.js';
 import { Entity } from '../backend/models/entity.model.js';
-import { PressEntry, ShortformEntry } from '../backend/models/entry.model.js';
+import {
+  PRESS_ENTITY_FIELDS,
+  PressEntry,
+  ShortformEntry,
+} from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
 import { BookTag, Tag } from '../backend/models/tag.model.js';
@@ -61,8 +68,9 @@ export const hydrateFeedEntry = (entry, context = {}) => {
     entry.press = {
       ...entry.press,
       ...formatArticleDate(entry.press),
-      // "with …": the host, then the others in it
-      withHtml: pressWithHtml(entry.press.author, entry.press.people),
+      // Who wrote it ("— Jane Doe"), and for an appearance "with …": the host, then the others
+      authorHtml: pressAuthorHtml(entry.press),
+      withHtml: pressWithHtml(entry.press),
     };
   }
   return entry;
@@ -124,11 +132,11 @@ export const getFeedEntries = async ({
     .populate({
       path: 'press',
       model: PressEntry,
-      populate: {
-        path: 'people',
+      populate: PRESS_ENTITY_FIELDS.map((path) => ({
+        path,
         model: Entity,
         select: ENTITY_SUMMARY_FIELDS,
-      },
+      })),
     })
     .lean();
 

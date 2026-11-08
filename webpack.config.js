@@ -12,9 +12,7 @@ export default [
     entry: {
       admin: './frontend/js/admin.js',
       editor: './frontend/js/editor.js',
-      reading: './frontend/js/reading.js',
       site: './frontend/js/site.js',
-      feed: './frontend/js/feed.js',
       tagger: './frontend/js/tagger.js',
       webmentions: './frontend/js/webmentions.js',
     },

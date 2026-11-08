@@ -7,6 +7,7 @@ import {
 } from '../../../api/helpers/mentions';
 import {
   entityNameLink,
+  pressAuthorHtml,
   pressWithHtml,
   expandMentionsInPost,
   renderMention,
@@ -311,15 +312,35 @@ describe('people in a talk or appearance', () => {
     hasPage: true,
   };
 
+  it('shows who wrote it as entities, linked, or else as written', () => {
+    expect(pressAuthorHtml({ author: 'Ezra & Co' })).toBe('Ezra &amp; Co');
+    expect(
+      pressAuthorHtml({
+        author: 'Paul Grewal and Jo',
+        authors: [panelist, { name: 'Jo', type: 'person' }],
+      }),
+    ).toBe(
+      '<a class="entity-page p-name" href="/entities/people/paul-grewal">Paul Grewal</a> and Jo',
+    );
+    // An author entity that's since been deleted doesn't hide the name as written
+    expect(pressAuthorHtml({ author: 'Ezra', authors: [undefined] })).toBe(
+      'Ezra',
+    );
+    expect(pressAuthorHtml({})).toBeNull();
+  });
+
   it('lists the host, then the others, linked to their pages', () => {
     expect(
-      pressWithHtml('Ezra & Co', [panelist, { name: 'Jo', type: 'person' }]),
+      pressWithHtml({
+        author: 'Ezra & Co',
+        people: [panelist, { name: 'Jo', type: 'person' }],
+      }),
     ).toBe(
       'Ezra &amp; Co, <a class="entity-page p-name" href="/entities/people/paul-grewal">Paul Grewal</a> and Jo',
     );
-    expect(pressWithHtml(null, [panelist])).toContain('Paul Grewal</a>');
-    expect(pressWithHtml('Ezra')).toBe('Ezra');
-    expect(pressWithHtml(null, [])).toBeNull();
+    expect(pressWithHtml({ people: [panelist] })).toContain('Paul Grewal</a>');
+    expect(pressWithHtml({ author: 'Ezra' })).toBe('Ezra');
+    expect(pressWithHtml({ people: [] })).toBeNull();
   });
 });
 

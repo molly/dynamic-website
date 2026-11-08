@@ -109,6 +109,10 @@ describe('entity pages', () => {
       $or: [{ about: 'e1' }, { tags: 't1' }],
     });
     expect(entityEntriesQuery({ _id: 'e2' }).$or).toEqual([{ about: 'e2' }]);
+    // And press it was in
+    expect(entityEntriesQuery({ _id: 'e2' }, { pressIds: ['p1'] }).$or).toEqual(
+      [{ about: 'e2' }, { press: { $in: ['p1'] } }],
+    );
   });
 
   it('counts an entry once, whether it’s about the entity, tagged, or both', () => {
@@ -119,10 +123,12 @@ describe('entity pages', () => {
         { about: [], tags: ['tag-coinbase'] }, // Tagged before entities
         { about: ['coinbase', 'grewal'], tags: [] },
         { about: [], tags: ['tag-other'] },
+        { about: ['grewal'], tags: [], people: ['grewal'] }, // Both
+        { about: [], tags: [], people: ['grewal'] }, // In a talk
       ],
     );
     expect(counts.get('coinbase')).toBe(3);
-    expect(counts.get('grewal')).toBe(1);
+    expect(counts.get('grewal')).toBe(3);
   });
 
   it('lists a committee’s current members, with their seats first', () => {

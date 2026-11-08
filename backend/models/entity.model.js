@@ -69,7 +69,7 @@ export const EntitySchema = new mongoose.Schema(
     tag: { type: ObjectId, ref: 'Tag' },
     ids: {
       wikidata: { type: String, match: /^Q\d+$/ },
-      website: String,
+      // Websites are accounts (network "website"), so an entity can have several
       // The Wikipedia article about them, as a link (wikipedia.js). Not one of their accounts.
       wikipedia: String,
     },

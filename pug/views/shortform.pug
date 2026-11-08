@@ -1,38 +1,75 @@
-extends ../templates/base.pug
+extends ../templates/site.pug
+
+//- The shortform reading list: articles (and videos and podcasts) I've read, newest first, with
+//- search, sort, and the tags beside them. Filters are plain links and a form, as on the press page
+//- (frontend/routes/readingList.js, api/helpers/readingList.js), so the page needs no script.
 
 block vars
-  - var htmlClass = 'reading';
-  - var importPrefix = 'https://www.mollywhite.net'
-  - var showTagCount = true 
-  - var frequencyCategory = 'shortform'
+  - var htmlClass = 'reading-page'
+  - var navCurrent = 'reading'
 
 block head
   include ../templates/titleAndDescription.pug
-  link(rel='stylesheet', href="/static/reading.css")
   +titleAndDescription('Shortform reading', 'Molly White\'s shortform reading list.')
 
 block body
-  main
-    .content-box.h-feed.hfeed
-      a(href="/reading") < All reading lists
-      p.p-summary.site-description
-        | This is an incomplete list of the shortform reading (and listening and watching) I've been doing lately.
+  include ../mixins/author.pug
+  include ../mixins/site/listControls.pug
+  include ../mixins/site/listTags.pug
+  main#main.site-main.list-layout.h-feed
+    .list-main
+      header.list-head
+        p.list-back #[a(href="/reading") ← All reading lists]
+        p.entity-type-label Reading list
+        h1.list-title.p-name Shortform reading
+        p.list-intro.p-summary
+          | This is an incomplete list of the shortform reading (and listening and watching) I’ve
+          | been doing lately.
+        p.list-feed-link #[a(href="https://www.mollywhite.net/reading/shortform/feed.xml") subscribe (rss)]
 
-      h3.p-name.site-title(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Shortform reading list 
-      div.rss-link
-        i.fas.fa-rss(aria-hidden="true") 
-        |  
-        a(href="https://www.mollywhite.net/reading/shortform/feed.xml", target="_blank") Subscribe 
+      section(aria-label="Articles")
+        +listControls({ action: '/reading/shortform', id: 'shortform-search', label: 'Search the reading list', hidden: { tags: query.tags.join('-'), order: query.order }, search: query.search, placeholder: 'Search…', totalResults, isFiltered, clearHref, newestHref, oldestHref, order: query.order })
 
-      include ../includes/filters.pug
+        if !rows.length
+          p.empty Nothing matches that.
+        ul.list-entries
+          each article in rows
+            li.list-entry.h-entry
+              span.list-entry-date
+                if article.readLabel
+                  time.dt-accessed(datetime=article.started) #{article.readLabel}
+              div
+                p.list-entry-meta
+                  if article.work || article.publisher
+                    span.list-entry-outlet.p-publication #{article.work || article.publisher}
+                  if article.author
+                    if article.work || article.publisher
+                      | #{' · '}
+                    +author(article.author)
+                  if article.publishedLabel
+                    if article.work || article.publisher || article.author
+                      | #{' · '}
+                    | published #[time.dt-published(datetime=article.date) #{article.publishedLabel}]
+                p.list-entry-title
+                  a.u-url.u-repost-of(href=article.href) #[span.p-name #{article.title}]
+                  if article.parenthetical
+                    span.list-entry-parenthetical  (#{article.parenthetical})
+                if article.summary
+                  .list-entry-summary.p-summary!= article.summary
+                each excerpt in (article.excerpts || [])
+                  blockquote.list-entry-excerpt #{excerpt}
+                - var tags = (article.tags || []).filter((tag) => tag && tag.text)
+                - var archive = article.href ? archived[article.href] : null
+                if tags.length || archive
+                  p.list-entry-foot
+                    each tag, index in tags
+                      if index > 0
+                        | #{' · '}
+                      a.p-category(href=tagHref(tag)) #{tagText(tag)}
+                    if archive
+                      | #{tags.length ? ' · ' : ''}#[a(href=archive) archived]
 
-      .articles
-        #articlesContainer
-          include ../mixins/shortformArticle.pug
-          each article in results
-            +shortformArticle(article)
+        include ../includes/pager.pug
 
-      include ../includes/paginator.pug
-
-block post-javascript
-  script(src="/static/reading.js")
+    aside.list-side
+      +listTags(tags)

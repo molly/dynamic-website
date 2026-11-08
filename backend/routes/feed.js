@@ -12,6 +12,7 @@ import { Book } from '../models/book.model.js';
 import {
   PRESS_CARD_FIELDS,
   PRESS_KINDS,
+  PRESS_ENTITY_FIELDS,
   PRESS_ROLES,
   PressEntry,
   ShortformEntry,
@@ -308,15 +309,17 @@ export function checkPressFields(input) {
   if (fields.role && !PRESS_ROLES.includes(fields.role)) {
     return { error: `Unknown role "${fields.role}".` };
   }
-  if (
-    fields.people !== undefined &&
-    fields.people !== null &&
-    !(
-      Array.isArray(fields.people) &&
-      fields.people.every((id) => mongoose.isValidObjectId(id))
-    )
-  ) {
-    return { error: 'People must be a list of entities.' };
+  const badList = PRESS_ENTITY_FIELDS.find(
+    (name) =>
+      fields[name] !== undefined &&
+      fields[name] !== null &&
+      !(
+        Array.isArray(fields[name]) &&
+        fields[name].every((id) => mongoose.isValidObjectId(id))
+      ),
+  );
+  if (badList) {
+    return { error: `${badList} must be a list of entities.` };
   }
   if (
     fields.duration !== undefined &&

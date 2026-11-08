@@ -142,11 +142,11 @@ export const getPaginatedAndFilteredBooksFromDb = async (
   const sortOrder = req.query.order && req.query.order === 'reverse' ? 1 : -1;
   const query = await makeQuery(req, true);
   const addedFilters = [];
-  if (req.query.hidefiction === 'true') {
-    addedFilters.push({ $match: { fiction: { $nin: [null, true] } } });
-  }
-  if (req.query.hidenonfiction === 'true') {
+  // Books not marked either way count as fiction, as they always have
+  if (req.query.type === 'fiction') {
     addedFilters.push({ $match: { fiction: { $ne: false } } });
+  } else if (req.query.type === 'nonfiction') {
+    addedFilters.push({ $match: { fiction: false } });
   }
 
   try {

@@ -4,8 +4,6 @@ block vars
   - var htmlClass = 'entities entity-page'
   - var e = page.entity
   - var ordinal = (n) => { const s = ['th', 'st', 'nd', 'rd']; const v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]) }
-  - var domainOf = (url) => { try { return new URL(/^https?:/.test(url) ? url : `https://${url}`).hostname.replace(/^www\./, '') } catch (err) { return url } }
-  - var asUrl = (url) => (/^https?:\/\//.test(url) ? url : `https://${url}`)
   - var isCoverage = e.type === 'case' || e.type === 'bill'
   //- Dates are shown in Eastern time; date-only fields are saved as midnight Eastern.
 
@@ -190,7 +188,7 @@ block body
           ])
 
         - var candidacies = e.candidacies || []
-        - var identifiers = [{ label: 'Wikidata', value: e.ids && e.ids.wikidata, href: e.ids && e.ids.wikidata ? `https://www.wikidata.org/wiki/${e.ids.wikidata}` : null }, { label: 'SEC CIK', value: e.secCik, href: e.secCik ? `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${e.secCik}` : null }, { label: 'FEC ID', value: e.fecId, href: e.fecId ? `https://www.fec.gov/data/committee/${e.fecId}/` : null }].concat(candidacies.filter((c) => c.fecCandidateId).map((c) => ({ label: 'FEC', value: c.fecCandidateId, href: `https://www.fec.gov/data/candidate/${c.fecCandidateId}/` }))).concat([{ label: 'website', value: e.ids && e.ids.website ? domainOf(e.ids.website) : null, href: e.ids && e.ids.website ? asUrl(e.ids.website) : null }])
+        - var identifiers = [{ label: 'Wikidata', value: e.ids && e.ids.wikidata, href: e.ids && e.ids.wikidata ? `https://www.wikidata.org/wiki/${e.ids.wikidata}` : null }, { label: 'SEC CIK', value: e.secCik, href: e.secCik ? `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${e.secCik}` : null }, { label: 'FEC ID', value: e.fecId, href: e.fecId ? `https://www.fec.gov/data/committee/${e.fecId}/` : null }].concat(candidacies.filter((c) => c.fecCandidateId).map((c) => ({ label: 'FEC', value: c.fecCandidateId, href: `https://www.fec.gov/data/candidate/${c.fecCandidateId}/` })))
         if identifiers.some((row) => row.value)
           section
             h2.entity-side-heading Identifiers

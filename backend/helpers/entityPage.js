@@ -12,7 +12,11 @@ import {
 } from '../../api/helpers/entityTypes.js';
 import { ENTITY_TYPE_NAMES, entityUrl } from '../../api/helpers/entityUrls.js';
 import { Entity } from '../models/entity.model.js';
-import { PressEntry, ShortformEntry } from '../models/entry.model.js';
+import {
+  PRESS_ENTITY_FIELDS,
+  PressEntry,
+  ShortformEntry,
+} from '../models/entry.model.js';
 import { FeedEntry } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 import { Tag } from '../models/tag.model.js';
@@ -328,8 +332,12 @@ export async function loadEntityPage(type, slug, { filter, all = false } = {}) {
   if (!entity) {
     return null;
   }
+  // Press it wrote, hosted or was in (PressEntry.authors, people) lists the press's feed entry
+  const pressIds = await PressEntry.distinct('_id', {
+    $or: PRESS_ENTITY_FIELDS.map((field) => ({ [field]: entity._id })),
+  });
   const [entries, relations, tag] = await Promise.all([
-    FeedEntry.find(entityEntriesQuery(entity))
+    FeedEntry.find(entityEntriesQuery(entity, { pressIds }))
       .sort({ createdAt: -1 })
       .populate(FEED_ENTRY_LABEL_POPULATE)
       .lean()
@@ -425,17 +433,41 @@ export async function loadEntityIndex(type) {
     .sort({ name: 1 })
     .lean();
   const tags = entities.map((e) => e.tag).filter(Boolean);
+  // Press these entities wrote, hosted or were in, by press id: their feed entries count for them
+  // too
+  const entityIds = entities.map((e) => e._id);
+  const press = await PressEntry.find(
+    {
+      $or: PRESS_ENTITY_FIELDS.map((field) => ({
+        [field]: { $in: entityIds },
+      })),
+    },
+    PRESS_ENTITY_FIELDS.join(' '),
+  ).lean();
+  const peopleByPress = new Map(
+    press.map((p) => [
+      idOf(p),
+      PRESS_ENTITY_FIELDS.flatMap((field) => p[field] || []),
+    ]),
+  );
   const entries = await FeedEntry.find(
     {
       deletedAt: null,
       $or: [
         { about: { $in: entities.map((e) => e._id) } },
         ...(tags.length ? [{ tags: { $in: tags } }] : []),
+        ...(press.length ? [{ press: { $in: press.map((p) => p._id) } }] : []),
       ],
     },
-    'about tags',
+    'about tags press',
   ).lean();
-  const counts = countEntityEntries(entities, entries);
+  const counts = countEntityEntries(
+    entities,
+    entries.map((entry) => ({
+      ...entry,
+      people: entry.press ? peopleByPress.get(idOf(entry.press)) : [],
+    })),
+  );
   return entities.map((entity) => ({
     ...entity,
     href: entityUrl(entity),

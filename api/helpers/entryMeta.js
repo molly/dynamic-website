@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { tagText } from './listFilters.js';
 import { getPressDetails, isUpcoming } from './press.js';
 
 // The metadata column beside each entry on the redesigned pages: an icon, a verb and a linked date,
@@ -55,9 +56,6 @@ const fullDateTime = (date) => {
 
 const fullTime = (date) =>
   toDateTime(date).toLocaleString(DateTime.DATETIME_FULL);
-
-const tagText = (tag) =>
-  `#${tag.text.trim().toLowerCase().replace(/\s+/g, '-')}`;
 
 // Tags; on a post's page each with how many entries have it.
 function tagsRow(tags, tagBase, { counts = false } = {}) {

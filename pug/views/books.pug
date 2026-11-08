@@ -1,34 +1,91 @@
-extends ../templates/base.pug
+extends ../templates/site.pug
+
+//- The books list: books I'm reading, have read, or gave up on, with status and type filters, search,
+//- sort and the tags beside them. Filters are plain links and a form, as on the press page
+//- (frontend/routes/readingList.js, api/helpers/readingList.js), so the page needs no script.
 
 block vars
-  - var htmlClass = 'reading';
-  - var page = 'pleasure';
-  - var importPrefix = 'https://www.mollywhite.net'
-  - var showTagCount = true
-  - var frequencyCategory = 'total' 
-  - var showStatusFilter = true
+  - var htmlClass = 'reading-page'
+  - var navCurrent = 'reading'
 
 block head
   include ../templates/titleAndDescription.pug
-  link(rel='stylesheet', href="/static/reading.css")
   +titleAndDescription('Books', 'Molly White\'s book reading list.')
 
 block body
-  main
-    .content-box.h-feed.hfeed
-      a(href="/reading") < All reading lists
-      h3.p-name.site-title(aria-sort=query.order === 'reverse' ? 'ascending' : 'descending') Books
+  include ../mixins/author.pug
+  include ../mixins/site/listControls.pug
+  include ../mixins/site/listTags.pug
+  main#main.site-main.list-layout.h-feed
+    .list-main
+      header.list-head
+        p.list-back #[a(href="/reading") ← All reading lists]
+        p.entity-type-label Reading list
+        h1.list-title.p-name Books
 
-      include ../includes/filters.pug
+      section(aria-label="Books")
+        nav.list-segments(aria-label="Filters")
+          each group in [{ label: 'status', filters: statusFilters }, { label: 'type', filters: typeFilters }]
+            .list-segment-group
+              span.list-segment-label #{group.label}
+              ul
+                each filter in group.filters
+                  li
+                    a(href=filter.href, aria-current=filter.current ? 'true' : null) #{filter.text}
 
-      .articles
-        #articlesContainer
-          include ../mixins/book.pug
-          each book in results
-            +book(book)
+        +listControls({ action: '/reading/books', id: 'books-search', label: 'Search books', hidden: { status: query.status, type: query.type, tags: query.tags.join('-'), order: query.order }, search: query.search, placeholder: 'Search…', totalResults, isFiltered, clearHref, newestHref, oldestHref, order: query.order })
 
+        if !rows.length
+          p.empty Nothing matches that.
+        ul.list-entries
+          each book in rows
+            li.book-entry.h-entry
+              if book.imageSrc
+                span.book-cover
+                  img.u-photo(class=book.border ? 'bordered' : null, src=book.imageSrc, alt=`Cover of ${book.title}`, loading="lazy")
+              else
+                span.book-cover.book-cover-empty
+              div
+                if book.series
+                  p.book-entry-series
+                    | #[i #{book.series}] series
+                    if book.seriesNumber
+                      | , book #{book.seriesNumber}
+                p.book-entry-title
+                  i
+                    if book.href
+                      a.u-url.p-name(href=book.href) #{book.title}
+                    else
+                      span.p-name #{book.title}
+                    if book.subtitle
+                      span.book-entry-subtitle #{book.subtitle}
+                if book.author || book.editor || book.translator
+                  p.book-entry-byline
+                    if book.author
+                      | by#{' '}
+                      +author(book.author)
+                    if book.editor
+                      | #{book.author ? ', ' : ''}edited by #{book.editor}
+                    if book.translator
+                      | #{book.author || book.editor ? ', ' : ''}translated by #{book.translator}
+                - var meta = [book.publishedLabel, book.pages ? `${book.pages} pages` : '', book.format === 'audio' ? 'audiobook' : ''].filter(Boolean)
+                if meta.length
+                  p.book-entry-meta #{meta.join(' · ')}
+                if book.statusLabel || book.readingDates
+                  p.book-entry-reading
+                    if book.statusLabel
+                      span.book-status.p-category(class=`book-status-${book.status}`) #{book.statusLabel}
+                    if book.readingDates
+                      span #{book.readingDates}
+                - var tags = (book.tags || []).filter((tag) => tag && tag.text)
+                if tags.length
+                  p.book-entry-tags
+                    each tag, index in tags
+                      if index > 0
+                        | #{' · '}
+                      a.p-category(href=tagHref(tag)) #{tagText(tag)}
 
-      include ../includes/paginator.pug
+        include ../includes/pager.pug
 
-block post-javascript
-  script(src="/static/reading.js")
+    aside.list-side
+      +listTags(tags)

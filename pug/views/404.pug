@@ -1,0 +1,22 @@
+extends ../templates/site.pug
+
+//- Not found, for any page the dynamic site serves (feed, micro posts, entities).
+
+block vars
+  - var htmlClass = 'status-page'
+
+block head
+  include ../templates/titleAndDescription.pug
+  +titleAndDescription('Not found', 'There’s nothing at this address.')
+  meta(name="robots", content="noindex")
+
+block body
+  main#main.site-main.status-main
+    p.entity-type-label 404
+    h1.list-title Nothing here
+    p.list-intro There’s nothing at this address. It may have moved, or the link may be wrong.
+    ul.status-links
+      li #[a(href="/") Home]
+      li #[a(href="/feed") Feed]
+      li #[a(href="/work") Work]
+      li #[a(href="/about") About]

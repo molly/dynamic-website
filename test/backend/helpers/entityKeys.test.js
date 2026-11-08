@@ -40,6 +40,19 @@ describe('accountKey', () => {
   });
 });
 
+describe('accountKey for websites', () => {
+  it('treats a site as the same with or without its protocol, www. or trailing slash', () => {
+    const key = accountKey('website', 'https://www.Warren.senate.gov/');
+    expect(key).toEqual('website:warren.senate.gov');
+    expect(accountKey('website', 'http://warren.senate.gov')).toEqual(key);
+    expect(accountKey('website', 'warren.senate.gov/')).toEqual(key);
+    // A different page on the site is a different site
+    expect(accountKey('website', 'https://example.com/me')).not.toEqual(
+      accountKey('website', 'https://example.com/'),
+    );
+  });
+});
+
 describe('normalizeDomain', () => {
   it('strips protocol, www and path', () => {
     expect(normalizeDomain('https://www.NYTimes.com/section/tech')).toEqual(

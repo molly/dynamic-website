@@ -15,6 +15,7 @@ block body
     include ../includes/feedControls.pug
     include ../mixins/site/entry.pug
     +feedList(entries, options)
-    if totalPages > 1
-      nav.pager(aria-label="Pages")
-        a.pager-older(href="/feed?page=2", rel="next") ← older
+    //- The homepage is the feed's first page; the pager goes on to the feed's
+    - var currentPage = 1
+    - var pageBase = '/feed?'
+    include ../includes/pager.pug

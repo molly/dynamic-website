@@ -88,19 +88,18 @@ export function wikidataSuggestions(entry, type) {
   if (sitelink && has.has('ids.wikipedia')) {
     suggestions.ids.wikipedia = wikipediaArticleUrl(sitelink[1].title);
   }
-  const [website] = stringValues(entry, OFFICIAL_WEBSITE);
-  if (website && has.has('ids.website')) {
-    suggestions.ids.website = website;
-  }
-
   if (has.has('accounts')) {
-    suggestions.accounts = Object.entries(ACCOUNT_PROPERTIES).flatMap(
-      ([property, network]) =>
+    // The official website first, as a website account
+    const [website] = stringValues(entry, OFFICIAL_WEBSITE);
+    suggestions.accounts = [
+      ...(website ? [{ network: 'website', handle: website }] : []),
+      ...Object.entries(ACCOUNT_PROPERTIES).flatMap(([property, network]) =>
         stringValues(entry, property).map((handle) => ({
           network,
           handle: handle.replace(/^@/, ''),
         })),
-    );
+      ),
+    ];
   }
 
   // The English label names a new entity; for one already named differently, it's another name
@@ -148,7 +147,6 @@ export function fillFromWikidata(entity, suggestions) {
   for (const [key, label] of [
     ['wikidata', 'Wikidata ID'],
     ['wikipedia', 'Wikipedia article'],
-    ['website', 'website'],
   ]) {
     const value = suggestions.ids?.[key];
     if (value && isEmpty(filled.ids[key])) {

@@ -65,6 +65,11 @@ block body
           .entity-field-row(data-kinds="talk podcast radio video tv")
             label(for="press-duration") length
             input#press-duration(type="text", value=durationText(press.duration), placeholder="52:30 or 1:02:30", inputmode="numeric")
+          //- Who wrote it, or hosts the show; as written, the press entry's author
+          .entity-field-row(data-kinds="article podcast radio video tv")
+            - var writtenAuthor = entry.press && entry.press.author
+            label(for="press-authors") #{writtenAuthor ? `author (${writtenAuthor})` : 'author'}
+            input#press-authors(autocomplete="off")
           .entity-field-row(data-kinds="podcast radio video tv talk")
             label(for="press-people") with
             input#press-people(autocomplete="off")

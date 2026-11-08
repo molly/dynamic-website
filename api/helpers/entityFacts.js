@@ -70,32 +70,24 @@ const articleTitle = (url) => {
 };
 
 /**
- * The rows for "Accounts", like the page's other label and value rows: the entity's own
- * accounts ("Twitter · @SenWarren") and its other websites ("website · elizabethwarren.com",
- * leaving out the main one, which is under Identifiers).
+ * The rows for "Accounts", like the page's other label and value rows: the entity's websites
+ * first ("website · elizabethwarren.com"), then its social accounts ("Twitter · @SenWarren").
  * @param {Object} entity
  * @returns {{label: string, value: string, href: string}[]}
  */
 export function accountRows(entity) {
-  const mainSite = entity.ids?.website ? domainOf(entity.ids.website) : null;
   const order = Object.keys(NETWORK_LABELS);
   return [...(entity.accounts || [])]
     .sort((a, b) => order.indexOf(a.network) - order.indexOf(b.network))
-    .flatMap((account) => {
+    .map((account) => {
       const href = getSocialLinkFromHandle(account.handle, account.network);
-      if (account.network === 'website') {
-        const domain = domainOf(account.handle);
-        return domain === mainSite
-          ? []
-          : [{ label: 'website', value: domain, href }];
-      }
-      return [
-        {
-          label: NETWORK_LABELS[account.network] || account.network,
-          value: handleText(account),
-          href,
-        },
-      ];
+      return account.network === 'website'
+        ? { label: 'website', value: domainOf(account.handle), href }
+        : {
+            label: NETWORK_LABELS[account.network] || account.network,
+            value: handleText(account),
+            href,
+          };
     });
 }
 

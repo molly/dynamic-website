@@ -1,0 +1,24 @@
+//- Search, count, and sort over a list (press, the reading lists), under a strong rule. The search
+//- is a plain form: hidden fields carry the other filters, so searching keeps them.
+//-   action: the list's path; id: the search box's id; label: its hidden label
+//-   hidden: other filters to keep, by name (empty ones are left out); search, placeholder
+//-   totalResults, isFiltered, clearHref, newestHref, oldestHref, order ('reverse' for oldest first)
+mixin listControls(opts)
+  .list-controls
+    form.list-search(method="get", action=opts.action, role="search")
+      each value, name in (opts.hidden || {})
+        if value
+          input(type="hidden", name=name, value=value)
+      label.visually-hidden(for=opts.id) #{opts.label}
+      svg.list-search-icon(viewBox="0 0 16 16", width="13", height="13", fill="none", stroke="currentColor", stroke-width="1.5", aria-hidden="true")
+        circle(cx="7", cy="7", r="4.5")
+        path(d="M10.5 10.5 14 14")
+      input(id=opts.id, type="search", name="search", value=opts.search, placeholder=opts.placeholder)
+    p.list-count
+      | #{opts.totalResults.toLocaleString('en-US')} #{opts.totalResults === 1 ? 'result' : 'results'}
+      if opts.isFiltered
+        |  · #[a(href=opts.clearHref) clear]
+    p.list-sort
+      a(href=opts.newestHref, aria-current=opts.order ? null : 'true') newest
+      | #{' · '}
+      a(href=opts.oldestHref, aria-current=opts.order ? 'true' : null) oldest

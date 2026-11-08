@@ -166,8 +166,9 @@ mark {
 
 /* Header and nav ------------------------------------------------------------------------------- */
 
-.site-header {
-  position: relative;
+/* The header bar: one row at every width, the wordmark then the main pages and the Menu button
+   (pug/templates/includes/siteHeader.pug). The Menu opens below it and pushes the page down. */
+.site-header-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -184,15 +185,15 @@ mark {
 }
 
 .site-header-home {
-  display: block;
   padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--rule-strong);
 }
 
-.site-header-home .site-nav {
-  /* The homepage header holds the intro too, so the menu opens from the nav, not below the intro */
-  position: relative;
-  display: flex;
+/* The homepage bar is only the nav, on the right; the rule is under the intro instead */
+.site-header-home .site-header-bar {
   justify-content: flex-end;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 .site-intro {
@@ -232,12 +233,12 @@ mark {
 
 .site-nav > ul {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.35rem 1.1rem;
+  gap: 1.1rem;
   margin: 0;
   padding: 0;
   list-style: none;
+  white-space: nowrap;
 }
 
 .site-nav a {
@@ -245,17 +246,42 @@ mark {
   text-decoration: none;
 }
 
-.site-nav a[aria-current='page'] {
+/* The page you're on, or the top-level page it's under where its own link isn't shown */
+.site-nav a[aria-current='page'],
+.site-nav a.site-nav-parent-always {
   color: var(--accent);
   text-decoration: underline;
   text-decoration-thickness: 1.5px;
   text-underline-offset: 0.3em;
 }
 
+/* Links drop out at fixed widths; the Menu still has them (api/helpers/siteNav.js) */
+@media (max-width: 1239.98px) {
+  .site-nav-from-desktop {
+    display: none;
+  }
+
+  .site-nav a.site-nav-parent-narrow {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.3em;
+  }
+}
+
+@media (max-width: 639.98px) {
+  .site-nav-from-tablet {
+    display: none;
+  }
+
+  .site-nav > ul {
+    gap: 0.9rem;
+  }
+}
+
 .site-menu-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
   padding: 0.2rem 0.5rem;
   border: 0;
   border-radius: 2px;
@@ -266,20 +292,36 @@ mark {
   cursor: pointer;
 }
 
+.site-menu-button > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.site-menu-button[aria-expanded='true'] {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.site-menu-button[aria-expanded='true'] .site-menu-button-closed,
+.site-menu-button:not([aria-expanded='true']) .site-menu-button-open {
+  display: none;
+}
+
+/* The Menu: groups of a top-level page and the pages under it, in columns, or stacked between
+   rules on phones. A strong rule closes it off from the page. */
 .site-menu {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 5;
   display: grid;
-  grid-template-columns: repeat(3, minmax(10rem, 1fr));
-  gap: 1rem 2rem;
-  width: min(40rem, 100%);
-  margin-top: 0.5rem;
-  padding: 1.25rem 1.5rem;
-  border: 1px solid var(--rule);
-  background: var(--bg);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.08);
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1.25rem 2rem;
+  padding: 1.25rem 0 1.5rem;
+  border-bottom: 2px solid var(--rule-strong);
+}
+
+.site-header-home .site-menu {
+  margin-top: 0.9rem;
+  border-top: 2px solid var(--rule-strong);
 }
 
 .site-menu[hidden] {
@@ -292,18 +334,22 @@ mark {
   list-style: none;
 }
 
-.site-menu li {
-  font-size: 0.95rem;
-  line-height: 1.6;
+.site-menu-top {
+  font-size: 1.1rem;
+  line-height: 1.5;
 }
 
-.site-menu .nav-header {
-  margin-bottom: 0.25rem;
-  color: var(--text-faint);
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.site-menu-top + .site-menu-top {
+  margin-top: 0.35rem;
+}
+
+.site-menu .site-menu-children {
+  margin-top: 0.3rem;
+}
+
+.site-menu-children li {
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .site-menu a {
@@ -312,6 +358,37 @@ mark {
 
 .site-menu a:hover {
   text-decoration: underline;
+}
+
+.site-menu a.site-menu-here {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.site-menu-here-note {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+}
+
+@media (max-width: 639.98px) {
+  .site-menu {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-top: 0.5rem;
+  }
+
+  .site-menu .site-menu-group {
+    padding: 0.75rem 0;
+  }
+
+  .site-menu .site-menu-group + .site-menu-group {
+    border-top: 1px solid var(--rule);
+  }
+
+  .site-menu .site-menu-children {
+    padding-left: 1rem;
+  }
 }
 
 /* Page headings, filters, paging --------------------------------------------------------------- */
@@ -399,8 +476,855 @@ mark {
   padding-top: 1.25rem;
 }
 
+/* The numbered pager (pug/includes/pager.pug): newer on the left, the pages in the middle (the
+   current one filled), older on the right */
+.page-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+.page-nav-prev {
+  justify-self: start;
+}
+
+.page-nav-next {
+  justify-self: end;
+}
+
+.page-nav-prev,
+.page-nav-next {
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.page-nav .page-nav-disabled {
+  color: var(--text-faint);
+}
+
+.page-nav-pages {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page-nav-pages a,
+.page-nav-current,
+.page-nav-gap {
+  display: inline-block;
+  min-width: 2rem;
+  padding: 0.35rem 0.4rem;
+  text-align: center;
+}
+
+.page-nav-pages a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.page-nav-pages a:hover {
+  text-decoration: underline;
+}
+
+.page-nav-current {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.page-nav-gap {
+  min-width: 0;
+  color: var(--text-faint);
+}
+
+@media (max-width: 34rem) {
+  .page-nav {
+    gap: 0.5rem;
+  }
+
+  .page-nav-pages {
+    gap: 0;
+  }
+
+  .page-nav-pages a,
+  .page-nav-current {
+    min-width: 1.6rem;
+    padding: 0.35rem 0.2rem;
+  }
+}
+
 .empty {
   color: var(--text-muted);
+}
+
+/* Lists: press and the reading lists (pug/views/press.pug, reading.pug, shortform.pug, books.pug).
+   The layout, search and sort controls and entries are shared; the press page adds tag chips by
+   its title, the reading lists a tag column beside the list. ------------------------------------ */
+
+.list-layout {
+  display: grid;
+  grid-template-columns: minmax(0, var(--main-width)) var(--meta-width);
+  column-gap: var(--column-gap);
+  padding-top: 2rem;
+}
+
+.list-title {
+  margin: 0.1rem 0 0.9rem;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.list-intro {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.55;
+}
+
+.press-list {
+  margin-top: 2.5rem;
+}
+
+.press-list-heading {
+  margin: 0 0 1rem;
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Tag chips: the tag in the serif, its count small in mono. "+ n more tags" follows the last chip,
+   and opens the rest on the rows below. */
+.press-tags,
+.press-more-tags ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.press-tags ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.press-tags > ul {
+  display: contents;
+}
+
+.press-tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--chip-border);
+  border-radius: 2px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.press-tag:hover:not([aria-current]) {
+  border-color: var(--accent);
+}
+
+.press-tag[aria-current] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.press-tag-count {
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+}
+
+.press-tag[aria-current] .press-tag-count {
+  color: inherit;
+}
+
+.press-more-tags[open] {
+  flex-basis: 100%;
+}
+
+.press-more-tags summary {
+  display: inline;
+  margin-left: 0.2rem;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.press-more-tags summary::-webkit-details-marker {
+  display: none;
+}
+
+.press-more-tags[open] summary {
+  display: none;
+}
+
+.press-more-tags ul {
+  margin: 0;
+}
+
+/* Search, count and sort, under a strong rule */
+.list-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-top: 1.1rem;
+  padding: 1rem 0;
+  border-top: 2px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+.list-search {
+  position: relative;
+  flex: 1 1 18rem;
+}
+
+.list-search-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.65rem;
+  color: var(--text-faint);
+  transform: translateY(-50%);
+}
+
+.list-search input {
+  width: 100%;
+  padding: 0.5rem 0.6rem 0.5rem 1.9rem;
+  border: 1px solid var(--chip-border);
+  border-radius: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 0.95rem;
+}
+
+.list-search input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.list-count,
+.list-sort {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.list-sort a {
+  color: var(--text-muted);
+}
+
+.list-sort a[aria-current] {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Entries by month: date on the left, outlet and author over the headline */
+.press-month-heading {
+  margin: 1.5rem 0 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.list-entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list-entry {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.list-entry-date {
+  padding-top: 0.15rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+}
+
+.list-entry-meta,
+.list-entry-foot {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+}
+
+.list-entry-outlet {
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.list-entry-title {
+  margin: 0.25rem 0 0.35rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.list-entry-title a {
+  text-decoration: none;
+}
+
+.list-entry-title a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+}
+
+.list-entry-foot a {
+  color: var(--text-muted);
+}
+
+/* Side: a photo, then how journalists can reach you */
+.press-photo {
+  margin: 0;
+}
+
+.press-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 0.5rem;
+  border: 1px solid var(--rule);
+}
+
+.press-photo figcaption {
+  margin-top: 0.45rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+
+.press-photo figcaption a {
+  color: var(--accent);
+}
+
+.press-contact {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-wash);
+}
+
+.press-contact p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.press-contact .press-contact-label {
+  margin-bottom: 0.4rem;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .list-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The side (press photo and contact details, reading list tags) follows the list */
+  .list-side {
+    margin-top: 2rem;
+  }
+
+  .list-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+  }
+}
+
+/* Reading lists: the index (reading.pug), shortform reading (shortform.pug), books (books.pug) */
+
+.list-back {
+  margin: 0 0 0.9rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+.list-back a {
+  text-decoration: none;
+}
+
+.list-back a:hover {
+  text-decoration: underline;
+}
+
+.list-feed-link {
+  margin: 0.9rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.list-feed-link a {
+  color: var(--accent);
+}
+
+.reading-lists {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.reading-card {
+  padding: 1.1rem 1.1rem 1.2rem;
+  border: 1px solid var(--rule);
+}
+
+.reading-card-book {
+  display: grid;
+  grid-template-columns: 4.6rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.reading-card-label {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+}
+
+.reading-card-label a {
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.reading-card-label a:hover {
+  text-decoration: underline;
+}
+
+.reading-card-when {
+  margin: 0.9rem 0 0.15rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+}
+
+.reading-card-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.reading-card-title a,
+.reading-card-book-title a {
+  text-decoration: none;
+}
+
+.reading-card-title a:hover,
+.reading-card-book-title a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+}
+
+.reading-card-book-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.reading-card-byline {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+}
+
+.reading-card-others {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.reading-card-links {
+  margin: 1rem 0 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+}
+
+.reading-card-links a:first-child {
+  color: var(--accent);
+}
+
+.reading-card-links a + a {
+  color: var(--text-muted);
+}
+
+/* A book's cover, or a tinted box the same shape when there isn't one */
+.book-cover {
+  display: block;
+}
+
+.book-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.book-cover img.bordered {
+  border: 1px solid var(--rule);
+}
+
+.book-cover-empty {
+  aspect-ratio: 2 / 3;
+  background: var(--accent-wash);
+}
+
+/* Status and type filters over the books list: joined segments, the chosen one filled */
+.list-segments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.25rem;
+  margin-top: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+.list-segment-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.list-segment-label {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+}
+
+.list-segment-group ul {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--chip-border);
+  list-style: none;
+}
+
+.list-segment-group li + li {
+  border-left: 1px solid var(--chip-border);
+}
+
+.list-segment-group a {
+  display: block;
+  padding: 0.3rem 0.6rem;
+  text-decoration: none;
+}
+
+.list-segment-group a:hover:not([aria-current]) {
+  color: var(--accent);
+}
+
+.list-segment-group a[aria-current] {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+/* A shortform entry's commentary, then its quoted passages after a lavender quotation mark */
+.list-entry-parenthetical {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.list-entry-summary {
+  margin: 0.4rem 0 0.5rem;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.list-entry-summary > :first-child {
+  margin-top: 0;
+}
+
+.list-entry-summary > :last-child {
+  margin-bottom: 0;
+}
+
+.list-entry-excerpt {
+  position: relative;
+  margin: 0.45rem 0 0.6rem;
+  padding-left: 1.1rem;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.list-entry-excerpt::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.2rem;
+  left: 0;
+  color: var(--accent);
+  font-family: var(--quote-face);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+/* A book: its cover beside the series, title, author and when it was read */
+.book-entry {
+  display: grid;
+  grid-template-columns: 5.3rem minmax(0, 1fr);
+  gap: 1.1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.book-entry-series {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.book-entry-title {
+  margin: 0.05rem 0 0.15rem;
+  font-size: 1.45rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.book-entry-title a {
+  text-decoration: none;
+}
+
+.book-entry-title a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+}
+
+.book-entry-subtitle {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.book-entry-byline {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.book-entry-meta,
+.book-entry-reading,
+.book-entry-tags {
+  margin: 0.5rem 0 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+}
+
+.book-entry-reading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.75rem;
+  color: var(--text);
+}
+
+.book-entry-tags a {
+  color: var(--text-muted);
+}
+
+.book-status {
+  padding: 0.2rem 0.45rem;
+  background: var(--rule);
+  color: var(--text);
+}
+
+.book-status-currentlyReading {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.book-status-dnf {
+  padding: calc(0.2rem - 1px) calc(0.45rem - 1px);
+  border: 1px solid var(--chip-border);
+  background: none;
+  color: var(--text-muted);
+}
+
+/* The tag column: each tag over a bar for its count, against a grey track */
+.list-tags-heading {
+  margin: 0 0 0.4rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.list-tag-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list-tag-row {
+  --bar: var(--quote-rule);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.3rem 0 0.4rem;
+  background:
+    linear-gradient(var(--bar), var(--bar)) left bottom /
+      calc(var(--share, 0) * 100%) 2px no-repeat,
+    linear-gradient(var(--rule), var(--rule)) left bottom / 100% 2px no-repeat;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.list-tag-row:hover {
+  --bar: var(--accent);
+}
+
+.list-tag-row[aria-current] {
+  --bar: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.list-tag-row-count {
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+}
+
+.list-more-tags summary {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+  text-underline-offset: 0.22em;
+  cursor: pointer;
+  list-style: none;
+}
+
+.list-more-tags summary::-webkit-details-marker {
+  display: none;
+}
+
+.list-more-tags[open] summary {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .reading-lists {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .book-entry {
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: 0.9rem;
+  }
+}
+
+/* Short status pages: not found (404.pug), a deleted post (micro/tombstone.pug), log in
+   (micro/login.pug). The list pages' label, title and intro, then a row of links onward. */
+.status-main {
+  max-width: var(--main-width);
+  padding-top: 2rem;
+}
+
+.status-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 1.75rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 2px solid var(--rule-strong);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  list-style: none;
+}
+
+.status-links a {
+  color: var(--accent);
+}
+
+.login-form {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 22rem;
+  margin-top: 1.5rem;
+}
+
+.login-form label {
+  margin-top: 0.6rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+.login-form input {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--chip-border);
+  border-radius: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 1rem;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.login-form button {
+  justify-self: start;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: 0;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 /* Entries -------------------------------------------------------------------------------------- */
@@ -1804,14 +2728,6 @@ a.mention-name {
 
   .site-photo {
     display: none;
-  }
-
-  .site-header {
-    flex-wrap: wrap;
-  }
-
-  .site-menu {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .feed-controls {

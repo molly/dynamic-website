@@ -99,9 +99,16 @@ const PressSchema = new mongoose.Schema({
   mediaUrl: { type: String, match: /^https?:\/\// }, // Your own copy of a video
   posterUrl: { type: String, match: /^https?:\/\// },
   audioUrl: { type: String, match: /^https?:\/\// }, // Audio you've rehosted
+  // Who wrote it or hosted it, as entities, beside `author` as written. When set, they're shown
+  // (linked) instead of `author`, which stays for search and for entries without them.
+  authors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Entity' }],
   // Others in a talk or appearance (fellow panelists, guests), shown as "with …" after the host
   people: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Entity' }],
 });
+
+// Press fields that hold entities: each puts the press on those entities' pages, and is updated
+// when one is deleted or merged
+export const PRESS_ENTITY_FIELDS = ['authors', 'people'];
 
 // The press fields the tagger page edits.
 export const PRESS_CARD_FIELDS = [
@@ -117,6 +124,7 @@ export const PRESS_CARD_FIELDS = [
   'mediaUrl',
   'posterUrl',
   'audioUrl',
+  'authors',
   'people',
 ];
 

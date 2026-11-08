@@ -1,10 +1,25 @@
-//- "← older" and "newer →" between pages of a feed. Needs currentPage, totalPages and pageBase
-//- (the URL up to and including "?" or "&").
+//- The numbered pager under a feed or list: "← newer   1 2 3 … 35   older →" (pagerItems,
+//- api/helpers/pager.js). Needs currentPage and totalPages, and either pageHref (a function from
+//- a page number to its URL) or pageBase (the URL up to and including "?" or "&"). A list that
+//- runs oldest first (a thread) sets pagerOldestFirst, so the arrows read "← older" and "newer →".
+- var hrefFor = typeof pageHref === 'function' ? pageHref : (n) => (n === 1 ? pageBase.replace(/[?&]$/, '') || '/' : `${pageBase}page=${n}`)
+- var labels = typeof pagerOldestFirst !== 'undefined' && pagerOldestFirst ? { prev: '← older', next: 'newer →' } : { prev: '← newer', next: 'older →' }
 if totalPages > 1
-  nav.pager(aria-label="Pages")
-    if currentPage < totalPages
-      a.pager-older(href=`${pageBase}page=${currentPage + 1}`, rel="next") ← older
-    else
-      span
+  nav.page-nav(aria-label="Pages")
     if currentPage > 1
-      a.pager-newer(href=currentPage === 2 ? pageBase.replace(/[?&]$/, '') || '/' : `${pageBase}page=${currentPage - 1}`, rel="prev") newer →
+      a.page-nav-prev(href=hrefFor(currentPage - 1), rel="prev") #{labels.prev}
+    else
+      span.page-nav-prev.page-nav-disabled(aria-hidden="true") #{labels.prev}
+    ol.page-nav-pages
+      each item in pagerItems(currentPage, totalPages)
+        li
+          if item === null
+            span.page-nav-gap(aria-hidden="true") …
+          else if item === currentPage
+            span.page-nav-current(aria-current="page") #{item}
+          else
+            a(href=hrefFor(item), aria-label=`Page ${item}`) #{item}
+    if currentPage < totalPages
+      a.page-nav-next(href=hrefFor(currentPage + 1), rel="next") #{labels.next}
+    else
+      span.page-nav-next.page-nav-disabled(aria-hidden="true") #{labels.next}

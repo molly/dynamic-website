@@ -1,21 +1,31 @@
-- var navLinks = [{ key: 'home', href: '/', text: 'Home' }, { key: 'feed', href: '/feed', text: 'Feed' }, { key: 'about', href: '/about', text: 'About' }, { key: 'support', href: '/support', text: 'Support' }]
+//- The site header: the wordmark, one row of the main pages, and the Menu button, with the Menu
+//- below them (siteMenu.pug). The pages are in api/helpers/siteNav.js, which says which links drop
+//- out at which widths and which top-level page is underlined for a page that isn't in the bar.
+- var nav = navState(typeof navCurrent === 'undefined' ? null : navCurrent)
 
 mixin siteNav
   nav.site-nav(aria-label="Main")
     ul
-      each link in navLinks
-        li
-          a(href=link.href, aria-current=navCurrent === link.key ? 'page' : false) #{link.text}
+      each link in siteBar
+        - var isParent = nav.parent === link.key
+        li(class=link.from ? `site-nav-from-${link.from}` : null)
+          a(href=link.href, aria-current=nav.current === link.key ? 'page' : null, class=isParent ? `site-nav-parent site-nav-parent-${nav.parentFrom}` : null) #{link.text}
       li
         button#site-menu-button.site-menu-button(type="button", aria-expanded="false", aria-controls="site-menu")
-          svg(viewBox="0 0 12 12", width="10", height="10", aria-hidden="true")
-            path(d="M1 3h10M1 6h10M1 9h10", stroke="currentColor", stroke-width="1.3")
-          |  Menu
-    include ./siteMenu.pug
+          span.site-menu-button-closed
+            svg(viewBox="0 0 12 12", width="10", height="10", aria-hidden="true")
+              path(d="M1 3h10M1 6h10M1 9h10", stroke="currentColor", stroke-width="1.3")
+            |  Menu
+          span.site-menu-button-open
+            svg(viewBox="0 0 12 12", width="9", height="9", aria-hidden="true")
+              path(d="M2 2l8 8M10 2l-8 8", stroke="currentColor", stroke-width="1.5")
+            |  Close
 
 if headerVariant === 'home'
   header.site-header.site-header-home.h-card
-    +siteNav
+    .site-header-bar
+      +siteNav
+    include ./siteMenu.pug
     .site-intro
       //- A portrait photo, to the left of the name and intro
       picture.site-photo
@@ -27,5 +37,7 @@ if headerVariant === 'home'
         p.p-note I research and write critically about the cryptocurrency industry and technology more broadly in my independent publication, #[a(href="https://www.citationneeded.news/") #[i Citation Needed]]. I also run projects like #[a(href="https://www.web3isgoinggreat.com/") #[i Web3 is Going Just Great]] and #[a(href="https://influence.citationneeded.news/") #[i Tech Influence Watch]].
 else
   header.site-header
-    a.site-wordmark-small(href="/") Molly White
-    +siteNav
+    .site-header-bar
+      a.site-wordmark-small(href="/") Molly White
+      +siteNav
+    include ./siteMenu.pug

@@ -51,13 +51,21 @@ export function nameKey(name) {
 }
 
 /**
- * One key per social account, so the same handle can't belong to two entities.
+ * One key per account, so the same handle (or website) can't belong to two entities. A website is
+ * the same site with or without its protocol, "www." or a trailing slash.
  * @param {string} network
  * @param {string} handle
  * @returns {string}
  */
 export function accountKey(network, handle) {
-  return `${network}:${handle.trim().replace(/^@/, '').toLowerCase()}`;
+  const key = handle.trim().replace(/^@/, '').toLowerCase();
+  if (network === 'website') {
+    return `website:${key
+      .replace(/^[a-z]+:\/\//, '')
+      .replace(/^www\./, '')
+      .replace(/\/+$/, '')}`;
+  }
+  return `${network}:${key}`;
 }
 
 /**

@@ -12,7 +12,9 @@ import {
 } from './helpers/pickers.js';
 
 let socialLinks = {};
-// Others in a press talk or appearance (entities), on press entries only
+// Who wrote or hosted press, and the others in a talk or appearance (entities), on press entries
+// only
+let pressAuthorsPicker = null;
 let pressPeoplePicker = null;
 
 // Press card fields ----------------------------------------------------------------------------
@@ -115,6 +117,9 @@ function readPressFields() {
     kind: document.getElementById('press-kind').value,
     role: document.getElementById('press-role').value || null,
     duration,
+    authors: pressAuthorsPicker
+      ? selectedValues(pressAuthorsPicker)
+      : undefined,
     people: pressPeoplePicker ? selectedValues(pressPeoplePicker) : undefined,
   };
   for (const name of PRESS_FIELDS) {
@@ -154,6 +159,11 @@ async function onFirstLoad() {
   // #coinbase suggests @Coinbase for "about", and the other way round
   suggestBetweenTagsAndAbout({ tagSelect, aboutPicker });
   initPressFields();
+  if (document.getElementById('press-authors')) {
+    pressAuthorsPicker = createAboutPicker('#press-authors', {
+      initial: pickerData.pressAuthors,
+    });
+  }
   if (document.getElementById('press-people')) {
     pressPeoplePicker = createAboutPicker('#press-people', {
       initial: pickerData.pressPeople,

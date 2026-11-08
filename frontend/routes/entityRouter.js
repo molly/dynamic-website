@@ -13,7 +13,7 @@ import {
 // (hasPage) are shown; the rest only power @mentions.
 const router = express.Router();
 
-const notFound = (res) => res.status(404).render('micro/404.pug');
+const notFound = (res) => res.status(404).render('404.pug');
 
 router.get('/', async (req, res) => {
   const entities = await loadEntityIndex();

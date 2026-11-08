@@ -42,7 +42,6 @@ export const SHARED_FIELDS = [
     input: 'text',
     placeholder: 'Q12345',
   },
-  { name: 'ids.website', label: 'Website', input: 'url' },
   {
     name: 'ids.wikipedia',
     label: 'Wikipedia article',
@@ -274,13 +273,7 @@ const FIELD_SECTIONS = {
     'endDate',
   ],
   identifiers: ['ids.wikidata', 'secCik', 'fecId'],
-  links: [
-    'ids.website',
-    'congressGovUrl',
-    'courtListenerUrl',
-    'pacerUrl',
-    'complaint.pdfUrl',
-  ],
+  links: ['congressGovUrl', 'courtListenerUrl', 'pacerUrl', 'complaint.pdfUrl'],
   accounts: ['accounts'],
   elsewhere: ['elsewhere', 'ids.wikipedia'],
   page: ['hasPage'],

@@ -267,8 +267,8 @@ mixin pressBody(entry, meta)
           i.p-publication #{press.work}
           | : 
         | “#[a.u-url.p-name(href=press.href) #{press.title}]”
-        if press.author
-          span.press-line-author  — #{press.author}
+        if press.authorHtml
+          span.press-line-author  — !{press.authorHtml}
 
 //- Your own copy of a talk or video, when there is one.
 mixin pressMedia(press)

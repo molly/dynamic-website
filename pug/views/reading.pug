@@ -1,34 +1,78 @@
-extends ../templates/base.pug
+extends ../templates/site.pug
+
+//- The reading lists' index: a card for each list, with how many it holds and what's newest on it
+//- (frontend/routes/readingList.js, data/filter/landing.js).
 
 block vars
-  - var htmlClass = 'reading landing';
-  - var page = 'reading';
-  - var importPrefix = 'https://www.mollywhite.net'
-  - var showTagCount = true
+  - var htmlClass = 'reading-page'
+  - var navCurrent = 'reading'
 
 block head
   include ../templates/titleAndDescription.pug
-  link(rel='stylesheet', href="/static/reading.css")
   +titleAndDescription('Reading', 'Interested in what I\'m reading these days? Check out my reading lists.', '/reading')
 
 block body
-  main
-    .content-box
-      p Interested in what I'm reading these days? Check out my reading lists. I also have a #[a(href="/blogroll") blogroll] of sites I read regularly.
+  include ../mixins/author.pug
+  main#main.site-main.list-layout
+    .list-main
+      header.list-head
+        p.entity-type-label Other interests
+        h1.list-title Reading
+        p.list-intro
+          | Interested in what I’m reading these days? Check out my reading lists. I also have a
+          | #[a(href="/blogroll") blogroll] of sites I read regularly.
 
-      .reading-section
-        h3
-          a(href="/reading/shortform") Shortform reading list 
-        div.rss-link
-          img.rss-icon.bw-icon(src="https://www.mollywhite.net/storage/rss.svg")
-          a(href="https://www.mollywhite.net/reading/shortform/feed.xml", target="_blank") RSS 
-        .reading-section-body  
-          include ../mixins/currentlyReadingArticleSummary.pug
-          +currentlyReadingArticleSummary(mostRecentShortform)
+      .reading-lists
+        section.reading-card(aria-labelledby="reading-shortform-heading")
+          p.reading-card-label
+            a#reading-shortform-heading(href="/reading/shortform") Shortform reading list
+            |  · #{shortformCount.toLocaleString('en-US')}
+          if shortform
+            p.reading-card-when most recently #{shortformVerb}
+            p.reading-card-title
+              a(href=shortform.href) #{shortform.title}
+            if shortform.author || shortform.work || shortform.publisher
+              p.reading-card-byline
+                if shortform.author
+                  +author(shortform.author)
+                if shortform.work
+                  | #{shortform.author ? ' in ' : ''}
+                  if shortform.workItalics === false
+                    | #{shortform.work}
+                  else
+                    i #{shortform.work}
+                else if shortform.publisher
+                  | #{shortform.author ? ' for ' : ''}#{shortform.publisher}
+          p.reading-card-links
+            a(href="/reading/shortform") See the list →
+            | #{' · '}
+            a(href="https://www.mollywhite.net/reading/shortform/feed.xml") rss
 
-      .reading-section
-        h3
-          a(href="/reading/books") Books 
-        .reading-section-body  
-          include ../mixins/currentlyReadingSummary.pug
-          +currentlyReadingSummary(currentlyReadingBooks)
+        - var book = currentBooks.books[0]
+        section.reading-card(class=book ? 'reading-card-book' : null, aria-labelledby="reading-books-heading")
+          if book
+            if book.imageSrc
+              span.book-cover
+                img(class=book.border ? 'bordered' : null, src=book.imageSrc, alt=`Cover of ${book.title}`)
+            else
+              .book-cover.book-cover-empty
+          div
+            p.reading-card-label
+              a#reading-books-heading(href="/reading/books") Books
+              |  · #{bookCount.toLocaleString('en-US')}
+            if book
+              p.reading-card-when #{currentBooks.status === 'currentlyReading' ? 'currently reading' : 'most recently finished'}
+              p.reading-card-book-title
+                if book.href
+                  a(href=book.href) #{book.title}
+                else
+                  | #{book.title}
+              if book.author
+                p.reading-card-byline
+                  +author(book.author)
+              - var others = currentBooks.books.length - 1
+              if others > 0
+                p.reading-card-others
+                  a(href="/reading/books?status=currentlyReading") and #{others} other #{others === 1 ? 'book' : 'books'}
+            p.reading-card-links
+              a(href="/reading/books") See the list →

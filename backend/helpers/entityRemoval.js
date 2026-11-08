@@ -2,7 +2,11 @@ import * as cheerio from 'cheerio';
 
 import { fieldsFor } from '../../api/helpers/entityFields.js';
 import { Entity, EntityRelation } from '../models/entity.model.js';
-import { PressEntry, ShortformEntry } from '../models/entry.model.js';
+import {
+  PRESS_ENTITY_FIELDS,
+  PressEntry,
+  ShortformEntry,
+} from '../models/entry.model.js';
 import { FeedEntry } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 import { accountKey, nameKey } from './entityKeys.js';
@@ -13,6 +17,7 @@ import { accountKey, nameKey } from './entityKeys.js';
 //  - feed entries' "about"
 //  - relations, from either end
 //  - reading and press entries' outlet
+//  - press entries' authors and people (who wrote or hosted it; others in a talk or appearance)
 // Deleting turns its mentions into plain text and drops it everywhere else; merging points
 // everything at the entity kept, and gives it the duplicate's accounts, names and anything else
 // it doesn't have.
@@ -86,11 +91,14 @@ export async function entityUsage(id) {
     {},
     `slug ${POST_FIELDS.join(' ')}`,
   ).lean();
-  const [about, relations, reading, press] = await Promise.all([
+  const [about, relations, reading, press, inPress] = await Promise.all([
     FeedEntry.countDocuments({ about: id }),
     EntityRelation.countDocuments({ $or: [{ from: id }, { to: id }] }),
     ShortformEntry.countDocuments({ outlet: id }),
     PressEntry.countDocuments({ outlet: id }),
+    PressEntry.countDocuments({
+      $or: PRESS_ENTITY_FIELDS.map((field) => ({ [field]: id })),
+    }),
   ]);
   return {
     posts: posts
@@ -99,6 +107,7 @@ export async function entityUsage(id) {
     about,
     relations,
     outletOf: reading + press,
+    inPress,
   };
 }
 
@@ -141,6 +150,12 @@ export async function deleteEntity(id) {
     EntityRelation.deleteMany({ $or: [{ from: id }, { to: id }] }),
     ShortformEntry.updateMany({ outlet: id }, { $unset: { outlet: '' } }),
     PressEntry.updateMany({ outlet: id }, { $unset: { outlet: '' } }),
+    ...PRESS_ENTITY_FIELDS.map((field) =>
+      PressEntry.updateMany(
+        { [field]: id },
+        { $pull: { [field]: entity._id } },
+      ),
+    ),
   ]);
   await Entity.deleteOne({ _id: id });
   return { posts };
@@ -247,6 +262,17 @@ export async function mergeEntity(duplicateId, keepId) {
     { about: duplicate._id },
     { $pull: { about: duplicate._id } },
   );
+  // Press authors and people: the kept entity where the duplicate was, once, as with "about"
+  for (const field of PRESS_ENTITY_FIELDS) {
+    await PressEntry.updateMany(
+      { [field]: duplicate._id },
+      { $addToSet: { [field]: keep._id } },
+    );
+    await PressEntry.updateMany(
+      { [field]: duplicate._id },
+      { $pull: { [field]: duplicate._id } },
+    );
+  }
   await Promise.all([
     ShortformEntry.updateMany(
       { outlet: duplicate._id },

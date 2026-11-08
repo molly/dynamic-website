@@ -1,0 +1,19 @@
+//- The tags beside a list (the reading lists): the most used, each over a bar for its count, then
+//- "all n tags" to open the rest. Each links to the list with that tag added or, when chosen, taken
+//- away (readingTags, api/helpers/readingList.js).
+mixin listTagRows(chips)
+  ul.list-tag-rows
+    each chip in chips
+      li
+        a.list-tag-row(href=chip.href, aria-current=chip.current ? 'true' : null, style=`--share: ${chip.share}`)
+          span.list-tag-row-text #{chip.text}
+          span.list-tag-row-count #{chip.count}
+
+mixin listTags(tags)
+  nav.list-tags(aria-labelledby="list-tags-heading")
+    h2#list-tags-heading.list-tags-heading Tags
+    +listTagRows(tags.shown)
+    if tags.more.length
+      details.list-more-tags
+        summary all #{tags.total} tags →
+        +listTagRows(tags.more)

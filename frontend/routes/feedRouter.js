@@ -4,6 +4,7 @@ import { shortDate } from '../../api/helpers/entryMeta.js';
 import { FEED_FILTERS, feedFilter } from '../../api/helpers/feedFilters.js';
 import {
   PRESS_CARD_FIELDS,
+  PRESS_ENTITY_FIELDS,
   PRESS_KINDS,
   PRESS_ROLES,
   PressEntry,
@@ -92,7 +93,7 @@ const THREAD_LIMIT = 50;
 router.get('/thread/:slug', async (req, res) => {
   const thread = await Thread.findOne({ slug: String(req.params.slug) }).lean();
   if (!thread) {
-    res.status(404).render('micro/404.pug');
+    res.status(404).render('404.pug');
     return;
   }
   const page = pageNumber(req.query.page);
@@ -215,11 +216,11 @@ router.get(
       await entry.populate({
         path: 'press',
         model: PressEntry,
-        populate: {
-          path: 'people',
+        populate: PRESS_ENTITY_FIELDS.map((path) => ({
+          path,
           model: Entity,
           select: ENTITY_SUMMARY_FIELDS,
-        },
+        })),
       });
     }
     const pickerData = {
@@ -228,7 +229,12 @@ router.get(
       createdAt: entry.createdAt,
       threads: entry.threads.map((t) => t.toJSON()),
       about: entry.about.map((e) => e.toJSON()),
-      // The others in a talk or appearance, for the press card's picker
+      // Who wrote or hosted it, and the others in a talk or appearance, for the press card's
+      // pickers
+      pressAuthors:
+        entryType === 'press'
+          ? (entry.press?.authors || []).map((e) => e.toJSON())
+          : [],
       pressPeople:
         entryType === 'press'
           ? (entry.press?.people || []).map((e) => e.toJSON())
