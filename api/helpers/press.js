@@ -9,6 +9,7 @@ const ROLE_PHRASES = {
   cited: 'Cited in',
   interviewed: 'Interviewed in',
   profiled: 'Profiled in',
+  'panel member': 'On a panel in',
 };
 
 const KIND_DETAILS = {
@@ -20,6 +21,25 @@ const KIND_DETAILS = {
   tv: { icon: 'tv', verb: 'Appeared on' },
   talk: { icon: 'chat', verb: 'Spoke' },
 };
+
+/**
+ * When a press piece goes in the feed: on the day it was published (midnight Eastern), so the feed
+ * lists press by publication rather than by when it was added. Null, for the time it's added,
+ * when the date has no day ("2025-03") or is after today (an upcoming talk shows when it's
+ * announced).
+ * @param {{date?: string}} press
+ * @returns {?Date}
+ */
+export function pressFeedDate(press, { now = DateTime.now() } = {}) {
+  const date = String(press?.date || '');
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+    date > now.setZone('America/New_York').toISODate()
+  ) {
+    return null;
+  }
+  return DateTime.fromISO(date, { zone: 'America/New_York' }).toJSDate();
+}
 
 /**
  * Whether a talk hasn't happened yet: its date is after today (Eastern).

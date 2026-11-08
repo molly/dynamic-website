@@ -3,7 +3,10 @@ import {
   RELATED_POPULATE,
   loadPostContext,
 } from '../backend/helpers/postContext.js';
+import { ENTITY_SUMMARY_FIELDS } from '../backend/helpers/entities.js';
+import { pressWithHtml } from '../backend/helpers/mentionMarkup.js';
 import { Book } from '../backend/models/book.model.js';
+import { Entity } from '../backend/models/entity.model.js';
 import { PressEntry, ShortformEntry } from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
@@ -55,7 +58,12 @@ export const hydrateFeedEntry = (entry, context = {}) => {
   } else if (entry.__t === 'FeedEntryPress' && entry.press) {
     entry.entryType = 'press';
     Object.assign(entry, getPressDetails(entry.press));
-    entry.press = { ...entry.press, ...formatArticleDate(entry.press) };
+    entry.press = {
+      ...entry.press,
+      ...formatArticleDate(entry.press),
+      // "with …": the host, then the others in it
+      withHtml: pressWithHtml(entry.press.author, entry.press.people),
+    };
   }
   return entry;
 };
@@ -113,7 +121,15 @@ export const getFeedEntries = async ({
       model: ShortformEntry,
     })
     .populate({ path: 'book', model: Book })
-    .populate({ path: 'press', model: PressEntry })
+    .populate({
+      path: 'press',
+      model: PressEntry,
+      populate: {
+        path: 'people',
+        model: Entity,
+        select: ENTITY_SUMMARY_FIELDS,
+      },
+    })
     .lean();
 
   if (entries.some((entry) => 'book' in entry)) {

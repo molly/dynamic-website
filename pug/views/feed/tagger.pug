@@ -55,7 +55,7 @@ block body
             select#press-kind
               each kind in pressKinds
                 option(value=kind, selected=press.kind === kind) #{pressKindNames[kind] || kind}
-          .entity-field-row(data-kinds="article podcast radio video tv")
+          .entity-field-row(data-kinds="article podcast radio video tv talk")
             label(for="press-role") your part
             select#press-role
               option(value="", selected=!press.role) —
@@ -65,6 +65,9 @@ block body
           .entity-field-row(data-kinds="talk podcast radio video tv")
             label(for="press-duration") length
             input#press-duration(type="text", value=durationText(press.duration), placeholder="52:30 or 1:02:30", inputmode="numeric")
+          .entity-field-row(data-kinds="podcast radio video tv talk")
+            label(for="press-people") with
+            input#press-people(autocomplete="off")
           .entity-field-row(data-kinds="podcast radio")
             label(for="press-episode") episode
             input#press-episode(type="text", value=press.episode || '', placeholder="426")

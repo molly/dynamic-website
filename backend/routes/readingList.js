@@ -1,4 +1,5 @@
 import express from 'express';
+import { pressFeedDate } from '../../api/helpers/press.js';
 import { queueArchive } from '../helpers/archive.js';
 import { addOutletDomain, outletForUrl } from '../helpers/outlets.js';
 import { SHORTFORM_CARD_FIELDS } from '../helpers/postContext.js';
@@ -93,7 +94,13 @@ router.post('/entry', authenticated(), async (req, res) => {
 
     if (postToFeed) {
       const FeedModel = type === 'press' ? FeedEntryPress : FeedEntryReading;
-      await new FeedModel({ [type]: result._id, tags: tagIds }).save();
+      // Press goes in the feed on the day it was published (pressFeedDate)
+      const createdAt = type === 'press' ? pressFeedDate(result) : null;
+      await new FeedModel({
+        [type]: result._id,
+        tags: tagIds,
+        ...(createdAt ? { createdAt } : {}),
+      }).save();
     }
   } catch (err) {
     return res.status(400).send({ message: err.message });

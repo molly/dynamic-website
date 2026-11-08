@@ -309,6 +309,16 @@ export function checkPressFields(input) {
     return { error: `Unknown role "${fields.role}".` };
   }
   if (
+    fields.people !== undefined &&
+    fields.people !== null &&
+    !(
+      Array.isArray(fields.people) &&
+      fields.people.every((id) => mongoose.isValidObjectId(id))
+    )
+  ) {
+    return { error: 'People must be a list of entities.' };
+  }
+  if (
     fields.duration !== undefined &&
     fields.duration !== null &&
     !(Number.isFinite(fields.duration) && fields.duration >= 0)

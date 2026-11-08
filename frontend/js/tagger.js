@@ -12,6 +12,8 @@ import {
 } from './helpers/pickers.js';
 
 let socialLinks = {};
+// Others in a press talk or appearance (entities), on press entries only
+let pressPeoplePicker = null;
 
 // Press card fields ----------------------------------------------------------------------------
 
@@ -113,6 +115,7 @@ function readPressFields() {
     kind: document.getElementById('press-kind').value,
     role: document.getElementById('press-role').value || null,
     duration,
+    people: pressPeoplePicker ? selectedValues(pressPeoplePicker) : undefined,
   };
   for (const name of PRESS_FIELDS) {
     fields[name] =
@@ -151,6 +154,11 @@ async function onFirstLoad() {
   // #coinbase suggests @Coinbase for "about", and the other way round
   suggestBetweenTagsAndAbout({ tagSelect, aboutPicker });
   initPressFields();
+  if (document.getElementById('press-people')) {
+    pressPeoplePicker = createAboutPicker('#press-people', {
+      initial: pickerData.pressPeople,
+    });
+  }
 
   /**
    * Track social post IDs typed into the manual link fields

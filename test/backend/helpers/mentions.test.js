@@ -7,6 +7,7 @@ import {
 } from '../../../api/helpers/mentions';
 import {
   entityNameLink,
+  pressWithHtml,
   expandMentionsInPost,
   renderMention,
 } from '../../../backend/helpers/mentionMarkup';
@@ -299,6 +300,26 @@ describe('site markup', () => {
     expect(expanded.blocks[0].data.text).toContain('h-card');
     expect(expanded.blocks[1].data.text).toEqual('Gone');
     expect(post.blocks[0].data.text).toEqual(POST_TEXT); // Original untouched
+  });
+});
+
+describe('people in a talk or appearance', () => {
+  const panelist = {
+    name: 'Paul Grewal',
+    type: 'person',
+    slug: 'paul-grewal',
+    hasPage: true,
+  };
+
+  it('lists the host, then the others, linked to their pages', () => {
+    expect(
+      pressWithHtml('Ezra & Co', [panelist, { name: 'Jo', type: 'person' }]),
+    ).toBe(
+      'Ezra &amp; Co, <a class="entity-page p-name" href="/entities/people/paul-grewal">Paul Grewal</a> and Jo',
+    );
+    expect(pressWithHtml(null, [panelist])).toContain('Paul Grewal</a>');
+    expect(pressWithHtml('Ezra')).toBe('Ezra');
+    expect(pressWithHtml(null, [])).toBeNull();
   });
 });
 

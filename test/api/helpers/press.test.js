@@ -1,5 +1,9 @@
 import { DateTime } from 'luxon';
-import { getPressDetails, isUpcoming } from '../../../api/helpers/press';
+import {
+  getPressDetails,
+  isUpcoming,
+  pressFeedDate,
+} from '../../../api/helpers/press';
 import { candidateDomains, domainOf } from '../../../backend/helpers/outlets';
 
 describe('outlet domains', () => {
@@ -24,6 +28,20 @@ describe('outlet domains', () => {
 describe('press in the feed', () => {
   const now = DateTime.fromISO('2026-11-07T12:00:00', {
     zone: 'America/New_York',
+  });
+
+  it('goes in the feed on the day it was published', () => {
+    // Midnight Eastern
+    expect(pressFeedDate({ date: '2025-03-14' }, { now })).toEqual(
+      new Date('2025-03-14T04:00:00Z'),
+    );
+    expect(pressFeedDate({ date: '2026-11-07' }, { now })).toEqual(
+      new Date('2026-11-07T05:00:00Z'),
+    );
+    // No day, or still to come: the time it's added
+    expect(pressFeedDate({ date: '2025-03' }, { now })).toBeNull();
+    expect(pressFeedDate({ date: '2026-11-08' }, { now })).toBeNull();
+    expect(pressFeedDate({}, { now })).toBeNull();
   });
 
   it('takes its verb from the medium, and your role for the sentence', () => {

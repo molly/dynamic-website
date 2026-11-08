@@ -14,7 +14,9 @@ import {
   FeedEntryPress,
   FeedEntryReading,
 } from '../../backend/models/feed/feedEntry.model.js';
+import { ENTITY_SUMMARY_FIELDS } from '../../backend/helpers/entities.js';
 import { populateTaggerFields } from '../../backend/helpers/feedEntries.js';
+import { Entity } from '../../backend/models/entity.model.js';
 import { attachFeedMeta } from '../../backend/helpers/feedMeta.js';
 import { Thread } from '../../backend/models/thread.model.js';
 import { Tag } from '../../backend/models/tag.model.js';
@@ -210,7 +212,15 @@ router.get(
     if (entryType === 'readingShortform') {
       await entry.populate({ path: 'shortform', model: ShortformEntry });
     } else if (entryType === 'press') {
-      await entry.populate({ path: 'press', model: PressEntry });
+      await entry.populate({
+        path: 'press',
+        model: PressEntry,
+        populate: {
+          path: 'people',
+          model: Entity,
+          select: ENTITY_SUMMARY_FIELDS,
+        },
+      });
     }
     const pickerData = {
       feedEntryId: entry._id,
@@ -218,6 +228,11 @@ router.get(
       createdAt: entry.createdAt,
       threads: entry.threads.map((t) => t.toJSON()),
       about: entry.about.map((e) => e.toJSON()),
+      // The others in a talk or appearance, for the press card's picker
+      pressPeople:
+        entryType === 'press'
+          ? (entry.press?.people || []).map((e) => e.toJSON())
+          : [],
     };
     const header = taggerHeader(entry.toObject(), entryType);
     const page = await feedPageOf(entry);

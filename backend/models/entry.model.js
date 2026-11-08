@@ -62,7 +62,13 @@ export const PRESS_KINDS = [
   'talk',
   'freelance',
 ];
-export const PRESS_ROLES = ['quoted', 'cited', 'interviewed', 'profiled'];
+export const PRESS_ROLES = [
+  'quoted',
+  'cited',
+  'interviewed',
+  'profiled',
+  'panel member',
+];
 
 const PressSchema = new mongoose.Schema({
   ...EntrySchema,
@@ -93,6 +99,8 @@ const PressSchema = new mongoose.Schema({
   mediaUrl: { type: String, match: /^https?:\/\// }, // Your own copy of a video
   posterUrl: { type: String, match: /^https?:\/\// },
   audioUrl: { type: String, match: /^https?:\/\// }, // Audio you've rehosted
+  // Others in a talk or appearance (fellow panelists, guests), shown as "with …" after the host
+  people: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Entity' }],
 });
 
 // The press fields the tagger page edits.
@@ -109,6 +117,7 @@ export const PRESS_CARD_FIELDS = [
   'mediaUrl',
   'posterUrl',
   'audioUrl',
+  'people',
 ];
 
 export const PressEntry = db.connection.model(

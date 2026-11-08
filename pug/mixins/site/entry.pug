@@ -226,6 +226,8 @@ mixin pressBody(entry, meta)
         - var talkLinks = [press.work, date].filter(Boolean)
         p.press-links
           | #{talkLinks.join(' · ')}
+          if press.people && press.people.length
+            | #{talkLinks.length ? ' · ' : ''}with !{press.withHtml}
           each link in [['slides', press.slidesUrl], ['transcript', press.transcriptUrl], ['YouTube', press.youtubeUrl]]
             if link[1]
               |  · #[a(href=link[1]) #{link[0]}]
@@ -240,8 +242,8 @@ mixin pressBody(entry, meta)
         p.press-card-meta
           if press.work
             span.press-card-outlet.p-publication #{press.work}
-          if press.author
-            |  · with #{press.author}
+          if press.withHtml
+            |  · with !{press.withHtml}
           if press.episode
             |  · ep. #{press.episode}
         p.press-card-title.p-name

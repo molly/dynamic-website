@@ -49,6 +49,26 @@ export function entityNameLink(entity) {
 }
 
 /**
+ * Who else was in a talk or appearance, as HTML: the host as written (a press entry's author), then
+ * the entities, each linked like a name beside a post. "Jane Doe, Paul Grewal and Coinbase".
+ * @param {?string} author
+ * @param {Object[]} [people] Entities
+ * @returns {?string}
+ */
+export function pressWithHtml(author, people = []) {
+  const names = [
+    ...(author ? [escapeHtml(author)] : []),
+    ...people.filter(Boolean).map(entityNameLink),
+  ];
+  if (!names.length) {
+    return null;
+  }
+  return names.length === 1
+    ? names[0]
+    : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+}
+
+/**
  * One mention: the words as written, linked to the entity's page (or its website).
  * @param {Object} entity
  * @param {string} innerHtml The words as written in the post
