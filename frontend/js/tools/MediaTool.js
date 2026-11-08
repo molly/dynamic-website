@@ -1,6 +1,6 @@
 import { formatDuration } from '../../../api/helpers/blocks.js';
 import { escapeHtml } from '../helpers/escapeHtml.js';
-import { uploadFile as upload } from '../helpers/upload.js';
+import { chooseLinkedFile, uploadFile as upload } from '../helpers/upload.js';
 
 // Block for your own copies of video and audio (talks, podcast appearances): uploaded to the
 // bucket and played with the browser's own player, never embedded from another site.
@@ -54,7 +54,7 @@ export default class MediaTool {
       ${player}
       <div class="media-meta">
         <span class="media-duration">${formatDuration(duration)}</span>
-        ${kind === 'video' ? `<label class="link-button">${poster ? 'change poster' : 'add poster image'}<input type="file" accept="image/*" class="poster-input" hidden></label>` : ''}
+        ${kind === 'video' ? `<label class="link-button">${poster ? 'change poster' : 'add poster image'}<input type="file" accept="image/*" class="poster-input" hidden></label> or <button type="button" class="link-button poster-url">use a link</button>` : ''}
       </div>
       <div class="media-caption" contenteditable="${!this.readOnly}" data-placeholder="Caption">${caption || ''}</div>`;
     const media = this.wrapper.querySelector('video, audio');
@@ -68,6 +68,21 @@ export default class MediaTool {
     this.wrapper
       .querySelector('.poster-input')
       ?.addEventListener('change', (evt) => this.onPoster(evt.target.files[0]));
+    this.wrapper
+      .querySelector('.poster-url')
+      ?.addEventListener('click', () => this.posterFromUrl());
+  }
+
+  async posterFromUrl() {
+    try {
+      const file = await chooseLinkedFile({ label: 'poster image' });
+      if (file) {
+        this.data.poster = file.url;
+        this.draw();
+      }
+    } catch (err) {
+      window.alert(`Couldn't use that poster: ${err.message}`);
+    }
   }
 
   async onFile(file) {

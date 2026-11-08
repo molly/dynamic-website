@@ -225,6 +225,7 @@ describe('feedExcerpt', () => {
     ).toEqual({
       html: ['<paragraph0>', '<image1>', '<paragraph2>'],
       truncated: true,
+      next: '<paragraph3>', // The teaser
     });
     expect(
       feedExcerpt(post(['paragraph', 'socialPostDelimiter', 'image'])),

@@ -17,6 +17,7 @@ import {
   createThreadPicker,
 } from './helpers/pickers.js';
 import { ArchivePanel } from './archivePanel.js';
+import { suggestBetweenTagsAndAbout } from './helpers/tagSuggestions.js';
 import {
   DataField,
   LiveField,
@@ -24,6 +25,7 @@ import {
   SourcesField,
 } from './metadata/metadataFields.js';
 import { UpdatesEditor } from './metadata/updatesEditor.js';
+import { X_HELPER_UNREACHABLE, X_HELPER_URL } from './helpers/xHelper.js';
 import { SOCIAL_NETWORKS, ThreadEditors } from './threads/threadEditor.js';
 
 import debounce from 'lodash.debounce';
@@ -43,8 +45,6 @@ const postMeta = {
 const editors = {
   primary: null,
 };
-// Local helper that composes Twitter posts in a browser (see backend/scripts/xComposeHelper.js)
-const X_HELPER_URL = 'http://localhost:5055';
 
 let savedPost = {};
 let tagSelect;
@@ -348,9 +348,7 @@ async function composeOnX(twitter) {
     return { postId: resp.data.postId };
   } catch (err) {
     if (!err.response) {
-      return {
-        error: `Couldn't reach the X compose helper at ${X_HELPER_URL}. Is \`npm run x-helper\` running on this computer?`,
-      };
+      return { error: X_HELPER_UNREACHABLE };
     }
     return { error: err.response.data?.error || err.message };
   }
@@ -603,6 +601,8 @@ async function onFirstLoad() {
       postMeta.about = ids;
     },
   });
+  // #coinbase suggests @Coinbase for "about", and the other way round
+  suggestBetweenTagsAndAbout({ tagSelect, aboutPicker });
   relatedEntriesPicker = createEntryPicker('#related-entries', {
     initial: savedPost.feed?.related || [],
     getExclude: () => savedPost.feed?._id,

@@ -206,24 +206,30 @@ ins.correction {
   width: 100%;
 }
 
-/* Document excerpts */
+/* Document excerpts: no box; the first page beside them, if there's an image of it */
 .document-block {
   display: flex;
   gap: 1em;
   margin: 1.25em 0;
-  padding: 0.75em 1em;
-  border: 1px solid var(--hr-color);
-  border-radius: 3px;
+}
+
+/* Documents in a row are divided by a thin rule */
+.document-block + .document-block {
+  padding-top: 1.25em;
+  border-top: 1px solid var(--hr-color);
 }
 
 .document-thumbnail {
   flex: 0 0 4.5em;
+  align-self: flex-start;
   background: none;
 }
 
 .document-thumbnail img {
+  display: block;
   width: 100%;
   border: 1px solid var(--hr-color);
+  box-shadow: 3px 3px 0 var(--accent-tint, #efedf8);
 }
 
 .document-main {
@@ -233,6 +239,7 @@ ins.correction {
 
 .document-head,
 .document-meta,
+.document-from,
 .document-notes {
   font-family: var(--block-mono);
   font-size: 0.7em;
@@ -240,16 +247,30 @@ ins.correction {
 }
 
 .document-head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.25em 1em;
-  padding-bottom: 0.4em;
-  border-bottom: 1px solid var(--hr-color);
+  margin-bottom: 0.25em;
 }
 
 .document-meta {
-  margin: 0.5em 0 0;
+  margin: 0;
+}
+
+.document-from {
+  margin: 0.1em 0 0;
+  font-size: 0.65em;
+}
+
+/* The date and senders/recipients that are entities stand out from the rest of the line:
+   "Aug 5, 2026 → Howard Lutnick, Secretary of Commerce" */
+.document-meta strong,
+.document-from strong {
+  font-weight: 600;
+  color: var(--main-text-color);
+}
+
+.document-meta a.document-party,
+.document-from a.document-party {
+  color: var(--main-text-color);
+  text-decoration-color: var(--hr-color);
 }
 
 .document-excerpt {
@@ -268,6 +289,23 @@ ins.correction {
 
 .document-notes {
   margin: 0;
+}
+
+/* "show full passage" on a card showing only its highlights (added by site.js) */
+.document-passage-toggle {
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--hr-color);
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.document-passage-toggle:hover {
+  color: var(--timestamp-color-hover);
 }
 
 /* Social post cards and threads: no avatars or branding, just the structure */
@@ -354,7 +392,7 @@ ins.correction {
   border-radius: 3px;
 }
 
-.social-media-missing {
+.social-card .social-media-missing {
   margin: 0;
   padding: 0.6em;
   font-size: 0.85em;
@@ -389,15 +427,21 @@ ins.correction {
   border-radius: 4px;
 }
 
-.social-meta,
-.social-footer {
+/* The card's paragraphs are scoped to .social-card so their margins win over the page's own
+   paragraph margins (e.g. .entry-content p in site.css) */
+.social-card .social-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 1em;
   margin: 0.4em 0 0;
   font-size: 0.8em;
   color: var(--timestamp-color);
 }
 
-.social-footer {
-  text-align: right;
+/* Links stay at the right even with no date beside them (threads date each post instead) */
+.social-card .social-links {
+  margin-left: auto;
 }
 
 .social-thread-posts {
@@ -407,7 +451,7 @@ ins.correction {
   border-left: 2px solid var(--hr-color);
 }
 
-.social-thread-head {
+.social-card .social-thread-head {
   margin: 0 0 0.25em;
 }
 

@@ -126,7 +126,7 @@ html(class='feed-editor', lang='en')
               #reply-details.reply-details(hidden)
                 input#reply-name(type="text", placeholder="their name", aria-label="Their name")
                 select#reply-network(aria-label="Network")
-                input#reply-posted(type="datetime-local", aria-label="When they posted")
+                input#reply-posted(type="datetime-local", step="60", aria-label="When they posted")
 
             .side-section
               .crosspost-header
@@ -140,7 +140,7 @@ html(class='feed-editor', lang='en')
                   option(value="updating") updating
                   option(value="ended") ended
                 label.side-hint(for="live-started") started
-                input#live-started(type="datetime-local")
+                input#live-started(type="datetime-local", step="60")
 
             .side-section.archive-links
               .crosspost-header

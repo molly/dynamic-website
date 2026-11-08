@@ -108,15 +108,16 @@ export async function loadPostContext(posts, { urls = [] } = {}) {
  * A copy of a post ready for the site's renderer: mentions expanded, current reading entries
  * attached to article cards and roundups, and on every block `archived` (url -> Wayback copy).
  * Quotes get `contextUrl` when the post links to exactly one article (`quoteSource`), so they can
- * link to where they appear in it.
+ * link to where they appear in it. Documents set to show their full passage get `fullPassage` on
+ * the post's own page (`postPage`); everywhere else they show only their highlights.
  * @param {{blocks: Object[]}} post
  * @param {{mentions?: Object, shortform?: Object, archived?: Object}} context From loadPostContext
- * @param {{quoteSource?: string}} [options]
+ * @param {{quoteSource?: string, postPage?: boolean}} [options]
  */
 export function preparePostForDisplay(
   post,
   { mentions = {}, shortform = {}, archived = {} } = {},
-  { quoteSource } = {},
+  { quoteSource, postPage = false } = {},
 ) {
   const expanded = expandMentionsInPost(post, mentions);
   const prepare = (block) => {
@@ -126,6 +127,9 @@ export function preparePostForDisplay(
         ...prepared.data,
         contextUrl: textFragmentUrl(quoteSource, prepared.data.text),
       };
+    }
+    if (prepared.type === 'document') {
+      prepared.fullPassage = postPage && prepared.data?.display === 'full';
     }
     if (prepared.type === 'comparison') {
       const side = (slot) =>

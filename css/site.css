@@ -438,6 +438,12 @@ mark {
   color: var(--accent);
 }
 
+/* On a post's own page the date is plain text, like the verb beside it */
+.entry-verb-date {
+  font-weight: 600;
+  color: var(--text);
+}
+
 .site-icon {
   flex: none;
   color: var(--accent);
@@ -466,10 +472,6 @@ mark {
 .entry-rows dd {
   margin: 0;
   overflow-wrap: anywhere;
-}
-
-.entry-rows .cdx-mention-social-group {
-  font-size: 0.85em;
 }
 
 .reading-group-extra .p-category,
@@ -516,11 +518,12 @@ mark {
   color: var(--accent);
 }
 
-/* Citation Needed: image beside the headline */
+/* Citation Needed: the issue's image beside a label, the headline and dek, and links to read it
+   and subscribe */
 .entry-cn {
   display: grid;
-  grid-template-columns: 7.5rem minmax(0, 1fr);
-  gap: 1rem;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: 1.25rem;
   align-items: start;
 }
 
@@ -533,6 +536,48 @@ mark {
   width: 100%;
   aspect-ratio: 3 / 2;
   object-fit: cover;
+  background: var(--accent-tint);
+}
+
+.entry-cn-label {
+  margin: 0 0 0.35rem;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.entry-cn .entry-dek {
+  color: var(--text);
+}
+
+.entry-cn-links {
+  margin: 0.8rem 0 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.entry-cn-links a {
+  color: var(--text-muted);
+}
+
+.entry-cn-links a.entry-cn-read {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* On a phone the image goes above */
+@media (max-width: 34rem) {
+  .entry-cn {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .entry-cn-image {
+    max-width: 14rem;
+  }
 }
 
 .entry-dek {
@@ -1010,8 +1055,6 @@ mark {
 /* "continues →" after the start of a long post in the feed */
 .entry-continues {
   margin: 0.9rem 0 0;
-  padding-top: 0.5rem;
-  border-top: 1px dotted var(--rule);
   font-family: var(--mono);
   font-size: 0.72rem;
 }
@@ -1177,6 +1220,10 @@ mark {
 
 .site-entry-permalink .entry-verb {
   margin: 0 0 0.9rem;
+}
+
+.entry-tag {
+  white-space: nowrap;
 }
 
 .entry-tag-count {
@@ -1411,6 +1458,13 @@ mark {
   font-size: 0.62rem;
 }
 
+/* A note that follows on the same line, e.g. "Citation Needed" after a related issue's title */
+.side-note-inline {
+  display: inline;
+  margin-left: 0.3em;
+  white-space: nowrap;
+}
+
 .post-pager {
   margin-top: 2rem;
   padding-top: 1rem;
@@ -1493,6 +1547,13 @@ mark {
 
 .italic {
   font-style: italic;
+}
+
+.entity-formerly {
+  margin: -0.3rem 0 0.6rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.75rem;
 }
 
 .entity-description {
@@ -1625,7 +1686,9 @@ mark {
 }
 
 .entity-rows dt {
+  min-width: 0;
   color: var(--text-faint);
+  overflow-wrap: anywhere; /* A long label, like a site's domain, wraps in its column */
 }
 
 .entity-rows dd {
@@ -1765,4 +1828,18 @@ mark {
   .thread-box-members li {
     grid-template-columns: 4.5rem minmax(0, 1fr);
   }
+}
+
+/* A post cut short in the feed: the top of the next block (text, an image, a card), cut off after
+   a few lines and faded out, before "continues →" */
+.entry-teaser {
+  margin-top: 0.85em; /* The gap between paragraphs (.entry-content p) */
+  max-height: 4.8em;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 55%), transparent);
+  user-select: none;
+}
+
+.entry-teaser > :first-child {
+  margin-top: 0;
 }

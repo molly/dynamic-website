@@ -1,5 +1,29 @@
 // Tell which network a link to a single post is on, and pull out what's needed to fetch it.
-// Used for "in reply to" (and later the social post block).
+// Used for "in reply to" and the social post block, along with a few small link helpers for them.
+
+/**
+ * A URL's host without "www.", or '' if it isn't a URL.
+ * @param {string} url
+ */
+export function domainOf(url) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * A Twitter account's profile link. With the account's permanent user ID it keeps working after the
+ * account is renamed; without one, the handle has to do.
+ * @param {{accountId?: string, handle?: string}} account
+ */
+export function twitterProfileUrl({ accountId, handle }) {
+  if (accountId) {
+    return `https://twitter.com/i/user/${accountId}`;
+  }
+  return handle ? `https://twitter.com/${handle}` : '';
+}
 
 /**
  * @param {string} text A post URL

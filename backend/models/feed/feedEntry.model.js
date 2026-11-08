@@ -48,6 +48,7 @@ const FeedEntrySchema = new mongoose.Schema(
 );
 FeedEntrySchema.index({ threads: 1, createdAt: 1 });
 FeedEntrySchema.index({ about: 1, createdAt: -1 });
+FeedEntrySchema.index({ tags: 1, createdAt: -1 }); // Entity pages list entries with the entity's tag
 
 // Generate RSS on each save
 FeedEntrySchema.post('save', generateRssForFeed);

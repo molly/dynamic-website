@@ -1,10 +1,12 @@
-import { cleanHtml } from '../../../api/helpers/html';
+import { cleanHtml, htmlToText } from '../../../api/helpers/html';
 import { mapPostText } from '../../../api/helpers/mentions';
 import {
+  highlightsOnly,
   renderComparison,
   renderDocument,
   renderSocialPost,
 } from '../../../api/helpers/sourceBlocks';
+import { preparePostForDisplay } from '../../../backend/helpers/postContext';
 import { suggestSources } from '../../../api/helpers/sources';
 import { extractUrlsFromBlocks } from '../../../backend/helpers/links';
 import {
@@ -50,6 +52,27 @@ const POST = {
   },
   quoted: null,
 };
+
+describe('htmlToText', () => {
+  it('turns alt text saved as HTML into plain text', () => {
+    expect(htmlToText('Cohen &amp; Gresser LLP ("C&amp;G")')).toEqual(
+      'Cohen & Gresser LLP ("C&G")',
+    );
+    expect(htmlToText('closed.&nbsp;So many&nbsp;')).toEqual('closed. So many');
+    expect(htmlToText('Line one<br>Line two<br><br>Line four')).toEqual(
+      'Line one\nLine two\n\nLine four',
+    );
+    expect(htmlToText('one<div>two</div><div><b>three</b></div>')).toEqual(
+      'one\ntwo\nthree',
+    );
+  });
+
+  it('leaves plain text as it is, so converting twice is safe', () => {
+    for (const text of ['Tom & Jerry', 'a < b', 'Line one\nLine two']) {
+      expect(htmlToText(text)).toEqual(text);
+    }
+  });
+});
 
 describe('cleanHtml', () => {
   it('keeps only allowed tags and safe links', () => {
@@ -100,6 +123,24 @@ describe('fetching social posts', () => {
     );
   });
 
+  it('shows Mastodon mentions with their full handle, leaving hashtags alone', () => {
+    expect(
+      mastodonContentToHtml(
+        '<p><span class="h-card"><a href="https://hachyderm.io/@m" class="u-url mention">@<span>m</span></a></span> and <span class="h-card"><a href="https://mastodon.social/@them" class="u-url mention">@<span>them</span></a></span> <a href="https://hachyderm.io/tags/crypto" class="mention hashtag">#<span>crypto</span></a></p>',
+        [
+          { acct: 'm', url: 'https://hachyderm.io/@m' },
+          {
+            acct: 'them@mastodon.social',
+            url: 'https://mastodon.social/@them',
+          },
+        ],
+        'hachyderm.io',
+      ),
+    ).toEqual(
+      '<a href="https://hachyderm.io/@m">@m@hachyderm.io</a> and <a href="https://mastodon.social/@them">@them@mastodon.social</a> <a href="https://hachyderm.io/tags/crypto">#crypto</a>',
+    );
+  });
+
   it('reads a Bluesky post with a quoted post that has images', () => {
     const author = { did: 'did:plc:me', handle: 'me.test', displayName: 'Me' };
     const post = blueskyToPost({
@@ -132,10 +173,13 @@ describe('fetching social posts', () => {
     expect(post).not.toHaveProperty('metrics');
     expect(post).toMatchObject({
       authorName: 'Me',
-      originalUrl: 'https://bsky.app/profile/me.test/post/111',
+      handle: 'me.test',
+      profileUrl: 'https://bsky.app/profile/did:plc:me',
+      originalUrl: 'https://bsky.app/profile/did:plc:me/post/111',
       quoted: {
         authorName: 'them.test',
-        originalUrl: 'https://bsky.app/profile/them.test/post/222',
+        profileUrl: 'https://bsky.app/profile/did:plc:them',
+        originalUrl: 'https://bsky.app/profile/did:plc:them/post/222',
         media: [{ type: 'image', alt: 'pic', filename: 'cid1.jpg' }],
       },
     });
@@ -204,7 +248,7 @@ describe('renderDocument', () => {
     const html = renderDocument({
       data: {
         docType: 'letter',
-        title: 'Letter',
+        title: 'Letter to Brandon Lutnick',
         date: '2026-10-08',
         from: 'Senate PSI (minority)',
         to: 'Brandon Lutnick',
@@ -213,14 +257,86 @@ describe('renderDocument', () => {
         coverageUrl: 'https://www.citationneeded.news/x/',
       },
     });
+    // As in the design: the date and recipient, then who it's from
     expect(html).toContain(
-      'Oct 8, 2026 · Senate PSI (minority) → Brandon Lutnick',
+      '<p class="document-meta"><strong class="document-date">Oct 8, 2026</strong> → Brandon Lutnick</p><p class="document-from">from Senate PSI (minority)</p>',
     );
-    expect(html).toContain('full document (PDF)');
+    // The links go under the excerpt, before the notes
     expect(html).toContain(
-      'my coverage: <a href="https://www.citationneeded.news/x/">citationneeded.news</a>',
+      '<p class="document-notes"><a href="https://example.com/l.pdf">full letter (PDF)</a> · my coverage: <a href="https://www.citationneeded.news/x/">citationneeded.news</a></p>',
     );
+    expect(html).not.toContain('document-head'); // Known by its sender and recipient
     expect(html).not.toContain('highlight mine');
+  });
+});
+
+describe('document highlights', () => {
+  const LETTER = {
+    docType: 'letter',
+    excerptHtml:
+      'We write to you. <mark>UAE entities invested half a billion dollars.</mark> Further, the decision followed.<br><br>We are concerned. <mark>The Department’s actions raise questions.</mark>',
+  };
+
+  it('keeps just the highlights, with … where text is left out', () => {
+    expect(highlightsOnly(LETTER.excerptHtml)).toBe(
+      '… <mark>UAE entities invested half a billion dollars.</mark> … <mark>The Department’s actions raise questions.</mark>',
+    );
+    expect(highlightsOnly('<mark>a</mark> <mark>b</mark> rest')).toBe(
+      '<mark>a</mark> <mark>b</mark> …',
+    );
+    expect(highlightsOnly('<b>Bold <mark>bit</mark></b>')).toBe(
+      '… <mark>bit</mark>',
+    );
+    expect(highlightsOnly('nothing highlighted')).toBeNull();
+  });
+
+  it('shows only the highlights unless asked for the full passage', () => {
+    const html = renderDocument({ data: LETTER });
+    expect(html).toContain('<div class="document-excerpt highlights-only">…');
+    expect(html).toContain('highlights mine');
+    // The full passage only comes along unshown, for the "show full passage" button
+    const shown = html.replace(/<template[\s\S]*<\/template>/, '');
+    expect(shown).not.toContain('We write to you');
+    expect(html).toContain(
+      '<template class="document-full-passage"><div class="document-excerpt with-highlights">We write to you.',
+    );
+
+    const full = renderDocument({ data: LETTER, fullPassage: true });
+    expect(full).toContain(
+      '<div class="document-excerpt with-highlights">We write to you.',
+    );
+    expect(full).not.toContain('<template');
+  });
+
+  it('shows an excerpt with nothing highlighted in full', () => {
+    const html = renderDocument({
+      data: { docType: 'letter', excerptHtml: 'All of it' },
+    });
+    expect(html).toContain('<div class="document-excerpt">All of it</div>');
+  });
+
+  it('uses the full passage only on the post page, and only when the block asks', () => {
+    const blocks = (display) => [
+      { type: 'document', data: { ...LETTER, display } },
+      {
+        type: 'comparison',
+        data: {
+          left: { block: { type: 'document', data: { ...LETTER, display } } },
+        },
+      },
+    ];
+    const full = (display, postPage) => {
+      const [doc, comparison] = preparePostForDisplay(
+        { blocks: blocks(display) },
+        {},
+        { postPage },
+      ).blocks;
+      return [doc.fullPassage, comparison.data.left.block.fullPassage];
+    };
+    expect(full('full', true)).toEqual([true, true]);
+    expect(full('full', false)).toEqual([false, false]); // The feed
+    expect(full('highlights', true)).toEqual([false, false]);
+    expect(full(undefined, true)).toEqual([false, false]);
   });
 });
 
@@ -243,6 +359,10 @@ describe('renderSocialPost', () => {
     expect(html).toContain(
       '<a href="https://bsky.app/profile/cz.bsky.social/post/abc">original</a> · <a href="https://s/shot.png">screenshot</a>',
     );
+    // The date and the links share the last line
+    expect(html).toMatch(
+      /<p class="social-footer"><span class="social-when"><time[^>]*>10:00 AM · Oct 29, 2025<\/time><\/span><span class="social-links"><a /,
+    );
   });
 
   it('draws several posts as a thread, and calls Twitter Twitter', () => {
@@ -251,6 +371,10 @@ describe('renderSocialPost', () => {
     expect(html).toContain('Thread · 2 posts');
     expect(html).toContain('<span class="social-network">Twitter</span>');
     expect(html.match(/class="social-thread-post"/g)).toHaveLength(2);
+    // Each post carries its own date, so the footer has only the links
+    expect(html).toContain(
+      '<p class="social-footer"><span class="social-links">',
+    );
   });
 
   it('cleans the stored text', () => {

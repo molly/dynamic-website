@@ -94,7 +94,7 @@ export const formatMedia = ({ data, tunes, archived }) => {
   const sourceLine = imageSourceLine(source, { archived, file: fileUrl(data) });
   const alt =
     source.screenshot && data.alt
-      ? `<p class="media-alt">${escapeHtml(data.alt)}</p>`
+      ? `<p class="media-alt">${escapeHtml(data.alt).replace(/\n/g, '<br>')}</p>`
       : '';
   return `<figure ${getImageClass(data)}>${mediaElement(data)}${caption}${sourceLine}${alt}</figure>`;
 };

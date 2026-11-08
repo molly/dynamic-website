@@ -1,7 +1,7 @@
 import Codecup from '@calumk/editorjs-codecup';
 import Embed from '@editorjs/embed';
 import Header from '@editorjs/header';
-import ImageTool from '@editorjs/image';
+import ImageBlock from '../tools/ImageBlock.js';
 import InlineCode from '@editorjs/inline-code';
 import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
@@ -48,7 +48,7 @@ export const editorToolConfig = {
     },
   },
   image: {
-    class: ImageTool,
+    class: ImageBlock,
     tunes: ['imageSource'],
     config: {
       endpoints: {

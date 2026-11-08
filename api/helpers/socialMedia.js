@@ -6,12 +6,13 @@ export const NETWORKS = [
   'tiktok',
   'youtube',
 ];
-export const MENTION_NETWORKS = ['website', 'wikipedia', ...NETWORKS];
+// An entity's accounts: its website and its social accounts. (A Wikipedia article is about the
+// entity, not an account of theirs: it's `ids.wikipedia`, see wikipedia.js.)
+export const MENTION_NETWORKS = ['website', ...NETWORKS];
 
 // How each network is named in the admin and editor.
 export const NETWORK_LABELS = {
   website: 'Website',
-  wikipedia: 'Wikipedia',
   twitter: 'Twitter',
   mastodon: 'Mastodon',
   bluesky: 'Bluesky',
@@ -36,7 +37,6 @@ export const GENERIC_SOCIAL_PREFIXES = {
   tiktok: 'https://www.tiktok.com/@',
   threads: 'https://www.threads.net/@',
   youtube: 'https://www.youtube.com/channel/',
-  wikipedia: 'https://en.wikipedia.org/wiki/',
 };
 
 export function hydrateAndSortSocialLinks(links) {
@@ -76,8 +76,28 @@ export function getSocialLinkFromHandle(handle, network) {
     return `https://www.youtube.com/${handle}`;
   } else if (network === 'website') {
     return handle;
-  } else if (network === 'wikipedia') {
-    return `${GENERIC_SOCIAL_PREFIXES.wikipedia}${handle.replace(/ /g, '_')}`;
   }
   return `${GENERIC_SOCIAL_PREFIXES[network]}${strippedHandle}`;
+}
+
+// Characters that don't show but break links: zero-width spaces and joiners, direction marks and
+// embeddings (often carried along when a handle is copied from a profile), and byte order marks
+const INVISIBLE =
+  /[\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u2069\uFEFF]/g;
+
+/**
+ * An account handle cleaned of mistakes that break its link: invisible characters, surrounding
+ * space, and a Mastodon server written twice ("user@host@host").
+ * @param {string} network
+ * @param {string} handle
+ * @returns {string}
+ */
+export function cleanHandle(network, handle) {
+  let clean = String(handle ?? '')
+    .replace(INVISIBLE, '')
+    .trim();
+  if (network === 'mastodon') {
+    clean = clean.replace(/^(@?[^@\s]+@([^@\s]+))@\2$/i, '$1');
+  }
+  return clean;
 }

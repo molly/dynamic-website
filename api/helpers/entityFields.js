@@ -50,6 +50,13 @@ export const SHARED_FIELDS = [
   },
   { name: 'ids.website', label: 'Website', input: 'url' },
   {
+    name: 'ids.wikipedia',
+    label: 'Wikipedia article',
+    input: 'text',
+    placeholder: 'https://en.wikipedia.org/wiki/…',
+    help: 'The article about them. Paste its link, or type an English Wikipedia title.',
+  },
+  {
     name: 'aliases',
     label: 'Other names',
     input: 'list',
@@ -122,7 +129,6 @@ export const TYPE_FIELDS = {
       options: ORGANIZATION_KINDS,
     },
     { name: 'secCik', label: 'SEC CIK', input: 'text' },
-    { name: 'ticker', label: 'Ticker', input: 'text' },
     {
       name: 'domains',
       label: 'Domains',
@@ -135,22 +141,7 @@ export const TYPE_FIELDS = {
       input: 'checkbox',
     },
   ],
-  project: [
-    { name: 'ticker', label: 'Ticker', input: 'text' },
-    { name: 'chains', label: 'Chains', input: 'strings' },
-    {
-      name: 'contracts',
-      label: 'Contracts',
-      input: 'list',
-      fields: [
-        { name: 'chain', label: 'Chain', input: 'text' },
-        { name: 'address', label: 'Address', input: 'text' },
-      ],
-    },
-    { name: 'coingeckoId', label: 'CoinGecko ID', input: 'text' },
-    { name: 'cmcId', label: 'CoinMarketCap ID', input: 'text' },
-    { name: 'launchedAt', label: 'Launched', input: 'date' },
-  ],
+  project: [{ name: 'launchedAt', label: 'Launched', input: 'date' }],
   committee: [
     {
       name: 'fecId',
@@ -164,7 +155,6 @@ export const TYPE_FIELDS = {
       input: 'select',
       options: COMMITTEE_TYPES,
     },
-    { name: 'treasurer', label: 'Treasurer', input: 'text' },
   ],
   bill: [
     {
@@ -210,8 +200,8 @@ export const TYPE_FIELDS = {
     { name: 'outcome.amountUsd', label: 'Amount (USD)', input: 'number' },
   ],
   event: [
-    { name: 'startDate', label: 'Start date', input: 'date' },
-    { name: 'endDate', label: 'End date', input: 'date' },
+    { name: 'startDate', label: 'Start date', input: 'partialDate' },
+    { name: 'endDate', label: 'End date', input: 'partialDate' },
     {
       name: 'amounts',
       label: 'Amounts',
@@ -239,4 +229,69 @@ export function fieldsFor(type) {
  */
 export function editablePaths(type) {
   return [...new Set(fieldsFor(type).map((field) => field.name.split('.')[0]))];
+}
+
+// Where each field goes on the admin form, which is laid out like the public entity page: the
+// name, description and note at the top, the side panel's sections as on the page, and the list
+// fields (other names, versions, candidacies…) each as a section in the main column. A field not
+// listed here goes in the main column.
+export const SIDE_SECTIONS = [
+  { id: 'glance', label: 'At a glance' },
+  { id: 'identifiers', label: 'Identifiers' },
+  { id: 'links', label: 'Links' },
+  { id: 'accounts', label: 'Accounts' },
+  { id: 'elsewhere', label: 'Elsewhere' },
+  { id: 'page', label: 'Page' },
+];
+
+const FIELD_SECTIONS = {
+  head: ['name', 'disambiguator', 'description', 'note'],
+  glance: [
+    'status.value',
+    'status.date',
+    'tag',
+    'kind',
+    'paywalledByDefault',
+    'launchedAt',
+    'committeeType',
+    'number',
+    'congress',
+    'chamber',
+    'billStatus',
+    'court',
+    'docketNumber',
+    'judge',
+    'filedAt',
+    'caseStatus',
+    'releaseNumber',
+    'date',
+    'outcome.kind',
+    'outcome.amountUsd',
+    'startDate',
+    'endDate',
+  ],
+  identifiers: ['ids.wikidata', 'secCik', 'fecId'],
+  links: [
+    'ids.website',
+    'congressGovUrl',
+    'courtListenerUrl',
+    'pacerUrl',
+    'complaint.pdfUrl',
+  ],
+  accounts: ['accounts'],
+  elsewhere: ['elsewhere', 'ids.wikipedia'],
+  page: ['hasPage'],
+};
+
+/**
+ * Which part of the admin form a field goes in: 'head', 'main', or one of SIDE_SECTIONS' ids.
+ * @param {{name: string}} field
+ * @returns {string}
+ */
+export function sectionOf(field) {
+  return (
+    Object.keys(FIELD_SECTIONS).find((section) =>
+      FIELD_SECTIONS[section].includes(field.name),
+    ) || 'main'
+  );
 }

@@ -9,8 +9,7 @@ import {
   feedEntryHref,
   labelFeedEntry,
 } from './feedEntries.js';
-import { escapeHtml } from '../../api/helpers/html.js';
-import { renderMention } from './mentionMarkup.js';
+import { entityNameLink } from './mentionMarkup.js';
 
 // What the metadata column needs beyond an entry itself: its threads and their neighbours, the
 // entities it's about, and Wayback copies of its links. Loaded once per page, for every entry on
@@ -117,7 +116,7 @@ const permalinkOf = (entry) => {
  * previousInSeries }.
  *  - threads: titled threads, each { title, slug, position, total }
  *  - previous/next/laterIssues: from the entry's first thread (titled or not), by date
- *  - about: [{ name, html }], html being the name with its account links
+ *  - about: [{ name, html }], html being the name linked to its page (or website)
  *  - archived: { [url]: archiveUrl } for a post's permalink, a press piece's or an article's link
  *  - previousInSeries: for a book, the one before it in its series
  * @param {Object[]} entries Hydrated feed entries, or micro entries on their own
@@ -227,7 +226,8 @@ export async function attachFeedMeta(entries) {
       .filter(Boolean)
       .map((entity) => ({
         name: entity.name,
-        html: renderMention(entity, escapeHtml(entity.name)),
+        // Just the linked name: account icons are for mentions in post text
+        html: entityNameLink(entity),
       }));
     meta.archived = Object.fromEntries(
       linksOf(entry)

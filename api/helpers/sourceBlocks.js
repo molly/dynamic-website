@@ -1,5 +1,7 @@
+import * as cheerio from 'cheerio';
 import { DateTime } from 'luxon';
 import { formatDuration, formatReadDate } from './blocks.js';
+import { documentSide, joinNames } from './documentParties.js';
 import { cleanHtml, escapeHtml } from './html.js';
 import { NETWORK_LABELS } from './socialMedia.js';
 
@@ -7,8 +9,13 @@ import { NETWORK_LABELS } from './socialMedia.js';
 // threads, and side-by-side comparisons.
 
 // Document ---------------------------------------------------------------------------------------
-// Data: { docType: 'filing' | 'letter' | 'other', title, date, from, to, paragraph, excerptHtml
-// (<mark> for "highlight mine"), pdfUrl, pdfPage, docketUrl, thumbnail, coverageUrl, entity }
+// Data: { docType: 'filing' | 'letter' | 'other', title, date, paragraph, excerptHtml
+// (<mark> for "highlight mine"), pdfUrl, pdfPage, docketUrl, thumbnail, coverageUrl, entity,
+// senders, recipients, display: 'highlights' | 'full' } (senders and recipients: see
+// documentParties.js). The excerpt is stored whole; with display 'highlights' (the default) only
+// its highlighted passages show, with "…" where text is left out. 'full' shows it all, with the
+// highlights marked, but only on the post's own page (preparePostForDisplay sets `fullPassage`);
+// the feed always shows highlights only.
 
 const EXCERPT_TAGS = ['a', 'br', 'mark', 'b', 'strong', 'i', 'em'];
 
@@ -23,35 +30,106 @@ const domainOf = (url) => {
   }
 };
 
+const PDF_LABELS = {
+  filing: 'PDF',
+  letter: 'full letter (PDF)',
+  other: 'full document (PDF)',
+};
+
 const pdfHref = ({ pdfUrl, pdfPage }) =>
   pdfUrl && pdfPage ? `${pdfUrl}#page=${pdfPage}` : pdfUrl;
 
-export function renderDocument({ data, archived = {} }) {
+/**
+ * Just the highlighted passages of an excerpt, with "…" wherever text is left out: before, between
+ * and after them. Null if nothing is highlighted.
+ * @param {string} html Clean excerpt HTML
+ * @returns {?string}
+ */
+export function highlightsOnly(html) {
+  const $ = cheerio.load(html, null, false);
+  if (!$('mark').length) {
+    return null;
+  }
+  const parts = [];
+  let skipped = false;
+  const walk = (nodes) => {
+    for (const node of nodes) {
+      if (node.type === 'tag' && node.name === 'mark') {
+        if (skipped) {
+          parts.push('…');
+        }
+        parts.push($.html(node));
+        skipped = false;
+      } else if (node.type === 'text') {
+        skipped = skipped || /\S/.test(node.data);
+      } else if (node.children) {
+        walk(node.children);
+      }
+    }
+  };
+  walk($.root()[0].children);
+  if (skipped) {
+    parts.push('…');
+  }
+  return parts.join(' ');
+}
+
+export function renderDocument({ data, archived = {}, fullPassage = false }) {
   const isFiling = data.docType === 'filing';
   const paragraph = String(data.paragraph || '').trim();
-  const excerpt = cleanHtml(data.excerptHtml, EXCERPT_TAGS);
+  const whole = cleanHtml(data.excerptHtml, EXCERPT_TAGS);
+  const highlights = whole.includes('<mark>') ? highlightsOnly(whole) : null;
   const pdf = pdfHref(data);
 
   const title = [data.title, isFiling && paragraph ? `¶${paragraph}` : null]
     .filter(Boolean)
     .map(escapeHtml)
     .join(' · ');
+  // Senders and recipients that are entities show in bold, linked to them (each person's `html`,
+  // made when mentions are expanded); others as the name written. A lone person's descriptor
+  // follows a comma ("Howard Lutnick, Secretary of Commerce"); in a list it's in parentheses.
+  const party = (key) => {
+    const { prefix, people, more } = documentSide(data, key);
+    const alone = people.length === 1 && !more;
+    const names = people
+      .map(({ name, role, html }) => {
+        // Someone saved only as an entity that's since been deleted has no name to show
+        const shown = html || escapeHtml(name);
+        if (!shown || !role) {
+          return shown;
+        }
+        return alone
+          ? `${shown}, ${escapeHtml(role)}`
+          : `${shown} (${escapeHtml(role)})`;
+      })
+      .filter(Boolean);
+    const list = joinNames(names, more);
+    return list && prefix ? `${escapeHtml(prefix)} ${list}` : list;
+  };
+  // "Oct 8, 2026 → Brandon Lutnick, Cantor Fitzgerald", then "from Senate PSI (minority)"
+  const senders = party('senders');
+  const recipients = party('recipients');
   const meta = [
-    formatReadDate(data.date),
-    [data.from, data.to].filter(Boolean).join(' → '),
+    data.date
+      ? `<strong class="document-date">${escapeHtml(formatReadDate(data.date))}</strong>`
+      : '',
+    recipients ? `→ ${recipients}` : '',
   ]
     .filter(Boolean)
-    .map(escapeHtml)
-    .join(' · ');
-  const sourceLinks = [
-    link(pdf, isFiling ? 'PDF' : 'full document (PDF)'),
+    .join(' ');
+  // The title shows for a filing (the case) or a document with nobody named on it; a letter is
+  // known by who sent it to whom.
+  const showTitle = title && (isFiling || (!senders && !recipients));
+  // Under the excerpt: the links to the document, then the notes on it
+  const notes = [
+    link(pdf, PDF_LABELS[data.docType] || PDF_LABELS.other),
     link(archived[data.pdfUrl], 'archived'),
     link(data.docketUrl, 'docket'),
-  ]
-    .filter(Boolean)
-    .join(' · ');
-  const notes = [
-    excerpt.includes('<mark>') ? 'highlight mine' : null,
+    highlights
+      ? whole.match(/<mark>/g).length > 1
+        ? 'highlights mine'
+        : 'highlight mine'
+      : null,
     pdf && paragraph ? link(pdf, `jump to ¶${paragraph} in PDF`) : null,
     data.coverageUrl
       ? `my coverage: ${link(data.coverageUrl, domainOf(data.coverageUrl))}`
@@ -61,16 +139,31 @@ export function renderDocument({ data, archived = {} }) {
   const thumbnail = data.thumbnail
     ? `<a class="document-thumbnail" href="${escapeHtml(pdf || data.thumbnail)}"><img src="${escapeHtml(data.thumbnail)}" alt="${escapeHtml(`First page of ${data.title || 'the document'}`)}" loading="lazy"></a>`
     : '';
-  const body = excerpt
-    ? isFiling && paragraph
-      ? `<div class="document-excerpt numbered"><span class="document-paragraph">${escapeHtml(paragraph)}.</span><div>${excerpt}</div></div>`
-      : `<div class="document-excerpt">${excerpt}</div>`
-    : '';
+  const excerptBlock = (html, mode) => {
+    const className = [
+      'document-excerpt',
+      isFiling && paragraph ? 'numbered' : null,
+      mode,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    return isFiling && paragraph
+      ? `<div class="${className}"><span class="document-paragraph">${escapeHtml(paragraph)}.</span><div>${html}</div></div>`
+      : `<div class="${className}">${html}</div>`;
+  };
+  let body = '';
+  if (highlights && !fullPassage) {
+    // The full passage comes along unshown, for the "show full passage" button site.js adds.
+    // (A template's content isn't displayed, and feed readers drop it.)
+    body = `${excerptBlock(highlights, 'highlights-only')}<template class="document-full-passage">${excerptBlock(whole, 'with-highlights')}</template>`;
+  } else if (whole) {
+    body = excerptBlock(whole, highlights ? 'with-highlights' : null);
+  }
 
   return `<figure class="document-block ${escapeHtml(data.docType || 'other')}${thumbnail ? ' with-thumbnail' : ''}">
 ${thumbnail}<div class="document-main">
-<header class="document-head"><span class="document-title">${title}</span>${sourceLinks ? `<span class="document-links">${sourceLinks}</span>` : ''}</header>
-${meta ? `<p class="document-meta">${meta}</p>` : ''}${body}${notes.length ? `<p class="document-notes">${notes.join(' · ')}</p>` : ''}
+${showTitle ? `<header class="document-head"><span class="document-title">${title}</span></header>` : ''}
+${meta ? `<p class="document-meta">${meta}</p>` : ''}${senders ? `<p class="document-from">from ${senders}</p>` : ''}${body}${notes.length ? `<p class="document-notes">${notes.join(' · ')}</p>` : ''}
 </div></figure>`;
 }
 
@@ -81,6 +174,15 @@ ${meta ? `<p class="document-meta">${meta}</p>` : ''}${body}${notes.length ? `<p
 const postedTime = (iso, format = 'h:mm a · LLL d, yyyy') => {
   const dt = DateTime.fromISO(String(iso || ''), { zone: 'America/New_York' });
   return dt.isValid ? dt.toFormat(format) : '';
+};
+
+// A post's time in Eastern, marked so the reader's browser shows it in their own zone
+// (api/helpers/localTimes.js).
+const postedTimeTag = (iso, localFormat, format) => {
+  const text = postedTime(iso, format);
+  return text
+    ? `<time datetime="${escapeHtml(String(iso))}" data-local="${localFormat}">${escapeHtml(text)}</time>`
+    : '';
 };
 
 function renderSocialMedia(media = [], screenshot) {
@@ -119,7 +221,9 @@ function renderPostBody(post, screenshot) {
   return `<div class="social-text">${cleanHtml(post.textHtml)}</div>${renderSocialMedia(post.media, screenshot)}${card}${quoted}`;
 }
 
-function cardFooter(originalUrl, screenshot, archived = {}) {
+// The card's last line: when it was posted (single posts; a thread dates each post) on the left,
+// and the original, archived and screenshot links on the right.
+function cardFooter(originalUrl, screenshot, archived = {}, when = '') {
   const links = [
     link(originalUrl, 'original'),
     link(archived[originalUrl], 'archived'),
@@ -127,7 +231,10 @@ function cardFooter(originalUrl, screenshot, archived = {}) {
   ]
     .filter(Boolean)
     .join(' · ');
-  return links ? `<p class="social-footer">${links}</p>` : '';
+  if (!links && !when) {
+    return '';
+  }
+  return `<p class="social-footer">${when ? `<span class="social-when">${when}</span>` : ''}${links ? `<span class="social-links">${links}</span>` : ''}</p>`;
 }
 
 export function renderSocialPost({ data, archived = {} }) {
@@ -138,17 +245,17 @@ export function renderSocialPost({ data, archived = {} }) {
   const network = NETWORK_LABELS[posts[0].network] || '';
   if (posts.length === 1) {
     const [post] = posts;
-    const when = postedTime(post.postedAt);
+    const when = postedTimeTag(post.postedAt, 'social');
     return `<figure class="social-card network-${escapeHtml(post.network)}">
 <header class="social-head">${authorLine(post)}<span class="social-network">${escapeHtml(network)}</span></header>
 ${renderPostBody(post, data.screenshot)}
-${when ? `<p class="social-meta">${escapeHtml(when)}</p>` : ''}${cardFooter(post.originalUrl, data.screenshot, archived)}
+${cardFooter(post.originalUrl, data.screenshot, archived, when)}
 </figure>`;
   }
   const items = posts
     .map((post) => {
-      const date = postedTime(post.postedAt, 'LLL d');
-      return `<li class="social-thread-post"><p class="social-thread-head">${authorLine(post)}${date ? ` · <a href="${escapeHtml(post.originalUrl || '')}">${escapeHtml(date)}</a>` : ''}</p>${renderPostBody(post, data.screenshot)}</li>`;
+      const date = postedTimeTag(post.postedAt, 'monthDay', 'LLL d');
+      return `<li class="social-thread-post"><p class="social-thread-head">${authorLine(post)}${date ? ` · <a href="${escapeHtml(post.originalUrl || '')}">${date}</a>` : ''}</p>${renderPostBody(post, data.screenshot)}</li>`;
     })
     .join('');
   return `<figure class="social-card social-thread network-${escapeHtml(posts[0].network)}">

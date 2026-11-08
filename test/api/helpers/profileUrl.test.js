@@ -25,10 +25,6 @@ describe('parseProfileUrl', () => {
       { network: 'youtube', handle: 'UC123' },
     ],
     [
-      'https://en.wikipedia.org/wiki/Taylor_Lorenz',
-      { network: 'wikipedia', handle: 'Taylor_Lorenz' },
-    ],
-    [
       'https://hachyderm.io/@molly0xfff',
       { network: 'mastodon', handle: 'molly0xfff@hachyderm.io' },
     ],
@@ -49,6 +45,8 @@ describe('parseProfileUrl', () => {
     ['Taylor'],
     ['https://x.com/i/status/123'],
     ['https://en.wikipedia.org/'],
+    // An article about someone isn't their account (it's their ids.wikipedia)
+    ['https://en.wikipedia.org/wiki/Taylor_Lorenz'],
   ])('returns null for %s', (input) => {
     expect(parseProfileUrl(input)).toBeNull();
   });

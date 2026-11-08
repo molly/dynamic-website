@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon';
 
-// <input type="datetime-local"> works in local time without a zone; the database stores instants.
+// <input type="datetime-local"> holds a date and time with no zone. The editor's are in the
+// computer's own time zone; the database stores instants (UTC). Minutes only: the inputs have
+// step="60", and seconds are dropped.
 
 /** @param {string|Date|null} value An ISO string or Date */
 export function toLocalInput(value) {
@@ -11,7 +13,7 @@ export function toLocalInput(value) {
     value instanceof Date
       ? DateTime.fromJSDate(value)
       : DateTime.fromISO(value);
-  return dt.isValid ? dt.toFormat("yyyy-MM-dd'T'HH:mm") : '';
+  return dt.isValid ? dt.toLocal().toFormat("yyyy-MM-dd'T'HH:mm") : '';
 }
 
 /** @returns {string|null} ISO, or null when the input is empty */

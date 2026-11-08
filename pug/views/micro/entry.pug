@@ -114,7 +114,14 @@ block body
             ul
               each item in page.related
                 li
-                  a(href=item.href) #{item.label}
+                  if item.kind
+                    //- A newsletter issue: its title in italics, and which newsletter
+                    a(href=item.href)
+                      i #{item.label}
+                    | #{' '}
+                    span.side-note.side-note-inline #{item.kind}
+                  else
+                    a(href=item.href) #{item.label}
 
     nav.pager.post-pager(aria-label="Newer and older entries")
       if page.newer

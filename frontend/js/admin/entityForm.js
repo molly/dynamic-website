@@ -1,10 +1,18 @@
 import axios from 'axios';
 import TomSelect from 'tom-select';
-import { fieldsFor } from '../../../api/helpers/entityFields.js';
+import {
+  SHARED_FIELDS,
+  SIDE_SECTIONS,
+  fieldsFor,
+  sectionOf,
+} from '../../../api/helpers/entityFields.js';
 import {
   RELATION_KINDS,
   RELATION_LABELS,
+  relationLabel,
 } from '../../../api/helpers/entityTypes.js';
+import { formatPartialDate } from '../../../api/helpers/partialDate.js';
+import { fillFromWikidata, wikidataId } from '../../../api/helpers/wikidata.js';
 import { createAboutPicker, selectedValues } from '../helpers/pickers.js';
 import {
   escapeHtml,
@@ -12,14 +20,33 @@ import {
   readControl,
   renderControl,
   setPath,
-  showStatus,
 } from './formHelpers.js';
 
-// Entity admin form, rendered from the field lists in api/helpers/entityFields.js.
+// Entity editor (pug/views/admin/entity.pug), laid out like the public entity page and styled like
+// the post editor. The fields come from api/helpers/entityFields.js; sectionOf says where each one
+// goes: the head (name, description, note), a section of its own in the main column, or one of the
+// side panel's sections.
 
 let tagPicker;
 
-// Fields ---------------------------------------------------------------------------------------
+// Placeholders for the head, which has no labels: it reads like the page it becomes.
+const HEAD_PLACEHOLDERS = {
+  name: 'Name',
+  disambiguator: 'disambiguator · only if another entity has this name',
+  description: 'One-line description',
+  note: 'Optional note, in your words: why you cover this',
+};
+
+// Fields -----------------------------------------------------------------------------------------
+
+function removeButton() {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'link-button remove-row';
+  button.setAttribute('aria-label', 'Remove');
+  button.textContent = '×';
+  return button;
+}
 
 function renderListRow(field, value = {}) {
   const row = document.createElement('div');
@@ -37,91 +64,181 @@ function renderListRow(field, value = {}) {
   return row;
 }
 
-function renderStringRow(value = '') {
+function renderStringRow(field, value = '') {
   const row = document.createElement('div');
   row.className = 'list-row';
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.value = value;
+  const input = Object.assign(document.createElement('input'), {
+    type: 'text',
+    value,
+    placeholder: field.label,
+  });
   input.dataset.sub = 'value';
+  input.setAttribute('aria-label', field.label);
   row.append(input, removeButton());
   return row;
 }
 
-function removeButton() {
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'remove-row';
-  button.setAttribute('aria-label', 'Remove');
-  button.textContent = '×';
-  return button;
-}
-
-function renderField(field, value) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'input-group';
-  wrapper.dataset.field = field.name;
-  const id = `field-${field.name.replace(/\./g, '-')}`;
-
-  if (field.input === 'list' || field.input === 'strings') {
-    const fieldset = document.createElement('fieldset');
-    fieldset.className = 'list-field';
-    fieldset.dataset.field = field.name;
-    fieldset.innerHTML = `<legend>${escapeHtml(field.label)}</legend><div class="list-rows"></div>`;
-    const rows = fieldset.querySelector('.list-rows');
-    const newRow = (item) =>
-      field.input === 'list'
-        ? renderListRow(field, item)
-        : renderStringRow(item);
-    for (const item of value || []) {
-      rows.appendChild(newRow(item));
-    }
-    const add = document.createElement('button');
-    add.type = 'button';
-    add.textContent = `Add ${field.label.toLowerCase()}`;
-    add.addEventListener('click', () => rows.appendChild(newRow()));
-    rows.addEventListener('click', (evt) => {
-      if (evt.target.classList.contains('remove-row')) {
-        evt.target.closest('.list-row').remove();
-      }
-    });
-    fieldset.appendChild(add);
-    if (field.help) {
-      fieldset.insertAdjacentHTML(
-        'beforeend',
-        `<p class="field-help">${escapeHtml(field.help)}</p>`,
-      );
-    }
-    return fieldset;
+// A list of rows (other names, versions, accounts…), with "+ add" under it
+function renderListField(field, value, { heading }) {
+  const section = document.createElement('fieldset');
+  section.className = 'list-field';
+  section.dataset.field = field.name;
+  section.innerHTML = `<legend class="${heading}">${escapeHtml(field.label)}</legend><div class="list-rows"></div>`;
+  const rows = section.querySelector('.list-rows');
+  const newRow = (item) =>
+    field.input === 'list'
+      ? renderListRow(field, item)
+      : renderStringRow(field, item);
+  for (const item of value || []) {
+    rows.appendChild(newRow(item));
   }
-
-  const label = document.createElement('label');
-  label.htmlFor = id;
-  label.textContent = field.label;
-  const control =
-    field.input === 'tag'
-      ? Object.assign(document.createElement('input'), { type: 'text' })
-      : renderControl(field, value);
-  control.id = id;
-  control.dataset.control = field.name;
-  wrapper.append(label, control);
+  const add = document.createElement('button');
+  add.type = 'button';
+  add.className = 'link-button add-row';
+  add.textContent = '+ add';
+  add.setAttribute('aria-label', `Add to ${field.label.toLowerCase()}`);
+  add.addEventListener('click', () => {
+    const row = newRow();
+    rows.appendChild(row);
+    row.querySelector('input, select')?.focus();
+  });
+  rows.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('remove-row')) {
+      evt.target.closest('.list-row').remove();
+    }
+  });
+  section.appendChild(add);
   if (field.help) {
-    wrapper.insertAdjacentHTML(
+    section.insertAdjacentHTML(
       'beforeend',
       `<p class="field-help">${escapeHtml(field.help)}</p>`,
     );
   }
-  return wrapper;
+  return section;
 }
 
-async function renderFields(container, type, entity) {
-  container.innerHTML = '';
-  for (const field of fieldsFor(type)) {
-    let value = entity ? getPath(entity, field.name) : undefined;
-    if (field.name === 'hasPage' && value === undefined) {
-      value = type !== 'person'; // Same default as the model: people are mention-only
+function fieldId(field) {
+  return `field-${field.name.replace(/\./g, '-')}`;
+}
+
+function simpleControl(field, value) {
+  const control =
+    field.input === 'tag'
+      ? Object.assign(document.createElement('input'), { type: 'text' })
+      : renderControl(field, value);
+  control.id = fieldId(field);
+  control.dataset.control = field.name;
+  return control;
+}
+
+// The head: name, disambiguator, description and note, unlabeled, in the page's own type
+function renderHeadField(field, value) {
+  const control = simpleControl(field, value);
+  control.classList.add(`entity-head-${field.name}`);
+  control.placeholder = HEAD_PLACEHOLDERS[field.name] || field.label;
+  control.setAttribute('aria-label', field.label);
+  if (control.tagName === 'TEXTAREA') {
+    control.rows = 2;
+  }
+  return control;
+}
+
+// A side panel row: a small label, then the control, like "at a glance" on the page
+function renderSideRow(field, value) {
+  const row = document.createElement('div');
+  row.className = 'entity-field-row';
+  row.dataset.field = field.name;
+  if (field.input === 'checkbox') {
+    const label = document.createElement('label');
+    label.className = 'entity-check';
+    label.append(
+      simpleControl(field, value),
+      field.name === 'hasPage'
+        ? ' give them a public entity page'
+        : ` ${field.label}`,
+    );
+    row.classList.add('entity-field-check');
+    row.appendChild(label);
+  } else {
+    const label = document.createElement('label');
+    label.htmlFor = fieldId(field);
+    label.textContent = field.label.toLowerCase();
+    row.append(label, simpleControl(field, value));
+  }
+  if (field.help) {
+    row.insertAdjacentHTML(
+      'beforeend',
+      `<p class="field-help">${escapeHtml(field.help)}</p>`,
+    );
+  }
+  return row;
+}
+
+// Main column sections: the type's own lists first (versions, candidacies…), then the shared ones
+// (other names, sources)
+function mainFields(type) {
+  const fields = fieldsFor(type).filter((f) => sectionOf(f) === 'main');
+  const shared = new Set(SHARED_FIELDS.map((f) => f.name));
+  return [
+    ...fields.filter((f) => !shared.has(f.name)),
+    ...fields.filter((f) => shared.has(f.name)),
+  ];
+}
+
+async function renderFields(containers, type, entity) {
+  const valueOf = (field) => {
+    const value = entity ? getPath(entity, field.name) : undefined;
+    // Same default as the model: people are mention-only
+    return field.name === 'hasPage' && value === undefined
+      ? type !== 'person'
+      : value;
+  };
+  const fields = fieldsFor(type);
+
+  containers.head.innerHTML = '';
+  for (const field of fields.filter((f) => sectionOf(f) === 'head')) {
+    containers.head.appendChild(renderHeadField(field, valueOf(field)));
+  }
+
+  containers.main.innerHTML = '';
+  for (const field of mainFields(type)) {
+    containers.main.appendChild(
+      field.input === 'list' || field.input === 'strings'
+        ? renderListField(field, valueOf(field), {
+            heading: 'entity-editor-heading',
+          })
+        : renderSideRow(field, valueOf(field)),
+    );
+  }
+
+  containers.side.innerHTML = '';
+  for (const { id, label } of SIDE_SECTIONS) {
+    const sectionFields = fields.filter((f) => sectionOf(f) === id);
+    if (!sectionFields.length) {
+      continue;
     }
-    container.appendChild(renderField(field, value));
+    const section = document.createElement('section');
+    section.className = 'side-section';
+    section.innerHTML = `<h2 class="side-label">${escapeHtml(label)}</h2>`;
+    for (const field of sectionFields) {
+      section.appendChild(
+        field.input === 'list' || field.input === 'strings'
+          ? renderListField(field, valueOf(field), { heading: 'side-hint' })
+          : renderSideRow(field, valueOf(field)),
+      );
+    }
+    containers.side.appendChild(section);
+  }
+
+  // "fill from Wikidata", under the Wikidata ID (setupEntityForm handles the click)
+  const wikidataRow = containers.side
+    .querySelector('[data-control="ids.wikidata"]')
+    ?.closest('.entity-field-row');
+  if (wikidataRow) {
+    wikidataRow.insertAdjacentHTML(
+      'beforeend',
+      `<p class="field-help wikidata-fill-row"><button type="button" class="link-button wikidata-fill">fill from Wikidata</button> <span class="wikidata-fill-status" role="status"></span></p>`,
+    );
   }
 
   // The tag field picks one existing tag.
@@ -139,26 +256,29 @@ async function renderFields(container, type, entity) {
 
 // Read the whole form back into an entity object. Empty values are left out, which the server
 // treats as cleared.
-function collectFields(container, type) {
+function collectFields(containers, type) {
+  const find = (selector, all = false) => {
+    for (const container of Object.values(containers)) {
+      const found = all
+        ? [...container.querySelectorAll(selector)]
+        : container.querySelector(selector);
+      if (all ? found.length : found) {
+        return found;
+      }
+    }
+    return all ? [] : null;
+  };
   const data = {};
   for (const field of fieldsFor(type)) {
     let value;
     if (field.input === 'tag') {
       value = tagPicker.getValue() || undefined;
     } else if (field.input === 'strings') {
-      value = [
-        ...container.querySelectorAll(
-          `fieldset[data-field="${field.name}"] .list-row input`,
-        ),
-      ]
+      value = find(`fieldset[data-field="${field.name}"] .list-row input`, true)
         .map((input) => input.value.trim())
         .filter(Boolean);
     } else if (field.input === 'list') {
-      value = [
-        ...container.querySelectorAll(
-          `fieldset[data-field="${field.name}"] .list-row`,
-        ),
-      ]
+      value = find(`fieldset[data-field="${field.name}"] .list-row`, true)
         .map((row) => {
           const item = {};
           for (const sub of field.fields) {
@@ -174,10 +294,7 @@ function collectFields(container, type) {
         })
         .filter((item) => Object.keys(item).length > 0);
     } else {
-      value = readControl(
-        field,
-        container.querySelector(`[data-control="${field.name}"]`),
-      );
+      value = readControl(field, find(`[data-control="${field.name}"]`));
     }
     if (value !== undefined) {
       setPath(data, field.name, value);
@@ -186,8 +303,7 @@ function collectFields(container, type) {
   return data;
 }
 
-function showMatches(form, reason, matches) {
-  const box = form.querySelector('.entity-matches');
+function showMatches(box, reason, matches) {
   const intro =
     reason === 'id'
       ? 'One of these IDs or accounts already belongs to:'
@@ -200,6 +316,9 @@ function showMatches(form, reason, matches) {
     .join('')}</ul>`;
   box.hidden = false;
 }
+
+const savedAt = () =>
+  `saved ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()}`;
 
 // Relations ------------------------------------------------------------------------------------
 
@@ -221,30 +340,34 @@ const RELATION_FIELDS = [
     input: 'text',
     placeholder: 'e.g. Chief Legal Officer',
   },
-  { name: 'start', label: 'Start', input: 'date' },
-  { name: 'end', label: 'End', input: 'date' },
+  { name: 'start', label: 'Start', input: 'partialDate' },
+  { name: 'end', label: 'End', input: 'partialDate' },
   { name: 'amountUsd', label: 'Amount (USD)', input: 'number' },
   { name: 'source', label: 'Source URL', input: 'url' },
 ];
 
-const formatDate = (date) => (date ? date.slice(0, 10) : '');
-
-function relationLabel(relation) {
-  const labels = RELATION_LABELS[relation.kind];
-  const verb = labels ? labels[relation.direction] : relation.kind;
+// One relation as a row, like the page's "related" list: what it is, the other entity, details
+function relationRow(relation) {
+  // "worked at" once it has an end date
+  const verb = relationLabel(relation);
   const other = relation.other.disambiguator
     ? `${relation.other.name} (${relation.other.disambiguator})`
     : relation.other.name;
   const details = [
     relation.role,
     relation.start || relation.end
-      ? `${formatDate(relation.start) || '?'} – ${formatDate(relation.end) || 'now'}`
+      ? `${formatPartialDate(relation.start) || '?'} – ${formatPartialDate(relation.end) || 'now'}`
       : null,
     relation.amountUsd != null
       ? `$${relation.amountUsd.toLocaleString()}`
       : null,
   ].filter(Boolean);
-  return `${escapeHtml(verb)} <a href="/admin/entities/${escapeHtml(relation.other._id)}">${escapeHtml(other)}</a>${details.length ? ` <span class="picker-meta">${escapeHtml(details.join(' · '))}</span>` : ''}`;
+  return `<li>
+    <span class="relation-verb">${escapeHtml(verb)}</span>
+    <a href="/admin/entities/${escapeHtml(relation.other._id)}">${escapeHtml(other)}</a>
+    ${details.length ? `<span class="side-hint">${escapeHtml(details.join(' · '))}</span>` : ''}
+    <span class="relation-actions"><button type="button" class="link-button" data-edit="${escapeHtml(relation._id)}">edit</button> · <button type="button" class="link-button" data-delete="${escapeHtml(relation._id)}">delete</button></span>
+  </li>`;
 }
 
 function setupRelations(entity, initialRelations) {
@@ -259,31 +382,26 @@ function setupRelations(entity, initialRelations) {
   let editingId = null;
 
   fields.innerHTML = `
-    <div class="input-group">
+    <div class="entity-field-row">
       <label for="relation-kind">${escapeHtml(entity.name)}…</label>
       <select id="relation-kind">${RELATION_CHOICES.map(
         (choice) =>
           `<option value="${choice.value}">${escapeHtml(choice.label)}</option>`,
       ).join('')}</select>
     </div>
-    <div class="input-group">
-      <label for="relation-other">Entity</label>
+    <div class="entity-field-row">
+      <label for="relation-other">entity</label>
       <input id="relation-other" type="text">
     </div>`;
   for (const field of RELATION_FIELDS) {
-    fields.appendChild(renderField(field, undefined));
+    fields.appendChild(renderSideRow(field, undefined));
   }
   const otherPicker = createAboutPicker('#relation-other', { maxItems: 1 });
 
   const renderList = () => {
     list.innerHTML = relations.length
-      ? relations
-          .map(
-            (relation) =>
-              `<li>${relationLabel(relation)} <button type="button" data-edit="${escapeHtml(relation._id)}">Edit</button> <button type="button" data-delete="${escapeHtml(relation._id)}">Delete</button></li>`,
-          )
-          .join('')
-      : '<li>No relations yet.</li>';
+      ? relations.map(relationRow).join('')
+      : '<li class="side-hint">No relations yet.</li>';
   };
 
   const resetForm = () => {
@@ -308,8 +426,7 @@ function setupRelations(entity, initialRelations) {
       for (const field of RELATION_FIELDS) {
         const control = fields.querySelector(`[data-control="${field.name}"]`);
         const value = relation[field.name];
-        control.value =
-          field.input === 'date' ? formatDate(value) : value ?? '';
+        control.value = value ?? '';
       }
       formTitle.textContent = 'Edit relation';
       cancel.hidden = false;
@@ -368,21 +485,27 @@ export async function setupEntityForm(pageData) {
   const { type } = pageData;
   let { entity } = pageData;
   const form = document.getElementById('entity-form');
-  const container = document.getElementById('entity-fields');
-  const matches = form.querySelector('.entity-matches');
-  const error = form.querySelector('.entity-error');
-  const status = form.querySelector('.admin-status');
+  const containers = {
+    head: document.getElementById('entity-head'),
+    main: document.getElementById('entity-main-fields'),
+    side: document.getElementById('entity-side-fields'),
+  };
+  const matches = document.querySelector(
+    '.entity-editor-main > .entity-matches',
+  );
+  const error = document.querySelector('.entity-editor-main > .entity-error');
+  const status = document.getElementById('entity-status');
 
   // Attach the submit handler before rendering finishes (the tag list loads asynchronously), so
   // an early click can't fall through to a native form submission.
-  let ready = renderFields(container, type, entity);
+  let ready = renderFields(containers, type, entity);
 
   form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
     await ready;
     matches.hidden = true;
     error.hidden = true;
-    const fields = collectFields(container, type);
+    const fields = collectFields(containers, type);
     try {
       if (!entity) {
         const { data } = await axios.post('/dynamic-api/entities', {
@@ -397,17 +520,76 @@ export async function setupEntityForm(pageData) {
         fields,
       );
       entity = data.entity;
-      document.getElementById('entity-title').textContent = entity.name;
-      ready = renderFields(container, type, entity);
+      document.title = `${entity.name} · Admin`;
+      tagPicker?.destroy();
+      ready = renderFields(containers, type, entity);
       await ready;
-      showStatus(status, 'Saved.');
+      status.textContent = savedAt();
     } catch (err) {
       if (err.response?.status === 409) {
-        showMatches(form, err.response.data.reason, err.response.data.matches);
+        showMatches(
+          matches,
+          err.response.data.reason,
+          err.response.data.matches,
+        );
       } else {
         error.textContent = err.response?.data?.error || err.message;
         error.hidden = false;
       }
+    }
+  });
+
+  // Fill empty fields from Wikidata, found by the Wikidata ID or else the Wikipedia article. The
+  // form is redrawn with the additions; nothing is saved until Save.
+  containers.side.addEventListener('click', async (evt) => {
+    const button = evt.target.closest('.wikidata-fill');
+    if (!button) {
+      return;
+    }
+    await ready;
+    const current = collectFields(containers, type);
+    const say = (message) => {
+      containers.side.querySelector('.wikidata-fill-status').textContent =
+        message;
+    };
+    button.disabled = true;
+    say('looking up…');
+    try {
+      const { data: suggestions } = await axios.get(
+        '/dynamic-api/entities/wikidata',
+        {
+          params: {
+            type,
+            wikidata: wikidataId(current.ids?.wikidata) || undefined,
+            wikipedia: current.ids?.wikipedia,
+          },
+        },
+      );
+      const { entity: filled, added } = fillFromWikidata(
+        // A pasted link to the entry counts as its ID
+        {
+          ...current,
+          ids: {
+            ...current.ids,
+            wikidata: wikidataId(current.ids?.wikidata) || undefined,
+          },
+        },
+        suggestions,
+      );
+      tagPicker?.destroy();
+      ready = renderFields(containers, type, {
+        ...filled,
+        tag: current.tag ? { _id: current.tag } : undefined,
+      });
+      await ready;
+      say(
+        added.length
+          ? `Added ${added.join(', ')}. Check them, then save.`
+          : 'Nothing new on Wikidata.',
+      );
+    } catch (err) {
+      button.disabled = false;
+      say(err.response?.data?.error || err.message);
     }
   });
 

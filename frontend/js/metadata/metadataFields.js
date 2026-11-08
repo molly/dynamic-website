@@ -146,7 +146,7 @@ export class DataField {
   }
 }
 
-const REPLY_NETWORKS = MENTION_NETWORKS.filter((n) => n !== 'wikipedia');
+const REPLY_NETWORKS = MENTION_NETWORKS;
 
 export class ReplyField {
   constructor({ onChange }) {

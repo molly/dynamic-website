@@ -11,7 +11,13 @@ import {
   RELATION_KINDS,
 } from '../../api/helpers/entityTypes.js';
 import { easternDate } from '../../api/helpers/easternDate.js';
-import { MENTION_NETWORKS } from '../../api/helpers/socialMedia.js';
+import { normalizePartialDate } from '../../api/helpers/partialDate.js';
+import {
+  MENTION_NETWORKS,
+  cleanHandle,
+} from '../../api/helpers/socialMedia.js';
+import { wikidataId } from '../../api/helpers/wikidata.js';
+import { wikipediaArticleUrl } from '../../api/helpers/wikipedia.js';
 import {
   accountKey,
   nameKey,
@@ -24,6 +30,17 @@ const { ObjectId } = mongoose.Schema.Types;
 
 // Dates typed without a time are days in Eastern time (api/helpers/easternDate.js).
 const Day = { type: Date, set: easternDate };
+// A year, month or day, as precisely as it's known: "2019", "2019-03" or "2019-03-05"
+const PartialDay = {
+  type: String,
+  set: (value) =>
+    value === '' || value == null ? undefined : String(value).trim(),
+  validate: {
+    validator: (value) => value == null || normalizePartialDate(value) !== null,
+    message: (props) =>
+      `“${props.value}” isn’t a date: use a year, YYYY-MM or YYYY-MM-DD.`,
+  },
+};
 
 const slugPattern = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -56,11 +73,13 @@ export const EntitySchema = new mongoose.Schema(
     ids: {
       wikidata: { type: String, match: /^Q\d+$/ },
       website: String,
+      // The Wikipedia article about them, as a link (wikipedia.js). Not one of their accounts.
+      wikipedia: String,
     },
     accounts: [
       {
         _id: false,
-        // Social networks plus wikipedia (article title) and website (URL)
+        // Social networks plus website (URL)
         network: { type: String, enum: MENTION_NETWORKS, required: true },
         handle: { type: String, required: true, trim: true },
       },
@@ -91,6 +110,7 @@ export const EntitySchema = new mongoose.Schema(
 
 EntitySchema.index({ type: 1, slug: 1 }, { unique: true });
 EntitySchema.index(...uniqueWhenSet('ids.wikidata'));
+EntitySchema.index(...uniqueWhenSet('ids.wikipedia'));
 EntitySchema.index(...uniqueWhenSet('accountKeys'));
 // Type-specific identifiers, declared here so the indexes cover the whole collection.
 EntitySchema.index(...uniqueWhenSet('secCik'));
@@ -113,6 +133,25 @@ EntitySchema.pre('validate', function () {
         .map(nameKey),
     ),
   ];
+  // A pasted link to the Wikidata entry is stored as its ID
+  if (this.ids?.wikidata) {
+    this.ids.wikidata = wikidataId(this.ids.wikidata) || this.ids.wikidata;
+  }
+  // A link or title in any form is stored as the article's link, so the same article always matches
+  if (this.ids?.wikipedia) {
+    const article = wikipediaArticleUrl(this.ids.wikipedia);
+    if (article) {
+      this.ids.wikipedia = article;
+    } else {
+      this.invalidate(
+        'ids.wikipedia',
+        'That isn’t a link to a Wikipedia article.',
+      );
+    }
+  }
+  for (const account of this.accounts) {
+    account.handle = cleanHandle(account.network, account.handle);
+  }
   this.accountKeys = this.accounts.map(({ network, handle }) =>
     accountKey(network, handle),
   );
@@ -145,7 +184,6 @@ export const OrganizationEntity = Entity.discriminator(
   new mongoose.Schema({
     kind: { type: String, enum: ORGANIZATION_KINDS, default: 'company' },
     secCik: { type: String, match: /^\d{1,10}$/ },
-    ticker: String,
     // Outlets: articles from these domains get this outlet, and its paywall default.
     domains: [String],
     paywalledByDefault: Boolean,
@@ -155,17 +193,6 @@ export const OrganizationEntity = Entity.discriminator(
 export const ProjectEntity = Entity.discriminator(
   'project',
   new mongoose.Schema({
-    ticker: String,
-    chains: [String],
-    contracts: [
-      {
-        _id: false,
-        chain: { type: String, required: true },
-        address: { type: String, required: true },
-      },
-    ],
-    coingeckoId: String,
-    cmcId: String,
     launchedAt: Day,
   }),
 );
@@ -175,7 +202,6 @@ export const CommitteeEntity = Entity.discriminator(
   new mongoose.Schema({
     fecId: { type: String, match: /^C\d{8}$/ },
     committeeType: { type: String, enum: COMMITTEE_TYPES },
-    treasurer: String,
   }),
 );
 
@@ -227,8 +253,8 @@ export const EnforcementEntity = Entity.discriminator(
 export const EventEntity = Entity.discriminator(
   'event',
   new mongoose.Schema({
-    startDate: Day,
-    endDate: Day,
+    startDate: PartialDay,
+    endDate: PartialDay,
     amounts: [
       {
         _id: false,
@@ -249,8 +275,8 @@ export const EntityRelationSchema = new mongoose.Schema(
     to: { type: ObjectId, ref: 'Entity', required: true, index: true },
     kind: { type: String, enum: RELATION_KINDS, required: true },
     role: String, // e.g. "Chief Legal Officer", "plaintiff"
-    start: Day,
-    end: Day, // The current role is the one with no end
+    start: PartialDay,
+    end: PartialDay, // The current role is the one with no end
     amountUsd: Number,
     source: { type: String, match: /^https?:\/\// },
   },

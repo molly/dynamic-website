@@ -33,7 +33,7 @@ mixin entryList(years)
     ul.entity-entries
       each row in group.rows
         li
-          span.entity-entry-date #{row.date}
+          time.entity-entry-date(datetime=row.iso, data-local="monthDay") #{row.date}
           +siteIcon(row.icon)
           a.entity-entry-label(href=row.href, class=row.italic ? 'italic' : null) #{row.label}
 
@@ -52,7 +52,13 @@ block body
         header.entity-head.h-card
           p.entity-type-label #{page.typeName.one}
           h1.entity-name.p-name(class=e.type === 'case' ? 'italic' : null) #{e.name}
-          if e.type === 'case' && (e.court || e.docketNumber)
+          if page.formerly
+            p.entity-formerly #{page.formerly}
+          //- Your description if there is one; otherwise one made from the entity's details: a
+          //- case's court and docket, or a person's current job
+          if e.description
+            p.entity-description.p-note #{e.description}
+          else if e.type === 'case' && (e.court || e.docketNumber)
             p.entity-description #{[e.court, e.docketNumber].filter(Boolean).join(' · ')}
           else if page.role
             p.entity-description
@@ -61,15 +67,10 @@ block body
                 a(href=page.role.href) #{page.role.name}
               else
                 | #{page.role.name}
-          else if e.description
-            p.entity-description.p-note #{e.description}
           if e.status && e.status.value && e.status.value !== 'active'
             p.entity-status #{e.status.value}#{e.status.date ? ` as of ${new Date(e.status.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' })}` : ''}
           if e.type === 'bill' && e.congressGovUrl
             p.entity-callout #[a(href=e.congressGovUrl) Current status, text and votes on congress.gov →]
-          if e.type === 'committee'
-            each link in (e.elsewhere || [])
-              p.entity-callout #[a(href=link.url) #{link.label} →]
           if e.note
             p.entity-note #{e.note}
 
@@ -77,6 +78,11 @@ block body
           section.entity-section
             h2.entity-section-heading Parties
             +rows(page.parties.map((p) => ({ label: p.label, value: p.name, href: p.href })))
+
+        if page.members.length
+          section.entity-section
+            h2.entity-section-heading Members
+            +rows(page.members.map((m) => ({ label: m.label, value: m.name, href: m.href })))
 
         if page.documents.length
           section.entity-section
@@ -168,6 +174,7 @@ block body
             e.type === 'bill' ? { label: 'congress', value: e.congress ? ordinal(e.congress) : null } : null,
             e.type === 'bill' ? { label: 'status', value: e.billStatus } : null,
             e.type === 'committee' ? { label: 'type', value: e.committeeType } : null,
+            ...page.facts,
             { label: 'entries', value: page.glance.count ? `${page.glance.count} · since ${page.glance.since}` : null },
             { label: 'latest', value: page.glance.latest },
             page.role ? { label: 'role', value: `${page.role.label}, ${page.role.name}` } : null,
@@ -177,7 +184,7 @@ block body
           ])
 
         - var candidacies = e.candidacies || []
-        - var identifiers = [{ label: 'Wikidata', value: e.ids && e.ids.wikidata, href: e.ids && e.ids.wikidata ? `https://www.wikidata.org/wiki/${e.ids.wikidata}` : null }, { label: 'SEC CIK', value: e.secCik, href: e.secCik ? `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${e.secCik}` : null }, { label: 'ticker', value: e.ticker }, { label: 'FEC ID', value: e.fecId, href: e.fecId ? `https://www.fec.gov/data/committee/${e.fecId}/` : null }].concat(candidacies.filter((c) => c.fecCandidateId).map((c) => ({ label: 'FEC', value: c.fecCandidateId, href: `https://www.fec.gov/data/candidate/${c.fecCandidateId}/` }))).concat([{ label: 'website', value: e.ids && e.ids.website ? domainOf(e.ids.website) : null, href: e.ids && e.ids.website ? asUrl(e.ids.website) : null }])
+        - var identifiers = [{ label: 'Wikidata', value: e.ids && e.ids.wikidata, href: e.ids && e.ids.wikidata ? `https://www.wikidata.org/wiki/${e.ids.wikidata}` : null }, { label: 'SEC CIK', value: e.secCik, href: e.secCik ? `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${e.secCik}` : null }, { label: 'FEC ID', value: e.fecId, href: e.fecId ? `https://www.fec.gov/data/committee/${e.fecId}/` : null }].concat(candidacies.filter((c) => c.fecCandidateId).map((c) => ({ label: 'FEC', value: c.fecCandidateId, href: `https://www.fec.gov/data/candidate/${c.fecCandidateId}/` }))).concat([{ label: 'website', value: e.ids && e.ids.website ? domainOf(e.ids.website) : null, href: e.ids && e.ids.website ? asUrl(e.ids.website) : null }])
         if identifiers.some((row) => row.value)
           section
             h2.entity-side-heading Identifiers
@@ -210,16 +217,15 @@ block body
             h2.entity-side-heading Links
             +rows([{ label: 'text', value: 'congress.gov', href: e.congressGovUrl }])
 
-        - var wikipedia = (e.accounts || []).find((a) => a.network === 'wikipedia')
-        - var elsewhere = e.type === 'committee' ? [] : (e.elsewhere || [])
-        if elsewhere.length || wikipedia
+        if page.accounts.length
+          section
+            h2.entity-side-heading Accounts
+            +rows(page.accounts)
+
+        if page.elsewhere.length
           section
             h2.entity-side-heading Elsewhere
-            ul.entity-side-links
-              each link in elsewhere
-                li #[a(href=link.url) #{link.label}]
-              if wikipedia
-                li #[a(href=`https://en.wikipedia.org/wiki/${encodeURIComponent(wikipedia.handle.replace(/ /g, '_'))}`) Wikipedia]
+            +rows(page.elsewhere)
 
         if page.affiliated.length
           section

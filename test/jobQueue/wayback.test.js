@@ -1,5 +1,5 @@
 import { extractUrlsFromBlocks } from '../../backend/helpers/links';
-import { recentCaptureFromCdx } from '../../jobQueue/wayback';
+import { recentCaptureFromCdx, waybackFileUrl } from '../../jobQueue/wayback';
 
 const HEADER = ['timestamp', 'original'];
 const NOW = new Date(Date.UTC(2026, 10, 6, 12, 0, 0));
@@ -27,11 +27,33 @@ describe('recentCaptureFromCdx', () => {
     ).toBeNull();
   });
 
+  it('takes a capture of any age when asked', () => {
+    expect(
+      recentCaptureFromCdx(
+        [HEADER, ['20190101000000', 'https://example.com/']],
+        NOW,
+        Infinity,
+      )?.archiveUrl,
+    ).toBe('https://web.archive.org/web/20190101000000/https://example.com/');
+  });
+
   it('handles no captures and odd responses', () => {
     expect(recentCaptureFromCdx([], NOW)).toBeNull();
     expect(recentCaptureFromCdx([HEADER], NOW)).toBeNull();
     expect(recentCaptureFromCdx('nope', NOW)).toBeNull();
     expect(recentCaptureFromCdx([HEADER, ['garbage', 'x']], NOW)).toBeNull();
+  });
+});
+
+describe('waybackFileUrl', () => {
+  it('asks for the saved file, without the Wayback toolbar', () => {
+    expect(
+      waybackFileUrl(
+        'https://web.archive.org/web/20240102030405/https://example.gov/a.pdf',
+      ),
+    ).toBe(
+      'https://web.archive.org/web/20240102030405id_/https://example.gov/a.pdf',
+    );
   });
 });
 

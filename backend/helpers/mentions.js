@@ -17,7 +17,7 @@ export async function loadMentionedEntities(posts) {
   }
   const entities = await Entity.find(
     { _id: { $in: ids } },
-    'name accounts hasPage slug type',
+    'name accounts ids.wikipedia hasPage slug type',
   ).lean();
   return Object.fromEntries(entities.map((e) => [String(e._id), e]));
 }

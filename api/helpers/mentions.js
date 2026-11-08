@@ -1,6 +1,8 @@
 import * as cheerio from 'cheerio';
 import { accountKey, nameKey } from '../../backend/helpers/entityKeys.js';
+import { DOCUMENT_SIDES, documentSide } from './documentParties.js';
 import { MENTION_NETWORKS } from './socialMedia.js';
+import { wikipediaArticleUrl } from './wikipedia.js';
 
 // Mentions in post text. The current format stores only which entity is mentioned:
 //   <span class="mention" data-entity="ENTITY_ID">the text as written</span>
@@ -20,8 +22,37 @@ export function collectMentionIds(posts) {
     )) {
       ids.add(match[1]);
     }
+    for (const id of documentPartyIds(post?.blocks)) {
+      ids.add(id);
+    }
   }
   return [...ids];
+}
+
+/**
+ * Ids of the entities among a document block's senders and recipients, including documents
+ * inside comparisons. They're shown as mentions of those entities.
+ * @param {Object[]} [blocks]
+ * @returns {string[]}
+ */
+function documentPartyIds(blocks = []) {
+  return blocks.flatMap((block) => {
+    if (block?.type === 'comparison') {
+      return ['left', 'right'].flatMap((side) =>
+        block.data?.[side]?.block
+          ? documentPartyIds([block.data[side].block])
+          : [],
+      );
+    }
+    if (block?.type !== 'document') {
+      return [];
+    }
+    return DOCUMENT_SIDES.flatMap((side) =>
+      documentSide(block.data, side).people.map((p) => p.entity?._id),
+    )
+      .filter(Boolean)
+      .map(String);
+  });
 }
 
 const escapeText = (text) =>
@@ -37,9 +68,10 @@ export function mentionMarkup(entityId, text) {
 }
 
 /**
- * Read a legacy mention: the name as written, and its accounts by network.
+ * Read a legacy mention: the name as written, its accounts by network, and the Wikipedia article
+ * the old tool listed among them (it's not an account; it goes in the entity's ids.wikipedia).
  * @param {import('cheerio').Cheerio} $mention A span.cdx-mention
- * @returns {{name: string, accounts: {network: string, handle: string}[]}}
+ * @returns {{name: string, accounts: {network: string, handle: string}[], wikipedia: ?string}}
  */
 function readLegacyMention($mention) {
   const name = $mention.find('.cdx-mention-plain').text().trim();
@@ -53,7 +85,13 @@ function readLegacyMention($mention) {
       }
     }
   }
-  return { name, accounts };
+  const $wikipedia = $mention.find('a.wikipedia').first();
+  const wikipedia = $wikipedia.length
+    ? wikipediaArticleUrl(
+        $wikipedia.attr('href') || $wikipedia.attr('data-username'),
+      )
+    : null;
+  return { name, accounts, wikipedia };
 }
 
 /**
@@ -142,9 +180,10 @@ export function mapPostText(post, fn) {
  * A key identifying one distinct legacy mention: same name and same accounts.
  * @param {{name: string, accounts: {network: string, handle: string}[]}} mention
  */
-export function mentionSignature({ name, accounts }) {
+export function mentionSignature({ name, accounts, wikipedia }) {
   return JSON.stringify([
     nameKey(name || ''),
     accounts.map((a) => accountKey(a.network, a.handle)).sort(),
+    wikipedia || null,
   ]);
 }

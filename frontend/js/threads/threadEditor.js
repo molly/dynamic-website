@@ -15,6 +15,8 @@ import {
   visibleText,
 } from '../../../api/helpers/socialThreads.js';
 import { escapeHtml } from '../helpers/escapeHtml.js';
+import { insertPlainText } from '../helpers/plainPaste.js';
+import { chooseLinkedFile } from '../helpers/upload.js';
 import { buildThread } from './buildThread.js';
 
 export const SOCIAL_NETWORKS = ['bluesky', 'mastodon', 'twitter'];
@@ -242,6 +244,7 @@ export class ThreadEditors {
         <div class="post-actions">
           <span class="chars-left"></span>
           <button type="button" class="link-button add-image">+ image</button>
+          <button type="button" class="link-button add-image-url" title="Add an image that's already online">+ image link</button>
           <button type="button" class="link-button split-post">split here</button>
           ${index < total - 1 ? '<button type="button" class="link-button merge-post">merge with next</button>' : ''}
           ${total > 1 ? '<button type="button" class="link-button delete-post">delete</button>' : ''}
@@ -475,15 +478,7 @@ export class ThreadEditors {
     }
     // Paste as plain text: the platforms don't take formatting.
     evt.preventDefault();
-    const lines = evt.clipboardData.getData('text/plain').split(/\r?\n/);
-    lines.forEach((line, i) => {
-      if (i > 0) {
-        document.execCommand('insertLineBreak');
-      }
-      if (line) {
-        document.execCommand('insertText', false, line);
-      }
-    });
+    insertPlainText(evt.clipboardData.getData('text/plain'));
   }
 
   onInput(evt) {
@@ -587,6 +582,8 @@ export class ThreadEditors {
       this.pendingImage = { network, index };
       this.fileInput.value = '';
       this.fileInput.click();
+    } else if (target.closest('.add-image-url')) {
+      this.addImageFromLink(network, index);
     } else if (target.closest('.move-image')) {
       this.moveImage(
         network,
@@ -670,6 +667,21 @@ export class ThreadEditors {
         `.thread-post[data-network="${network}"][data-index="${index}"] .post-text`,
       )
       ?.focus();
+  }
+
+  async addImageFromLink(network, index) {
+    try {
+      const file = await chooseLinkedFile();
+      if (file) {
+        this.threads[network].posts[index].media.push({
+          url: file.url,
+          alt: '',
+        });
+        this.changed(network, { rerender: true });
+      }
+    } catch (err) {
+      window.alert(`Couldn't use that image: ${err.message}`);
+    }
   }
 
   async uploadImage() {

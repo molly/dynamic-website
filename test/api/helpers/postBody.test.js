@@ -121,6 +121,21 @@ describe('images', () => {
     );
   });
 
+  it('shows a screenshot’s alt text with its line breaks', () => {
+    const html = formatMedia({
+      data: {
+        file: { url: 'https://s/shot.png' },
+        alt: 'Line one\n\n<Line two>',
+      },
+      tunes: { imageSource: { screenshot: true } },
+    });
+    expect(html).toContain(
+      '<p class="media-alt">Line one<br><br>&lt;Line two&gt;</p>',
+    );
+    // The img alt attribute keeps the newlines as they are
+    expect(html).toContain('alt="Line one\n\n&lt;Line two&gt;"');
+  });
+
   it('credits a source image and links to the full size', () => {
     expect(
       imageSourceLine(

@@ -54,10 +54,9 @@ export function parseProfileUrl(text) {
   const host = url.hostname.toLowerCase().replace(/^www\./, '');
   const path = decodeURIComponent(url.pathname);
 
-  // en.wikipedia.org/wiki/Taylor_Lorenz -> the article title
-  if (host.endsWith('wikipedia.org')) {
-    const title = path.match(/^\/wiki\/(.+)$/);
-    return title ? { network: 'wikipedia', handle: title[1] } : null;
+  // A Wikipedia article is about someone, not an account of theirs (see wikipedia.js)
+  if (host === 'wikipedia.org' || host.endsWith('.wikipedia.org')) {
+    return null;
   }
 
   for (const { hosts, network, pattern } of HOST_NETWORKS) {

@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { editablePaths } from '../../api/helpers/entityFields.js';
+import { wikidataId, wikidataSuggestions } from '../../api/helpers/wikidata.js';
 import {
   ENTITY_SUMMARY_FIELDS,
   entityModelFor,
@@ -14,6 +15,10 @@ import {
   EntityRelation,
 } from '../models/entity.model.js';
 import { Tag } from '../models/tag.model.js';
+import {
+  fetchWikidataEntry,
+  wikidataIdForArticle,
+} from '../helpers/wikidata.js';
 import logger from '../winston.js';
 import { authenticated } from './auth.js';
 
@@ -42,6 +47,22 @@ router.get('/', authenticated(), async (req, res) => {
   }
 });
 
+// Entities linked to a feed tag, for the editors to suggest one from the other: adding #coinbase
+// suggests @Coinbase for "about", and the other way round.
+router.get('/tagged', authenticated(), async (req, res) => {
+  try {
+    res.json(
+      await Entity.find(
+        { tag: { $type: 'objectId' } },
+        `${ENTITY_SUMMARY_FIELDS} tag`,
+      ).lean(),
+    );
+  } catch (err) {
+    logger.error('Failed to list tagged entities', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Entities a new one with this name would duplicate, for the new-entity dialog to warn as you
 // type. Only names: IDs and accounts are checked when the entity is created.
 router.get('/check', authenticated(), async (req, res) => {
@@ -51,6 +72,36 @@ router.get('/check', authenticated(), async (req, res) => {
   } catch (err) {
     logger.error('Entity duplicate check failed', err);
     res.status(500).json({ error: err.message });
+  }
+});
+
+// What an entity's Wikidata entry offers it (api/helpers/wikidata.js), found by its Wikidata ID
+// or, failing that, its Wikipedia article. ?type= picks the fields; nothing is saved here.
+router.get('/wikidata', authenticated(), async (req, res) => {
+  const { type } = req.query;
+  if (!ENTITY_TYPES.includes(type)) {
+    res.status(400).json({ error: `Unknown entity type "${type}".` });
+    return;
+  }
+  try {
+    const id =
+      wikidataId(req.query.wikidata) ||
+      (req.query.wikipedia
+        ? await wikidataIdForArticle(req.query.wikipedia)
+        : null);
+    if (!id) {
+      res.status(404).json({
+        error: req.query.wikipedia
+          ? 'Wikidata has no entry for that Wikipedia article.'
+          : 'Add a Wikidata ID or a Wikipedia article first.',
+      });
+      return;
+    }
+    const entry = await fetchWikidataEntry(id);
+    res.json(wikidataSuggestions(entry, type));
+  } catch (err) {
+    logger.error('Wikidata lookup failed', err);
+    res.status(502).json({ error: err.message });
   }
 });
 

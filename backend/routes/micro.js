@@ -9,7 +9,11 @@ import {
   labelFeedEntry,
 } from '../helpers/feedEntries.js';
 import { refreshRelatedInBackground } from '../helpers/related.js';
-import { fetchPostInfo, fetchSocialPost } from '../helpers/socialFetch.js';
+import {
+  fetchPostInfo,
+  fetchSocialPost,
+  saveTwitterPosts,
+} from '../helpers/socialFetch.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Entity } from '../models/entity.model.js';
 import { ShortformEntry } from '../models/entry.model.js';
@@ -237,6 +241,15 @@ router.post('/socialPost', authenticated(), async (req, res) => {
     res.json(await fetchSocialPost(String(req.body.url || '')));
   } catch (err) {
     sendFetchError(res, err);
+  }
+});
+
+// Twitter posts fetched by the local X helper, checked and with their media copied to the bucket
+router.post('/socialPost/twitter', authenticated(), async (req, res) => {
+  try {
+    res.json({ posts: await saveTwitterPosts(req.body.posts) });
+  } catch (err) {
+    res.status(422).json({ error: err.message });
   }
 });
 

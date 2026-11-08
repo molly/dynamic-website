@@ -90,7 +90,7 @@ export class UpdatesEditor {
     el.innerHTML = `
       <div class="update-head">
         <span class="update-kind">${UPDATE_LABELS[update.kind]}</span>
-        <input type="datetime-local" class="update-at" aria-label="Time" value="${update.at ? toLocalInput(update.at) : nowLocalInput()}">
+        <input type="datetime-local" step="60" class="update-at" aria-label="Time" value="${update.at ? toLocalInput(update.at) : nowLocalInput()}">
         <button type="button" class="link-button update-remove">remove</button>
       </div>
       ${update.kind === 'live' ? `<input type="text" class="update-headline" placeholder="Headline" aria-label="Headline" value="${escapeHtml(update.headline || '')}">` : ''}

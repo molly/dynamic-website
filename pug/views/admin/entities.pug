@@ -1,44 +1,50 @@
 extends layout.pug
 
+block topbarLeft
+  span entities
+  if q || type || bare
+    span.topbar-separator ·
+    a(href="/admin/entities") clear filters
+
 block content
-  h1 Entities
+  h1.admin-title Entities
 
   form.admin-filters(method="get", action="/admin/entities")
     input(type="search", name="q", value=q, placeholder="Search names, aliases and handles", aria-label="Search")
     select(name="type", aria-label="Type")
-      option(value="") All types
+      option(value="") all types
       each t in ENTITY_TYPES
         option(value=t, selected=(t === type)) #{t}
-    button(type="submit") Filter
+    label.admin-filter-check
+      input(type="checkbox", name="bare", value="1", checked=bare)
+      |  only ones with nothing filled in
+    button(type="submit") Search
 
-  form.admin-filters(method="get", action="/admin/entities/new")
-    select(name="type", aria-label="Type for new entity")
+  //- One click per type, as in the new-entity dialog
+  .admin-new
+    span.side-label New
+    .segmented
       each t in ENTITY_TYPES
-        option(value=t, selected=(t === type)) #{t}
-    button(type="submit") New entity
+        a(href=`/admin/entities/new?type=${t}`) #{t}
 
   if entities.length
-    table.admin-table
-      thead
-        tr
-          th Name
-          th Type
-          th Page
-      tbody
-        each entity in entities
-          tr
-            td
-              a(href=`/admin/entities/${entity._id}`) #{entity.name}
-              if entity.disambiguator
-                span.picker-meta (#{entity.disambiguator})
-            td= entity.type
-            td= entity.hasPage ? 'yes' : 'mention only'
+    ul.admin-list
+      each entity in entities
+        li
+          a.admin-list-name(href=`/admin/entities/${entity._id}`) #{entity.name}
+          if entity.disambiguator
+            span.side-hint  (#{entity.disambiguator})
+          span.admin-list-meta
+            | #{entity.type}
+            | · #{entity.hasPage ? 'page' : 'mention only'}
+            if entity.createdAt
+              | · added #{new Date(entity.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' })}
   else
-    p No entities found.
+    p.side-hint No entities found.
 
-  - var params = (p) => new URLSearchParams({ ...(q ? { q } : {}), ...(type ? { type } : {}), page: p }).toString()
+  - var params = (p) => new URLSearchParams({ ...(q ? { q } : {}), ...(type ? { type } : {}), ...(bare ? { bare: '1' } : {}), page: p }).toString()
   nav.admin-pagination
     if page > 1
-      a(href=`/admin/entities?${params(page - 1)}`) ← Previous
+      a(href=`/admin/entities?${params(page - 1)}`) ← previous
     if hasMore
-      a(href=`/admin/entities?${params(page + 1)}`) Next →
+      a(href=`/admin/entities?${params(page + 1)}`) next →

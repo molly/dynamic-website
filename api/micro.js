@@ -132,11 +132,16 @@ export const relatedUrls = (entry) =>
  * Prepare a micro entry for display.
  * @param {Object} entry
  * @param {Object} [context] What the post refers to, from loadPostContext
+ * @param {{postPage?: boolean}} [display] postPage: for the post's own page, not the feed
  */
-export const hydrateMicroEntry = (entry, context = {}) => {
+export const hydrateMicroEntry = (
+  entry,
+  context = {},
+  { postPage = false } = {},
+) => {
   if (entry) {
     Object.assign(entry, { timestamps: hydrateTimestamps(entry) });
-    const options = { quoteSource: quoteSource(entry, context) };
+    const options = { quoteSource: quoteSource(entry, context), postPage };
     const renderPost = (post) =>
       edjsParser.parse(preparePostForDisplay(post, context, options));
     entry.archived = context.archived || {}; // For the related-post cards
@@ -210,5 +215,6 @@ export const getMicroEntry = async (slug) => {
   const context = entry
     ? await loadPostContext(entryPosts(entry), { urls: relatedUrls(entry) })
     : {};
-  return hydrateMicroEntry(entry, context);
+  // Only the post's own page uses this
+  return hydrateMicroEntry(entry, context, { postPage: true });
 };

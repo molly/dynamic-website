@@ -6,9 +6,11 @@ import {
   replaceLegacyMentions,
 } from '../../../api/helpers/mentions';
 import {
+  entityNameLink,
   expandMentionsInPost,
   renderMention,
 } from '../../../backend/helpers/mentionMarkup';
+import { renderDocument } from '../../../api/helpers/sourceBlocks';
 import { processText } from '../../../backend/helpers/social';
 import { transformMicroEntry } from '../../../backend/scripts/copyTransforms';
 import { buildThread } from '../../../frontend/js/threads/buildThread';
@@ -41,6 +43,132 @@ describe('collectMentionIds', () => {
   });
 });
 
+describe('document senders and recipients', () => {
+  const OTHER = '0'.repeat(23) + '1';
+  const letter = {
+    type: 'document',
+    data: {
+      docType: 'letter',
+      senders: {
+        prefix: '',
+        people: [
+          {
+            name: 'Ms. Lorenz',
+            role: 'journalist',
+            entity: { _id: ID, name: 'Taylor Lorenz', type: 'person' },
+          },
+        ],
+        more: 0,
+      },
+      recipients: {
+        prefix: '',
+        people: [
+          {
+            name: 'Senate Banking',
+            role: 'minority staff',
+            entity: { _id: OTHER, name: 'Senate Banking', type: 'committee' },
+          },
+        ],
+        more: 0,
+      },
+    },
+  };
+
+  it('counts as mentioning them, in comparisons too', () => {
+    expect(collectMentionIds([{ blocks: [letter] }])).toEqual([ID, OTHER]);
+    expect(
+      collectMentionIds([
+        {
+          blocks: [
+            {
+              type: 'comparison',
+              data: { left: { block: letter }, right: {} },
+            },
+          ],
+        },
+      ]),
+    ).toEqual([ID, OTHER]);
+  });
+
+  it('shows a sender that is an entity in bold, linked to it, with the name as written', () => {
+    const [doc] = expandMentionsInPost({ blocks: [letter] }, ENTITIES).blocks;
+    const [sender] = doc.data.senders.people;
+    // No page, so its website; not the purple @ mention, which is for your own writing
+    expect(sender.html).toEqual(
+      '<a class="document-party" href="https://www.usermag.co"><strong>Ms. Lorenz</strong></a>',
+    );
+    // An entity that isn't loaded (e.g. deleted) stays as the name written
+    expect(doc.data.recipients.people[0].html).toBeUndefined();
+    const html = renderDocument({ data: doc.data });
+    expect(html).toContain(
+      '<p class="document-meta">→ Senate Banking, minority staff</p>',
+    );
+    expect(html).toContain(
+      `<p class="document-from">from ${sender.html}, journalist</p>`,
+    );
+    expect(letter.data.senders.people[0].html).toBeUndefined(); // Original untouched
+  });
+
+  it('lists several people, with their titles in parentheses, and how many others', () => {
+    const many = {
+      ...letter,
+      data: {
+        ...letter.data,
+        senders: {
+          prefix: 'Sens.',
+          people: [
+            { name: 'Lorenz', entity: { _id: ID } },
+            { name: 'Kim', role: 'Ranking Member' },
+          ],
+          more: 14,
+        },
+      },
+    };
+    const [doc] = expandMentionsInPost({ blocks: [many] }, ENTITIES).blocks;
+    expect(renderDocument({ data: doc.data })).toContain(
+      `from Sens. ${doc.data.senders.people[0].html}, Kim (Ranking Member) and 14 others</p>`,
+    );
+  });
+
+  it('reads documents saved with one sender and one recipient', () => {
+    const old = {
+      type: 'document',
+      data: {
+        docType: 'letter',
+        from: 'Ms. Lorenz',
+        fromEntity: { _id: ID, name: 'Taylor Lorenz', type: 'person' },
+        fromRole: 'journalist',
+        to: 'Senate Banking',
+        fromHtml: '<script>x</script>',
+      },
+    };
+    expect(collectMentionIds([{ blocks: [old] }])).toEqual([ID]);
+    const [doc] = expandMentionsInPost({ blocks: [old] }, ENTITIES).blocks;
+    expect(doc.data.from).toBeUndefined();
+    expect(doc.data.fromHtml).toBeUndefined();
+    const html = renderDocument({ data: doc.data });
+    expect(html).toContain('→ Senate Banking</p>');
+    expect(html).toContain(
+      `from ${doc.data.senders.people[0].html}, journalist</p>`,
+    );
+  });
+
+  it('never shows saved markup for a sender', () => {
+    const saved = {
+      ...letter,
+      data: {
+        ...letter.data,
+        recipients: {
+          people: [{ name: 'Senate Banking', html: '<script>x</script>' }],
+        },
+      },
+    };
+    const [doc] = expandMentionsInPost({ blocks: [saved] }, ENTITIES).blocks;
+    expect(doc.data.recipients.people[0].html).toBeUndefined();
+    expect(renderDocument({ data: doc.data })).not.toContain('<script>');
+  });
+});
+
 describe('legacy mentions', () => {
   it('reads the name and accounts', () => {
     expect(parseLegacyMentions(`Hi ${LEGACY}`)).toEqual([
@@ -50,8 +178,24 @@ describe('legacy mentions', () => {
           { network: 'twitter', handle: 'molly0xFFF' },
           { network: 'bluesky', handle: 'molly.wiki' },
         ],
+        wikipedia: null,
       },
     ]);
+  });
+
+  it('reads a Wikipedia link as the article about them, not an account', () => {
+    const withArticle = LEGACY.replace(
+      '</span></span>',
+      '</span><a class="wikipedia u-url cdx-social-link" href="https://en.wikipedia.org/wiki/Molly_White_(writer)" data-username="Molly White (writer)"></a></span>',
+    );
+    const [mention] = parseLegacyMentions(withArticle);
+    expect(mention.accounts.map((a) => a.network)).toEqual([
+      'twitter',
+      'bluesky',
+    ]);
+    expect(mention.wikipedia).toBe(
+      'https://en.wikipedia.org/wiki/Molly_White_(writer)',
+    );
   });
 
   it('replaces resolved ones and leaves the rest', () => {
@@ -98,6 +242,35 @@ describe('site markup', () => {
     // Mastodon comes before Bluesky, as on the site
     expect(html.indexOf('mastodon u-url')).toBeLessThan(
       html.indexOf('bluesky u-url'),
+    );
+    expect(html).not.toContain('wikipedia');
+  });
+
+  it('links just the name beside a post, without account icons', () => {
+    // No page, so its website
+    expect(entityNameLink(ENTITY)).toBe(
+      '<a class="website u-url p-name" href="https://www.usermag.co">Taylor Lorenz</a>',
+    );
+    expect(
+      entityNameLink({ name: 'Paul Grewal', type: 'person', accounts: [] }),
+    ).toBe('Paul Grewal');
+    expect(entityNameLink({ ...ENTITY, name: 'A & B' })).toContain('A &amp; B');
+  });
+
+  it('links the Wikipedia article about them after their accounts, not as theirs', () => {
+    const html = renderMention(
+      {
+        ...ENTITY,
+        ids: { wikipedia: 'https://en.wikipedia.org/wiki/Taylor_Lorenz' },
+      },
+      'Taylor Lorenz',
+    );
+    expect(html).toContain(
+      '<a class="wikipedia cdx-social-link" href="https://en.wikipedia.org/wiki/Taylor_Lorenz"',
+    );
+    expect(html).not.toContain('wikipedia u-url');
+    expect(html.indexOf('bluesky u-url')).toBeLessThan(
+      html.indexOf('wikipedia cdx-social-link'),
     );
   });
 

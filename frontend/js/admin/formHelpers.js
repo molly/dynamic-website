@@ -1,3 +1,7 @@
+import {
+  PARTIAL_DATE_PATTERN,
+  PARTIAL_DATE_PLACEHOLDER,
+} from '../../../api/helpers/partialDate.js';
 import { escapeHtml } from '../helpers/escapeHtml.js';
 
 export { escapeHtml };
@@ -30,7 +34,8 @@ export function setPath(obj, path, value) {
 }
 
 /**
- * A form control for a simple field (text, textarea, url, date, number, checkbox, select).
+ * A form control for a simple field (text, textarea, url, date, partialDate, number, checkbox,
+ * select). partialDate is a year, month or day, typed: "2019", "2019-03" or "2019-03-05".
  * @param {{input: string, options?: string[], placeholder?: string}} field
  * @param {*} value
  * @returns {HTMLElement}
@@ -54,6 +59,14 @@ export function renderControl(field, value) {
     return select;
   }
   const input = document.createElement('input');
+  if (field.input === 'partialDate') {
+    input.type = 'text';
+    input.inputMode = 'numeric';
+    input.pattern = PARTIAL_DATE_PATTERN;
+    input.placeholder = PARTIAL_DATE_PLACEHOLDER;
+    input.value = value ?? '';
+    return input;
+  }
   input.type = field.input === 'checkbox' ? 'checkbox' : field.input;
   if (field.input === 'checkbox') {
     input.checked = Boolean(value);

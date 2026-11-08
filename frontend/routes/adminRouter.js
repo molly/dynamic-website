@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import { ENTITY_TYPE_NAMES, entityUrl } from '../../api/helpers/entityUrls.js';
 import { ENTITY_TYPES } from '../../api/helpers/entityTypes.js';
 import {
   relationsFor,
@@ -32,9 +33,12 @@ router.get(
       ? req.query.type
       : undefined;
     const q = req.query.q || '';
+    const bare = req.query.bare === '1';
     // One extra, to know whether there's a next page.
     const entities = await searchEntities(q, {
       type,
+      bare,
+      newestFirst: true,
       limit: PAGE_SIZE + 1,
       skip: (page - 1) * PAGE_SIZE,
     });
@@ -46,6 +50,7 @@ router.get(
       page,
       type,
       q,
+      bare,
       ENTITY_TYPES,
     });
   }),
@@ -58,6 +63,7 @@ router.get('/entities/new', (req, res) => {
   res.render('admin/entity.pug', {
     adminPage: 'entity',
     title: `New ${type}`,
+    typeName: ENTITY_TYPE_NAMES[type].one,
     pageData: { entity: null, type, relations: [] },
   });
 });
@@ -77,6 +83,8 @@ router.get(
     res.render('admin/entity.pug', {
       adminPage: 'entity',
       title: entity.name,
+      typeName: ENTITY_TYPE_NAMES[entity.type]?.one || entity.type,
+      viewHref: entityUrl(entity),
       pageData: {
         entity,
         type: entity.type,

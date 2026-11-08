@@ -1,12 +1,17 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { cleanHtml, escapeHtml } from '../../api/helpers/html.js';
-import { parsePostUrl } from '../../api/helpers/postUrl.js';
+import {
+  domainOf,
+  parsePostUrl,
+  twitterProfileUrl,
+} from '../../api/helpers/postUrl.js';
 import { copyUrlToBucket } from './bucket.js';
 
 // Public posts on Bluesky and Mastodon, from their public APIs: who wrote a post and when (for
-// "in reply to"), or the whole post as a social post card. Twitter has no public API, so only what
-// its URLs say is returned and its cards are filled in by hand.
+// "in reply to"), or the whole post as a social post card. Twitter has no public API, so for
+// "in reply to" only what its URLs say is returned, and its cards are fetched by the local X helper
+// (see twitterPost.js) and only checked and saved here.
 
 const config = {
   timeout: 10000,
@@ -96,14 +101,6 @@ export async function fetchPostInfo(url) {
 // 'video', src, remoteUrl, alt, poster, duration, saved }], linkCard: { url, domain, title },
 // quoted: another post }. `saved` media were copied to the bucket; `src` is the copy.
 
-const domainOf = (url) => {
-  try {
-    return new URL(url).hostname.replace(/^www\./, '');
-  } catch {
-    return '';
-  }
-};
-
 /**
  * A Bluesky post's text as HTML, with its links, mentions and hashtags (facets) as links. Facet
  * positions count UTF-8 bytes, not characters.
@@ -144,11 +141,23 @@ export function blueskyTextToHtml(text, facets = []) {
 
 /**
  * A Mastodon post's HTML as card text: paragraphs become blank lines, and links show the text
- * Mastodon shows (it hides parts of long URLs in spans).
+ * Mastodon shows (it hides parts of long URLs in spans). Mentions show the full @user@instance
+ * handle, where Mastodon shows only @user.
  * @param {string} content
+ * @param {Object[]} [mentions] The status's `mentions`
+ * @param {string} [host] The server the status was fetched from; `acct` is relative to it
  */
-export function mastodonContentToHtml(content) {
+export function mastodonContentToHtml(content, mentions = [], host = '') {
   const $ = cheerio.load(content || '', null, false);
+  const handles = new Map(
+    mentions.map((m) => [m.url, `@${mastodonHandle(m, host)}`]),
+  );
+  $('a').each((_, el) => {
+    const handle = handles.get($(el).attr('href'));
+    if (handle) {
+      $(el).text(handle);
+    }
+  });
   $('.invisible').remove();
   $('.ellipsis').each((_, el) => {
     $(el).replaceWith(`${$(el).text()}…`);
@@ -161,8 +170,9 @@ export function mastodonContentToHtml(content) {
   return cleanHtml(paragraphs.join('<br><br>'));
 }
 
+// Bluesky links use the account's DID, not its handle, so they keep working after a rename.
 const bskyPostUrl = (author, uri) =>
-  `https://bsky.app/profile/${author.handle}/post/${uri.split('/').pop()}`;
+  `https://bsky.app/profile/${author.did}/post/${uri.split('/').pop()}`;
 
 // The CID in a Bluesky CDN image URL (…/plain/<did>/<cid>@jpeg), for naming the copy.
 const cdnCid = (url) => url.split('/').pop().split('@')[0];
@@ -246,7 +256,7 @@ export function blueskyToPost(view, { quoted = false } = {}) {
     network: 'bluesky',
     authorName: view.author.displayName || view.author.handle,
     handle: view.author.handle,
-    profileUrl: `https://bsky.app/profile/${view.author.handle}`,
+    profileUrl: `https://bsky.app/profile/${view.author.did}`,
     originalUrl: bskyPostUrl(view.author, view.uri),
     postedAt: record.createdAt || view.indexedAt,
     textHtml: blueskyTextToHtml(record.text, record.facets),
@@ -274,7 +284,7 @@ export function mastodonToPost(status, host, { quoted = false } = {}) {
     profileUrl: status.account.url,
     originalUrl: status.url || status.uri,
     postedAt: status.created_at,
-    textHtml: mastodonContentToHtml(status.content),
+    textHtml: mastodonContentToHtml(status.content, status.mentions, host),
     media: (status.media_attachments || [])
       .filter((m) => ['image', 'video', 'gifv'].includes(m.type))
       .map((m) => ({
@@ -359,6 +369,85 @@ async function saveMedia(post, copy) {
   };
 }
 
+// Twitter posts arrive from the editor (fetched by the local X helper; see twitterPost.js), so
+// they're checked here: only known fields are kept, and media are only downloaded from x.com's own
+// media servers, never from any URL the request names.
+const TWITTER_MEDIA_HOSTS = ['pbs.twimg.com', 'video.twimg.com'];
+const MAX_TWITTER_POSTS = 30;
+
+function twitterMediaUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' &&
+      TWITTER_MEDIA_HOSTS.includes(parsed.hostname)
+      ? parsed.href
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+const str = (value) => (typeof value === 'string' ? value : '');
+
+function checkTwitterPost(post, { quoted = false } = {}) {
+  const accountId = /^\d+$/.test(str(post?.accountId)) ? post.accountId : '';
+  const handle = str(post?.handle).replace(/^@/, '');
+  const originalUrl = str(post?.originalUrl);
+  if (parsePostUrl(originalUrl)?.network !== 'twitter') {
+    throw new Error('Not a Twitter post.');
+  }
+  const postedAt = new Date(post.postedAt);
+  return {
+    network: 'twitter',
+    authorName: str(post.authorName),
+    handle,
+    accountId,
+    profileUrl: twitterProfileUrl({ accountId, handle }),
+    originalUrl,
+    postedAt: Number.isNaN(postedAt.getTime()) ? null : postedAt.toISOString(),
+    textHtml: cleanHtml(str(post.textHtml)),
+    media: (Array.isArray(post.media) ? post.media : []).map((item) => ({
+      type: item?.type === 'video' ? 'video' : 'image',
+      remoteUrl: twitterMediaUrl(item?.remoteUrl),
+      remotePoster: twitterMediaUrl(item?.remotePoster),
+      filename: str(item?.filename) || undefined,
+      duration: Number.isFinite(item?.duration) ? item.duration : null,
+      alt: str(item?.alt),
+    })),
+    linkCard: post.linkCard?.url
+      ? {
+          url: str(post.linkCard.url),
+          domain: domainOf(str(post.linkCard.url)),
+          title: str(post.linkCard.title),
+        }
+      : null,
+    quoted:
+      post.quoted && !quoted
+        ? checkTwitterPost(post.quoted, { quoted: true })
+        : null,
+  };
+}
+
+/**
+ * Twitter posts fetched by the local X helper, checked and with their media copied to the bucket.
+ * @param {Object[]} posts
+ * @param {{copyMedia?: boolean}} [options]
+ * @throws When the posts aren't Twitter posts
+ */
+export async function saveTwitterPosts(posts, { copyMedia = true } = {}) {
+  if (!Array.isArray(posts) || !posts.length) {
+    throw new Error('No posts to save.');
+  }
+  if (posts.length > MAX_TWITTER_POSTS) {
+    throw new Error(`At most ${MAX_TWITTER_POSTS} posts at a time.`);
+  }
+  const checked = posts.map((post) => checkTwitterPost(post));
+  const saved = await Promise.all(
+    checked.map((post) => saveMedia(post, copyMedia)),
+  );
+  return saved;
+}
+
 /**
  * Fetch a Bluesky or Mastodon post as a social post card's post, with its media copied to the
  * bucket.
@@ -371,7 +460,7 @@ export async function fetchSocialPost(url, { copyMedia = true } = {}) {
   if (!parsed || parsed.network === 'twitter') {
     throw new Error(
       parsed
-        ? 'Twitter posts can’t be fetched; fill in the card by hand.'
+        ? 'Twitter posts are fetched by the local X helper, not the server.'
         : 'Not a link to a Bluesky or Mastodon post.',
     );
   }

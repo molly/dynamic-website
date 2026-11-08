@@ -1,5 +1,11 @@
 import { DateTime } from 'luxon';
-import { RELATION_LABELS } from '../../api/helpers/entityTypes.js';
+import {
+  accountRows,
+  elsewhereRows,
+  formerNames,
+  typeFacts,
+} from '../../api/helpers/entityFacts.js';
+import { relationLabel } from '../../api/helpers/entityTypes.js';
 import { ENTITY_TYPE_NAMES, entityUrl } from '../../api/helpers/entityUrls.js';
 import { Entity } from '../models/entity.model.js';
 import { PressEntry, ShortformEntry } from '../models/entry.model.js';
@@ -68,6 +74,7 @@ export function entryRow(entry) {
     icon: kind.icon,
     year: date.year,
     date: date.toFormat('LLL d'),
+    iso: new Date(entry.createdAt).toISOString(),
     label: labelFeedEntry(entry).label,
     href: feedEntryHref(entry),
     italic: ['newsletter', 'reading'].includes(kind.value),
@@ -186,11 +193,29 @@ export const RELATION_NOUNS = {
   companion: { from: 'companion', to: 'companion' },
   referred_to: { from: 'referred to', to: 'referral' },
   works_at: { from: 'employer', to: 'employee' },
+  member_of: { from: 'member of', to: 'member' },
   subsidiary_of: { from: 'parent', to: 'subsidiary' },
+  part_of: { from: 'part of', to: 'part' },
   owns: { from: 'owned', to: 'owner' },
   funds: { from: 'funded', to: 'funder' },
   gave_to: { from: 'recipient', to: 'donor' },
+  parent_of: { from: 'child', to: 'parent' },
+  spouse_of: { from: 'spouse', to: 'spouse' },
+  sibling_of: { from: 'sibling', to: 'sibling' },
+  relative_of: { from: 'relative', to: 'relative' },
 };
+
+// A member with a seat of their own (Chair, Ranking Member), not just "member"
+const hasSeat = (row) => Number(row.label !== RELATION_NOUNS.member_of.to);
+
+/**
+ * A body's current members (e.g. a committee's), those with a seat first, then by name.
+ * @param {Object[]} rows The entity's relations, as relationRow makes them
+ */
+export const currentMembers = (rows) =>
+  rows
+    .filter((r) => r.kind === 'member_of' && r.direction === 'to' && r.current)
+    .sort((a, b) => hasSeat(b) - hasSeat(a) || a.name.localeCompare(b.name));
 
 // Relations as rows: the other entity, linked when it has a page, and the label.
 function relationRow(relation) {
@@ -205,8 +230,7 @@ function relationRow(relation) {
     label:
       relation.role ||
       RELATION_NOUNS[relation.kind]?.[relation.direction] ||
-      RELATION_LABELS[relation.kind]?.[relation.direction] ||
-      relation.kind,
+      relationLabel(relation),
     current: !relation.end,
   };
 }
@@ -274,7 +298,7 @@ export async function loadEntityPage(type, slug, { filter, all = false } = {}) {
     return null;
   }
   const [entries, relations, tag] = await Promise.all([
-    FeedEntry.find({ about: entity._id, deletedAt: null })
+    FeedEntry.find(entityEntriesQuery(entity))
       .sort({ createdAt: -1 })
       .populate(FEED_ENTRY_LABEL_POPULATE)
       .lean()
@@ -324,6 +348,11 @@ export async function loadEntityPage(type, slug, { filter, all = false } = {}) {
     entity,
     typeName: ENTITY_TYPE_NAMES[entity.type],
     tag,
+    // From the entity's own fields (api/helpers/entityFacts.js)
+    accounts: accountRows(entity),
+    elsewhere: elsewhereRows(entity),
+    facts: typeFacts(entity),
+    formerly: formerNames(entity),
     glance: glance(entries),
     // Person: the current job, the relation with no end
     role: relationRows.find(
@@ -337,6 +366,8 @@ export async function loadEntityPage(type, slug, { filter, all = false } = {}) {
     hasMore: shown.length < filtered.length,
     parties: ofKind('party_to').filter((r) => r.direction === 'to'),
     sponsors: ofKind('sponsored').filter((r) => r.direction === 'to'),
+    // A body's current members, those with a seat (Chair, Ranking Member) first
+    members: currentMembers(relationRows),
     affiliated: ofKind('affiliated'),
     related,
     documents,
@@ -348,30 +379,70 @@ export async function loadEntityPage(type, slug, { filter, all = false } = {}) {
 }
 
 /**
+ * The feed entries an entity's page lists: those marked as about it, and those with its tag (so
+ * posts tagged before entities existed show up without being marked again).
+ * @param {{_id: *, tag?: *}} entity
+ */
+export function entityEntriesQuery(entity) {
+  return {
+    deletedAt: null,
+    $or: [{ about: entity._id }, ...(entity.tag ? [{ tags: entity.tag }] : [])],
+  };
+}
+
+/**
+ * How many entries each entity has, counting an entry once even when it's both about the entity
+ * and has its tag.
+ * @param {{_id: *, tag?: *}[]} entities
+ * @param {{about?: *[], tags?: *[]}[]} entries
+ * @returns {Map<string, number>} By entity id
+ */
+export function countEntityEntries(entities, entries) {
+  const byTag = new Map();
+  for (const entity of entities) {
+    if (entity.tag) {
+      byTag.set(idOf(entity.tag), [
+        ...(byTag.get(idOf(entity.tag)) || []),
+        idOf(entity),
+      ]);
+    }
+  }
+  const counts = new Map();
+  for (const entry of entries) {
+    const ids = new Set([
+      ...(entry.about || []).map(idOf),
+      ...(entry.tags || []).flatMap((tag) => byTag.get(idOf(tag)) || []),
+    ]);
+    for (const id of ids) {
+      counts.set(id, (counts.get(id) || 0) + 1);
+    }
+  }
+  return counts;
+}
+
+/**
  * Entities with pages, by type, with how many entries each has, for the index pages.
  * @param {string} [type] Just this type
  */
 export async function loadEntityIndex(type) {
   const entities = await Entity.find(
     { hasPage: true, ...(type ? { type } : {}) },
-    'name slug type hasPage description disambiguator',
+    'name slug type hasPage description disambiguator tag',
   )
     .sort({ name: 1 })
     .lean();
-  const counts = new Map(
-    (
-      await FeedEntry.aggregate([
-        {
-          $match: {
-            about: { $in: entities.map((e) => e._id) },
-            deletedAt: null,
-          },
-        },
-        { $unwind: '$about' },
-        { $group: { _id: '$about', count: { $sum: 1 } } },
-      ])
-    ).map((c) => [idOf(c._id), c.count]),
-  );
+  const tags = entities.map((e) => e.tag).filter(Boolean);
+  const entries = await FeedEntry.find(
+    {
+      deletedAt: null,
+      $or: [
+        { about: { $in: entities.map((e) => e._id) } },
+        ...(tags.length ? [{ tags: { $in: tags } }] : []),
+      ],
+    },
+    'about tags',
+  ).lean();
+  const counts = countEntityEntries(entities, entries);
   return entities.map((entity) => ({
     ...entity,
     href: entityUrl(entity),

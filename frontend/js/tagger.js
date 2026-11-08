@@ -3,6 +3,7 @@ import debounce from 'lodash.debounce';
 import TomSelect from 'tom-select';
 import { parseDuration } from '../../api/helpers/duration.js';
 import { socialLinksToArray } from './helpers/editorHelpers.js';
+import { suggestBetweenTagsAndAbout } from './helpers/tagSuggestions.js';
 import { uploadFile } from './helpers/upload.js';
 import {
   createAboutPicker,
@@ -147,6 +148,8 @@ async function onFirstLoad() {
   const aboutPicker = createAboutPicker('#about', {
     initial: pickerData.about,
   });
+  // #coinbase suggests @Coinbase for "about", and the other way round
+  suggestBetweenTagsAndAbout({ tagSelect, aboutPicker });
   initPressFields();
 
   /**

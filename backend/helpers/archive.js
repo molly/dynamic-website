@@ -1,6 +1,7 @@
 import { Queue } from 'bullmq';
 import { ArchivedLink } from '../models/archivedLink.model.js';
 import db from '../models/db.js';
+import { waybackFileUrl } from '../../jobQueue/wayback.js';
 import { ARCHIVE_QUEUE } from './archiveQueue.js';
 
 // Archiving links with the Wayback Machine. Jobs run in jobQueue/consumer.js on their own queue,
@@ -62,4 +63,14 @@ export async function queueArchive(urls, { delay = 0 } = {}) {
     await archiveQueue().add('archive-url', { url }, { delay });
   }
   return linkStatuses(valid);
+}
+
+/**
+ * The Wayback Machine's copy of a URL as the file it saved, if the URL has been archived.
+ * @param {string} url
+ * @returns {Promise<?string>}
+ */
+export async function archivedFileUrl(url) {
+  const record = await ArchivedLink.findOne({ url, status: 'ok' }).lean();
+  return record?.archiveUrl ? waybackFileUrl(record.archiveUrl) : null;
 }

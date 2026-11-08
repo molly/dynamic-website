@@ -12,20 +12,25 @@ html(class='feed-editor', lang='en')
     include ../../templates/titleAndDescription.pug
     +titleAndDescription(title ? `${title} · Admin` : 'Admin', "Site admin")
 
-  body(data-page=adminPage)
-    .editor-container
-      main
-        .content-box
-          .content-container
-            nav.admin-nav
-              a(href="/admin/entities") Entities
-              |  · 
-              a(href="/admin/threads") Threads
-              |  · 
-              a(href="/feed") Feed
-              |  · 
-              a(href="/micro/editor") New post
-            block content
+  //- The editor's shell (top bar, then the page), as in the post editor. Pages fill topbarLeft and
+  //- topbarRight, and either content (a single column) or body (their own layout).
+  //- micro-editor: the editor's variables, and room for the fixed action bar
+  body.micro-editor(data-page=adminPage)
+    .editor-shell
+      header.editor-topbar
+        .topbar-group
+          block topbarLeft
+            span admin
+        .topbar-group
+          block topbarRight
+          nav.admin-nav(aria-label="Admin")
+            a(href="/admin/entities", aria-current=adminPage === 'entities' ? 'page' : null) entities
+            a(href="/admin/threads", aria-current=adminPage === 'threads' ? 'page' : null) threads
+            a(href="/feed") feed
+            a(href="/micro/editor") new post
+      block body
+        .admin-body
+          block content
     if pageData
       script#page-data(type="application/json") !{JSON.stringify(pageData).replace(/</g, '\\u003c')}
     script(src="/static/admin.js")

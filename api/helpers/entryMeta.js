@@ -203,7 +203,8 @@ function permalinkRows(micro, href) {
         : `all ${plural(archive.total, 'link')}`
     : null;
   return {
-    permalink: row('permalink', [{ text: href, href }]),
+    // The post's u-url here, since on its own page the date above isn't a link
+    permalink: row('permalink', [{ text: href, href, className: 'u-url' }]),
     from: row(
       'from',
       [
@@ -546,6 +547,8 @@ export function entryMeta(
       iso: toDateTime(at).toUTC().toISO({ suppressMilliseconds: true }),
       title: fullTime(at),
       href,
+      // How the reader's browser rewrites it in their zone (api/helpers/localTimes.js).
+      format: isPermalink ? 'full' : withTime ? 'short' : 'day',
     },
     rows: ROW_ORDER.map((key) => rows[key]).filter(Boolean),
   };

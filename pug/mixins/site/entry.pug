@@ -5,6 +5,13 @@ include ./icon.pug
 include ../shortformArticle.pug
 include ../pressArticle.pug
 
+mixin entryRowLink(row, item)
+  a(href=item.href, class=item.className || (row.label === 'tags' ? 'p-category' : null), rel=row.label === 'tags' ? 'tag' : null)
+    if item.italic
+      i #{item.text}
+    else
+      | #{item.text}
+
 mixin entryRows(meta, options)
   - var showEdit = options.isLoggedIn && meta.editUrl
   if meta.rows.length || showEdit
@@ -19,13 +26,13 @@ mixin entryRows(meta, options)
               if item.html
                 != item.html
               else if item.href
-                a(href=item.href, class=row.label === 'tags' ? 'p-category' : null, rel=row.label === 'tags' ? 'tag' : null)
-                  if item.italic
-                    i #{item.text}
-                  else
-                    | #{item.text}
                 if item.count
-                  span.entry-tag-count  #{item.count}
+                  //- A tag and its count wrap together, never apart
+                  span.entry-tag
+                    +entryRowLink(row, item)
+                    span.entry-tag-count  #{item.count}
+                else
+                  +entryRowLink(row, item)
               else if item.italic
                 i #{item.text}
               else
@@ -44,7 +51,7 @@ mixin microBody(micro, meta, options)
         span.entry-live-dot(aria-hidden="true") ●
         |  Updating
         if micro.live.lastUpdateAt
-          |  · last #{updateTime(micro.live.lastUpdateAt, new Date())}
+          |  · last #[time(datetime=toISOWithoutMillis(micro.live.lastUpdateAt), data-local="update") #{updateTime(micro.live.lastUpdateAt, new Date())}]
       else
         | Live coverage ended
   if micro.title
@@ -70,6 +77,11 @@ mixin microBody(micro, meta, options)
       each block in excerpt.html
         != block
     if excerpt.truncated
+      //- The top of the next block, faded out. Not part of the post's content (no e-content),
+      //- and not clickable or focusable: "continues →" is the way on.
+      if excerpt.next
+        .entry-content.entry-teaser(aria-hidden="true", inert)
+          != excerpt.next
       p.entry-continues
         a(href=meta.date.href) continues →
     else
@@ -85,7 +97,7 @@ mixin liveBody(micro, meta, options)
       each update in shown
         .live-update(id=`update-${update.id}`)
           p.update-time
-            time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime) #{updateTime(update.at, micro.createdAt)}
+            time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime, data-local="update", data-ref=toISOWithoutMillis(micro.createdAt)) #{updateTime(update.at, micro.createdAt)}
           if update.headline
             h3.update-headline #{update.headline}
           .entry-content
@@ -96,7 +108,7 @@ mixin liveBody(micro, meta, options)
       a(href=meta.date.href) continues → #{liveUpdates.length - shown.length} earlier #{liveUpdates.length - shown.length === 1 ? 'update' : 'updates'}
   else
     .live-original
-      p.update-time #{updateTime(micro.createdAt, micro.createdAt)} · first post
+      p.update-time #[time(datetime=toISOWithoutMillis(micro.createdAt), data-local="update", data-ref=toISOWithoutMillis(micro.createdAt)) #{updateTime(micro.createdAt, micro.createdAt)}] · first post
       .entry-content.e-content
         each block in micro.html
           != block
@@ -116,7 +128,7 @@ mixin microExtras(micro, updates)
           p.update-meta
             span.update-label #{update.label}
             |  · 
-            time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime) #{updateTime(update.at, micro.createdAt)}
+            time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime, data-local="update", data-ref=toISOWithoutMillis(micro.createdAt)) #{updateTime(update.at, micro.createdAt)}
           if update.headline
             h3.update-headline #{update.headline}
           .entry-content
@@ -129,7 +141,7 @@ mixin followUps(feedMeta)
   aside.followups(id=`followed-up-${feedMeta.key}`)
     p.followups-head
       +siteIcon('envelope')
-      |  Followed up in #[i Citation Needed] · #{issues.length} #{issues.length === 1 ? 'issue' : 'issues'} · #{shortDate(issues[0].createdAt)}
+      |  Followed up in #[i Citation Needed] · #{issues.length} #{issues.length === 1 ? 'issue' : 'issues'} · #[time(datetime=toISOWithoutMillis(issues[0].createdAt), data-local="day") #{shortDate(issues[0].createdAt)}]
     .followups-issues
       each issue in issues
         a.followup(href=issue.href)
@@ -140,17 +152,23 @@ mixin followUps(feedMeta)
             if issue.dek
               span.followup-dek #{issue.dek}
 
+//- A Citation Needed issue: its image beside a "Citation Needed" label, the headline and dek, then
+//- links to read it and to subscribe.
 mixin citationNeededBody(entry, meta)
   .entry-cn
     if entry.image
       a.entry-cn-image(href=meta.date.href, tabindex="-1", aria-hidden="true")
         img(src=entry.image, alt=entry.imageAlt || '', loading="lazy")
     div
+      p.entry-cn-label Citation Needed
       h2.entry-title.p-name
         a.u-syndication(href=meta.date.href, rel="syndication") #{entry.title}
       if entry.excerpt
         .entry-dek.p-summary
           != entry.excerpt
+      p.entry-cn-links
+        a.entry-cn-read(href=meta.date.href) Read in Citation Needed →
+        |  · #[a(href="https://www.citationneeded.news/signup/") subscribe]
 
 //- Press: a line for coverage of you; cards for your own pieces, talks and appearances. Media is
 //- linked out to, with a player only for a copy you host yourself (mediaUrl, audioUrl).
@@ -316,9 +334,13 @@ mixin siteEntry(entry, options = {})
       p.entry-verb
         +siteIcon(meta.icon)
         span.entry-verb-word #{meta.verb}
-        |  
-        a.u-url(href=meta.date.href)
-          time.dt-published(datetime=meta.date.iso, title=meta.date.title) #{meta.date.text}
+        | #{' '}
+        //- On the post's own page the permalink row has the link (and the u-url), so the date isn't one
+        if meta.rows.some((row) => row.label === 'permalink')
+          time.dt-published.entry-verb-date(datetime=meta.date.iso, title=meta.date.title, data-local=meta.date.format) #{meta.date.text}
+        else
+          a.u-url(href=meta.date.href)
+            time.dt-published(datetime=meta.date.iso, title=meta.date.title, data-local=meta.date.format) #{meta.date.text}
       .entry-main
         if micro
           +microBody(micro, meta, options)

@@ -275,6 +275,17 @@ button:hover {
   width: 100%;
 }
 
+/* "or use a link" under the image block's select button (ImageBlock.js); gone once there's an
+   image, like the button */
+.image-block-link {
+  margin-top: 0.4em;
+}
+
+.image-tool--filled .image-block-link,
+.image-tool--loading .image-block-link {
+  display: none;
+}
+
 /* Dark mode */
 [data-theme='dark'] .image-tool--white .image-tool__image-picture {
   filter: invert(0.85);
@@ -1083,65 +1094,345 @@ button.primary:disabled {
   justify-content: flex-end;
 }
 
-/* Admin pages ----------------------------------------------------------------- */
+/* Admin pages ---------------------------------------------------------------
+   The editor's shell: top bar, then the page (pug/views/admin/layout.pug). */
 .admin-nav {
-  margin-bottom: 1.5em;
-  font-size: 0.9em;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  gap: 0.25em 1em;
+  font-size: inherit;
+}
+
+.admin-nav a {
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+.admin-nav a[aria-current='page'] {
+  font-weight: 600;
+  color: var(--main-text-color);
+}
+
+.admin-body {
+  max-width: 60rem;
+  padding: 1.5rem;
+}
+
+.admin-title {
+  margin: 0 0 1rem;
+  font-size: 2.5rem;
 }
 
 .admin-filters {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5em;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
 }
 
 .admin-filters input[type='search'] {
   flex-grow: 1;
 }
 
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
+.admin-filters select {
+  width: auto;
 }
 
-.admin-table th,
-.admin-table td {
-  padding: 0.4em 0.5em;
-  text-align: left;
-  border-bottom: 1px solid var(--hr-color);
+.admin-new {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75em;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.admin-new .side-label {
+  margin: 0;
+}
+
+.segmented a {
+  padding: 0.3em 0.75em;
+  font-family: var(--editor-mono, monospace);
+  font-size: 0.8rem;
+  color: var(--main-text-color);
+  text-decoration: none;
+  border: 1px solid var(--hr-color);
+  margin-right: -1px;
+}
+
+.segmented a:hover {
+  color: #ffffff;
+  background-color: var(--accent-color-purple);
+  border-color: var(--accent-color-purple);
+}
+
+.admin-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--editor-border);
+}
+
+.admin-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  align-items: baseline;
+  padding: 0.5em 0;
+  border-bottom: 1px solid var(--editor-border);
+}
+
+.admin-list-meta {
+  margin-left: auto;
+  font-family: var(--editor-mono);
+  font-size: 0.75rem;
+  color: var(--timestamp-color);
 }
 
 .admin-pagination {
   display: flex;
   justify-content: space-between;
-  margin-top: 1em;
+  margin-top: 1rem;
+  padding: 0;
+  font-family: var(--editor-mono);
+  font-size: 0.8rem;
+}
+
+.admin-status {
+  font-family: var(--editor-mono);
+  color: var(--timestamp-color);
+}
+
+.field-help {
+  margin: 0.25em 0 0;
+  font-family: var(--editor-mono);
+  font-size: 0.7rem;
+  color: var(--timestamp-color);
+}
+
+/* Entity editor (pug/views/admin/entity.pug), laid out like the public entity page */
+.entity-editor-type {
+  margin: 0;
+  font-family: var(--editor-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--editor-accent);
+}
+
+/* The head reads like the page: no boxes, just the words */
+#entity-head input,
+#entity-head textarea {
+  display: block;
+  width: 100%;
+  padding: 0;
+  color: var(--main-text-color);
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+}
+
+#entity-head input:focus,
+#entity-head textarea:focus {
+  outline: none;
+  border-bottom-color: var(--editor-accent);
+}
+
+#entity-head ::placeholder {
+  color: var(--hr-color);
+}
+
+.entity-head-name {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.entity-head-disambiguator {
+  margin-top: 0.25rem;
+  font-family: var(--editor-mono);
+  font-size: 0.8rem;
+}
+
+.entity-head-description {
+  margin-top: 0.75rem;
+  font-size: 1.2rem;
+}
+
+.entity-head-note {
+  margin-top: 0.5rem;
+  font-size: 1.05rem;
+  resize: vertical;
+}
+
+/* Sections in the main column: a small heading over a rule, as on the page */
+.entity-editor-section,
+#entity-main-fields > .list-field,
+#entity-main-fields > .entity-field-row {
+  margin-top: 1.75rem;
+}
+
+.entity-editor-heading {
+  display: block;
+  width: 100%;
+  margin: 0 0 0.6rem;
+  padding: 0 0 0.4rem;
+  font-family: var(--editor-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--editor-border);
 }
 
 .list-field {
-  margin: 1em 0;
-  border: 1px solid var(--hr-color);
+  margin: 0.5rem 0;
+  padding: 0;
+  border: none;
+}
+
+.list-field > legend.side-hint {
+  padding: 0;
+  margin-bottom: 0.25rem;
 }
 
 .list-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5em;
-  margin-bottom: 0.5em;
+  gap: 0.4em;
+  align-items: center;
+  margin-bottom: 0.4em;
 }
 
-.list-row input {
+.list-row input,
+.list-row select {
   flex: 1 1 8em;
   min-width: 0;
 }
 
-.field-help {
-  margin: 0.25em 0 0;
-  font-size: 0.8em;
+.remove-row {
+  font-size: 1rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.add-row {
+  font-size: 0.75rem;
+  color: var(--editor-accent);
+  text-decoration: none;
+}
+
+/* A field in the side panel: small label, then the control, like "at a glance" */
+.entity-field-row {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.entity-field-row > label {
+  font-family: var(--editor-mono);
+  font-size: 0.75rem;
   color: var(--timestamp-color);
 }
 
-.admin-status {
+.entity-field-check {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.entity-field-row > label.entity-check {
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--main-text-color);
+}
+
+.entity-field-row > .field-help {
+  grid-column: 1 / -1;
+}
+
+.entity-field-row input:not([type='checkbox']),
+.entity-field-row select,
+.entity-field-row textarea,
+.list-row input,
+.list-row select,
+.admin-filters input,
+.admin-filters select {
+  width: 100%;
+  padding: 0.25em 0.5em;
+  font-size: 0.85rem;
+  color: var(--main-text-color);
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--editor-border);
+}
+
+.entity-field-row input:focus,
+.entity-field-row select:focus,
+.list-row input:focus,
+.list-row select:focus,
+.admin-filters input:focus {
+  outline: none;
+  border-color: var(--editor-accent);
+}
+
+.entity-field-row input[type='url'],
+.list-row input[type='url'] {
+  font-family: var(--editor-mono);
+}
+
+/* Relations: rows like the page's "related", then the form in a tinted box */
+.entity-relation-list {
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.entity-relation-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  align-items: baseline;
+  padding: 0.45em 0;
+  border-bottom: 1px solid var(--editor-border);
+}
+
+.relation-verb {
+  min-width: 7em;
+  font-family: var(--editor-mono);
+  font-size: 0.75rem;
   color: var(--timestamp-color);
+}
+
+.relation-actions {
+  margin-left: auto;
+  font-size: 0.75rem;
+}
+
+.entity-relation-form {
+  padding: 1rem;
+  background-color: var(--editor-tint);
+}
+
+.entity-relation-form .side-label {
+  margin-top: 0;
+}
+
+.entity-relation-form .dialog-buttons {
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+/* Secondary buttons, like the post editor's "Save draft" */
+.entity-relation-form button[type='submit'],
+.admin-filters button {
+  padding: 0.4em 1em;
+  font-family: var(--editor-mono);
+  font-size: 0.8rem;
+  color: var(--main-text-color);
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--editor-border);
 }
 
 .thread-entries time {
@@ -1149,12 +1440,19 @@ button.primary:disabled {
   color: var(--timestamp-color);
 }
 
-#relation-list {
-  padding-left: 1.25em;
-}
-
 /* Mobile --------------------------------------------------------------------- */
 @media screen and (max-width: 768px) {
+  /* The top bar's two groups wrap rather than push the page wider than the screen */
+  .editor-topbar,
+  .topbar-group,
+  .admin-nav {
+    flex-wrap: wrap;
+  }
+
+  .admin-nav {
+    flex-shrink: 1;
+  }
+
   .editor-container {
     padding-top: 0;
   }
@@ -1649,6 +1947,7 @@ button.primary:disabled {
 .document-tool input,
 .document-tool select,
 .social-post-tool input,
+.social-post-tool textarea,
 .comparison-tool input {
   min-width: 0;
   padding: 0.2em 0.4em;
@@ -1658,8 +1957,15 @@ button.primary:disabled {
   border: 1px solid var(--editor-border);
 }
 
+/* Alt text can run to several lines */
+.social-post-tool textarea {
+  font-family: inherit;
+  resize: vertical;
+}
+
 .document-tool input:focus,
 .social-post-tool input:focus,
+.social-post-tool textarea:focus,
 .comparison-tool input:focus {
   outline: none;
   border-color: var(--editor-accent);
@@ -1877,4 +2183,106 @@ button.primary:disabled {
 .comparison-change {
   font-size: 0.75rem;
   color: var(--timestamp-color);
+}
+
+/* A document's senders and recipients: a shared title, a row per person and "and N others" */
+.document-sides {
+  align-items: flex-start;
+}
+
+.document-side {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.3em;
+  min-width: 18em;
+  margin: 0;
+  padding: 0.3em 0.5em 0.4em;
+  border: 1px solid var(--editor-border);
+}
+
+.document-side legend {
+  padding: 0 0.3em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.document-side input[data-side-field='prefix'] {
+  width: 12em;
+}
+
+.document-person {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  align-items: center;
+}
+
+.document-person + .document-person {
+  padding-top: 0.3em;
+  border-top: 1px dashed var(--editor-border);
+}
+
+.document-person input[data-person-field] {
+  flex: 1;
+  min-width: 8em;
+}
+
+.document-tool .document-person .ts-wrapper {
+  flex: 1 1 100%;
+}
+
+.document-side-more {
+  display: flex;
+  gap: 0.4em;
+  align-items: center;
+}
+
+.document-side input[data-side-field='more'] {
+  width: 4em;
+}
+
+/* "fill from Wikidata" and what it added, under the Wikipedia field in the new-entity dialog */
+.entity-dialog .entity-wikidata {
+  margin: 0.4rem 0 0;
+  font-family: var(--editor-mono, monospace);
+  font-size: 0.75rem;
+  color: var(--timestamp-color);
+}
+
+/* Suggestions under the tag and "about" pickers: "from tags: + @Coinbase" */
+.picker-suggestions {
+  margin: 0.3rem 0 0;
+  font-size: 0.8rem;
+}
+
+.picker-suggestions .link-button {
+  margin-right: 0.5em;
+}
+
+/* The entity list's filters share a line, the search box taking what's left; on a narrow screen
+   they wrap */
+.admin-filters input[type='search'] {
+  flex: 1 1 14rem;
+  width: auto;
+}
+
+.admin-filters select {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+/* "only ones with nothing filled in" on the entity list */
+.admin-filter-check {
+  display: flex;
+  gap: 0.3em;
+  align-items: center;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.admin-filters .admin-filter-check input {
+  width: auto;
 }

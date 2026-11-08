@@ -2,6 +2,8 @@ import axios from 'axios';
 import TomSelect from 'tom-select';
 import { ENTITY_TYPES } from '../../../api/helpers/entityTypes.js';
 import { parseProfileUrl } from '../../../api/helpers/profileUrl.js';
+import { fillFromWikidata, wikidataId } from '../../../api/helpers/wikidata.js';
+import { isWikipediaLink } from '../../../api/helpers/wikipedia.js';
 import {
   MENTION_NETWORKS,
   NETWORK_LABELS,
@@ -25,6 +27,10 @@ export function selectedValues(select) {
 
 // Feed entries -----------------------------------------------------------------------------------
 
+// TomSelect writes its own bookkeeping ($order, $id, $option: a DOM node) onto the option objects
+// it's given. Give it copies, so the caller's data (saved with the post) stays as it was.
+const ownCopies = (items) => items.map((item) => ({ ...item }));
+
 const KIND_LABELS = {
   FeedEntryMicro: 'post',
   FeedEntryCitationNeeded: 'Citation Needed',
@@ -45,7 +51,7 @@ export function createEntryPicker(
   { initial = [], getExclude = () => null, onChange = () => {} },
 ) {
   const picker = new TomSelect(selector, {
-    options: initial,
+    options: ownCopies(initial),
     items: initial.map((entry) => entry._id),
     valueField: '_id',
     labelField: 'label',
@@ -101,10 +107,10 @@ export async function createThreadPicker(
   { initial = [], preview, getPosition, onChange = () => {} },
 ) {
   const { data: threads } = await axios.get('/dynamic-api/threads');
-  const options = [
+  const options = ownCopies([
     ...initial,
     ...threads.filter((t) => !initial.some((i) => i._id === t._id)),
-  ];
+  ]);
 
   const picker = new TomSelect(selector, {
     options,
@@ -197,7 +203,7 @@ export function createAboutPicker(
   { initial = [], onChange = () => {}, maxItems = null },
 ) {
   const picker = new TomSelect(selector, {
-    options: initial,
+    options: ownCopies(initial),
     items: initial.map((e) => e._id),
     valueField: '_id',
     labelField: 'name',
@@ -253,20 +259,14 @@ const MAIN_TYPES = [
 const OTHER_TYPES = ENTITY_TYPES.filter(
   (type) => !MAIN_TYPES.some((main) => main.value === type),
 );
-// Wikipedia first: it's the most common account for people mentioned.
-const ACCOUNT_NETWORKS = [
-  'wikipedia',
-  ...MENTION_NETWORKS.filter((network) => network !== 'wikipedia'),
-];
-
 let dialog;
 
-function accountRow({ network = 'wikipedia', handle = '' } = {}) {
+function accountRow({ network = MENTION_NETWORKS[0], handle = '' } = {}) {
   const row = document.createElement('div');
   row.className = 'entity-account-row';
   row.innerHTML = `
     <select name="network" aria-label="Network">
-      ${ACCOUNT_NETWORKS.map(
+      ${MENTION_NETWORKS.map(
         (n) =>
           `<option value="${n}"${n === network ? ' selected' : ''}>${NETWORK_LABELS[n]}</option>`,
       ).join('')}
@@ -312,6 +312,13 @@ function buildDialog() {
       <span class="field-label">Accounts <span class="field-hint">· paste a profile URL and the platform fills in</span></span>
       <div class="entity-account-rows"></div>
       <input class="entity-paste" type="text" placeholder="paste URL or handle…" aria-label="Paste a profile URL or handle">
+
+      <label class="field-label" for="entity-wikipedia">Wikipedia article <span class="field-hint">· the article about them</span></label>
+      <input id="entity-wikipedia" name="wikipedia" type="text" placeholder="https://en.wikipedia.org/wiki/…">
+      <p class="field-hint entity-wikidata">
+        <button type="button" class="link-button wikidata-fill">fill from Wikidata</button>
+        <span class="wikidata-fill-status" role="status"></span>
+      </p>
 
       <label class="checkbox-label">
         <input type="checkbox" name="hasPage"> give them a public entity page
@@ -422,16 +429,88 @@ export function openEntityDialog({ name = '' } = {}) {
     if (!value) {
       return;
     }
+    paste.value = '';
+    // A Wikipedia article is about them, not their account: it goes in its own field. It, or a
+    // link to their Wikidata entry, fills in the rest from Wikidata.
+    if (isWikipediaLink(value)) {
+      form.elements.wikipedia.value = value;
+      fillWikidata();
+      return;
+    }
+    if (wikidataId(value) && /wikidata\.org/i.test(value)) {
+      wikidata = { ids: { wikidata: wikidataId(value) } };
+      fillWikidata();
+      return;
+    }
     // Unrecognized text still becomes a row, so the network can be picked by hand.
     rows.appendChild(accountRow(parseProfileUrl(value) || { handle: value }));
-    paste.value = '';
+  };
+
+  // From Wikidata: accounts and the name show in the dialog; the rest (other names, IDs) is kept
+  // here and sent when the entity is created.
+  let wikidata = null;
+  const wikidataStatus = dialog.querySelector('.wikidata-fill-status');
+  wikidataStatus.textContent = '';
+  const fillWikidata = async () => {
+    const entityType = type === 'other' ? otherType.value : type;
+    wikidataStatus.textContent = 'looking up…';
+    try {
+      const { data: suggestions } = await axios.get(
+        '/dynamic-api/entities/wikidata',
+        {
+          params: {
+            type: entityType,
+            wikidata: wikidata?.ids?.wikidata,
+            wikipedia: form.elements.wikipedia.value.trim() || undefined,
+          },
+        },
+      );
+      const { entity: filled, added } = fillFromWikidata(
+        readFields(),
+        suggestions,
+      );
+      wikidata = filled;
+      if (!nameInput.value.trim() && filled.name) {
+        nameInput.value = filled.name;
+        updateMentionedAs();
+        checkSimilar();
+      }
+      if (!form.elements.wikipedia.value.trim() && filled.ids?.wikipedia) {
+        form.elements.wikipedia.value = filled.ids.wikipedia;
+      }
+      const shown = new Set(
+        readFields().accounts.map((a) => `${a.network}:${a.handle}`),
+      );
+      for (const account of filled.accounts || []) {
+        if (!shown.has(`${account.network}:${account.handle}`)) {
+          rows.appendChild(accountRow(account));
+        }
+      }
+      wikidataStatus.textContent = added.length
+        ? `added ${added.join(', ')}`
+        : 'nothing new on Wikidata';
+    } catch (err) {
+      wikidataStatus.textContent = err.response?.data?.error || err.message;
+    }
   };
 
   const readFields = () => ({
+    // What Wikidata added that the dialog doesn't show; the dialog's own fields win
+    ...(wikidata
+      ? Object.fromEntries(
+          Object.entries(wikidata).filter(
+            ([key]) => !['name', 'accounts', 'hasPage', 'type'].includes(key),
+          ),
+        )
+      : {}),
     name: nameInput.value.trim(),
     type: type === 'other' ? otherType.value : type,
     disambiguator: form.elements.disambiguator.value.trim() || undefined,
     hasPage: hasPage.checked,
+    ids: {
+      ...(wikidata?.ids || {}),
+      wikipedia: form.elements.wikipedia.value.trim() || undefined,
+    },
     accounts: [...rows.querySelectorAll('.entity-account-row')]
       .map((row) => ({
         network: row.querySelector('[name=network]').value,
@@ -532,6 +611,7 @@ export function openEntityDialog({ name = '' } = {}) {
       evt?.preventDefault();
       finish(null);
     };
+    listen(dialog.querySelector('.wikidata-fill'), 'click', fillWikidata);
     listen(dialog.querySelector('.cancel'), 'click', onCancel);
     listen(dialog, 'cancel', onCancel);
 

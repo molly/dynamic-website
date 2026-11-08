@@ -1,5 +1,11 @@
 import axios from 'axios';
 import Sortable from 'sortablejs';
+import { chooseLinkedFile } from '../../helpers/upload.js';
+import {
+  editableText,
+  plainTextField,
+  plainTextHtml,
+} from '../../helpers/plainPaste.js';
 import buttonIcon from './svg/button-icon.svg';
 import toolboxIcon from './svg/toolbox.svg';
 import trashIcon from './svg/trash.svg';
@@ -56,6 +62,11 @@ export default class ImageGallery {
       innerHTML: `${buttonIcon} Select images`,
     });
     this.nodes.fileButton.addEventListener('click', () => this.selectFiles());
+    this.nodes.linkButton = make('button', 'link-button', {
+      type: 'button',
+      textContent: 'or use a link',
+    });
+    this.nodes.linkButton.addEventListener('click', () => this.addFromLink());
     this.nodes.caption = this.makeEditable(
       [styles.input, 'image-gallery__caption'],
       this.data.caption,
@@ -63,7 +74,11 @@ export default class ImageGallery {
     );
 
     if (!this.readOnly) {
-      this.nodes.controls.append(this.nodes.preloaders, this.nodes.fileButton);
+      this.nodes.controls.append(
+        this.nodes.preloaders,
+        this.nodes.fileButton,
+        this.nodes.linkButton,
+      );
     }
     this.nodes.wrapper.append(
       this.nodes.items,
@@ -94,12 +109,16 @@ export default class ImageGallery {
     });
   }
 
+  // Pastes and Enter stay in the field, as line breaks, rather than becoming new blocks
   makeEditable(classNames, html, placeholder) {
     const el = make('div', classNames, {
       contentEditable: !this.readOnly,
       innerHTML: html || '',
     });
     el.dataset.placeholder = placeholder;
+    if (!this.readOnly) {
+      plainTextField(el);
+    }
     return el;
   }
 
@@ -142,9 +161,10 @@ export default class ImageGallery {
       thumb.append(white, trash);
     }
 
+    // Alt text is plain text, with newlines for its line breaks
     item.alt = this.makeEditable(
       [this.api.styles.input, 'image-gallery__alt'],
-      file.alt,
+      plainTextHtml(file.alt),
       'Alt text',
     );
     item.caption = this.makeEditable(
@@ -167,6 +187,24 @@ export default class ImageGallery {
     }
   }
 
+  // Add an image or video that's already online, e.g. one uploaded for another post
+  async addFromLink() {
+    try {
+      const file = await chooseLinkedFile({
+        accept: ['image', 'video'],
+        label: 'image or video',
+      });
+      if (file) {
+        this.appendImage(file);
+      }
+    } catch (err) {
+      this.api.notifier.show({
+        message: `Couldn’t use that link: ${err.message}`,
+        style: 'error',
+      });
+    }
+  }
+
   isFull() {
     const max = this.config.maxElementCount;
     return Boolean(max) && this.items.length >= max;
@@ -175,6 +213,7 @@ export default class ImageGallery {
   updateFileButton() {
     if (this.nodes.fileButton) {
       this.nodes.fileButton.hidden = this.isFull();
+      this.nodes.linkButton.hidden = this.isFull();
     }
   }
 
@@ -214,7 +253,7 @@ export default class ImageGallery {
     } catch (err) {
       console.error('Gallery upload failed:', err);
       this.api.notifier.show({
-        message: `Couldn’t upload ${file.name}: ${err.message}`,
+        message: `Couldn’t upload ${file.name}: ${err.response?.data?.error || err.message}`,
         style: 'error',
       });
     } finally {
@@ -231,7 +270,7 @@ export default class ImageGallery {
       caption: this.nodes.caption.innerHTML,
       files: this.items.map(({ file, alt, caption }) => ({
         ...file,
-        alt: alt.textContent.trim(),
+        alt: editableText(alt),
         caption: caption.innerHTML,
       })),
     };

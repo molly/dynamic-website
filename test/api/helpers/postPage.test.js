@@ -78,8 +78,13 @@ describe('post page', () => {
       'tags',
       'archived',
     ]);
+    // The permalink carries the post's u-url, since the date above it isn't a link here
     expect(rows.permalink).toEqual([
-      { text: '/micro/entry/202610301811', href: '/micro/entry/202610301811' },
+      {
+        text: '/micro/entry/202610301811',
+        href: '/micro/entry/202610301811',
+        className: 'u-url',
+      },
     ]);
     expect(rows.from.map((i) => i.text)).toEqual([
       'micro posts',

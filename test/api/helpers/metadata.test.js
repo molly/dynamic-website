@@ -1,3 +1,7 @@
+import {
+  fromLocalInput,
+  toLocalInput,
+} from '../../../frontend/js/metadata/dates';
 import { parsePostUrl } from '../../../api/helpers/postUrl';
 import { suggestSources } from '../../../api/helpers/sources';
 import {
@@ -178,5 +182,15 @@ describe('entry links', () => {
       'https://example.com/data',
       'https://bsky.app/profile/a/post/b',
     ]);
+  });
+});
+
+describe('editor date-and-time inputs', () => {
+  it('are in the computer’s time zone, to the minute, and save the exact moment', () => {
+    const iso = '2026-11-07T15:16:44.008Z';
+    const local = toLocalInput(iso);
+    expect(local).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/); // No seconds
+    expect(fromLocalInput(local)).toEqual('2026-11-07T15:16:00.000Z');
+    expect(fromLocalInput('')).toBeNull();
   });
 });

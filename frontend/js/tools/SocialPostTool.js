@@ -1,15 +1,20 @@
 import axios from 'axios';
 import { cleanHtml } from '../../../api/helpers/html.js';
-import { parsePostUrl } from '../../../api/helpers/postUrl.js';
+import {
+  parsePostUrl,
+  twitterProfileUrl,
+} from '../../../api/helpers/postUrl.js';
 import { NETWORK_LABELS } from '../../../api/helpers/socialMedia.js';
 import { escapeHtml } from '../helpers/escapeHtml.js';
-import { uploadFile } from '../helpers/upload.js';
+import { chooseLinkedFile, uploadFile } from '../helpers/upload.js';
+import { X_HELPER_UNREACHABLE, X_HELPER_URL } from '../helpers/xHelper.js';
 import { fromLocalInput, toLocalInput } from '../metadata/dates.js';
 import { isolateKeys } from './DocumentTool.js';
 
 // "Social post" block: a card for a Bluesky, Mastodon or Twitter post, or a thread of them. Paste a
-// Bluesky or Mastodon link and the post is fetched, with its images and video copied to the
-// bucket, so the card survives the original being deleted. Twitter posts are entered by hand.
+// link and the post is fetched, with its images and video copied to the bucket, so the card
+// survives the original being deleted. Twitter posts are fetched by the local X helper (Twitter has
+// no free API), and can still be entered by hand when it isn't running.
 // Data: { posts: [post], screenshot } (post as in backend/helpers/socialFetch.js)
 
 const blankPost = (network = 'twitter', fields = {}) => ({
@@ -79,7 +84,7 @@ export default class SocialPostTool {
     const { posts } = this.data;
     const adder = `
       <div class="sp-add">
-        <input type="url" class="sp-url" placeholder="Paste a Bluesky or Mastodon post link" aria-label="Post link">
+        <input type="url" class="sp-url" placeholder="Paste a Bluesky, Mastodon or Twitter post link" aria-label="Post link">
         <button type="button" class="sp-fetch">fetch</button>
         <span class="side-hint">or <button type="button" class="link-button sp-manual">enter a Twitter post by hand</button></span>
         <p class="sp-status" hidden></p>
@@ -100,7 +105,7 @@ export default class SocialPostTool {
               ? `<a href="${escapeHtml(this.data.screenshot)}" target="_blank" rel="noopener">screenshot</a>${this.readOnly ? '' : ' <button type="button" class="link-button sp-remove-screenshot">remove</button>'}`
               : this.readOnly
                 ? ''
-                : '<label class="link-button">add screenshot<input type="file" accept="image/*" class="sp-screenshot-input" hidden></label>'
+                : '<label class="link-button">add screenshot<input type="file" accept="image/*" class="sp-screenshot-input" hidden></label> or <button type="button" class="link-button sp-screenshot-url">use a link</button>'
           }</span>
         </p>
       </div>
@@ -110,14 +115,14 @@ export default class SocialPostTool {
   postHtml(post, index) {
     const ro = this.readOnly ? ' disabled' : '';
     const field = (name, value, placeholder, type = 'text') =>
-      `<input type="${type}" data-field="${name}" placeholder="${placeholder}" aria-label="${placeholder}" value="${escapeHtml(value ?? '')}"${ro}>`;
+      `<input type="${type}" data-field="${name}" placeholder="${placeholder}" aria-label="${placeholder}" value="${escapeHtml(value ?? '')}"${type === 'datetime-local' ? ' step="60"' : ''}${ro}>`;
     const isManual = post.network === 'twitter';
     const media = post.media
       .map(
         (item, m) => `
         <div class="sp-media-item">
           ${mediaPreview(item)}
-          <input type="text" data-alt="${m}" placeholder="alt text" aria-label="Alt text" value="${escapeHtml(item.alt || '')}"${ro}>
+          <textarea data-alt="${m}" rows="2" placeholder="alt text" aria-label="Alt text"${ro}>${escapeHtml(item.alt || '')}</textarea>
           ${this.readOnly ? '' : `<button type="button" class="link-button sp-remove-media" data-media="${m}" aria-label="Remove">×</button>`}
         </div>`,
       )
@@ -138,7 +143,7 @@ export default class SocialPostTool {
         </div>
         <div class="sp-text" contenteditable="${!this.readOnly}" data-placeholder="Post text">${cleanHtml(post.textHtml)}</div>
         ${media ? `<div class="sp-media">${media}</div>` : ''}
-        ${isManual && !this.readOnly ? '<label class="link-button sp-upload">+ image or video<input type="file" accept="image/*,video/*" class="sp-media-input" hidden></label>' : ''}
+        ${isManual && !this.readOnly ? '<label class="link-button sp-upload">+ image or video<input type="file" accept="image/*,video/*" class="sp-media-input" hidden></label> or <button type="button" class="link-button sp-media-url">use a link</button>' : ''}
         ${card}${quoted}
         <div class="sp-meta">
           ${field('originalUrl', post.originalUrl, 'Link to the post', 'url')}
@@ -150,14 +155,7 @@ export default class SocialPostTool {
     const status = this.wrapper.querySelector('.sp-status');
     const parsed = parsePostUrl(url);
     if (parsed?.network === 'twitter') {
-      // No public API: start a card from what the link says.
-      this.addPost(
-        blankPost('twitter', {
-          handle: parsed.handle,
-          originalUrl: url,
-          profileUrl: `https://twitter.com/${parsed.handle}`,
-        }),
-      );
+      await this.fetchTweet(url);
       return;
     }
     status.hidden = false;
@@ -172,11 +170,79 @@ export default class SocialPostTool {
     }
   }
 
+  /**
+   * Fetch a Twitter post with the local X helper, then have the server check it and copy its
+   * media. If it replies to other posts, offer to add those too.
+   * @param {string} url
+   */
+  async fetchTweet(url) {
+    const status = this.wrapper.querySelector('.sp-status');
+    status.hidden = false;
+    status.textContent = 'Fetching the post with the X helper…';
+    let posts;
+    try {
+      ({ posts } = (await axios.post(`${X_HELPER_URL}/fetch`, { url })).data);
+    } catch (err) {
+      status.textContent = err.response
+        ? err.response.data?.error || err.message
+        : `${X_HELPER_UNREACHABLE} Or enter the post by hand.`;
+      return;
+    }
+
+    // Skip posts already on the card (e.g. adding a later reply to a thread)
+    const onCard = new Set(
+      this.save().posts.map((post) => parsePostUrl(post.originalUrl)?.id),
+    );
+    const [pasted] = posts.slice(-1);
+    if (onCard.has(parsePostUrl(pasted.originalUrl)?.id)) {
+      status.textContent = 'That post is already on the card.';
+      return;
+    }
+    const earlier = posts
+      .slice(0, -1)
+      .filter((post) => !onCard.has(parsePostUrl(post.originalUrl)?.id));
+    const chosen =
+      earlier.length &&
+      window.confirm(
+        `This post replies to ${earlier.length === 1 ? 'an earlier post' : `${earlier.length} earlier posts`} that ${earlier.length === 1 ? "isn't" : "aren't"} on the card. Add ${earlier.length === 1 ? 'it' : 'them'} above it?`,
+      )
+        ? [...earlier, pasted]
+        : [pasted];
+
+    status.textContent = 'Saving its images and video…';
+    try {
+      const { data } = await axios.post(
+        '/dynamic-api/micro/socialPost/twitter',
+        { posts: chosen },
+      );
+      this.addPosts(data.posts);
+    } catch (err) {
+      status.textContent = err.response?.data?.error || err.message;
+    }
+  }
+
   addPost(post) {
+    this.addPosts([post]);
+  }
+
+  addPosts(posts) {
     this.data = this.save();
-    this.data.posts.push(post);
+    this.data.posts.push(...posts);
     this.adding = false;
     this.draw();
+  }
+
+  // A blank Twitter post, filled in from the link box if it holds a Twitter post link
+  manualPost() {
+    const url = this.wrapper.querySelector('.sp-url')?.value.trim();
+    const parsed = parsePostUrl(url);
+    return parsed?.network === 'twitter'
+      ? blankPost('twitter', {
+          handle: parsed.handle,
+          originalUrl: url,
+          profileUrl: twitterProfileUrl({ handle: parsed.handle }),
+        })
+      : blankPost('twitter');
   }
 
   postAt(target) {
@@ -197,13 +263,21 @@ export default class SocialPostTool {
       return;
     }
     if (button.classList.contains('sp-manual')) {
-      this.addPost(blankPost('twitter'));
+      this.addPost(this.manualPost());
       return;
     }
     if (button.classList.contains('sp-add-post')) {
       this.adding = true;
       this.redraw();
       this.wrapper.querySelector('.sp-url').focus();
+      return;
+    }
+    if (button.classList.contains('sp-screenshot-url')) {
+      this.screenshotFromUrl();
+      return;
+    }
+    if (button.classList.contains('sp-media-url')) {
+      this.mediaFromUrl(button);
       return;
     }
     if (button.classList.contains('sp-remove-screenshot')) {
@@ -227,6 +301,42 @@ export default class SocialPostTool {
       post.quoted = null;
     }
     this.draw();
+  }
+
+  // Use an image that's already online as the screenshot, e.g. one uploaded for another post
+  async screenshotFromUrl() {
+    try {
+      const file = await chooseLinkedFile({ label: 'screenshot' });
+      if (file) {
+        this.data = this.save();
+        this.data.screenshot = file.url;
+        this.draw();
+      }
+    } catch (err) {
+      window.alert(`Couldn't use that screenshot: ${err.message}`);
+    }
+  }
+
+  // Add an image or video that's already online to a hand-entered post
+  async mediaFromUrl(button) {
+    try {
+      const file = await chooseLinkedFile({
+        accept: ['image', 'video'],
+        label: 'image or video',
+      });
+      if (file) {
+        this.data = this.save();
+        this.postAt(button).media.push({
+          type: file.contentType?.startsWith('video/') ? 'video' : 'image',
+          src: file.url,
+          alt: '',
+          saved: true,
+        });
+        this.draw();
+      }
+    } catch (err) {
+      window.alert(`Couldn't use that file: ${err.message}`);
+    }
   }
 
   async onFile(evt) {
@@ -279,9 +389,7 @@ export default class SocialPostTool {
         }
       }
       if (updated.network === 'twitter') {
-        updated.profileUrl = updated.handle
-          ? `https://twitter.com/${updated.handle}`
-          : '';
+        updated.profileUrl = twitterProfileUrl(updated);
       }
       return updated;
     });

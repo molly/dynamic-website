@@ -54,3 +54,40 @@ export function cleanHtml(html, tags = ['a', 'br']) {
     .remove();
   return $.html();
 }
+
+const LINE_TAGS = new Set(['div', 'p', 'li']);
+
+/**
+ * HTML as plain text: <br> and the start of each line in its own <div>, <p> or <li> become
+ * newlines, entities are decoded, non-breaking spaces become plain ones, and other tags are
+ * dropped (keeping their text). For fields that hold plain text but were once saved as HTML, like
+ * image alt text.
+ * @param {string} html
+ * @returns {string}
+ */
+export function htmlToText(html) {
+  if (!html) {
+    return '';
+  }
+  const $ = cheerio.load(String(html), null, false);
+  let text = '';
+  const walk = (nodes) => {
+    for (const node of nodes) {
+      if (node.type === 'text') {
+        text += node.data;
+      } else if (node.type === 'tag') {
+        const name = node.name.toLowerCase();
+        if (name === 'br') {
+          text += '\n';
+          continue;
+        }
+        if (LINE_TAGS.has(name) && text && !text.endsWith('\n')) {
+          text += '\n';
+        }
+        walk(node.children || []);
+      }
+    }
+  };
+  walk($.root().contents().toArray());
+  return text.replace(/\u00a0/g, ' ').trim();
+}

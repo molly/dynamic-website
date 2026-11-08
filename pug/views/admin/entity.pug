@@ -1,23 +1,42 @@
 extends layout.pug
 
-block content
-  p
-    a(href="/admin/entities") ← All entities
-  h1#entity-title= title
+//- An entity's editor, laid out like its public page (pug/views/entities/entity.pug): type, name,
+//- description and note at the top, the type's own sections and its relations in the main column,
+//- and "at a glance", identifiers, links and elsewhere in the side panel. The fields are built by
+//- frontend/js/admin/entityForm.js from api/helpers/entityFields.js.
+
+block topbarLeft
+  a(href="/admin/entities") ← all entities
+  span.topbar-separator ·
+  span #{pageData.entity ? `editing ${typeName.toLowerCase()}` : `new ${typeName.toLowerCase()}`}
+
+block topbarRight
+  span#entity-status.admin-status(role="status")
+  if viewHref
+    a(href=viewHref) view page
+
+block body
+  //- The entity's own form holds no fields: they're spread over both columns, around the
+  //- relation form (forms can't nest). The Save button submits it with form="entity-form".
   form#entity-form(novalidate)
-    #entity-fields
-    .entity-matches(hidden)
-    p.entity-error(hidden)
-    p.admin-status(hidden)
-    .dialog-buttons
-      button(type="submit") Save
-  section#relations(hidden)
-    h2 Relations
-    ul#relation-list
-    form#relation-form
-      h3#relation-form-title Add a relation
-      #relation-fields
-      p.relation-error(hidden)
-      .dialog-buttons
-        button(type="submit") Save relation
-        button#relation-cancel(type="button", hidden) Cancel edit
+  .editor-body.entity-editor
+    main.entity-editor-main
+      p.entity-editor-type #{typeName}
+      #entity-head
+      .entity-matches(hidden)
+      p.entity-error(hidden, role="alert")
+      #entity-main-fields
+      section#relations.entity-editor-section(hidden)
+        h2.entity-editor-heading Related
+        ul#relation-list.entity-relation-list
+        form#relation-form.entity-relation-form
+          h3#relation-form-title.side-label Add a relation
+          #relation-fields
+          p.relation-error.entity-error(hidden, role="alert")
+          .dialog-buttons
+            button#relation-cancel.link-button(type="button", hidden) cancel edit
+            button(type="submit") Save relation
+    aside.editor-side-panel#entity-side-fields
+  footer.editor-actionbar
+    span.side-hint #{pageData.entity ? '' : 'Saving creates it; relations can be added after.'}
+    button.primary(type="submit", form="entity-form") #{pageData.entity ? 'Save' : 'Create'}

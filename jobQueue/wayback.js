@@ -12,9 +12,14 @@ const SAVE_URL = 'https://web.archive.org/save/';
  * The newest successful capture in a CDX response, if it's recent enough.
  * @param {Array<string[]>} rows CDX JSON output: a header row, then [timestamp, original] rows
  * @param {Date} [now]
+ * @param {number} [maxAgeDays] How old a capture may be; Infinity for any
  * @returns {?{archiveUrl: string, archivedAt: Date}}
  */
-export function recentCaptureFromCdx(rows, now = new Date()) {
+export function recentCaptureFromCdx(
+  rows,
+  now = new Date(),
+  maxAgeDays = RECENT_DAYS,
+) {
   if (!Array.isArray(rows) || rows.length < 2) {
     return null;
   }
@@ -25,7 +30,7 @@ export function recentCaptureFromCdx(rows, now = new Date()) {
   }
   const [, y, mo, d, h, mi, s] = match.map(Number);
   const archivedAt = new Date(Date.UTC(y, mo - 1, d, h, mi, s));
-  if (now - archivedAt > RECENT_DAYS * 24 * 60 * 60 * 1000) {
+  if (now - archivedAt > maxAgeDays * 24 * 60 * 60 * 1000) {
     return null;
   }
   return {
@@ -37,20 +42,27 @@ export function recentCaptureFromCdx(rows, now = new Date()) {
 /**
  * Look for a recent successful capture of a URL.
  * @param {string} url
+ * @param {{maxAgeDays?: number, mimetype?: string}} [options] maxAgeDays: how old a capture may
+ *   be; Infinity for any. mimetype: only captures of this type (e.g. a PDF, not the error page a
+ *   site served in its place)
  */
-export async function findRecentCapture(url) {
+export async function findRecentCapture(
+  url,
+  { maxAgeDays = RECENT_DAYS, mimetype } = {},
+) {
   const { data } = await axios.get(CDX_URL, {
     params: {
       url,
       output: 'json',
       fl: 'timestamp,original',
-      filter: 'statuscode:200',
+      filter: ['statuscode:200', ...(mimetype ? [`mimetype:${mimetype}`] : [])],
       limit: -1, // The newest capture only
     },
+    paramsSerializer: { indexes: null }, // filter=…&filter=…, as the CDX API wants
     headers: { 'User-Agent': USER_AGENT },
     timeout: 30000,
   });
-  return recentCaptureFromCdx(data);
+  return recentCaptureFromCdx(data, new Date(), maxAgeDays);
 }
 
 /**
@@ -79,3 +91,10 @@ export async function savePageNow(url) {
   }
   return { archiveUrl, archivedAt: new Date() };
 }
+
+/**
+ * A Wayback capture's address for the file it saved, without the Wayback toolbar or rewriting.
+ * @param {string} archiveUrl e.g. https://web.archive.org/web/20240102030405/https://…
+ */
+export const waybackFileUrl = (archiveUrl) =>
+  archiveUrl.replace(/^(https:\/\/web\.archive\.org\/web\/\d{14})\//, '$1id_/');

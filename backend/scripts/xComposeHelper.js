@@ -6,6 +6,9 @@
  * and waits for you to review it and click Post yourself. Once X confirms the post, the new post's
  * ID is returned to the editor so it can be saved as the post's social link.
  *
+ * It also fetches Twitter posts for social post cards: the editor sends a post link, and this opens
+ * it in the same browser and reads the post (and the posts it replies to) from what x.com loads.
+ *
  * The first time it runs, log in to X in the Chrome window it opens. The session is kept in
  * ~/.x-compose-helper-profile for subsequent runs.
  */
@@ -14,8 +17,10 @@ import os from 'os';
 import path from 'path';
 import { chromium } from 'playwright';
 
+import { parsePostUrl } from '../../api/helpers/postUrl.js';
 import { NETWORK_LIMITS } from '../../api/helpers/socialThreads.js';
 import { getImages, processThread } from '../helpers/social.js';
+import { collectTweets, tweetThread } from '../helpers/twitterPost.js';
 
 const PORT = Number(process.env.X_HELPER_PORT) || 5055;
 const PROFILE_DIR =
@@ -28,26 +33,130 @@ const ALLOWED_ORIGINS = (
 
 // How long to wait for you to click Post before giving up
 const POST_TIMEOUT_MS = 15 * 60 * 1000;
+// How long to wait for x.com to load a post being fetched
+const FETCH_TIMEOUT_MS = 30 * 1000;
 
+// The browser, or the promise of it while it launches, so that a fetch and a compose arriving
+// together share one browser rather than both trying to open the same profile.
 let browserContext = null;
 let busy = false;
 
-async function getBrowserContext() {
-  if (browserContext) {
-    return browserContext;
+function getBrowserContext() {
+  if (!browserContext) {
+    browserContext = chromium
+      .launchPersistentContext(PROFILE_DIR, {
+        channel: 'chrome',
+        headless: false,
+        viewport: null,
+        // Playwright's defaults tell Chrome to skip the OS keychain, which would leave the X session
+        // cookies in the profile directory effectively unencrypted. Use the real keychain instead.
+        ignoreDefaultArgs: ['--use-mock-keychain', '--password-store=basic'],
+      })
+      .then((context) => {
+        context.on('close', () => {
+          browserContext = null;
+        });
+        return context;
+      })
+      .catch((err) => {
+        browserContext = null;
+        throw err;
+      });
   }
-  browserContext = await chromium.launchPersistentContext(PROFILE_DIR, {
-    channel: 'chrome',
-    headless: false,
-    viewport: null,
-    // Playwright's defaults tell Chrome to skip the OS keychain, which would leave the X session
-    // cookies in the profile directory effectively unencrypted. Use the real keychain instead.
-    ignoreDefaultArgs: ['--use-mock-keychain', '--password-store=basic'],
-  });
-  browserContext.on('close', () => {
-    browserContext = null;
-  });
   return browserContext;
+}
+
+/**
+ * Wait for x.com to load data that includes the given post. Rather than relying on which API
+ * operation x.com uses (TweetDetail today) or on that request coming from the page itself (x.com's
+ * service worker can make it, which Playwright reports on the browser context, not the page), every
+ * GraphQL response in the browser is checked for the post.
+ * @param {import('playwright').BrowserContext} context
+ * @param {string} id
+ * @returns {{loaded: Promise<Object>, stop: () => void}}
+ */
+function waitForTweetData(context, id) {
+  const seen = new Set(); // Operations x.com loaded, to say what happened if the post never shows
+  let onResponse;
+  let timer;
+  const loaded = new Promise((resolve, reject) => {
+    timer = setTimeout(() => {
+      reject(
+        new Error(
+          seen.size
+            ? `x.com loaded ${[...seen].join(', ')}, but none of it included the post. It may have been deleted, or the account may be private or suspended.`
+            : "x.com didn't load any posts. If it's asking you to log in, log in in the helper's Chrome window and fetch again.",
+        ),
+      );
+    }, FETCH_TIMEOUT_MS);
+    onResponse = async (resp) => {
+      let path;
+      try {
+        path = new URL(resp.url()).pathname;
+      } catch {
+        return;
+      }
+      if (!path.includes('/graphql/')) {
+        return;
+      }
+      seen.add(path.split('/').pop());
+      let body;
+      try {
+        body = await resp.json();
+      } catch {
+        return; // Not JSON, or the response went away (e.g. a redirect)
+      }
+      if (collectTweets(body).has(id)) {
+        resolve(body);
+      }
+    };
+    context.on('response', onResponse);
+  });
+  const stop = () => {
+    clearTimeout(timer);
+    context.off('response', onResponse);
+  };
+  return { loaded, stop };
+}
+
+/**
+ * Open a Twitter post in the browser and read it from the data x.com loads for the page. Resolves
+ * with the post, preceded by the posts it replies to, as social post card posts (media not copied).
+ * @param {string} url
+ */
+async function fetchTweet(url) {
+  const parsed = parsePostUrl(url);
+  if (parsed?.network !== 'twitter') {
+    throw new Error('Not a link to a Twitter post.');
+  }
+  const context = await getBrowserContext();
+  const page = await context.newPage();
+  // Logged out, x.com doesn't load the post's data at all, so say so rather than wait for nothing.
+  // auth_token is x.com's login session cookie.
+  const cookies = await context.cookies('https://x.com');
+  if (!cookies.some((cookie) => cookie.name === 'auth_token')) {
+    await page.goto('https://x.com/i/flow/login');
+    throw new Error(
+      "The helper's Chrome window isn't logged in to X. Log in there (it's open on the login page), then fetch again.",
+    );
+  }
+  // Start listening before the page loads, so the response isn't missed
+  const { loaded, stop } = waitForTweetData(context, parsed.id);
+  loaded.catch(() => {}); // Awaited below, unless opening the page fails first
+  try {
+    await page.goto(`https://x.com/${parsed.handle}/status/${parsed.id}`, {
+      waitUntil: 'domcontentloaded',
+    });
+    const posts = tweetThread(await loaded, parsed.id);
+    await page.close();
+    return posts;
+  } catch (err) {
+    // Like composing, leave the tab open on failure so you can see what x.com showed (or log in)
+    console.error('Failed while fetching from X; leaving the tab open.');
+    throw err;
+  } finally {
+    stop();
+  }
 }
 
 /**
@@ -245,6 +354,21 @@ app.post('/compose', async (req, res) => {
     res.status(500).json({ error: err.message || String(err) });
   } finally {
     busy = false;
+  }
+});
+
+app.post('/fetch', async (req, res) => {
+  if (!req.is('application/json') || typeof req.body?.url !== 'string') {
+    res.status(400).json({ error: 'Expected a JSON body with "url"' });
+    return;
+  }
+  try {
+    const posts = await fetchTweet(req.body.url);
+    console.log(`Fetched ${posts.length} post(s) from X: ${req.body.url}`);
+    res.json({ posts });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || String(err) });
   }
 });
 

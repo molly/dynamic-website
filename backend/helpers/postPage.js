@@ -28,6 +28,8 @@ const linkTo = (entry) => ({
   id: idOf(entry),
   label: labelFeedEntry(entry).label,
   href: feedEntryHref(entry),
+  // Newsletter issues say so wherever they're listed (thread boxes, related)
+  kind: entry.__t === 'FeedEntryCitationNeeded' ? 'Citation Needed' : null,
 });
 
 /**
@@ -105,8 +107,6 @@ async function threadBoxes(feedEntry) {
           month: DateTime.fromJSDate(member.createdAt, { zone: ZONE }).toFormat(
             'yyyy-MM',
           ),
-          kind:
-            member.__t === 'FeedEntryCitationNeeded' ? 'Citation Needed' : null,
           current: idOf(member) === idOf(feedEntry),
         })),
       };

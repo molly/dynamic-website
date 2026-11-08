@@ -5,7 +5,9 @@ import MicroEntry from '../models/micro/microEntry.model.js';
 async function clean() {
   await db.initialize();
 
-  const entries = await FeedEntryMicro.find({ deletedAt: { $exists: false } }).populate({
+  const entries = await FeedEntryMicro.find({
+    deletedAt: { $exists: false },
+  }).populate({
     path: 'micro',
     model: MicroEntry,
   });
