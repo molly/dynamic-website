@@ -76,6 +76,7 @@ describe('post page', () => {
       'permalink',
       'from',
       'tags',
+      'discuss', // "your site": the webmention form
       'archived',
     ]);
     // The permalink carries the post's u-url, since the date above it isn't a link here

@@ -341,6 +341,83 @@ describe('document highlights', () => {
 });
 
 describe('renderSocialPost', () => {
+  it('keeps highlights, says "highlight mine", and fades a partial post', () => {
+    const html = renderSocialPost({
+      data: {
+        posts: [
+          {
+            network: 'twitter',
+            authorName: 'CZ',
+            handle: 'cz_binance',
+            textHtml:
+              'Loss might be <mark>a bit higher</mark> than that<br>and more',
+            partial: true,
+            media: [],
+          },
+        ],
+      },
+    });
+    expect(html).toContain(
+      '<div class="social-text social-text-partial"><p>Loss might be <mark>a bit higher</mark> than that<br>and more</p><span class="social-excerpt-note"> (excerpt)</span></div>',
+    );
+    expect(html).toContain('highlight mine');
+    // Blank lines are paragraphs; two highlights are "highlights"
+    const twice = renderSocialPost({
+      data: {
+        posts: [
+          {
+            network: 'twitter',
+            handle: 'binance',
+            textHtml:
+              'Binance has begun <mark>recovering</mark>.<br><br><mark>$6.34B</mark> reserved.',
+            media: [],
+          },
+        ],
+      },
+    });
+    expect(twice).toContain(
+      '<div class="social-text"><p>Binance has begun <mark>recovering</mark>.</p><p><mark>$6.34B</mark> reserved.</p></div>',
+    );
+    expect(twice).toContain('highlights mine');
+    const plain = renderSocialPost({
+      data: {
+        posts: [
+          { network: 'twitter', handle: 'x', textHtml: 'Plain', media: [] },
+        ],
+      },
+    });
+    expect(plain).not.toContain('highlight mine');
+    expect(plain).not.toContain('social-text-partial');
+  });
+
+  it('says who each post in a thread replies to, except when someone continues their own', () => {
+    const post = (handle, text, originalUrl = '') => ({
+      network: 'twitter',
+      authorName: handle,
+      handle,
+      profileUrl: `https://twitter.com/${handle}`,
+      originalUrl,
+      textHtml: text,
+      media: [],
+    });
+    const html = renderSocialPost({
+      data: {
+        posts: [
+          post('0xngmi', 'Binance has 144bn'),
+          post('cz_binance', 'Loss might be a bit higher'),
+          post('cz_binance', 'Also'),
+          post('elonmusk', '😬', 'https://x.com/elonmusk/status/1'),
+        ],
+      },
+    });
+    const replies = [
+      ...html.matchAll(/replying to <a href="[^"]+">@(\w+)<\/a>/g),
+    ].map((m) => m[1]);
+    expect(replies).toEqual(['0xngmi', 'cz_binance']);
+    // A post without a link isn't dated with an empty link
+    expect(html).not.toContain('href=""');
+  });
+
   it('draws one post as a card', () => {
     const html = renderSocialPost({
       data: { posts: [POST], screenshot: 'https://s/shot.png' },
@@ -355,13 +432,13 @@ describe('renderSocialPost', () => {
       'Image not archived · <a href="https://s/shot.png">see screenshot</a>',
     );
     expect(html).not.toMatch(/replies|likes/);
-    expect(html).toContain('10:00 AM · Oct 29, 2025');
+    expect(html).toContain('Oct 29, 2025');
     expect(html).toContain(
       '<a href="https://bsky.app/profile/cz.bsky.social/post/abc">original</a> · <a href="https://s/shot.png">screenshot</a>',
     );
-    // The date and the links share the last line
+    // The footer: the date (its time is in the hover text), then the links
     expect(html).toMatch(
-      /<p class="social-footer"><span class="social-when"><time[^>]*>10:00 AM · Oct 29, 2025<\/time><\/span><span class="social-links"><a /,
+      /<p class="social-footer"><span class="social-when"><time[^>]*data-local="date"[^>]*>Oct 29, 2025<\/time><\/span><span class="social-links"><a /,
     );
   });
 

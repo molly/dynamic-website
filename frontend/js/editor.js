@@ -184,9 +184,9 @@ function confirmRepost(networks) {
  */
 function onSocialPostLinkChange() {
   if (this.value) {
-    postMeta.socialLinks[this.id] = this.value;
+    postMeta.socialLinks[this.dataset.network] = this.value;
   } else {
-    delete postMeta.socialLinks[this.id];
+    delete postMeta.socialLinks[this.dataset.network];
   }
 }
 const debouncedOnSocialChange = debounce(onSocialPostLinkChange, 250);
@@ -287,8 +287,11 @@ function setInputValues() {
   aboutPicker.setValue(postMeta.about, true);
   relatedEntriesPicker.addOptions(savedPost.feed?.related || []);
   relatedEntriesPicker.setValue(postMeta.related, true);
-  Object.entries(postMeta.socialLinks).forEach(([key, value]) => {
-    document.getElementById(key).value = value;
+  Object.entries(postMeta.socialLinks).forEach(([network, value]) => {
+    const input = document.getElementById(`post-id-${network}`);
+    if (input) {
+      input.value = value;
+    }
   });
 
   // Once saved, the slug is the post's permanent address.

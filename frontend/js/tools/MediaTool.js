@@ -1,10 +1,12 @@
 import { formatDuration } from '../../../api/helpers/blocks.js';
 import { escapeHtml } from '../helpers/escapeHtml.js';
+import { CAPTION_SANITIZE, inlineTextField } from '../helpers/plainPaste.js';
 import { chooseLinkedFile, uploadFile as upload } from '../helpers/upload.js';
 
 // Block for your own copies of video and audio (talks, podcast appearances): uploaded to the
 // bucket and played with the browser's own player, never embedded from another site.
-// Data: { url, kind: 'video' | 'audio', contentType, duration (seconds), poster?, caption }
+// Data: { url, kind: 'video' | 'audio', contentType, duration (seconds), poster?, caption }. The
+// caption keeps links, bold and italic.
 
 export default class MediaTool {
   static get toolbox() {
@@ -16,6 +18,17 @@ export default class MediaTool {
 
   static get isReadOnlySupported() {
     return true;
+  }
+
+  // Only the caption is cleaned; sanitizing the URLs would turn their & into &amp;
+  static get sanitize() {
+    return {
+      caption: CAPTION_SANITIZE,
+      url: true,
+      kind: true,
+      contentType: true,
+      poster: true,
+    };
   }
 
   constructor({ data, api, readOnly }) {
@@ -57,6 +70,9 @@ export default class MediaTool {
         ${kind === 'video' ? `<label class="link-button">${poster ? 'change poster' : 'add poster image'}<input type="file" accept="image/*" class="poster-input" hidden></label> or <button type="button" class="link-button poster-url">use a link</button>` : ''}
       </div>
       <div class="media-caption" contenteditable="${!this.readOnly}" data-placeholder="Caption">${caption || ''}</div>`;
+    if (!this.readOnly) {
+      inlineTextField(this.wrapper.querySelector('.media-caption'));
+    }
     const media = this.wrapper.querySelector('video, audio');
     media.addEventListener('loadedmetadata', () => {
       if (Number.isFinite(media.duration)) {

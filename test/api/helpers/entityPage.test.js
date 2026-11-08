@@ -4,6 +4,7 @@ import { entityUrl, typeForSegment } from '../../../api/helpers/entityUrls';
 import {
   RELATION_NOUNS,
   byYear,
+  combineRelations,
   countEntityEntries,
   currentMembers,
   entityEntriesQuery,
@@ -67,6 +68,7 @@ describe('entity pages', () => {
     // Senate Banking (from) is part of the U.S. Senate (to)
     expect(RELATION_NOUNS.part_of.from).toEqual('part of');
     expect(RELATION_NOUNS.part_of.to).toEqual('part');
+    expect(RELATION_NOUNS.hired.to).toEqual('client');
   });
 
   it('puts a relation in the past tense once it has ended', () => {
@@ -83,6 +85,22 @@ describe('entity pages', () => {
     expect(
       relationLabel({ kind: 'gave_to', direction: 'from', end: '2024' }),
     ).toBe('gave to');
+    expect(relationLabel({ kind: 'hired', direction: 'to', end: '2024' })).toBe(
+      'hired by',
+    );
+  });
+
+  it('gives an entity related in several ways one row: current first, then former', () => {
+    const cz = { _id: 'cz', name: 'Changpeng Zhao' };
+    const rows = combineRelations([
+      { entity: cz, name: 'Changpeng Zhao', label: 'CEO', current: false },
+      { entity: { _id: 'bn' }, name: 'BNB', label: 'token', current: true },
+      { entity: cz, name: 'Changpeng Zhao', label: 'founder', current: true },
+    ]);
+    expect(rows.map((r) => `${r.name}: ${r.label}`)).toEqual([
+      'Changpeng Zhao: founder, former CEO',
+      'BNB: token',
+    ]);
   });
 
   it('lists entries about the entity or with its tag', () => {

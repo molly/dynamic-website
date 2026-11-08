@@ -1222,6 +1222,33 @@ button.primary:disabled {
   color: var(--editor-accent);
 }
 
+/* An entity without a public page (only for @mentions): labelled, with its name greyed out */
+.entity-private-badge,
+.entity-private-note {
+  display: none;
+}
+
+.entity-editor-private .entity-private-badge {
+  display: inline-block;
+  margin-left: 0.6em;
+  padding: 0 0.4em;
+  color: var(--timestamp-color);
+  border: 1px dashed var(--timestamp-color);
+  border-radius: 3px;
+}
+
+.entity-editor-private .entity-private-note {
+  display: block;
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--timestamp-color);
+}
+
+.entity-editor-private #entity-head input,
+.entity-editor-private #entity-head textarea {
+  color: var(--timestamp-color);
+}
+
 /* The head reads like the page: no boxes, just the words */
 #entity-head input,
 #entity-head textarea {
@@ -1265,6 +1292,81 @@ button.primary:disabled {
   margin-top: 0.5rem;
   font-size: 1.05rem;
   resize: vertical;
+}
+
+/* The tagger (pug/views/feed/tagger.pug): the entry like an editor's head, its fields below */
+.tagger-title {
+  margin: 0.4rem 0 0;
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.tagger-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tagger-title a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--editor-accent);
+}
+
+.tagger-source {
+  margin: 0.5rem 0 0;
+  font-family: var(--editor-mono);
+  font-size: 0.8rem;
+  color: var(--timestamp-color);
+}
+
+.tagger-blurb {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  font-size: 1.05rem;
+  border-left: 3px solid var(--editor-border);
+}
+
+.tagger-blurb > :first-child {
+  margin-top: 0;
+}
+
+.tagger-blurb > :last-child {
+  margin-bottom: 0;
+}
+
+.tagger-main .entity-field-row {
+  max-width: 40rem;
+}
+
+/* A URL with an upload beside it */
+.tagger-url {
+  display: flex;
+  gap: 0.75em;
+  align-items: baseline;
+}
+
+.tagger-url input {
+  flex: 1;
+  min-width: 0;
+}
+
+.tagger-url .link-button {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+
+.tagger-own-copy {
+  margin-top: 1rem;
+}
+
+.tagger-own-copy summary {
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+/* Room above the fixed action bar */
+.tagger {
+  padding-bottom: 5rem;
 }
 
 /* Sections in the main column: a small heading over a rule, as on the page */
@@ -1896,7 +1998,10 @@ button.primary:disabled {
 }
 
 .update-kind {
+  padding: 0.1em 0.3em;
+  font-size: 0.8rem;
   font-weight: 600;
+  border: 1px solid var(--editor-border);
 }
 
 .update-at {
@@ -2140,6 +2245,32 @@ button.primary:disabled {
   color: var(--timestamp-color);
 }
 
+/* A hand-entered quoted post: the same fields as a post, inside the post that quotes it */
+.sp-quoted-edit {
+  background: var(--editor-tint, #f7f6fb);
+}
+
+.sp-quoted-label,
+.sp-add-quoted {
+  margin: 0 0 0.3em;
+  font-size: 0.75rem;
+  color: var(--timestamp-color);
+}
+
+.sp-add-quoted {
+  margin: 0.4em 0;
+}
+
+.sp-partial {
+  display: inline-flex;
+  gap: 0.3em;
+  align-items: center;
+}
+
+.sp-partial input {
+  width: auto;
+}
+
 .sp-meta {
   display: flex;
   flex-wrap: wrap;
@@ -2285,4 +2416,41 @@ button.primary:disabled {
 
 .admin-filters .admin-filter-check input {
   width: auto;
+}
+
+/* An image's own settings under it in a comparison; the ones that are on are marked */
+.comparison-settings {
+  margin: 0.3em 0;
+  font-size: 0.75rem;
+  color: var(--timestamp-color);
+}
+
+.comparison-settings [aria-pressed='true'] {
+  color: var(--editor-accent);
+  font-weight: 600;
+}
+
+.comparison-settings [aria-pressed='true']::before {
+  content: '✓ ';
+}
+
+/* A pull quote in the editor: large, with the accent rule, as on the site */
+.quote-block-pull .cdx-quote__text {
+  min-height: 0;
+  padding-left: 0.8em;
+  font-size: 1.45rem;
+  line-height: 1.25;
+  border-left: 3px solid var(--editor-accent);
+}
+
+/* Deleting or merging an entity, at the bottom of its editor */
+.entity-remove-actions {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.entity-merge-form {
+  margin-top: 0.6rem;
+  padding: 0.75rem;
+  background: var(--editor-tint);
 }

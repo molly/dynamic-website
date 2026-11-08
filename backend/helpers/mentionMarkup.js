@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import fs from 'fs';
+import { isItalicEntity } from '../../api/helpers/entityTypes.js';
 import { entityUrl } from '../../api/helpers/entityUrls.js';
 import { escapeHtml } from '../../api/helpers/html.js';
 import {
@@ -7,30 +7,9 @@ import {
   withDocumentSides,
 } from '../../api/helpers/documentParties.js';
 import { mapPostText } from '../../api/helpers/mentions.js';
-import {
-  MENTION_NETWORKS,
-  NETWORK_LABELS,
-  getSocialLinkFromHandle,
-} from '../../api/helpers/socialMedia.js';
 
-// Show current-format mentions on the site. Each is expanded into the same h-card markup the old
-// mentions tool wrote into posts, so the site's existing styles keep working, but built from the
-// entity's details as they are now.
-
-const ICON_WIDTHS = { wikipedia: 14 };
-const icons = {};
-// The accounts' icons, and Wikipedia's for the article about them
-for (const network of [...MENTION_NETWORKS, 'wikipedia']) {
-  const path = new URL(`../../pug/icons/${network}.svg`, import.meta.url);
-  if (fs.existsSync(path)) {
-    const width = ICON_WIDTHS[network] || 10;
-    const svg = fs
-      .readFileSync(path, 'utf8')
-      .replace('<svg', `<svg style="width: ${width}px;"`);
-    icons[network] =
-      `<span class="cdx-mention-icon icon" style="width: ${width}px;">${svg}</span>`;
-  }
-}
+// Show current-format mentions on the site: the words as written, linked to the entity's page, or
+// to its website if it has no page.
 
 const escapeAttribute = (text) =>
   String(text)
@@ -44,11 +23,16 @@ function entityLinkTarget(entity) {
   if (page) {
     return { href: page, className: 'entity-page p-name' };
   }
-  const website = (entity.accounts || []).find((a) => a.network === 'website');
-  return website
-    ? { href: website.handle, className: 'website u-url p-name' }
-    : null;
+  const website =
+    (entity.accounts || []).find((a) => a.network === 'website')?.handle ||
+    entity.ids?.website;
+  return website ? { href: website, className: 'website u-url p-name' } : null;
 }
+
+// A case's or outlet's name in italics, as titles are. Not in mentions in post text, where the
+// words are as you wrote them, italics or not.
+const styledName = (entity, html) =>
+  isItalicEntity(entity) ? `<i>${html}</i>` : html;
 
 /**
  * An entity's name, linked to its page (or its website, if it has no page), without the account
@@ -57,7 +41,7 @@ function entityLinkTarget(entity) {
  * @returns {string}
  */
 export function entityNameLink(entity) {
-  const name = escapeHtml(entity.name);
+  const name = styledName(entity, escapeHtml(entity.name));
   const target = entityLinkTarget(entity);
   return target
     ? `<a class="${target.className}" href="${escapeAttribute(target.href)}">${name}</a>`
@@ -65,36 +49,16 @@ export function entityNameLink(entity) {
 }
 
 /**
- * The h-card markup for one mention.
+ * One mention: the words as written, linked to the entity's page (or its website).
  * @param {Object} entity
  * @param {string} innerHtml The words as written in the post
  */
 export function renderMention(entity, innerHtml) {
-  const accounts = [...(entity.accounts || [])].sort(
-    (a, b) =>
-      MENTION_NETWORKS.indexOf(a.network) - MENTION_NETWORKS.indexOf(b.network),
-  );
-  const plain = `<span class="cdx-mention-plain">${innerHtml}</span>`;
   const target = entityLinkTarget(entity);
   const name = target
-    ? `<a class="${target.className}" href="${escapeAttribute(target.href)}">${plain}</a>`
-    : plain;
-  const links = accounts
-    .filter((a) => a.network !== 'website')
-    .map(
-      ({ network, handle }) =>
-        `<a class="${network} u-url cdx-social-link" href="${escapeAttribute(getSocialLinkFromHandle(handle, network))}" data-username="${escapeAttribute(handle)}" style="padding: 0 0.025em; margin-left: 0.05em;" title="${NETWORK_LABELS[network]}">${icons[network] || NETWORK_LABELS[network]}</a>`,
-    )
-    .join('');
-  // The Wikipedia article about them comes after their own accounts. Not u-url: it isn't theirs.
-  const article = entity.ids?.wikipedia
-    ? `<a class="wikipedia cdx-social-link" href="${escapeAttribute(entity.ids.wikipedia)}" style="padding: 0 0.025em; margin-left: 0.05em;" title="Wikipedia article">${icons.wikipedia || 'Wikipedia'}</a>`
-    : '';
-  const group =
-    links || article
-      ? ` <span class="cdx-mention-social-group">${links}${article}</span>`
-      : '';
-  return `<span class="cdx-mention u-category h-card">${name}${group}</span>`;
+    ? `<a class="mention-name ${target.className}" href="${escapeAttribute(target.href)}">${innerHtml}</a>`
+    : `<span class="mention-name p-name">${innerHtml}</span>`;
+  return `<span class="mention h-card">${name}</span>`;
 }
 
 /**
@@ -127,7 +91,7 @@ export function expandMentionsInPost(post, entities) {
 }
 
 // A document's senders and recipients that are entities: each person's `html`, the name as
-// written in bold, linked to the entity's page or website, for renderDocument. Not the purple @
+// written in bold, linked to the entity's page or website, for renderDocument. Not the dotted-underline
 // mention style, which is for your own writing; this is the document's own details. Documents
 // inside comparisons too.
 function expandDocumentParties(block, entities) {
@@ -159,7 +123,7 @@ function expandDocumentParties(block, entities) {
       if (!entity || !name) {
         return person;
       }
-      const bold = `<strong>${escapeHtml(name)}</strong>`;
+      const bold = `<strong>${styledName(entity, escapeHtml(name))}</strong>`;
       const target = entityLinkTarget(entity);
       return {
         ...person,

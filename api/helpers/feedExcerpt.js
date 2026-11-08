@@ -1,5 +1,5 @@
-// In the feed, a long post shows its start and then "continues →": its first two paragraphs and
-// its first image or card, with the top of the next block faded out below them as a teaser. Each
+// In the feed, a long post shows its start and then "continue reading →": its first two paragraphs
+// and its first image or card, with the top of the next block faded out below them as a teaser. Each
 // rendered block in `micro.html` lines up with a block of `micro.post.blocks`.
 
 const TEXT_BLOCKS = new Set(['paragraph', 'header', 'list', 'quote']);

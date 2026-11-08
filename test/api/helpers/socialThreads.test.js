@@ -7,7 +7,10 @@ import {
   visibleText,
 } from '../../../api/helpers/socialThreads';
 import { processThread } from '../../../backend/helpers/social';
-import { buildThread } from '../../../frontend/js/threads/buildThread';
+import {
+  buildThread,
+  leftOutOfThreads,
+} from '../../../frontend/js/threads/buildThread';
 
 const LINKED = 'I <a href="https://example.com/a">reported</a> it &amp; more';
 
@@ -130,6 +133,80 @@ describe('buildThread', () => {
     expect(fingerprintPost({ blocks: [paragraph('one!')] })).not.toEqual(
       thread.basedOn.hash,
     );
+  });
+
+  it('includes headings, lists and code, one list item per line', () => {
+    const thread = buildThread(
+      {
+        blocks: [
+          { type: 'header', data: { text: 'What happened', level: 2 } },
+          {
+            type: 'list',
+            data: { style: 'unordered', items: ['one', '<b>two</b>'] },
+          },
+          { type: 'list', data: { style: 'ordered', items: ['first'] } },
+          { type: 'code', data: { code: 'npm run related' } },
+        ],
+      },
+      'mastodon',
+    );
+    expect(visibleText(thread.posts[0].text)).toEqual(
+      'What happened\n\n• one\n• two\n\n1. first\n\nnpm run related',
+    );
+  });
+
+  it('follows images with their captions, and quotes with who said them', () => {
+    const thread = buildThread(
+      {
+        blocks: [
+          {
+            type: 'image',
+            data: { file: { url: 'https://i/1.png' }, caption: 'The chart' },
+          },
+          {
+            type: 'gallery',
+            data: {
+              caption: 'Both PACs',
+              files: [
+                { url: 'https://i/2.png', caption: 'Fairshake' },
+                { url: 'https://i/3.png', caption: 'Leading the Future' },
+              ],
+            },
+          },
+          { type: 'quote', data: { text: 'Big words', caption: 'A senator' } },
+        ],
+      },
+      'twitter',
+    );
+    expect(thread.posts[0].media.map((m) => m.url)).toEqual([
+      'https://i/1.png',
+      'https://i/2.png',
+      'https://i/3.png',
+    ]);
+    expect(visibleText(thread.posts[0].text)).toEqual(
+      'The chart\n\n1/2 · Fairshake\n2/2 · Leading the Future\n\nBoth PACs\n\n"Big words" — A senator',
+    );
+  });
+
+  it('leaves out raw HTML, tables and video and audio, and says so', () => {
+    const post = {
+      blocks: [
+        paragraph('words'),
+        { type: 'raw', data: { html: '<div>x</div>' } },
+        { type: 'table', data: { content: [['a']] } },
+        { type: 'media', data: { kind: 'video', url: 'https://v/1.mp4' } },
+        { type: 'media', data: { kind: 'video', url: 'https://v/2.mp4' } },
+      ],
+    };
+    expect(
+      buildThread(post, 'bluesky').posts.map((p) => visibleText(p.text)),
+    ).toEqual(['words']);
+    expect(leftOutOfThreads(post)).toEqual([
+      'an HTML block',
+      'a table',
+      '2 videos',
+    ]);
+    expect(leftOutOfThreads({ blocks: [paragraph('words')] })).toEqual([]);
   });
 });
 

@@ -157,9 +157,9 @@ async function onFirstLoad() {
    */
   function onSocialPostLinkChange() {
     if (this.value) {
-      socialLinks[this.id] = this.value;
+      socialLinks[this.dataset.network] = this.value;
     } else {
-      delete socialLinks[this.id];
+      delete socialLinks[this.dataset.network];
     }
   }
   const debouncedOnSocialChange = debounce(onSocialPostLinkChange, 250);
@@ -169,14 +169,15 @@ async function onFirstLoad() {
     .forEach((el) => el.addEventListener('input', debouncedOnSocialChange));
 
   const saveButton = document.getElementById('save-button');
+  const lastSaved = document.getElementById('last-saved');
+  const error = document.getElementById('tagger-error');
   saveButton.addEventListener('click', async function () {
     saveButton.setAttribute('disabled', true);
-    const pathParts = window.location.pathname.split('/');
-    const entryType = pathParts[3];
+    error.hidden = true;
     try {
       // Every field is read from its control, so saving never clears a field that wasn't touched.
       const { data: entry } = await axios.post(
-        `/dynamic-api/feed/meta/${entryType}`,
+        `/dynamic-api/feed/meta/${pickerData.entryType}`,
         {
           id: pickerData.feedEntryId,
           tags: selectedValues(tagSelect),
@@ -198,12 +199,20 @@ async function onFirstLoad() {
         true,
       );
       for (const link of entry.socialLinks || []) {
-        document.getElementById(link.type).value = link.postId;
+        const input = document.getElementById(`post-id-${link.type}`);
+        if (input) {
+          input.value = link.postId;
+        }
       }
       socialLinks = {};
+      lastSaved.textContent = `saved ${new Date()
+        .toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+        .toLowerCase()}`;
     } catch (err) {
       console.error(err);
-      window.alert(`Save failed: ${err.response?.data?.error || err.message}`);
+      error.textContent = `Couldn’t save: ${err.response?.data?.error || err.message}`;
+      error.hidden = false;
+      error.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } finally {
       saveButton.removeAttribute('disabled');
     }

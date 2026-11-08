@@ -77,7 +77,8 @@ block body
                 if !reply.body.title
                   p.webmention-source #[a.u-url(href=reply.source, rel="nofollow") #{hostOf(reply.source)}]
 
-          .webmention-submit
+          //- "your site" in the post's discuss row links here
+          .webmention-submit#webmention
             label(for="webmention-manual") Wrote about this on your site? Send a #[a(href="https://indieweb.org/Webmention") webmention]:
             .submit-box
               input#webmention-manual(type="url", placeholder="https://your-site.example/post", name="source", required)

@@ -1,11 +1,20 @@
 import { escapeHtml } from '../helpers/escapeHtml.js';
 import { isolateKeys } from './DocumentTool.js';
+import ImageSourceTune from './ImageSourceTune.js';
 
 // "Comparison" block: two labelled sides, e.g. "THE HEADLINE · REUTERS" beside "THE SOURCE ·
 // @BINANCE", each holding one block of any kind offered (image, social post, document, linked
 // article or text). EditorJS doesn't nest blocks, so each side runs the chosen tool itself and
 // stores what it saves.
-// Data: { left: { label, block: { type, data } }, right: { … } }
+// Data: { left: { label, block: { type, data, tunes } }, right: { … } }. An image side has the
+// same "source details" as an image block (tunes.imageSource), shown under it on the site.
+
+// Block types whose side gets the image source details
+const SOURCED = new Set(['image', 'gallery']);
+
+// A tool's own settings (its renderSettings) that make no sense on one side of a comparison:
+// stretching would stretch the whole comparison block
+const SIDE_SETTINGS_LEFT_OUT = new Set(['stretched']);
 // Config: { tools: { [type]: { class, config, title } } }, set in editorConfig.js.
 
 const SIDES = ['left', 'right'];
@@ -119,9 +128,33 @@ export default class ComparisonTool {
       readOnly: this.readOnly,
       block: this.block,
     });
-    const element = await tool.render();
+    let element = await tool.render();
+    // Block tunes don't reach a tool run here, so an image side runs its source details itself
+    const sourceTune = SOURCED.has(block.type)
+      ? new ImageSourceTune({
+          data: block.tunes?.imageSource || {},
+          readOnly: this.readOnly,
+        })
+      : null;
+    const content = element;
+    if (sourceTune) {
+      element = sourceTune.wrap(content);
+    }
     slotEl.append(element);
     tool.rendered?.();
+    // A block's own settings normally live in the block's settings menu, which a tool run here
+    // doesn't get; they're shown under it instead
+    if (tool.renderSettings && !this.readOnly) {
+      slotEl.append(this.settingsRow(tool));
+    }
+    if (sourceTune && !this.readOnly) {
+      const details = document.createElement('button');
+      details.type = 'button';
+      details.className = 'link-button comparison-source';
+      details.textContent = 'source details';
+      details.addEventListener('click', () => sourceTune.render().onActivate());
+      slotEl.append(details, ' · ');
+    }
     if (!this.readOnly) {
       const change = document.createElement('button');
       change.type = 'button';
@@ -130,7 +163,42 @@ export default class ComparisonTool {
       change.textContent = `change ${(settings.title || block.type).toLowerCase()}`;
       slotEl.append(change);
     }
-    this.slots[side] = { tool, element, type: block.type };
+    this.slots[side] = {
+      tool,
+      element: content,
+      type: block.type,
+      sourceTune,
+    };
+  }
+
+  // Toggles for a tool's own settings: "with border · with background · …", each showing
+  // whether it's on
+  settingsRow(tool) {
+    const row = document.createElement('p');
+    row.className = 'comparison-settings';
+    const draw = () => {
+      const settings = [tool.renderSettings()]
+        .flat()
+        .filter(
+          (item) => item?.label && !SIDE_SETTINGS_LEFT_OUT.has(item.name),
+        );
+      row.replaceChildren(
+        ...settings.flatMap((item, i) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'link-button';
+          button.setAttribute('aria-pressed', String(Boolean(item.isActive)));
+          button.textContent = item.label.toLowerCase();
+          button.addEventListener('click', () => {
+            item.onActivate();
+            draw(); // Read the settings again for their new state
+          });
+          return i ? [' · ', button] : [button];
+        }),
+      );
+    };
+    draw();
+    return row;
   }
 
   onClick(evt) {
@@ -160,7 +228,16 @@ export default class ComparisonTool {
       if (slot) {
         const saved = await slot.tool.save(slot.element);
         const valid = slot.tool.validate ? slot.tool.validate(saved) : true;
-        block = valid ? { type: slot.type, data: saved } : null;
+        const source = slot.sourceTune?.save();
+        const hasSource =
+          source && Object.values(source).some((value) => value);
+        block = valid
+          ? {
+              type: slot.type,
+              data: saved,
+              ...(hasSource ? { tunes: { imageSource: source } } : {}),
+            }
+          : null;
       }
       data[side] = { label, block };
     }

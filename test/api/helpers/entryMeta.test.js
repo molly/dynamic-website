@@ -60,6 +60,12 @@ describe('entryMeta', () => {
             { text: '#elections', href: '/feed/tag/elections' },
           ],
         },
+        {
+          label: 'discuss',
+          items: [
+            { text: 'your site', href: '/micro/entry/202611051453#webmention' },
+          ],
+        },
       ],
       editUrl: '/micro/editor/202611051453',
     });
@@ -96,7 +102,8 @@ describe('entryMeta', () => {
 
   it('links tags to the micro feed on micro pages, and skips empty rows', () => {
     const meta = entryMeta(micro({ tags: [] }), { now, tagBase: '/micro/tag' });
-    expect(meta.rows).toEqual([]);
+    // Only "discuss", for replying from your own site; no empty tags row
+    expect(meta.rows.map((r) => r.label)).toEqual(['discuss']);
     expect(
       entryMeta(micro(), { now, tagBase: '/micro/tag' }).rows[0].items[0].href,
     ).toEqual('/micro/tag/crypto_lobby');
@@ -295,7 +302,12 @@ describe('metadata rows from threads, about and archives', () => {
       { text: 'Binance hack · 1 of 3', href: '/feed/thread/binance-hack' },
     ]);
     expect(byLabel.later[0].text).toEqual('2 newsletter issues ↓');
-    expect(byLabel.discuss.map((i) => i.text)).toEqual(['mastodon', 'bluesky']);
+    expect(byLabel.discuss.map((i) => i.text)).toEqual([
+      'mastodon',
+      'bluesky',
+      'your site',
+    ]);
+    expect(byLabel.discuss[2].href).toEqual('/micro/entry/p1#webmention');
     expect(byLabel.links.map((i) => i.text)).toEqual(['permalink', 'archived']);
   });
 

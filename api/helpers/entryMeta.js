@@ -112,7 +112,7 @@ const row = (label, items, extra = {}) =>
   items.length ? { label, items, ...extra } : null;
 
 // A post that's only quotes, with no words of your own, is "Quoted".
-const isQuoteOnly = (micro) => {
+export const isQuoteOnly = (micro) => {
   const blocks = micro.post?.blocks || [];
   return blocks.length > 0 && blocks.every((block) => block.type === 'quote');
 };
@@ -257,6 +257,8 @@ function microMeta(micro, options) {
       : null,
     rows: microRows(micro, href, options),
     socialLinks: micro.socialLinks,
+    // "your site": the form on the post's page for sending a webmention
+    webmentionHref: `${href}#webmention`,
     links: [{ text: 'permalink', href, url: `${SITE}${href}` }],
     editUrl: `/micro/editor/${micro.slug}`,
   };
@@ -463,14 +465,15 @@ function feedMetaRows(feedMeta) {
   };
 }
 
-// "mastodon · bluesky": where the post was cross-posted. Never "X".
-const discussRow = (socialLinks) =>
-  row(
-    'discuss',
-    (socialLinks || [])
+// "mastodon · bluesky · your site": where the post was cross-posted (never "X"), then, for a post,
+// the form for replying from your own site with a webmention.
+const discussRow = (socialLinks, webmentionHref) =>
+  row('discuss', [
+    ...(socialLinks || [])
       .filter((link) => link.href)
       .map((link) => ({ text: link.type, href: link.href })),
-  );
+    ...(webmentionHref ? [{ text: 'your site', href: webmentionHref }] : []),
+  ]);
 
 // "permalink · archived": an archived link appears only once the Wayback copy exists.
 function linksRow(links, archived = {}) {
@@ -523,7 +526,7 @@ export function entryMeta(
   const rows = {
     ...meta.rows,
     ...fromFeedMeta,
-    discuss: discussRow(meta.socialLinks),
+    discuss: discussRow(meta.socialLinks, meta.webmentionHref),
     links: linksRow(meta.links, entry.feedMeta?.archived),
   };
   if (isPermalink) {

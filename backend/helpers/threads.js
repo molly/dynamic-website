@@ -1,6 +1,7 @@
 import { FeedEntry } from '../models/feed/feedEntry.model.js';
 import { Thread } from '../models/thread.model.js';
 import { FEED_ENTRY_LABEL_POPULATE, labelFeedEntry } from './feedEntries.js';
+import { refreshRelated } from './related.js';
 
 /**
  * All threads with their entry counts, most recently updated first.
@@ -33,4 +34,27 @@ export async function threadEntries(threadId) {
     .populate(FEED_ENTRY_LABEL_POPULATE)
     .lean();
   return entries.map(labelFeedEntry);
+}
+
+/**
+ * Delete a thread. Its entries stay, out of the thread: membership is only their `threads` (deleted
+ * entries' too, so restoring one doesn't bring back a thread that's gone). Sharing a thread counts
+ * towards posts being related, so its posts' related entries are worked out again.
+ * @param {string} id
+ * @returns {Promise<?{entries: number}>} How many entries were in it, or null if there's no such
+ *   thread
+ */
+export async function deleteThread(id) {
+  const thread = await Thread.findById(id);
+  if (!thread) {
+    return null;
+  }
+  const memberIds = await FeedEntry.distinct('_id', { threads: thread._id });
+  await FeedEntry.updateMany(
+    { threads: thread._id },
+    { $pull: { threads: thread._id } },
+  );
+  await thread.deleteOne();
+  await refreshRelated(memberIds);
+  return { entries: memberIds.length };
 }

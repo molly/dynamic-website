@@ -20,7 +20,7 @@ block body
     ul.entity-type-list
       each entity in entities
         li
-          a(href=entity.href) #{entity.name}
+          a(href=entity.href, class=entity.italic ? 'italic' : null) #{entity.name}
           if entity.disambiguator
             span.entity-disambiguator  (#{entity.disambiguator})
           if entity.count

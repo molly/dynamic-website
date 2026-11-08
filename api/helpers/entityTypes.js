@@ -13,13 +13,6 @@ export const ENTITY_TYPES = [
   'event',
 ];
 
-export const ENTITY_STATUSES = [
-  'active',
-  'defunct',
-  'merged',
-  'acquired',
-  'bankrupt',
-];
 export const ALIAS_KINDS = ['other', 'former'];
 // agency: executive-branch bodies (the SEC, the Department of Commerce). legislative: the Senate,
 // the House, their committees and state legislatures. Campaign committees are their own type.
@@ -44,7 +37,40 @@ export const COMMITTEE_TYPES = [
 ];
 export const OFFICES = ['house', 'senate', 'president'];
 export const CHAMBERS = ['house', 'senate'];
+// How far a bill got, as Congress.gov tracks it, or how it ended. A bill introduced is referred
+// to committee straight away, so there's no "in committee". A bill that hadn't become law (or
+// been vetoed or failed) when its Congress ended died; that's shown from `congress`
+// (entityFacts.js billStatusLabel) rather than saved. A failed cloture vote isn't an end.
+export const BILL_STATUSES = [
+  'introduced',
+  'reported by committee',
+  'passed House',
+  'passed Senate',
+  'passed Congress',
+  'became law',
+  'vetoed',
+  'failed',
+];
 export const OUTCOME_KINDS = ['penalty', 'settlement', 'dismissal'];
+// Where a case stands. judgment: decided by the court or a jury (a ruling, verdict or sentence),
+// and not appealed (yet). Dismissed covers a case dropped by its plaintiff too.
+export const CASE_STATUSES = [
+  'pending',
+  'stayed',
+  'settled',
+  'dismissed',
+  'judgment',
+  'on appeal',
+];
+
+/**
+ * Whether an entity's name is set in italics, as titles are: a case (SEC v. Coinbase) or an
+ * outlet (The Verge). Needs the entity's type and kind.
+ * @param {{type?: string, kind?: string}} entity
+ */
+export const isItalicEntity = (entity) =>
+  entity?.type === 'case' ||
+  (entity?.type === 'organization' && entity.kind === 'outlet');
 
 export const RELATION_KINDS = [
   'works_at',
@@ -54,6 +80,7 @@ export const RELATION_KINDS = [
   'part_of',
   'funds',
   'gave_to',
+  'hired',
   'affiliated',
   'party_to',
   'sponsored',
@@ -78,6 +105,9 @@ export const RELATION_LABELS = {
   part_of: { from: 'part of', to: 'includes' },
   funds: { from: 'funds', to: 'funded by' },
   gave_to: { from: 'gave to', to: 'received from' },
+  // Paying another organization or person for a service: a consulting, law, lobbying or PR firm,
+  // an auditor. The role says what for ("consulting"). Reads the same once it has ended.
+  hired: { from: 'hired', to: 'hired by' },
   affiliated: { from: 'affiliated with', to: 'affiliated with' },
   party_to: { from: 'party to', to: 'party' },
   sponsored: { from: 'sponsored', to: 'sponsored by' },
@@ -92,7 +122,7 @@ export const RELATION_LABELS = {
 };
 
 // The same, for a relation that has ended (it has an end date): "worked at", "employed". Kinds
-// that already read as past ("gave to", "sponsored") or don't end aren't listed.
+// that already read as past ("gave to", "hired", "sponsored") or don't end aren't listed.
 const PAST_RELATION_LABELS = {
   works_at: { from: 'worked at', to: 'employed' },
   member_of: { from: 'was member of', to: 'had member' },

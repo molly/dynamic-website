@@ -1,11 +1,15 @@
 import { DateTime } from 'luxon';
 import {
   accountRows,
+  billStatusLabel,
   elsewhereRows,
   formerNames,
   typeFacts,
 } from '../../api/helpers/entityFacts.js';
-import { relationLabel } from '../../api/helpers/entityTypes.js';
+import {
+  isItalicEntity,
+  relationLabel,
+} from '../../api/helpers/entityTypes.js';
 import { ENTITY_TYPE_NAMES, entityUrl } from '../../api/helpers/entityUrls.js';
 import { Entity } from '../models/entity.model.js';
 import { PressEntry, ShortformEntry } from '../models/entry.model.js';
@@ -14,6 +18,7 @@ import MicroEntry from '../models/micro/microEntry.model.js';
 import { Tag } from '../models/tag.model.js';
 import { Thread } from '../models/thread.model.js';
 import { ENTITY_SUMMARY_FIELDS, relationsFor } from './entities.js';
+import { countEntityEntries, entityEntriesQuery } from './entityEntries.js';
 import {
   FEED_ENTRY_LABEL_POPULATE,
   feedEntryHref,
@@ -199,11 +204,36 @@ export const RELATION_NOUNS = {
   owns: { from: 'owned', to: 'owner' },
   funds: { from: 'funded', to: 'funder' },
   gave_to: { from: 'recipient', to: 'donor' },
+  hired: { from: 'hired', to: 'client' },
   parent_of: { from: 'child', to: 'parent' },
   spouse_of: { from: 'spouse', to: 'spouse' },
   sibling_of: { from: 'sibling', to: 'sibling' },
   relative_of: { from: 'relative', to: 'relative' },
 };
+
+/**
+ * One row per related entity, however many relations there are with it: "Changpeng Zhao ·
+ * founder, former CEO". Current relations come first; ended ones are "former".
+ * @param {Object[]} rows The entity's relations, as relationRow makes them
+ */
+export function combineRelations(rows) {
+  const byEntity = new Map();
+  for (const row of rows) {
+    const id = idOf(row.entity);
+    byEntity.set(id, [...(byEntity.get(id) || []), row]);
+  }
+  return [...byEntity.values()].map((group) => {
+    const labels = [
+      ...group.filter((r) => r.current).map((r) => r.label),
+      ...group.filter((r) => !r.current).map((r) => `former ${r.label}`),
+    ];
+    return {
+      ...group[0],
+      label: [...new Set(labels)].join(', '),
+      current: group.some((r) => r.current),
+    };
+  });
+}
 
 // A member with a seat of their own (Chair, Ranking Member), not just "member"
 const hasSeat = (row) => Number(row.label !== RELATION_NOUNS.member_of.to);
@@ -226,6 +256,7 @@ function relationRow(relation) {
     direction: relation.direction,
     name: other.name,
     href: entityUrl(other),
+    italic: isItalicEntity(other),
     entity: other,
     label:
       relation.role ||
@@ -332,7 +363,7 @@ export async function loadEntityPage(type, slug, { filter, all = false } = {}) {
   const ofKind = (kind) => relationRows.filter((r) => r.kind === kind);
   // Labelled relations first, then entities sharing entries, without repeats.
   const related = [
-    ...relationRows.filter((r) => r.href),
+    ...combineRelations(relationRows.filter((r) => r.href)),
     ...shared
       .filter(
         (s) => !relationRows.some((r) => idOf(r.entity) === idOf(s.entity)),
@@ -340,6 +371,7 @@ export async function loadEntityPage(type, slug, { filter, all = false } = {}) {
       .map((s) => ({
         name: s.entity.name,
         href: entityUrl(s.entity),
+        italic: isItalicEntity(s.entity),
         count: s.count,
       })),
   ].slice(0, RELATED_LIMIT);
@@ -347,11 +379,14 @@ export async function loadEntityPage(type, slug, { filter, all = false } = {}) {
   return {
     entity,
     typeName: ENTITY_TYPE_NAMES[entity.type],
+    // A case's or outlet's name is in italics, here and wherever it's linked
+    italic: isItalicEntity(entity),
     tag,
     // From the entity's own fields (api/helpers/entityFacts.js)
     accounts: accountRows(entity),
     elsewhere: elsewhereRows(entity),
     facts: typeFacts(entity),
+    billStatus: entity.type === 'bill' ? billStatusLabel(entity) : null,
     formerly: formerNames(entity),
     glance: glance(entries),
     // Person: the current job, the relation with no end
@@ -379,55 +414,13 @@ export async function loadEntityPage(type, slug, { filter, all = false } = {}) {
 }
 
 /**
- * The feed entries an entity's page lists: those marked as about it, and those with its tag (so
- * posts tagged before entities existed show up without being marked again).
- * @param {{_id: *, tag?: *}} entity
- */
-export function entityEntriesQuery(entity) {
-  return {
-    deletedAt: null,
-    $or: [{ about: entity._id }, ...(entity.tag ? [{ tags: entity.tag }] : [])],
-  };
-}
-
-/**
- * How many entries each entity has, counting an entry once even when it's both about the entity
- * and has its tag.
- * @param {{_id: *, tag?: *}[]} entities
- * @param {{about?: *[], tags?: *[]}[]} entries
- * @returns {Map<string, number>} By entity id
- */
-export function countEntityEntries(entities, entries) {
-  const byTag = new Map();
-  for (const entity of entities) {
-    if (entity.tag) {
-      byTag.set(idOf(entity.tag), [
-        ...(byTag.get(idOf(entity.tag)) || []),
-        idOf(entity),
-      ]);
-    }
-  }
-  const counts = new Map();
-  for (const entry of entries) {
-    const ids = new Set([
-      ...(entry.about || []).map(idOf),
-      ...(entry.tags || []).flatMap((tag) => byTag.get(idOf(tag)) || []),
-    ]);
-    for (const id of ids) {
-      counts.set(id, (counts.get(id) || 0) + 1);
-    }
-  }
-  return counts;
-}
-
-/**
  * Entities with pages, by type, with how many entries each has, for the index pages.
  * @param {string} [type] Just this type
  */
 export async function loadEntityIndex(type) {
   const entities = await Entity.find(
     { hasPage: true, ...(type ? { type } : {}) },
-    'name slug type hasPage description disambiguator tag',
+    'name slug type kind hasPage description disambiguator tag',
   )
     .sort({ name: 1 })
     .lean();
@@ -446,6 +439,9 @@ export async function loadEntityIndex(type) {
   return entities.map((entity) => ({
     ...entity,
     href: entityUrl(entity),
+    italic: isItalicEntity(entity),
     count: counts.get(idOf(entity)) || 0,
   }));
 }
+
+export { countEntityEntries, entityEntriesQuery };

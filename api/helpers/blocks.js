@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { cleanHtml } from './html.js';
 
 // Site HTML for the editor's custom blocks. Article cards and roundups get their reading entries
 // attached as `data.entry` before rendering (see backend/helpers/postContext.js); their stored
@@ -106,11 +107,13 @@ const articleTitle = (entry) =>
  * then when you read it and how to read it yourself. A paywalled article says so after the byline
  * and points to the gift link or the archived copy.
  * @param {Object} entry A reading or press entry (or a card's stored snapshot)
- * @param {{excerpts?: string[], archived?: Object}} [options] archived: url -> Wayback copy
+ * @param {{excerpts?: string[], archived?: Object, summary?: boolean}} [options] archived: url ->
+ *   Wayback copy. summary: show the entry's summary under the headline (a related article, which
+ *   has no post text of its own around it)
  */
 export function renderArticleCard(
   entry,
-  { excerpts = [], archived = {} } = {},
+  { excerpts = [], archived = {}, summary = false } = {},
 ) {
   if (!entry) {
     return '';
@@ -139,10 +142,14 @@ export function renderArticleCard(
         `<blockquote class="article-card-excerpt"><p>${escapeHtml(excerpt)}</p></blockquote>`,
     )
     .join('');
+  const summaryHtml =
+    summary && stripTags(entry.summary || '').trim()
+      ? `<div class="article-card-summary">${cleanHtml(entry.summary, ['a', 'b', 'strong', 'i', 'em', 'br', 'p'])}</div>`
+      : '';
   return `<aside class="article-card${paywalled ? ' paywalled' : ''}">
 <p class="article-card-meta">${articleMeta(entry, { paywalled })}</p>
 <p class="article-card-title">${articleTitle(entry)}</p>
-${quotes}${footer ? `<p class="article-card-footer">${footer}</p>` : ''}
+${summaryHtml}${quotes}${footer ? `<p class="article-card-footer">${footer}</p>` : ''}
 </aside>`;
 }
 
@@ -182,8 +189,10 @@ ${item.line ? `<p class="roundup-line">${escapeHtml(item.line)}</p>` : ''}
 }
 
 /**
- * A quote: a step smaller than your own words, with a light rule. Words you highlighted in it are
- * pulled out large. When the post links one article, "read in context" goes to the passage in it.
+ * A quote. A pull quote (style 'pull') is large, in the quote face. Any other quote is an excerpt:
+ * a step smaller than your own words, with a light rule, and words you highlighted in it are
+ * pulled out large, joined to the rest. When the post links one article, "read in context" goes
+ * to the passage in it.
  */
 export function renderQuote({ data }) {
   const parts = String(data.text || '')
@@ -203,7 +212,8 @@ export function renderQuote({ data }) {
   const context = data.contextUrl
     ? `<p class="quote-context"><a href="${escapeHtml(data.contextUrl)}">↗ read in context</a></p>`
     : '';
-  return `<figure class="quote${hasPull ? ' has-pull' : ''}"><blockquote>${paragraphs}</blockquote>${caption}${context}</figure>`;
+  const style = data.style === 'pull' ? 'pull' : 'excerpt';
+  return `<figure class="quote quote-${style}${hasPull ? ' has-pull' : ''}"><blockquote>${paragraphs}</blockquote>${caption}${context}</figure>`;
 }
 
 const NUMERIC = /^[-+(]?[$€£]?\s?[\d.,]+\s?(%|[KMB]|million|billion)?\)?$/i;

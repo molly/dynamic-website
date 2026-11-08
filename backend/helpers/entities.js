@@ -4,9 +4,10 @@ import { wikipediaArticleUrl } from '../../api/helpers/wikipedia.js';
 import { Entity, EntityRelation } from '../models/entity.model.js';
 import { accountKey, nameKey, normalizeDomain } from './entityKeys.js';
 
-// Fields returned wherever an entity is shown as a choice (pickers, "Did you mean...?").
+// Fields returned wherever an entity is shown as a choice (pickers, "Did you mean...?") or linked
+// from another page. kind: an outlet's name is in italics (isItalicEntity).
 export const ENTITY_SUMMARY_FIELDS =
-  'name slug type disambiguator hasPage accounts';
+  'name slug type kind disambiguator hasPage accounts';
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 

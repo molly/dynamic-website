@@ -15,7 +15,12 @@ import { isolateKeys } from './DocumentTool.js';
 // link and the post is fetched, with its images and video copied to the bucket, so the card
 // survives the original being deleted. Twitter posts are fetched by the local X helper (Twitter has
 // no free API), and can still be entered by hand when it isn't running.
-// Data: { posts: [post], screenshot } (post as in backend/helpers/socialFetch.js)
+// Data: { posts: [post], screenshot } (post as in backend/helpers/socialFetch.js). A post's text
+// can have highlights (<mark>, "highlight mine"), and `partial: true` marks it as only part of the
+// post, shown fading out.
+
+// What a post's text keeps: its links and line breaks, and your highlights
+const TEXT_TAGS = ['a', 'br', 'mark'];
 
 const blankPost = (network = 'twitter', fields = {}) => ({
   network,
@@ -50,6 +55,12 @@ export default class SocialPostTool {
 
   static get isReadOnlySupported() {
     return true;
+  }
+
+  // The posts are kept as they are: their text is cleaned when it's read from the card (TEXT_TAGS),
+  // and the editor's own sanitizing would drop its line breaks.
+  static get sanitize() {
+    return { posts: true, screenshot: true };
   }
 
   constructor({ data, readOnly }) {
@@ -112,11 +123,13 @@ export default class SocialPostTool {
       ${this.adding ? adder : ''}`;
   }
 
-  postHtml(post, index) {
+  // The fields of a post: name, handle and time, text, media, and its link. A hand-entered
+  // Twitter post can also have media added. Used for each post and for a hand-entered quoted post,
+  // each in its own .sp-body (save reads each body's own fields).
+  bodyHtml(post, { manual, headExtra = '' }) {
     const ro = this.readOnly ? ' disabled' : '';
     const field = (name, value, placeholder, type = 'text') =>
       `<input type="${type}" data-field="${name}" placeholder="${placeholder}" aria-label="${placeholder}" value="${escapeHtml(value ?? '')}"${type === 'datetime-local' ? ' step="60"' : ''}${ro}>`;
-    const isManual = post.network === 'twitter';
     const media = post.media
       .map(
         (item, m) => `
@@ -127,27 +140,51 @@ export default class SocialPostTool {
         </div>`,
       )
       .join('');
-    const card = post.linkCard?.url
-      ? `<p class="sp-link-card"><span>${escapeHtml(post.linkCard.domain || '')}</span> ${escapeHtml(post.linkCard.title || post.linkCard.url)} ${this.readOnly ? '' : '<button type="button" class="link-button sp-remove-card" aria-label="Remove link card">×</button>'}</p>`
-      : '';
-    const quoted = post.quoted
-      ? `<div class="sp-quoted"><strong>${escapeHtml(post.quoted.authorName)}</strong> @${escapeHtml(post.quoted.handle)} ${this.readOnly ? '' : '<button type="button" class="link-button sp-remove-quoted" aria-label="Remove quoted post">×</button>'}<div>${cleanHtml(post.quoted.textHtml)}</div></div>`
-      : '';
     return `
-      <div class="sp-post" data-index="${index}">
+      <div class="sp-body">
         <div class="sp-head">
           ${field('authorName', post.authorName, 'Name')}
           <span class="sp-at">@</span>${field('handle', post.handle, 'handle')}
           ${field('postedAt', toLocalInput(post.postedAt), 'Posted', 'datetime-local')}
-          ${this.readOnly ? '' : `<button type="button" class="link-button sp-remove-post" aria-label="Remove post">remove</button>`}
+          ${headExtra}
         </div>
-        <div class="sp-text" contenteditable="${!this.readOnly}" data-placeholder="Post text">${cleanHtml(post.textHtml)}</div>
+        <div class="sp-text" contenteditable="${!this.readOnly}" data-placeholder="Post text. Select words and use Highlight for “highlight mine”.">${cleanHtml(post.textHtml, TEXT_TAGS)}</div>
         ${media ? `<div class="sp-media">${media}</div>` : ''}
-        ${isManual && !this.readOnly ? '<label class="link-button sp-upload">+ image or video<input type="file" accept="image/*,video/*" class="sp-media-input" hidden></label> or <button type="button" class="link-button sp-media-url">use a link</button>' : ''}
-        ${card}${quoted}
+        ${manual && !this.readOnly ? '<label class="link-button sp-upload">+ image or video<input type="file" accept="image/*,video/*" class="sp-media-input" hidden></label> or <button type="button" class="link-button sp-media-url">use a link</button>' : ''}
         <div class="sp-meta">
           ${field('originalUrl', post.originalUrl, 'Link to the post', 'url')}
+          <label class="sp-partial"><input type="checkbox" data-partial${post.partial ? ' checked' : ''}${ro}> only part of the post (fades out)</label>
         </div>
+      </div>`;
+  }
+
+  postHtml(post, index) {
+    const manual = post.network === 'twitter';
+    const card = post.linkCard?.url
+      ? `<p class="sp-link-card"><span>${escapeHtml(post.linkCard.domain || '')}</span> ${escapeHtml(post.linkCard.title || post.linkCard.url)} ${this.readOnly ? '' : '<button type="button" class="link-button sp-remove-card" aria-label="Remove link card">×</button>'}</p>`
+      : '';
+    const remove = this.readOnly
+      ? ''
+      : '<button type="button" class="link-button sp-remove-quoted" aria-label="Remove quoted post">×</button>';
+    let quoted = '';
+    if (post.quoted && manual) {
+      // A hand-entered Twitter post's quoted post is entered by hand too
+      quoted = `<div class="sp-quoted sp-quoted-edit"><p class="sp-quoted-label">Quoting ${remove}</p>${this.bodyHtml(post.quoted, { manual: true })}</div>`;
+    } else if (post.quoted) {
+      quoted = `<div class="sp-quoted"><strong>${escapeHtml(post.quoted.authorName)}</strong> @${escapeHtml(post.quoted.handle)} ${remove}<div>${cleanHtml(post.quoted.textHtml, TEXT_TAGS)}</div></div>`;
+    } else if (manual && !this.readOnly) {
+      quoted =
+        '<p class="sp-add-quoted"><button type="button" class="link-button sp-add-quoted-post">+ quoted post</button></p>';
+    }
+    return `
+      <div class="sp-post" data-index="${index}">
+        ${this.bodyHtml(post, {
+          manual,
+          headExtra: this.readOnly
+            ? ''
+            : '<button type="button" class="link-button sp-remove-post" aria-label="Remove post">remove</button>',
+        })}
+        ${card}${quoted}
       </div>`;
   }
 
@@ -250,6 +287,12 @@ export default class SocialPostTool {
     return el ? this.data.posts[Number(el.dataset.index)] : null;
   }
 
+  // The post a control belongs to: a post, or the hand-entered post it quotes
+  bodyPostAt(target) {
+    const post = this.postAt(target);
+    return target.closest('.sp-quoted-edit') ? post?.quoted : post;
+  }
+
   onClick(evt) {
     const button = evt.target.closest('button');
     if (!button) {
@@ -293,8 +336,10 @@ export default class SocialPostTool {
     }
     if (button.classList.contains('sp-remove-post')) {
       this.data.posts.splice(this.data.posts.indexOf(post), 1);
+    } else if (button.classList.contains('sp-add-quoted-post')) {
+      post.quoted = blankPost('twitter');
     } else if (button.classList.contains('sp-remove-media')) {
-      post.media.splice(Number(button.dataset.media), 1);
+      this.bodyPostAt(button).media.splice(Number(button.dataset.media), 1);
     } else if (button.classList.contains('sp-remove-card')) {
       post.linkCard = null;
     } else if (button.classList.contains('sp-remove-quoted')) {
@@ -326,7 +371,7 @@ export default class SocialPostTool {
       });
       if (file) {
         this.data = this.save();
-        this.postAt(button).media.push({
+        this.bodyPostAt(button).media.push({
           type: file.contentType?.startsWith('video/') ? 'video' : 'image',
           src: file.url,
           alt: '',
@@ -350,7 +395,7 @@ export default class SocialPostTool {
       if (evt.target.classList.contains('sp-screenshot-input')) {
         this.data.screenshot = uploaded.url;
       } else {
-        const post = this.postAt(evt.target);
+        const post = this.bodyPostAt(evt.target);
         const type = (uploaded.contentType || file.type).startsWith('video/')
           ? 'video'
           : 'image';
@@ -362,6 +407,40 @@ export default class SocialPostTool {
     }
   }
 
+  // A post as its .sp-body has it now. Only the body's own fields: a quoted post's are in a body
+  // of their own, inside.
+  readBody(body, post) {
+    const own = (selector) =>
+      [...body.querySelectorAll(selector)].filter(
+        (node) => node.closest('.sp-body') === body,
+      );
+    const updated = {
+      ...post,
+      media: post.media.map((item, m) => ({
+        ...item,
+        alt: own(`[data-alt="${m}"]`)[0]?.value.trim() ?? item.alt,
+      })),
+      textHtml: cleanHtml(own('.sp-text')[0].innerHTML, TEXT_TAGS),
+    };
+    const partial = own('[data-partial]')[0];
+    if (partial) {
+      updated.partial = partial.checked || undefined;
+    }
+    for (const input of own('[data-field]')) {
+      const key = input.dataset.field;
+      const value = input.value.trim();
+      if (key === 'postedAt') {
+        updated.postedAt = fromLocalInput(value);
+      } else {
+        updated[key] = key === 'handle' ? value.replace(/^@/, '') : value;
+      }
+    }
+    if (updated.network === 'twitter') {
+      updated.profileUrl = twitterProfileUrl(updated);
+    }
+    return updated;
+  }
+
   save() {
     if (!this.wrapper) {
       return this.data;
@@ -371,25 +450,13 @@ export default class SocialPostTool {
       if (!el) {
         return post;
       }
-      const updated = {
-        ...post,
-        media: post.media.map((item, m) => ({
-          ...item,
-          alt: el.querySelector(`[data-alt="${m}"]`)?.value.trim() ?? item.alt,
-        })),
-        textHtml: cleanHtml(el.querySelector('.sp-text').innerHTML),
-      };
-      for (const input of el.querySelectorAll('[data-field]')) {
-        const key = input.dataset.field;
-        const value = input.value.trim();
-        if (key === 'postedAt') {
-          updated.postedAt = fromLocalInput(value);
-        } else {
-          updated[key] = key === 'handle' ? value.replace(/^@/, '') : value;
-        }
-      }
-      if (updated.network === 'twitter') {
-        updated.profileUrl = twitterProfileUrl(updated);
+      const updated = this.readBody(
+        el.querySelector(':scope > .sp-body'),
+        post,
+      );
+      const quotedBody = el.querySelector('.sp-quoted-edit > .sp-body');
+      if (quotedBody && post.quoted) {
+        updated.quoted = this.readBody(quotedBody, post.quoted);
       }
       return updated;
     });

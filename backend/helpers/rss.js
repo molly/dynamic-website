@@ -1,4 +1,3 @@
-import { decode } from 'html-entities';
 import fs from 'node:fs';
 import pug from 'pug';
 import { getRssReadingFromDb } from '../../api/client.js';
@@ -9,6 +8,7 @@ import { toISOWithoutMillis } from '../../pug/js/toISO.js';
 import { ShortformEntry } from '../models/entry.model.js';
 import { FeedEntry } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
+import { rssHtml } from './rssHtml.js';
 
 // Checks that the directory exists and then writes the file
 function writeRssFile(path, xml) {
@@ -43,7 +43,7 @@ export async function generateRssForFeed() {
       new URL('../../pug/views/rss/feedEntry.pug', import.meta.url).pathname,
     );
     for (let entry of entries) {
-      entry.html = decode(
+      entry.html = rssHtml(
         compiledPug({
           entry,
           options: { isRss: true, hasImage: hasImage(entry) },
@@ -81,11 +81,13 @@ export async function generateRssForMicro() {
     );
     for (let entry of entries) {
       entry.__t = 'MicroEntry';
-      entry.html = compiledPug({
-        entry,
-        options: { isRss: true, hasImage: hasImage(entry) },
-        toISOWithoutMillis,
-      });
+      entry.html = rssHtml(
+        compiledPug({
+          entry,
+          options: { isRss: true, hasImage: hasImage(entry) },
+          toISOWithoutMillis,
+        }),
+      );
     }
 
     const xml = pug.renderFile(

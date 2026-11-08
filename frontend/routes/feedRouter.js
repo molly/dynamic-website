@@ -1,5 +1,6 @@
 import express from 'express';
-import { getFeedEntries, hydrateFeedEntry } from '../../api/feed.js';
+import { FEED_PAGE_SIZE, feedPageOf, getFeedEntries } from '../../api/feed.js';
+import { shortDate } from '../../api/helpers/entryMeta.js';
 import { FEED_FILTERS, feedFilter } from '../../api/helpers/feedFilters.js';
 import {
   PRESS_CARD_FIELDS,
@@ -21,7 +22,7 @@ import { authenticated } from '../../backend/routes/auth.js';
 import { sanitizeTag } from '../js/helpers/sanitize.js';
 
 const router = express.Router();
-const LIMIT = 10;
+const LIMIT = FEED_PAGE_SIZE;
 
 const pageNumber = (value) => Math.max(1, parseInt(value, 10) || 1);
 
@@ -118,6 +119,68 @@ function pressCardFields(press) {
 }
 
 // Metadata editor for feed entries that aren't micro posts: tags, threads, about
+const PRESS_KIND_NAMES = {
+  article: 'Article',
+  podcast: 'Podcast',
+  radio: 'Radio',
+  video: 'Video',
+  tv: 'TV',
+  talk: 'Talk',
+  freelance: 'Freelance (I wrote it)',
+};
+
+/**
+ * What the tagger shows of the entry it's tagging, like the head of an editor: what kind of entry
+ * it is, its title (linked to the original), where it's from, when it was added, and its summary.
+ * source: [{ text, italic }], a publication's name in italics. blurb: HTML you wrote or the
+ * newsletter's excerpt.
+ * @param {Object} entry A plain feed entry, its shortform or press populated
+ * @param {string} entryType
+ */
+function taggerHeader(entry, entryType) {
+  const added = `added ${shortDate(entry.createdAt)}`;
+  if (entryType === 'citationNeeded') {
+    return {
+      label: 'Citation Needed issue',
+      kind: 'issue',
+      title: entry.title,
+      href: `https://www.citationneeded.news/${entry.slug}`,
+      source: [{ text: 'Citation Needed', italic: true }, { text: added }],
+      blurb: entry.excerpt || null,
+    };
+  }
+  if (entryType === 'readingShortform') {
+    const article = entry.shortform || {};
+    return {
+      label: 'Reading',
+      kind: 'reading',
+      title: article.title,
+      href: article.href,
+      source: [
+        article.author ? { text: article.author } : null,
+        article.work
+          ? { text: article.work, italic: article.workItalics !== false }
+          : null,
+        article.publisher ? { text: article.publisher } : null,
+        { text: added },
+      ].filter(Boolean),
+      blurb: article.summary || null,
+    };
+  }
+  const press = entry.press || {};
+  return {
+    label: `Press · ${PRESS_KIND_NAMES[press.kind] || press.kind || 'piece'}`,
+    kind: 'press',
+    title: press.title,
+    href: press.href,
+    source: [
+      press.work ? { text: press.work, italic: true } : null,
+      { text: added },
+    ].filter(Boolean),
+    blurb: null,
+  };
+}
+
 const TAGGER_MODELS = {
   citationNeeded: FeedEntryCitationNeeded,
   readingShortform: FeedEntryReading,
@@ -149,20 +212,27 @@ router.get(
     } else if (entryType === 'press') {
       await entry.populate({ path: 'press', model: PressEntry });
     }
-    // Captured before hydrateFeedEntry, which reshapes the entry for display.
     const pickerData = {
       feedEntryId: entry._id,
+      entryType,
       createdAt: entry.createdAt,
       threads: entry.threads.map((t) => t.toJSON()),
       about: entry.about.map((e) => e.toJSON()),
     };
+    const header = taggerHeader(entry.toObject(), entryType);
+    const page = await feedPageOf(entry);
     res.render('feed/tagger.pug', {
-      // hydrateFeedEntry works on plain objects, as the feed's lean queries give it.
-      entry: hydrateFeedEntry(entry.toObject()),
+      title: header.title || 'Tagger',
+      adminPage: 'tagger',
+      header,
+      // "← all posts" goes back to the page of the feed the entry is on
+      feedHref: page > 1 ? `/feed?page=${page}` : '/feed',
+      entry: entry.toObject(),
       entryType,
       pickerData,
       press: entryType === 'press' ? pressCardFields(entry.press) : null,
       pressKinds: PRESS_KINDS,
+      pressKindNames: PRESS_KIND_NAMES,
       pressRoles: PRESS_ROLES,
     });
   },

@@ -60,6 +60,22 @@ export const hydrateFeedEntry = (entry, context = {}) => {
   return entry;
 };
 
+// Entries on a page of the feed (/feed)
+export const FEED_PAGE_SIZE = 10;
+
+/**
+ * The page of the feed (/feed, newest first, unfiltered) an entry is on.
+ * @param {{createdAt: Date}} feedEntry
+ * @returns {Promise<number>}
+ */
+export async function feedPageOf(feedEntry) {
+  const newer = await FeedEntry.countDocuments({
+    deletedAt: { $exists: false },
+    createdAt: { $gt: feedEntry.createdAt },
+  });
+  return Math.floor(newer / FEED_PAGE_SIZE) + 1;
+}
+
 export const getFeedEntries = async ({
   query = {},
   start = 0,

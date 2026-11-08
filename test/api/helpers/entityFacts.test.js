@@ -1,5 +1,7 @@
 import {
   accountRows,
+  billStatusLabel,
+  congressOn,
   elsewhereRows,
   formatUsd,
   formerNames,
@@ -126,5 +128,33 @@ describe('entity page details', () => {
     expect(
       formerNames({ aliases: [{ name: 'FB', kind: 'other' }] }),
     ).toBeNull();
+  });
+
+  it('knows which Congress is sitting', () => {
+    expect(congressOn(new Date('2026-11-08T12:00:00-05:00'))).toBe(119);
+    expect(congressOn(new Date('2025-01-03T12:00:00-05:00'))).toBe(119);
+    expect(congressOn(new Date('2025-01-02T12:00:00-05:00'))).toBe(118);
+    expect(congressOn(new Date('1789-03-04T12:00:00-05:00'))).toBe(1);
+  });
+
+  it('shows a bill from an ended Congress that got no further as having died', () => {
+    const now = new Date('2026-11-08T12:00:00-05:00');
+    const label = (bill) => billStatusLabel(bill, now);
+    expect(label({ billStatus: 'introduced', congress: 119 })).toBe(
+      'introduced',
+    );
+    expect(label({ billStatus: 'introduced', congress: 118 })).toBe(
+      'died in committee',
+    );
+    expect(label({ billStatus: 'passed House', congress: 118 })).toBe(
+      'passed House, then died',
+    );
+    expect(label({ billStatus: 'became law', congress: 118 })).toBe(
+      'became law',
+    );
+    expect(label({ billStatus: 'vetoed', congress: 118 })).toBe('vetoed');
+    // Without a Congress (a state bill), as saved
+    expect(label({ billStatus: 'introduced' })).toBe('introduced');
+    expect(label({ congress: 118 })).toBeNull();
   });
 });

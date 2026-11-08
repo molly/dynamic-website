@@ -132,8 +132,11 @@ export function preparePostForDisplay(
       prepared.fullPassage = postPage && prepared.data?.display === 'full';
     }
     if (prepared.type === 'comparison') {
+      // Blocks in a comparison know it, for anything they show differently there
       const side = (slot) =>
-        slot?.block ? { ...slot, block: prepare(slot.block) } : slot;
+        slot?.block
+          ? { ...slot, block: { ...prepare(slot.block), inComparison: true } }
+          : slot;
       prepared.data = {
         ...prepared.data,
         left: side(prepared.data.left),

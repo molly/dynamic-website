@@ -72,6 +72,25 @@ describe('roundup', () => {
 });
 
 describe('quotes', () => {
+  it('marks a quote as a pull quote, or otherwise an excerpt', () => {
+    expect(
+      renderQuote({ data: { text: 'Big words', style: 'pull' } }),
+    ).toContain('<figure class="quote quote-pull">');
+    expect(
+      renderQuote({
+        data: { text: '<mark>Pulled out.</mark> The rest.', style: 'excerpt' },
+      }),
+    ).toContain(
+      '<figure class="quote quote-excerpt has-pull"><blockquote><p class="pull-quote">Pulled out.</p><p>The rest.</p></blockquote>',
+    );
+    expect(renderQuote({ data: { text: 'No style' } })).toContain(
+      '<figure class="quote quote-excerpt">',
+    );
+    expect(renderQuote({ data: { text: 'x', style: 'other' } })).toContain(
+      '<figure class="quote quote-excerpt">',
+    );
+  });
+
   it('pulls highlighted words out large, and links to the passage', () => {
     const html = renderQuote({
       data: {
@@ -81,7 +100,7 @@ describe('quotes', () => {
       },
     });
     expect(html).toEqual(
-      '<figure class="quote has-pull"><blockquote><p class="pull-quote">If you are reading this</p><p>On some level, you know this.</p></blockquote><figcaption><cite>– Laura Jedeed</cite></figcaption><p class="quote-context"><a href="https://slate.com/x#:~:text=If">↗ read in context</a></p></figure>',
+      '<figure class="quote quote-excerpt has-pull"><blockquote><p class="pull-quote">If you are reading this</p><p>On some level, you know this.</p></blockquote><figcaption><cite>– Laura Jedeed</cite></figcaption><p class="quote-context"><a href="https://slate.com/x#:~:text=If">↗ read in context</a></p></figure>',
     );
   });
 
@@ -119,6 +138,26 @@ describe('images', () => {
     expect(html).toContain(
       '<p class="media-alt">FCC page saying the record is closed</p>',
     );
+  });
+
+  it('in a comparison, gives a short source line and leaves out the alt text', () => {
+    const html = formatMedia({
+      inComparison: true,
+      data: { file: { url: 'https://s/shot.png' }, alt: 'Reuters headline' },
+      tunes: {
+        imageSource: {
+          sourceName: 'Reuters',
+          sourceUrl: 'https://www.reuters.com/x',
+          screenshot: true,
+          capturedAt: '2025-11-01',
+        },
+      },
+      archived: { 'https://www.reuters.com/x': 'https://web.archive.org/r' },
+    });
+    expect(html).toContain(
+      '<p class="media-source">Reuters · Nov 1, 2025 · <a href="https://www.reuters.com/x">original</a> · <a href="https://web.archive.org/r">archived</a></p>',
+    );
+    expect(html).not.toContain('media-alt');
   });
 
   it('shows a screenshot’s alt text with its line breaks', () => {

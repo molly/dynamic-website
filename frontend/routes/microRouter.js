@@ -1,7 +1,10 @@
 import express from 'express';
+import { feedPageOf } from '../../api/feed.js';
 import { getMicroEntries, getMicroEntry } from '../../api/micro.js';
 import { attachFeedMeta } from '../../backend/helpers/feedMeta.js';
 import { loadPostPage } from '../../backend/helpers/postPage.js';
+import { FeedEntry } from '../../backend/models/feed/feedEntry.model.js';
+import MicroEntry from '../../backend/models/micro/microEntry.model.js';
 import { Tag } from '../../backend/models/tag.model.js';
 import { Webmention } from '../../backend/models/webmention.model.js';
 import { authenticated } from '../../backend/routes/auth.js';
@@ -19,13 +22,34 @@ router.get('/login', (req, res) => {
   }
 });
 
+// "← all posts" goes back to the page of the feed the post is on (a new post is on the first)
 router.get(
   '/editor/?:slug?',
   authenticated({ redirectTo: '/micro/login' }),
-  (req, res) => {
-    res.render('micro/editor.pug');
+  async (req, res, next) => {
+    try {
+      res.render('micro/editor.pug', {
+        feedHref: await feedHrefFor(req.params.slug),
+      });
+    } catch (err) {
+      next(err);
+    }
   },
 );
+
+async function feedHrefFor(slug) {
+  const micro = slug
+    ? await MicroEntry.findOne({ slug: String(slug) }, '_id').lean()
+    : null;
+  const feedEntry = micro
+    ? await FeedEntry.findOne(
+        { micro: micro._id, deletedAt: { $exists: false } },
+        'createdAt',
+      ).lean()
+    : null;
+  const page = feedEntry ? await feedPageOf(feedEntry) : 1;
+  return page > 1 ? `/feed?page=${page}` : '/feed';
+}
 
 // View
 // All micro posts feed

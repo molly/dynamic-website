@@ -81,6 +81,21 @@ ins.correction {
   text-decoration: none;
 }
 
+/* A related article's summary, under its headline */
+.article-card-summary {
+  margin: 0 0 0.4em;
+  font-size: 0.92em;
+  line-height: 1.45;
+}
+
+.article-card-summary p {
+  margin: 0 0 0.4em;
+}
+
+.article-card-summary > :last-child {
+  margin-bottom: 0;
+}
+
 .article-card-title a:hover {
   text-decoration: underline;
 }
@@ -328,8 +343,10 @@ ins.correction {
   margin: 0 0 0.4em;
 }
 
+/* Handles are quiet: grey, no underline */
 .social-author a {
   color: var(--timestamp-color);
+  text-decoration: none;
 }
 
 .social-network {
@@ -344,6 +361,40 @@ ins.correction {
 
 .social-text {
   margin: 0.4em 0;
+}
+
+/* A post's paragraphs: a little space between, less than a blank line */
+.social-card .social-text p {
+  margin: 0 0 0.55em;
+}
+
+.social-card .social-text p:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Only part of the post: its last lines fade out */
+.social-text-partial {
+  position: relative;
+  mask-image: linear-gradient(
+    to bottom,
+    #000 max(0px, calc(100% - 2.9em)),
+    rgb(0 0 0 / 8%) 100%
+  );
+}
+
+/* For screen readers only: the fade says it to everyone else */
+.social-excerpt-note {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.social-text mark {
+  background-color: var(--highlight, #fdf0b5);
+  color: inherit;
 }
 
 .social-media {
@@ -379,7 +430,6 @@ ins.correction {
   border-radius: 4px;
 }
 
-.alt-badge,
 .social-duration {
   position: absolute;
   left: 0.5em;
@@ -444,23 +494,117 @@ ins.correction {
   margin-left: auto;
 }
 
-.social-thread-posts {
+/* A single post's footer: ruled off, its date and then its links, each on a line of its own */
+.social-card:not(.social-thread) > .social-footer {
+  flex-direction: column;
+  gap: 0.15em;
+  margin-top: 0.8em;
+  padding-top: 0.6em;
+  border-top: 1px solid var(--hr-color);
+}
+
+.social-card:not(.social-thread) > .social-footer .social-links {
+  margin-left: 0;
+  font-family: var(--block-mono);
+}
+
+/* Scoped to .social-card so it wins over the page's own list spacing (.entry-content ol) */
+.social-card .social-thread-posts {
   margin: 0;
-  padding: 0 0 0 1em;
+  padding: 0;
   list-style: none;
-  border-left: 2px solid var(--hr-color);
+}
+
+/* Each post hangs from a rail: a dot by its author, joined to the next post's; the last post's
+   dot is filled in the accent color */
+.social-thread-post {
+  position: relative;
+  padding-left: 1.4em;
+}
+
+.social-thread-post::before {
+  position: absolute;
+  top: 0.45em;
+  left: 0;
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  background: var(--quote-rule, #c9c1ea);
+  content: '';
+}
+
+.social-thread-post:last-child::before {
+  background: var(--accent-color-purple);
+}
+
+.social-thread-post:not(:last-child)::after {
+  position: absolute;
+  top: 1.25em;
+  bottom: -0.95em;
+  left: calc(0.3em - 1px);
+  width: 2px;
+  background: var(--hr-color);
+  content: '';
+}
+
+.social-thread-post + .social-thread-post {
+  margin-top: 1.1em;
 }
 
 .social-card .social-thread-head {
-  margin: 0 0 0.25em;
+  margin: 0 0 0.2em;
 }
 
+/* Handles and dates are quiet: grey, no underline */
+.social-thread-head .social-author a,
+.social-thread-head > a {
+  color: var(--timestamp-color);
+  text-decoration: none;
+}
+
+.social-thread-head,
 .social-thread-head > a {
   color: var(--timestamp-color);
 }
 
-.social-thread-post + .social-thread-post {
-  margin-top: 0.75em;
+.social-thread-head strong {
+  color: var(--main-text-color);
+}
+
+.social-card .social-replying {
+  margin: 0 0 0.3em;
+  font-size: 0.9em;
+  color: var(--timestamp-color);
+}
+
+.social-replying a {
+  color: var(--main-text-color);
+  text-decoration-color: var(--hr-color);
+}
+
+/* A thread's header and footer run the card's full width, ruled off from its posts */
+.social-thread > .social-head {
+  align-items: center;
+  margin: -0.85em -1em 0.9em;
+  padding: 0.7em 1em;
+  border-bottom: 1px solid var(--hr-color);
+  color: var(--timestamp-color);
+}
+
+.social-thread > .social-footer {
+  margin: 0.9em -1em -0.85em;
+  padding: 0.6em 1em;
+  border-top: 1px solid var(--hr-color);
+  font-family: var(--block-mono);
+}
+
+.social-thread-count {
+  font-size: 0.85em;
+}
+
+.social-thread .social-network {
+  align-self: center;
+  color: var(--main-text-color);
 }
 
 /* Comparisons */
@@ -472,18 +616,30 @@ ins.correction {
   margin: 1.25em 0;
 }
 
-.comparison-side > :first-child:not(.comparison-label),
-.comparison-label + * {
+/* Both sides start right under their labels, level with each other. Scoped to .comparison so it
+   wins over the page's own spacing for images and cards (e.g. .entry-content .media-wrapper). */
+.comparison .comparison-side > :first-child:not(.comparison-label),
+.comparison .comparison-side > .comparison-label + * {
   margin-top: 0;
 }
 
 .comparison-label {
-  margin: 0 0 0.4em;
+  margin: 0 0 0.5em;
   font-family: var(--block-mono);
   font-size: 0.7em;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--timestamp-color);
+}
+
+/* An image in a comparison always sits in a frame, with where it came from underneath. Its own
+   "with border" still borders the image inside the frame; switch that off for just the frame. */
+.comparison-side .media-wrapper > a {
+  display: block;
+  padding: 1em;
+  border: 1px solid var(--hr-color);
+  background: none;
 }
 
 @media screen and (max-width: 600px) {

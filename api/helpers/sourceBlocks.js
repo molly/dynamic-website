@@ -197,7 +197,7 @@ function renderSocialMedia(media = [], screenshot) {
     if (item.type === 'video') {
       return `<div class="social-video"><video controls preload="metadata" src="${escapeHtml(item.src)}"${item.poster ? ` poster="${escapeHtml(item.poster)}"` : ''}${item.alt ? ` aria-label="${escapeHtml(item.alt)}"` : ''}></video>${item.duration ? `<span class="social-duration">${formatDuration(item.duration)}</span>` : ''}</div>`;
     }
-    return `<a class="social-image" href="${escapeHtml(item.src)}"><img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt || '')}" loading="lazy">${item.alt ? '<span class="alt-badge" aria-hidden="true">ALT</span>' : ''}</a>`;
+    return `<a class="social-image" href="${escapeHtml(item.src)}"><img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt || '')}" loading="lazy"></a>`;
   });
   return `<div class="social-media count-${Math.min(media.length, 4)}">${items.join('')}</div>`;
 }
@@ -211,23 +211,55 @@ const authorLine = (post) =>
       : ''
   }</span>`;
 
+// A post's text keeps its links and line breaks, and your highlights ("highlight mine")
+const POST_TEXT_TAGS = ['a', 'br', 'mark'];
+
+// A post's text, its blank lines made paragraphs (with less space than an empty line). One that's
+// only part of the post fades out, with a note for screen readers.
+function postText(post) {
+  const paragraphs = cleanHtml(post.textHtml, POST_TEXT_TAGS)
+    .split(/(?:\s*<br>\s*){2,}/)
+    .filter((p) => p.trim())
+    .map((p) => `<p>${p}</p>`)
+    .join('');
+  return post.partial
+    ? `<div class="social-text social-text-partial">${paragraphs}<span class="social-excerpt-note"> (excerpt)</span></div>`
+    : `<div class="social-text">${paragraphs}</div>`;
+}
+
+// How many highlights the posts on a card (and the posts they quote) have
+const highlightCount = (posts) =>
+  posts
+    .flatMap((post) => [post.textHtml, post.quoted?.textHtml])
+    .reduce(
+      (n, text) => n + (String(text || '').match(/<mark>/g) || []).length,
+      0,
+    );
+
 function renderPostBody(post, screenshot) {
   const card = post.linkCard?.url
     ? `<a class="social-link-card" href="${escapeHtml(post.linkCard.url)}"><span class="social-link-domain">${escapeHtml(post.linkCard.domain || '')}</span><span class="social-link-title">${escapeHtml(post.linkCard.title || post.linkCard.url)}</span></a>`
     : '';
   const quoted = post.quoted
-    ? `<div class="social-quoted"><p class="social-head">${authorLine(post.quoted)}</p><div class="social-text">${cleanHtml(post.quoted.textHtml)}</div>${renderSocialMedia(post.quoted.media, screenshot)}</div>`
+    ? `<div class="social-quoted"><p class="social-head">${authorLine(post.quoted)}</p>${postText(post.quoted)}${renderSocialMedia(post.quoted.media, screenshot)}</div>`
     : '';
-  return `<div class="social-text">${cleanHtml(post.textHtml)}</div>${renderSocialMedia(post.media, screenshot)}${card}${quoted}`;
+  return `${postText(post)}${renderSocialMedia(post.media, screenshot)}${card}${quoted}`;
 }
 
 // The card's last line: when it was posted (single posts; a thread dates each post) on the left,
 // and the original, archived and screenshot links on the right.
-function cardFooter(originalUrl, screenshot, archived = {}, when = '') {
+function cardFooter(
+  originalUrl,
+  screenshot,
+  archived = {},
+  when = '',
+  { highlights = 0 } = {},
+) {
   const links = [
     link(originalUrl, 'original'),
     link(archived[originalUrl], 'archived'),
     link(screenshot, 'screenshot'),
+    highlights ? (highlights > 1 ? 'highlights mine' : 'highlight mine') : '',
   ]
     .filter(Boolean)
     .join(' · ');
@@ -245,23 +277,37 @@ export function renderSocialPost({ data, archived = {} }) {
   const network = NETWORK_LABELS[posts[0].network] || '';
   if (posts.length === 1) {
     const [post] = posts;
-    const when = postedTimeTag(post.postedAt, 'social');
+    const when = postedTimeTag(post.postedAt, 'date', 'LLL d, yyyy');
     return `<figure class="social-card network-${escapeHtml(post.network)}">
 <header class="social-head">${authorLine(post)}<span class="social-network">${escapeHtml(network)}</span></header>
 ${renderPostBody(post, data.screenshot)}
-${cardFooter(post.originalUrl, data.screenshot, archived, when)}
+${cardFooter(post.originalUrl, data.screenshot, archived, when, { highlights: highlightCount(posts) })}
 </figure>`;
   }
+  // A thread is a reply chain: each post replies to the one before. "replying to @…" shows where
+  // the author changes, not where someone continues their own thread (as on x.com).
   const items = posts
-    .map((post) => {
+    .map((post, i) => {
       const date = postedTimeTag(post.postedAt, 'monthDay', 'LLL d');
-      return `<li class="social-thread-post"><p class="social-thread-head">${authorLine(post)}${date ? ` · <a href="${escapeHtml(post.originalUrl || '')}">${date}</a>` : ''}</p>${renderPostBody(post, data.screenshot)}</li>`;
+      const dated = date
+        ? ` · ${post.originalUrl ? `<a href="${escapeHtml(post.originalUrl)}">${date}</a>` : date}`
+        : '';
+      const previous = posts[i - 1];
+      const replyingTo =
+        previous?.handle && previous.handle !== post.handle
+          ? `<p class="social-replying">replying to ${
+              previous.profileUrl
+                ? `<a href="${escapeHtml(previous.profileUrl)}">@${escapeHtml(previous.handle)}</a>`
+                : `@${escapeHtml(previous.handle)}`
+            }</p>`
+          : '';
+      return `<li class="social-thread-post"><p class="social-thread-head">${authorLine(post)}${dated}</p>${replyingTo}${renderPostBody(post, data.screenshot)}</li>`;
     })
     .join('');
   return `<figure class="social-card social-thread network-${escapeHtml(posts[0].network)}">
-<header class="social-head"><span>Thread · ${posts.length} posts</span><span class="social-network">${escapeHtml(network)}</span></header>
+<header class="social-head"><span class="social-thread-count">Thread · ${posts.length} posts</span><span class="social-network">${escapeHtml(network)}</span></header>
 <ol class="social-thread-posts">${items}</ol>
-${cardFooter(posts[0].originalUrl, data.screenshot, archived)}
+${cardFooter(posts[0].originalUrl, data.screenshot, archived, '', { highlights: highlightCount(posts) })}
 </figure>`;
 }
 

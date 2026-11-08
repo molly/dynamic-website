@@ -14,7 +14,6 @@ block body
         li
           span(aria-current="page") entities
     h1.page-title Entities
-    p.page-subtitle The people, organizations, committees, cases and bills I cover.
     each group in groups
       section.entity-index-group
         h2.entity-section-heading
@@ -23,7 +22,7 @@ block body
         ul.entity-index-list
           each entity in group.entities.slice(0, 12)
             li
-              a(href=entity.href) #{entity.name}
+              a(href=entity.href, class=entity.italic ? 'italic' : null) #{entity.name}
               if entity.count
                 span.entity-count  #{entity.count}
         if group.entities.length > 12

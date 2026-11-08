@@ -19,9 +19,15 @@ block body
   //- The entity's own form holds no fields: they're spread over both columns, around the
   //- relation form (forms can't nest). The Save button submits it with form="entity-form".
   form#entity-form(novalidate)
-  .editor-body.entity-editor
+  //- Without a public page (only for @mentions), the editor says so and its name is greyed out.
+  //- entityForm.js keeps this in step with the "has a page" checkbox; the default is the model's.
+  - var isPublic = pageData.entity && pageData.entity.hasPage !== undefined ? pageData.entity.hasPage : pageData.type !== 'person'
+  .editor-body.entity-editor(class=isPublic ? null : 'entity-editor-private')
     main.entity-editor-main
-      p.entity-editor-type #{typeName}
+      p.entity-editor-type
+        | #{typeName}
+        span.entity-private-badge not public
+      p.entity-private-note No public page: it’s only used for @mentions.
       #entity-head
       .entity-matches(hidden)
       p.entity-error(hidden, role="alert")
@@ -36,6 +42,20 @@ block body
           .dialog-buttons
             button#relation-cancel.link-button(type="button", hidden) cancel edit
             button(type="submit") Save relation
+      if pageData.entity
+        section#entity-remove.entity-editor-section
+          h2.entity-editor-heading Delete or merge
+          p.entity-remove-actions
+            button#entity-delete.link-button(type="button") delete this entity…
+            |  · 
+            button#entity-merge.link-button(type="button") merge it into another entity…
+          form#entity-merge-form.entity-merge-form(hidden)
+            p.field-help Everything that mentions or links this entity will point at the one you choose, which also gets its accounts, other names and anything else it doesn’t have. Then this one is deleted.
+            select#entity-merge-into(placeholder="Entity to keep")
+            .dialog-buttons
+              button#entity-merge-cancel.link-button(type="button") cancel
+              button(type="submit") Merge
+          p.entity-error.entity-remove-error(hidden, role="alert")
     aside.editor-side-panel#entity-side-fields
   footer.editor-actionbar
     span.side-hint #{pageData.entity ? '' : 'Saving creates it; relations can be added after.'}

@@ -4,7 +4,7 @@ import Header from '@editorjs/header';
 import ImageBlock from '../tools/ImageBlock.js';
 import InlineCode from '@editorjs/inline-code';
 import List from '@editorjs/list';
-import Quote from '@editorjs/quote';
+import QuoteBlock from '../tools/QuoteBlock.js';
 import RawTool from '@editorjs/raw';
 import MentionsTool from '../MentionsTool.js';
 import ArticleTool from '../tools/ArticleTool.js';
@@ -18,6 +18,7 @@ import ImageSourceTune from '../tools/ImageSourceTune.js';
 import MediaTool from '../tools/MediaTool.js';
 import RoundupTool from '../tools/RoundupTool.js';
 import SocialPostTool from '../tools/SocialPostTool.js';
+import { CAPTION_INLINE_TOOLS } from './plainPaste.js';
 
 export const editorToolConfig = {
   header: Header,
@@ -37,8 +38,10 @@ export const editorToolConfig = {
       },
     },
   },
+  // Captions keep links, bold and italic (plainPaste.js)
   gallery: {
     class: ImageGallery,
+    inlineToolbar: CAPTION_INLINE_TOOLS,
     tunes: ['imageSource'],
     config: {
       endpoints: {
@@ -49,6 +52,7 @@ export const editorToolConfig = {
   },
   image: {
     class: ImageBlock,
+    inlineToolbar: CAPTION_INLINE_TOOLS,
     tunes: ['imageSource'],
     config: {
       endpoints: {
@@ -76,18 +80,23 @@ export const editorToolConfig = {
   mentions: MentionsTool,
   highlight: HighlightTool,
   correction: CorrectionTool,
-  quote: Quote,
+  // Highlight in an excerpt pulls those words out large (QuoteBlock.js)
+  quote: {
+    class: QuoteBlock,
+    inlineToolbar: ['highlight', 'link', 'bold', 'italic'],
+  },
   raw: RawTool,
   article: ArticleTool,
   roundup: RoundupTool,
   table: { class: DataTable, inlineToolbar: true },
-  media: MediaTool,
+  media: { class: MediaTool, inlineToolbar: CAPTION_INLINE_TOOLS },
   // Highlight in the excerpt is "highlight mine"
   document: {
     class: DocumentTool,
     inlineToolbar: ['highlight', 'link', 'bold', 'italic'],
   },
-  socialPost: SocialPostTool,
+  // Highlight in a post's text is "highlight mine"
+  socialPost: { class: SocialPostTool, inlineToolbar: ['highlight'] },
   comparison: {
     class: ComparisonTool,
     inlineToolbar: ['highlight', 'link', 'bold', 'italic'],
@@ -99,7 +108,7 @@ export const editorToolConfig = {
 editorToolConfig.comparison.config = {
   tools: {
     image: { ...editorToolConfig.image, title: 'Image' },
-    socialPost: { class: SocialPostTool, title: 'Social post' },
+    socialPost: { ...editorToolConfig.socialPost, title: 'Social post' },
     document: { ...editorToolConfig.document, title: 'Document' },
     article: { class: ArticleTool, title: 'Linked article' },
   },

@@ -27,7 +27,11 @@ import {
   hydrateAndSortSocialLinks,
 } from './helpers/socialMedia.js';
 import { formatTimestamp, hydrateTimestamps } from './helpers/timestamps.js';
-import { hydrateUpdates, linkCorrections } from './helpers/updates.js';
+import {
+  hydrateUpdates,
+  linkCorrections,
+  liveRange,
+} from './helpers/updates.js';
 
 const edjsParser = EditorJSHtml({
   gallery: formatGallery,
@@ -157,13 +161,19 @@ export const hydrateMicroEntry = (
       entry.inReplyTo.networkLabel = NETWORK_LABELS[entry.inReplyTo.network];
     }
     if (entry.live?.status) {
-      // The newest live update, else the last edit, is when the post last changed.
-      const latest = entry.updates.find((u) => u.kind === 'live');
+      // The newest live update (updates are oldest first), else the last edit, is when the post
+      // last changed.
+      const latest = entry.updates.findLast((u) => u.kind === 'live');
       entry.live.lastUpdateAt = latest ? new Date(latest.at) : entry.updatedAt;
       entry.live.lastUpdate = formatTimestamp(entry.live.lastUpdateAt);
       if (entry.live.startedAt) {
         entry.live.started = formatTimestamp(entry.live.startedAt);
       }
+      // "Oct 29, 5:30–5:52 pm EDT": from the first post to the last live update, once it's ended
+      entry.live.range = liveRange(
+        entry.live.startedAt || entry.createdAt,
+        entry.live.status === 'ended' && latest ? latest.at : null,
+      );
     }
     if (entry.socialLinks?.length) {
       entry.socialLinks = hydrateAndSortSocialLinks(entry.socialLinks);

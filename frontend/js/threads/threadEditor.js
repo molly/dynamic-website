@@ -17,7 +17,7 @@ import {
 import { escapeHtml } from '../helpers/escapeHtml.js';
 import { insertPlainText } from '../helpers/plainPaste.js';
 import { chooseLinkedFile } from '../helpers/upload.js';
-import { buildThread } from './buildThread.js';
+import { buildThread, leftOutOfThreads } from './buildThread.js';
 
 export const SOCIAL_NETWORKS = ['bluesky', 'mastodon', 'twitter'];
 
@@ -388,6 +388,12 @@ export class ThreadEditors {
     }
 
     const problems = threadProblems(thread, network);
+    // Blocks no platform gets (raw HTML, tables, video and audio), so they're not missed by surprise
+    const leftOut = leftOutOfThreads(this.mainPost);
+    const leftOutText =
+      leftOut.length > 1
+        ? `${leftOut.slice(0, -1).join(', ')} and ${leftOut.at(-1)}`
+        : leftOut[0];
     panel.innerHTML = `
       ${notice}
       <div class="side-section">
@@ -396,6 +402,14 @@ export class ThreadEditors {
         ${network === 'mastodon' ? this.tagsField('panel-tags') : ''}
         ${problems.length ? `<p class="over-limit">Fix before posting: ${escapeHtml(problems.join('; '))}</p>` : ''}
       </div>
+      ${
+        leftOut.length
+          ? `<div class="side-section">
+        <span class="side-label">Not cross-posted</span>
+        <p>${escapeHtml(leftOutText.charAt(0).toUpperCase() + leftOutText.slice(1))} from the post ${leftOut.length === 1 && !/^\d/.test(leftOut[0]) ? 'isn’t' : 'aren’t'} on any platform.</p>
+      </div>`
+          : ''
+      }
       <div class="side-section">
         <span class="side-label">Other platforms</span>
         ${others

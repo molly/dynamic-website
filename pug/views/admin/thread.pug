@@ -29,3 +29,9 @@ block content
             span= entry.label
   else
     p No entries in this thread yet.
+
+  h2 Delete
+  p.entity-remove-actions
+    button#thread-delete.link-button(type="button") delete this thread…
+  p.field-help Its entries stay; they just won’t be in it anymore.
+  p#thread-delete-error.entity-error(hidden)

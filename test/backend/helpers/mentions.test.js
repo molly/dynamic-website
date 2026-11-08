@@ -229,21 +229,29 @@ describe('legacy mentions', () => {
 });
 
 describe('site markup', () => {
-  it('builds an h-card from the entity', () => {
-    const html = renderMention(ENTITY, 'Taylor Lorenz');
-    expect(html).toContain('class="cdx-mention u-category h-card"');
-    expect(html).toContain(
-      '<a class="website u-url p-name" href="https://www.usermag.co"><span class="cdx-mention-plain">Taylor Lorenz</span></a>',
+  it('shows the name as written, linked to the entity’s page', () => {
+    expect(
+      renderMention(
+        { ...ENTITY, type: 'person', slug: 'taylor-lorenz', hasPage: true },
+        'Taylor Lorenz’s',
+      ),
+    ).toBe(
+      '<span class="mention h-card"><a class="mention-name entity-page p-name" href="/entities/people/taylor-lorenz">Taylor Lorenz’s</a></span>',
     );
-    expect(html).toContain('href="https://mastodon.social/@taylor"');
-    expect(html).toContain(
-      'href="https://bsky.app/profile/taylorlorenz.bsky.social"',
+  });
+
+  it('links to the website without a page, and is plain text without either', () => {
+    expect(renderMention(ENTITY, 'Taylor')).toBe(
+      '<span class="mention h-card"><a class="mention-name website u-url p-name" href="https://www.usermag.co">Taylor</a></span>',
     );
-    // Mastodon comes before Bluesky, as on the site
-    expect(html.indexOf('mastodon u-url')).toBeLessThan(
-      html.indexOf('bluesky u-url'),
+    expect(
+      renderMention(
+        { name: 'Paul Grewal', type: 'person', accounts: [] },
+        'Grewal',
+      ),
+    ).toBe(
+      '<span class="mention h-card"><span class="mention-name p-name">Grewal</span></span>',
     );
-    expect(html).not.toContain('wikipedia');
   });
 
   it('links just the name beside a post, without account icons', () => {
@@ -257,21 +265,24 @@ describe('site markup', () => {
     expect(entityNameLink({ ...ENTITY, name: 'A & B' })).toContain('A &amp; B');
   });
 
-  it('links the Wikipedia article about them after their accounts, not as theirs', () => {
-    const html = renderMention(
-      {
-        ...ENTITY,
-        ids: { wikipedia: 'https://en.wikipedia.org/wiki/Taylor_Lorenz' },
-      },
-      'Taylor Lorenz',
+  it('sets cases’ and outlets’ names in italics, except in post text', () => {
+    const outlet = {
+      name: 'The Verge',
+      type: 'organization',
+      kind: 'outlet',
+      slug: 'the-verge',
+      hasPage: true,
+    };
+    // A mention is the words as written
+    expect(renderMention(outlet, 'the Verge')).toContain(
+      'href="/entities/organizations/the-verge">the Verge</a>',
     );
-    expect(html).toContain(
-      '<a class="wikipedia cdx-social-link" href="https://en.wikipedia.org/wiki/Taylor_Lorenz"',
-    );
-    expect(html).not.toContain('wikipedia u-url');
-    expect(html.indexOf('bluesky u-url')).toBeLessThan(
-      html.indexOf('wikipedia cdx-social-link'),
-    );
+    expect(entityNameLink(outlet)).toContain('<i>The Verge</i>');
+    expect(
+      entityNameLink({ name: 'SEC v. Coinbase', type: 'case', accounts: [] }),
+    ).toBe('<i>SEC v. Coinbase</i>');
+    // Other organizations aren't
+    expect(entityNameLink({ ...outlet, kind: 'company' })).not.toContain('<i>');
   });
 
   it('expands mentions in a post, and shows unknown entities as text', () => {

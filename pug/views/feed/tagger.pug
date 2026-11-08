@@ -1,121 +1,121 @@
-- var importPrefix = 'https://www.mollywhite.net'
+extends ../admin/layout.pug
 
-html(class='feed-editor', lang='en')
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1")
-    link(rel='icon' href=`${importPrefix || ''}/assets/images/icons/favicon.ico`)
-    link(rel='icon' href=`${importPrefix || ''}/assets/images/icons/favicon-16x16.png` sizes='16x16' type='image/png')
-    link(rel='icon' href=`${importPrefix || ''}/assets/images/icons/favicon-32x32.png` sizes='32x32' type='image/png')
-    link(rel='apple-touch-icon' href=`${importPrefix || ''}/assets/images/icons/apple-touch-icon.png` sizes='180x180')
-    link(rel='manifest', href=`${importPrefix || ''}/site.webmanifest`)
-    link(rel='stylesheet', href=`${importPrefix || ''}/assets/styles/base-styles.css`)
-    link(rel='stylesheet', href="/static/editor.css")
-    link(rel='stylesheet', href="/static/feed.css")
-    meta(name='theme-color', content='#191919')
-    block head
+//- The tagger: tags, threads and "about" for a feed entry that isn't a micro post (a newsletter
+//- issue, reading or press), in the editors' shell. The main column shows the entry like an
+//- editor's head (kind, title, where it's from) and the fields particular to its kind; the side
+//- panel has the metadata, as in the post editor; Save is in the fixed bar. The fields are wired up
+//- by frontend/js/tagger.js.
 
-  body
-    .editor-container
-      main
-        .content-box
-          if entryType == "citationNeeded"
-            include ../../mixins/feed/citationNeededEntry.pug
-            +citationNeededEntry(entry)
-          else if entryType == "readingShortform"
-            include ../../mixins/feed/readingEntry.pug
-            +readingEntry(entry, entry.shortform)
-          else if entryType == "press"
-            include ../../mixins/feed/pressEntry.pug
-            +pressEntry(entry, entry.press)
+block topbarLeft
+  a(href=feedHref) ← all posts
+  span.topbar-separator ·
+  span tagging #{header.kind}
 
-        .content-box
-          .content-container
-            .input-group
-              label(for="tags") Tags
-              input#tags.form-control-sm(autocomplete="off", value=entry.tags.map(e => e._id).join(','))
+block topbarRight
+  span#last-saved.admin-status(role="status")
+  if header.href
+    a(href=header.href) original ↗
 
-            .input-group
-              label(for="threads") Threads
-              input#threads.form-control-sm(autocomplete="off")
-            #threads-preview.picker-preview
+block body
+  .editor-body.tagger
+    main.tagger-main
+      p.entity-editor-type #{header.label}
+      h1.tagger-title
+        if header.href
+          a(href=header.href) #{header.title || 'Untitled'}
+        else
+          | #{header.title || 'Untitled'}
+      p.tagger-source
+        each part, index in header.source
+          if index > 0
+            | #{' · '}
+          if part.italic
+            i #{part.text}
+          else
+            | #{part.text}
+      if header.blurb
+        .tagger-blurb!= header.blurb
+      p#tagger-error.entity-error(hidden, role="alert")
 
-            .input-group
-              label(for="about") About
-              input#about.form-control-sm(autocomplete="off")
+      if entryType == "press"
+        - var durationText = (seconds) => { if (!seconds && seconds !== 0) return ''; const t = Math.round(seconds); const h = Math.floor(t / 3600); const m = Math.floor((t % 3600) / 60); const sec = String(t % 60).padStart(2, '0'); return h ? `${h}:${String(m).padStart(2, '0')}:${sec}` : `${m}:${sec}` }
+        //- A URL field, with an upload beside it when the file can be one of yours
+        mixin urlField(name, label, kinds, accept)
+          .entity-field-row(data-kinds=kinds)
+            label(for=`press-${name}`) #{label}
+            .tagger-url
+              input(id=`press-${name}`, type="url", value=press[name] || '', placeholder="https://")
+              if accept
+                label.link-button.upload-button upload#[input.press-upload(type="file", accept=accept, data-target=`press-${name}`, hidden)]
 
-            script#picker-data(type="application/json") !{JSON.stringify(pickerData).replace(/</g, '\\u003c')}
+        section#press-fields.entity-editor-section
+          h2.entity-editor-heading Press card
+          .entity-field-row
+            label(for="press-kind") kind
+            select#press-kind
+              each kind in pressKinds
+                option(value=kind, selected=press.kind === kind) #{pressKindNames[kind] || kind}
+          .entity-field-row(data-kinds="article podcast radio video tv")
+            label(for="press-role") your part
+            select#press-role
+              option(value="", selected=!press.role) —
+              each role in pressRoles
+                option(value=role, selected=press.role === role) #{role}
+          +urlField('leadImage', 'lead image', 'freelance', 'image/*')
+          .entity-field-row(data-kinds="talk podcast radio video tv")
+            label(for="press-duration") length
+            input#press-duration(type="text", value=durationText(press.duration), placeholder="52:30 or 1:02:30", inputmode="numeric")
+          .entity-field-row(data-kinds="podcast radio")
+            label(for="press-episode") episode
+            input#press-episode(type="text", value=press.episode || '', placeholder="426")
+          .entity-field-row(data-kinds="talk")
+            label(for="press-location") location
+            input#press-location(type="text", value=press.location || '', placeholder="for an upcoming talk")
+          +urlField('slidesUrl', 'slides', 'talk')
+          +urlField('transcriptUrl', 'transcript', 'talk podcast radio video tv')
+          +urlField('youtubeUrl', 'YouTube', 'talk video tv')
 
-        if entryType == "press"
-          - var KIND_NAMES = { article: 'Article', podcast: 'Podcast', radio: 'Radio', video: 'Video', tv: 'TV', talk: 'Talk', freelance: 'Freelance (I wrote it)' }
-          - var durationText = (seconds) => { if (!seconds && seconds !== 0) return ''; const t = Math.round(seconds); const h = Math.floor(t / 3600); const m = Math.floor((t % 3600) / 60); const sec = String(t % 60).padStart(2, '0'); return h ? `${h}:${String(m).padStart(2, '0')}:${sec}` : `${m}:${sec}` }
-          .content-box
-            .content-container.press-fields#press-fields
-              h3 Press card
-              .input-group
-                label(for="press-kind") Kind
-                select#press-kind.form-control-sm
-                  each kind in pressKinds
-                    option(value=kind, selected=press.kind === kind) #{KIND_NAMES[kind] || kind}
-              .input-group(data-kinds="article podcast radio video tv")
-                label(for="press-role") Your part
-                select#press-role.form-control-sm
-                  option(value="", selected=!press.role) —
-                  each role in pressRoles
-                    option(value=role, selected=press.role === role) #{role}
-              .input-group(data-kinds="freelance")
-                label(for="press-leadImage") Lead image
-                input#press-leadImage.form-control-sm(type="url", value=press.leadImage || '', placeholder="https://")
-                label.link-button.upload-button Upload#[input.press-upload(type="file", accept="image/*", data-target="press-leadImage", hidden)]
-              .input-group(data-kinds="talk podcast radio video tv")
-                label(for="press-duration") Length
-                input#press-duration.form-control-sm(type="text", value=durationText(press.duration), placeholder="52:30 or 1:02:30", inputmode="numeric")
-              .input-group(data-kinds="podcast radio")
-                label(for="press-episode") Episode
-                input#press-episode.form-control-sm(type="text", value=press.episode || '', placeholder="426")
-              .input-group(data-kinds="talk")
-                label(for="press-location") Location
-                input#press-location.form-control-sm(type="text", value=press.location || '', placeholder="For an upcoming talk")
-              .input-group(data-kinds="talk")
-                label(for="press-slidesUrl") Slides
-                input#press-slidesUrl.form-control-sm(type="url", value=press.slidesUrl || '', placeholder="https://")
-              .input-group(data-kinds="talk podcast radio video tv")
-                label(for="press-transcriptUrl") Transcript
-                input#press-transcriptUrl.form-control-sm(type="url", value=press.transcriptUrl || '', placeholder="https://")
-              .input-group(data-kinds="talk video tv")
-                label(for="press-youtubeUrl") YouTube
-                input#press-youtubeUrl.form-control-sm(type="url", value=press.youtubeUrl || '', placeholder="https://")
-              details.press-own-copy(data-kinds="talk podcast radio video tv", open=Boolean(press.mediaUrl || press.audioUrl))
-                summary Your own copy (gets a player on the site)
-                .input-group(data-kinds="talk video tv")
-                  label(for="press-mediaUrl") Video
-                  input#press-mediaUrl.form-control-sm(type="url", value=press.mediaUrl || '', placeholder="https://")
-                  label.link-button.upload-button Upload#[input.press-upload(type="file", accept="video/*", data-target="press-mediaUrl", hidden)]
-                .input-group(data-kinds="talk video tv")
-                  label(for="press-posterUrl") Poster
-                  input#press-posterUrl.form-control-sm(type="url", value=press.posterUrl || '', placeholder="https://")
-                  label.link-button.upload-button Upload#[input.press-upload(type="file", accept="image/*", data-target="press-posterUrl", hidden)]
-                .input-group(data-kinds="podcast radio")
-                  label(for="press-audioUrl") Audio
-                  input#press-audioUrl.form-control-sm(type="url", value=press.audioUrl || '', placeholder="https://")
-                  label.link-button.upload-button Upload#[input.press-upload(type="file", accept="audio/*", data-target="press-audioUrl", hidden)]
-              p#press-upload-status.press-upload-status(hidden)
+          details.tagger-own-copy(data-kinds="talk podcast radio video tv", open=Boolean(press.mediaUrl || press.audioUrl))
+            summary.side-label
+              | Your own copy
+              span.side-hint  · gets a player on the site
+            +urlField('mediaUrl', 'video', 'talk video tv', 'video/*')
+            +urlField('posterUrl', 'poster', 'talk video tv', 'image/*')
+            +urlField('audioUrl', 'audio', 'podcast radio', 'audio/*')
+          p#press-upload-status.field-help(hidden)
 
-        if entryType == "citationNeeded"
-          .content-box
-            .content-container
-              details.social-links
-                summary Manually link social post IDs
-                each network in ["twitter", "mastodon", "bluesky", "threads", "youtube", "tiktok"]
-                  - var socialLink = entry.socialLinks && entry.socialLinks.find(e => e.type === network)
-                  .input-group
-                    label(for=network) #{network.charAt(0).toUpperCase() + network.slice(1)}
-                    input.social-post-id(id=network, type="text", value=socialLink ? socialLink.postId : "")
+      if entryType == "citationNeeded"
+        section.entity-editor-section
+          h2.entity-editor-heading Already posted?
+          p.field-help Link the issue’s posts by their IDs, for “discuss” on the site.
+          each network in [{ id: 'twitter', label: 'Twitter' }, { id: 'mastodon', label: 'Mastodon' }, { id: 'bluesky', label: 'Bluesky' }, { id: 'threads', label: 'Threads' }, { id: 'youtube', label: 'YouTube' }, { id: 'tiktok', label: 'TikTok' }]
+            - var socialLink = entry.socialLinks && entry.socialLinks.find((e) => e.type === network.id)
+            .post-id-row
+              //- Not the network's name as its id: "threads" is also the Threads picker's
+              label(for=`post-id-${network.id}`) #{network.label}
+              input.social-post-id(id=`post-id-${network.id}`, data-network=network.id, type="text", placeholder="post ID", autocomplete="off", value=socialLink ? socialLink.postId : '')
 
-    footer.editor-footer
-      .footer-controls
-        .left-group
-          button#save-button Save
-          #last-edited
-    
-    script(src="/static/tagger.js")
+    aside.editor-side-panel
+      .side-section
+        label.side-label(for="tags") Tags
+        input#tags(autocomplete="off", value=entry.tags.map((tag) => tag._id).join(','))
+
+      .side-section
+        label.side-label(for="threads") Threads
+        input#threads(autocomplete="off")
+        #threads-preview.picker-preview
+
+      .side-section
+        label.side-label(for="about")
+          | About
+          span.side-hint  · people & things it’s about
+        input#about(autocomplete="off")
+
+  footer.editor-actionbar
+    span.side-hint shown with the entry in the feed
+    button#save-button.primary(type="button") Save
+
+  script#picker-data(type="application/json") !{JSON.stringify(pickerData).replace(/</g, '\\u003c')}
+
+block scripts
+  script(src="/static/tagger.js")

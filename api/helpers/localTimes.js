@@ -76,6 +76,8 @@ export function formatLocal(
       return `${p.weekday}, ${longMonth} ${p.day}, ${p.year} · ${time} ${p.timeZoneName}`;
     case 'update':
       return sameDay(date, ref || now, timeZone) ? time : `${day}, ${time}`;
+    case 'date':
+      return `${p.month} ${p.day}, ${p.year}`;
     case 'social':
       return `${p.hour}:${p.minute} ${p.dayPeriod} · ${p.month} ${p.day}, ${p.year}`;
     default:

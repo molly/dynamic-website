@@ -7,7 +7,7 @@ import { escapeHtml } from '../helpers/escapeHtml.js';
 export { escapeHtml };
 
 /**
- * Value at a dotted path ("status.value").
+ * Value at a dotted path ("ids.wikidata").
  * @param {Object} obj
  * @param {string} path
  */

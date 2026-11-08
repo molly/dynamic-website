@@ -1,5 +1,5 @@
 import EditorJS from '@editorjs/editorjs';
-import { UPDATE_LABELS } from '../../../api/helpers/updates.js';
+import { UPDATE_KINDS, UPDATE_LABELS } from '../../../api/helpers/updates.js';
 import { editorToolConfig } from '../helpers/editorConfig.js';
 import { escapeHtml } from '../helpers/escapeHtml.js';
 import {
@@ -10,7 +10,9 @@ import {
 } from './dates.js';
 
 // Updates, corrections and live updates, written under the post. Each has its own small EditorJS
-// for its body. Newest first, which is where you're working on a live post.
+// for its body. Newest first, which is where you're working on a live post. An update's kind can
+// be changed from the menu in its header (an update that should have been a live update, say);
+// a live update also has a headline.
 //
 // Inline corrections in the post (see CorrectionTool) point at the correction note explaining them
 // with data-update="<update id>". Corrections without a note are counted, with a button to write
@@ -89,11 +91,13 @@ export class UpdatesEditor {
     el.dataset.id = id;
     el.innerHTML = `
       <div class="update-head">
-        <span class="update-kind">${UPDATE_LABELS[update.kind]}</span>
+        <select class="update-kind" aria-label="Kind">
+          ${UPDATE_KINDS.map((kind) => `<option value="${kind}"${kind === update.kind ? ' selected' : ''}>${UPDATE_LABELS[kind]}</option>`).join('')}
+        </select>
         <input type="datetime-local" step="60" class="update-at" aria-label="Time" value="${update.at ? toLocalInput(update.at) : nowLocalInput()}">
         <button type="button" class="link-button update-remove">remove</button>
       </div>
-      ${update.kind === 'live' ? `<input type="text" class="update-headline" placeholder="Headline" aria-label="Headline" value="${escapeHtml(update.headline || '')}">` : ''}
+      <input type="text" class="update-headline" placeholder="Headline" aria-label="Headline" value="${escapeHtml(update.headline || '')}"${update.kind === 'live' ? '' : ' hidden'}>
       <div class="update-body"></div>`;
     if (atEnd) {
       this.list.append(el);
@@ -112,11 +116,24 @@ export class UpdatesEditor {
     });
     const item = { id, kind: update.kind, el, editor };
     this.items.push(item);
+    el.querySelector('.update-kind').addEventListener('change', (evt) =>
+      this.setKind(item, evt.target.value),
+    );
     if (focus && update.kind === 'live') {
       el.querySelector('.update-headline').focus();
     }
     this.checkCorrections();
     return item;
+  }
+
+  // Change an update's kind. Only a live update has a headline; one typed in is kept if it's
+  // switched away and back.
+  setKind(item, kind) {
+    item.kind = kind;
+    item.el.className = `update-item ${kind}`;
+    item.el.querySelector('.update-headline').hidden = kind !== 'live';
+    this.checkCorrections();
+    this.onChange();
   }
 
   remove(item) {
@@ -188,9 +205,10 @@ export class UpdatesEditor {
     const updates = await Promise.all(
       this.items.map(async (item, index) => {
         const body = await saveEditor(item.editor);
-        const headline = item.el
-          .querySelector('.update-headline')
-          ?.value.trim();
+        const headline =
+          item.kind === 'live'
+            ? item.el.querySelector('.update-headline').value.trim()
+            : '';
         if (!body.blocks.length && !headline) {
           throw new Error(
             `${UPDATE_LABELS[item.kind]} ${index + 1} is empty; write it or remove it.`,

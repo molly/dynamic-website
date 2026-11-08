@@ -126,6 +126,43 @@ export function elsewhereRows(entity) {
 }
 
 /**
+ * The Congress sitting on a date. Each starts on January 3 of an odd year; the 1st began in 1789.
+ * @param {Date} date
+ * @returns {number}
+ */
+export function congressOn(date) {
+  const { year, month, day } = DateTime.fromJSDate(date, { zone: ZONE });
+  const startedThisYear = year % 2 === 0 || month > 1 || day >= 3;
+  return Math.floor((year - 1789) / 2) + (startedThisYear ? 1 : 0);
+}
+
+// A bill with one of these statuses got as far as it would
+const FINAL_BILL_STATUSES = new Set(['became law', 'vetoed', 'failed']);
+
+/**
+ * A bill's status as the page shows it. Once its Congress has ended, a bill that hadn't become
+ * law, been vetoed or failed died: "died in committee", "passed House, then died".
+ * @param {{billStatus?: string, congress?: number}} bill
+ * @param {Date} [now]
+ * @returns {?string}
+ */
+export function billStatusLabel({ billStatus, congress }, now = new Date()) {
+  if (!billStatus) {
+    return null;
+  }
+  if (
+    FINAL_BILL_STATUSES.has(billStatus) ||
+    !congress ||
+    congress >= congressOn(now)
+  ) {
+    return billStatus;
+  }
+  return billStatus === 'introduced'
+    ? 'died in committee'
+    : `${billStatus}, then died`;
+}
+
+/**
  * The facts particular to the entity's type, for "At a glance".
  * @param {Object} entity
  * @returns {{label: string, value: string, href?: string}[]}

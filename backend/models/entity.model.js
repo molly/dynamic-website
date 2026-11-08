@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 import {
   ALIAS_KINDS,
+  BILL_STATUSES,
+  CASE_STATUSES,
   CHAMBERS,
   COMMITTEE_TYPES,
-  ENTITY_STATUSES,
   ENTITY_TYPES,
   OFFICES,
   ORGANIZATION_KINDS,
@@ -65,10 +66,6 @@ export const EntitySchema = new mongoose.Schema(
     ],
     description: String,
     note: String,
-    status: {
-      value: { type: String, enum: ENTITY_STATUSES },
-      date: Day,
-    },
     tag: { type: ObjectId, ref: 'Tag' },
     ids: {
       wikidata: { type: String, match: /^Q\d+$/ },
@@ -211,7 +208,7 @@ export const BillEntity = Entity.discriminator(
     number: String, // e.g. "H.R. 3633"
     congress: Number,
     chamber: { type: String, enum: CHAMBERS },
-    billStatus: String,
+    billStatus: { type: String, enum: BILL_STATUSES },
     congressGovUrl: String,
     versions: [
       {
@@ -231,7 +228,7 @@ export const CaseEntity = Entity.discriminator(
     docketNumber: String,
     judge: String,
     filedAt: Day,
-    caseStatus: String,
+    caseStatus: { type: String, enum: CASE_STATUSES },
     courtListenerUrl: String,
     pacerUrl: String,
     complaint: { pdfUrl: String },

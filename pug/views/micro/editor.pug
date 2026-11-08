@@ -28,7 +28,7 @@ html(class='feed-editor', lang='en')
     .editor-shell
       header.editor-topbar
         .topbar-group
-          a(href="/feed") ← all posts
+          a(href=feedHref || '/feed') ← all posts
           span.topbar-separator ·
           span#editing-label new post
         .topbar-group
@@ -166,8 +166,9 @@ html(class='feed-editor', lang='en')
                 summary.side-hint Already posted? Link existing post IDs
                 each network in [{ id: 'bluesky', label: 'Bluesky' }, { id: 'mastodon', label: 'Mastodon' }, { id: 'twitter', label: 'Twitter' }, { id: 'threads', label: 'Threads' }, { id: 'youtube', label: 'YouTube' }, { id: 'tiktok', label: 'TikTok' }]
                   .post-id-row
-                    label(for=network.id) #{network.label}
-                    input.social-post-id(id=network.id, type="text", placeholder="post ID", autocomplete="off")
+                    //- Not the network's name as its id: "threads" is also the Threads picker's
+                    label(for=`post-id-${network.id}`) #{network.label}
+                    input.social-post-id(id=`post-id-${network.id}`, data-network=network.id, type="text", placeholder="post ID", autocomplete="off")
 
       footer.editor-actionbar
         button#delete-button.link-button(type="button", hidden) delete post

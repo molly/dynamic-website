@@ -5,7 +5,7 @@ import {
   FEED_ENTRY_LABEL_POPULATE,
   labelFeedEntry,
 } from '../helpers/feedEntries.js';
-import { listThreads } from '../helpers/threads.js';
+import { deleteThread, listThreads } from '../helpers/threads.js';
 import { FeedEntry } from '../models/feed/feedEntry.model.js';
 import { Thread } from '../models/thread.model.js';
 import logger from '../winston.js';
@@ -70,6 +70,25 @@ router.put('/:id', authenticated(), async (req, res) => {
       logger.error('Failed to update thread', err);
       res.status(500).json({ error: err.message });
     }
+  }
+});
+
+// Delete a thread. Its entries stay, no longer in it (threads.js deleteThread).
+router.delete('/:id', authenticated(), async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      res.status(400).json({ error: 'Invalid thread id.' });
+      return;
+    }
+    const result = await deleteThread(req.params.id);
+    if (!result) {
+      res.sendStatus(404);
+      return;
+    }
+    res.json(result);
+  } catch (err) {
+    logger.error('Failed to delete thread', err);
+    res.status(500).json({ error: err.message });
   }
 });
 

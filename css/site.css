@@ -16,6 +16,7 @@
   --accent-tint: #efedf8;
   --accent-wash: #f6f5fa;
   --quote-rule: #c9c1ea;
+  --link-underline: #b8b2d3;
   --highlight: #fdf0b5;
   --chip-border: #d9d9d9;
 
@@ -55,6 +56,7 @@
     --accent-tint: #2c2840;
     --accent-wash: #1f1d29;
     --quote-rule: #5b5185;
+    --link-underline: #5b5185;
     --highlight: #5c4f12;
     --chip-border: #444444;
   }
@@ -72,6 +74,7 @@
   --accent-tint: #2c2840;
   --accent-wash: #1f1d29;
   --quote-rule: #5b5185;
+  --link-underline: #5b5185;
   --highlight: #5c4f12;
   --chip-border: #444444;
 }
@@ -98,15 +101,18 @@ body {
   line-height: 1.5;
 }
 
+/* Text in the body color over a thick lavender underline that sits well below the baseline */
 a {
   color: inherit;
   text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.15em;
+  text-decoration-color: var(--link-underline);
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.22em;
 }
 
 a:hover {
   color: var(--accent);
+  text-decoration-color: var(--accent-strong);
 }
 
 :focus-visible {
@@ -183,14 +189,16 @@ mark {
 }
 
 .site-header-home .site-nav {
+  /* The homepage header holds the intro too, so the menu opens from the nav, not below the intro */
+  position: relative;
   display: flex;
   justify-content: flex-end;
 }
 
 .site-intro {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 16rem;
-  gap: 3rem;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 2.5rem;
   align-items: end;
   margin-top: 0.5rem;
 }
@@ -217,7 +225,8 @@ mark {
 .site-photo img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: auto;
+  aspect-ratio: 528 / 675;
   object-fit: cover;
 }
 
@@ -241,11 +250,6 @@ mark {
   text-decoration: underline;
   text-decoration-thickness: 1.5px;
   text-underline-offset: 0.3em;
-}
-
-.site-nav a.support {
-  color: var(--accent);
-  font-weight: 600;
 }
 
 .site-menu-button {
@@ -499,8 +503,7 @@ mark {
   text-decoration: underline;
 }
 
-.entry-reply,
-.entry-live {
+.entry-reply {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -509,13 +512,6 @@ mark {
   color: var(--text-muted);
   font-family: var(--mono);
   font-size: 0.72rem;
-}
-
-.entry-live {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
-  background: var(--accent-tint);
-  color: var(--accent);
 }
 
 /* Citation Needed: the issue's image beside a label, the headline and dek, and links to read it
@@ -595,6 +591,11 @@ mark {
   margin-top: 0;
 }
 
+/* Related articles, as cards after a post's own text, set apart from it */
+.entry-content.entry-related {
+  margin-top: 1.4rem;
+}
+
 .entry-content > :last-child {
   margin-bottom: 0;
 }
@@ -628,10 +629,17 @@ mark {
   font-size: 0.85rem;
 }
 
-/* Quotes: a step smaller than your own words, with a light purple rule. Highlighted words in a
-   quote are pulled out large; a post that's only a quote shows it large. */
+/* Quotes. An excerpt is a step smaller than your own words, with a light purple rule; words you
+   highlighted in it are pulled out large, joined to the rest by a purple rule. A pull quote is
+   large throughout. Quotes saved before that choice existed have no style class: in a post
+   that's only quotes they're large, as they were. */
 .entry-content .quote {
   margin: 1.1em 0;
+}
+
+/* Separate quotes are clearly separate */
+.entry-content .quote + .quote {
+  margin-top: 1.9em;
 }
 
 .entry-content blockquote {
@@ -651,15 +659,34 @@ mark {
 }
 
 .entry-content .pull-quote,
-.site-entry-quoted .entry-content blockquote {
+.entry-content .quote-pull blockquote {
   font-family: var(--quote-face);
   font-size: 1.65rem;
   line-height: 1.25;
 }
 
-.entry-content .has-pull blockquote,
-.site-entry-quoted .entry-content blockquote {
+.entry-content .quote-pull blockquote {
   border-left: 3px solid var(--accent);
+}
+
+/* An excerpt with words pulled out: its rule is dark beside them and light beside the rest */
+.entry-content .has-pull:not(.quote-pull) blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid var(--quote-rule);
+}
+
+.entry-content .has-pull:not(.quote-pull) .pull-quote {
+  position: relative;
+}
+
+.entry-content .has-pull:not(.quote-pull) .pull-quote::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(-1rem - 3px);
+  width: 3px;
+  background: var(--accent);
+  content: '';
 }
 
 .entry-content .pull-quote {
@@ -667,7 +694,8 @@ mark {
   font-size: calc(1.65rem / 0.9);
 }
 
-.site-entry-quoted .entry-content blockquote .pull-quote {
+/* A pull quote is already large; highlighted words in it don't grow again */
+.entry-content .quote-pull blockquote .pull-quote {
   font-size: inherit;
 }
 
@@ -799,26 +827,11 @@ mark {
   font-family: var(--social-face);
 }
 
-.cdx-mention-social-group {
-  margin-left: 0.1em;
-  color: var(--text-muted);
-  font-family: var(--mono);
-  font-size: 0.6em;
-  white-space: nowrap;
-  vertical-align: 0.15em;
-}
-
-.cdx-mention-social-group::before {
-  content: '(';
-}
-
-.cdx-mention-social-group::after {
-  content: ')';
-}
-
-.cdx-social-link .cdx-mention-icon {
-  width: 10px;
-  height: auto;
+/* Mentions: the name as written, linked to the entity's page (or its website), with a dotted
+   underline to set it apart from other links */
+a.mention-name {
+  color: inherit;
+  text-decoration-style: dotted;
 }
 
 .correction-note {
@@ -828,7 +841,7 @@ mark {
   text-decoration: none;
 }
 
-/* "Also read · Oct 28 · 3": a day's reading, one line per article, across the whole width */
+/* "Read · Oct 28 · 3": a day's reading, one line per article, across the whole width */
 .reading-group {
   display: grid;
   grid-template-columns: 11rem minmax(0, 1fr);
@@ -1052,7 +1065,7 @@ mark {
   font-size: 0.95em;
 }
 
-/* "continues →" after the start of a long post in the feed */
+/* "continue reading →" after the start of a long post in the feed */
 .entry-continues {
   margin: 0.9rem 0 0;
   font-family: var(--mono);
@@ -1107,31 +1120,65 @@ mark {
   font-weight: 600;
 }
 
-/* A live post: "● Updating · last 4:52 pm", updates newest first, then the first post */
-.entry-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin: 0 0 0.6rem;
-  padding: 0.2rem 0.5rem;
-  background: var(--accent-tint);
+/* A live post: "Live coverage · ended · Oct 29, 5:30–5:52 pm EDT" in a tinted strip, then its
+   posts down a purple rail, each marked by an open circle at its time */
+.live-coverage-head {
+  margin: 0;
+  padding: 0.5rem 0.8rem;
   color: var(--accent);
   font-family: var(--mono);
   font-size: 0.68rem;
+  background: var(--accent-tint);
 }
 
-.entry-live.ended {
-  background: var(--accent-wash);
-  color: var(--text-muted);
+.live-coverage-head strong {
+  font-weight: 600;
 }
 
 .entry-live-dot {
   font-size: 0.6rem;
 }
 
-.live-update + .live-update,
-.live-original {
-  margin-top: 1.1em;
+.live-timeline {
+  margin: 0;
+  padding: 1.1rem 0 0.4rem 1.4rem;
+  list-style: none;
+  border-left: 2px solid var(--accent);
+}
+
+.live-entry {
+  position: relative;
+}
+
+.live-entry + .live-entry {
+  margin-top: 1.5rem;
+}
+
+/* The circle sits centered on the rail, level with the time */
+.live-entry::before {
+  position: absolute;
+  top: 0.1rem;
+  left: calc(-1.4rem - 1px - 0.45rem);
+  box-sizing: border-box;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg);
+  content: '';
+}
+
+.live-skipped {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.live-skipped::before {
+  border-style: dotted;
+}
+
+.live-skipped a {
+  color: var(--accent);
 }
 
 /* "Followed up in Citation Needed" */
@@ -1562,13 +1609,6 @@ mark {
   font-size: 1.15rem;
 }
 
-.entity-status {
-  margin: 0 0 0.9rem;
-  color: var(--text-muted);
-  font-family: var(--mono);
-  font-size: 0.7rem;
-}
-
 .entity-note {
   margin: 0 0 0.9rem;
 }
@@ -1831,7 +1871,7 @@ mark {
 }
 
 /* A post cut short in the feed: the top of the next block (text, an image, a card), cut off after
-   a few lines and faded out, before "continues →" */
+   a few lines and faded out, before "continue reading →" */
 .entry-teaser {
   margin-top: 0.85em; /* The gap between paragraphs (.entry-content p) */
   max-height: 4.8em;

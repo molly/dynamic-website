@@ -117,12 +117,13 @@ router.get(
       res.status(404).send('No such thread.');
       return;
     }
+    const entries = await threadEntries(thread._id);
     res.render('admin/thread.pug', {
       adminPage: 'thread',
       title: thread.title || 'Untitled thread',
       thread,
-      entries: await threadEntries(thread._id),
-      pageData: { thread },
+      entries,
+      pageData: { thread, entryCount: entries.length },
     });
   }),
 );

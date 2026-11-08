@@ -14,17 +14,99 @@ const linkTo = (snapshot = {}) =>
     ? `<a href="${escapeText(snapshot.href).replace(/"/g, '&quot;')}">${escapeText(snapshot.title || snapshot.href)}</a>`
     : escapeText(snapshot.title || '');
 
-const paragraph = (text) => ({ type: 'paragraph', data: { text } });
+// tight: joined to the paragraph before with a line break rather than a blank line (list items,
+// gallery captions)
+const paragraph = (text, { tight = false } = {}) => ({
+  type: 'paragraph',
+  data: { text, tight },
+});
+
+// Blocks that aren't cross-posted: what the platform tabs say is left out
+const LEFT_OUT = {
+  raw: { one: 'an HTML block', many: 'HTML blocks' },
+  table: { one: 'a table', many: 'tables' },
+  video: { one: 'a video', many: 'videos' },
+  audio: { one: 'an audio file', many: 'audio files' },
+};
+const leftOutKind = (block) =>
+  block.type === 'media'
+    ? block.data?.kind === 'audio'
+      ? 'audio'
+      : 'video'
+    : LEFT_OUT[block.type]
+      ? block.type
+      : null;
 
 /**
- * Blocks that become thread text, as paragraphs: article cards become a link to the article, each
- * roundup item a link followed by your line, a document a link to its PDF, and a social post a link
- * to it (by name, not @handle, so it doesn't notify them). A comparison's two sides are each
- * treated this way, after their labels. Tables and video/audio blocks aren't cross-posted.
+ * What in the main post isn't cross-posted, for the platform tabs to say: "a table", "2 videos".
+ * @param {{blocks: Object[]}} mainPost
+ * @returns {string[]}
+ */
+export function leftOutOfThreads(mainPost) {
+  const counts = new Map();
+  for (const block of mainPost.blocks || []) {
+    const kind = leftOutKind(block);
+    if (kind) {
+      counts.set(kind, (counts.get(kind) || 0) + 1);
+    }
+  }
+  return [...counts].map(([kind, n]) =>
+    n === 1 ? LEFT_OUT[kind].one : `${n} ${LEFT_OUT[kind].many}`,
+  );
+}
+
+/**
+ * Blocks that become thread text, as paragraphs: headings as their own paragraph, list items one
+ * per line ("• " or "1. "), code as plain text, article cards a link to the article, each roundup
+ * item a link followed by your line, a document a link to its PDF, and a social post a link to it
+ * (by name, not @handle, so it doesn't notify them). Images and galleries are followed by their
+ * captions, as on the site. A comparison's two sides are each treated this way, after their
+ * labels. Raw HTML, tables and video/audio aren't cross-posted (leftOutOfThreads).
  * @param {Object[]} blocks
  */
 function threadBlocks(blocks) {
   return blocks.flatMap((block) => {
+    if (leftOutKind(block)) {
+      return [];
+    }
+    if (block.type === 'header') {
+      return [paragraph(block.data.text || '')];
+    }
+    if (block.type === 'list') {
+      const ordered = block.data.style === 'ordered';
+      return (block.data.items || []).map((item, index) =>
+        paragraph(`${ordered ? `${index + 1}.` : '•'} ${item}`, {
+          tight: index > 0,
+        }),
+      );
+    }
+    if (block.type === 'code') {
+      return [paragraph(block.data.code || '')];
+    }
+    if (block.type === 'image') {
+      return [
+        block,
+        ...(block.data.caption ? [paragraph(block.data.caption)] : []),
+      ];
+    }
+    if (block.type === 'gallery') {
+      const files = block.data.files || [];
+      const captions = files
+        .map((file, index) =>
+          file.caption
+            ? files.length > 1
+              ? `${index + 1}/${files.length} · ${file.caption}`
+              : file.caption
+            : null,
+        )
+        .filter(Boolean)
+        .map((text, index) => paragraph(text, { tight: index > 0 }));
+      return [
+        block,
+        ...captions,
+        ...(block.data.caption ? [paragraph(block.data.caption)] : []),
+      ];
+    }
     if (block.type === 'document') {
       const { title, pdfUrl, docketUrl } = block.data;
       return [
@@ -87,10 +169,11 @@ function threadBlocks(blocks) {
 
 // One main-post block as thread text for a network: mentions become that network's handles,
 // emphasis is dropped, and links stay links (written out later for networks without rich text).
+// A quote is in quotation marks, followed by who said it.
 function blockText(block, network, entities) {
   let text = block.type === 'embed' ? block.data.source : block.data.text;
   if (block.type === 'quote') {
-    text = `"${text}"`;
+    text = `"${text}"${block.data.caption ? ` — ${block.data.caption}` : ''}`;
   }
   const processed = processText(text || '', network, entities).text;
   const html = network === 'bluesky' ? processed : escapeText(processed);
@@ -124,7 +207,10 @@ export function buildThread(mainPost, network, tags = '', entities = {}) {
       if (!text) {
         continue;
       }
-      const combined = current.text ? `${current.text}<br><br>${text}` : text;
+      const separator = block.data?.tight ? '<br>' : '<br><br>';
+      const combined = current.text
+        ? `${current.text}${separator}${text}`
+        : text;
       if (current.text && countCharacters(combined, network, tags) > limit) {
         finishPost();
         current.text = text;

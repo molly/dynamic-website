@@ -59,12 +59,13 @@ mixin shortformArticle(article, rss=false, feed=false, embedded=false)
             +verb(article, to=false, capitalize=true)
             | on #[time.dt-accessed.accessed(datetime=article.started) #{article.formattedStarted}]. 
 
-    if feed && article.summary
-      blockquote.summary.p-summary.entry-summary
-        != article.summary
-    else if article.summary
+    //- Your own commentary, then the passages you quoted from it (excerpts, plain text). Excerpts
+    //- used to be kept in the summary (backend/scripts/summariesToExcerpts.js).
+    if article.summary
       .summary.p-summary.entry-summary
         != article.summary
+    each excerpt in (article.excerpts || [])
+      blockquote.summary.entry-excerpt #{excerpt}
     
     if article.relatedReading && article.relatedReading.length 
       .related-reading

@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import { DateTime } from 'luxon';
 import { formatTimestamp } from './timestamps.js';
 
 // Updates, corrections and live updates under a post, and the inline corrections tied to them.
@@ -11,15 +12,12 @@ export const UPDATE_LABELS = {
 };
 
 /**
- * Updates in the order the site shows them: a live post's newest first, like a live blog;
- * otherwise oldest first, as notes after the post.
+ * Updates in the order the site shows them: oldest first, after the post. A live post reads the
+ * same way, from its first post through each live update.
  * @param {Object[]} updates
- * @param {boolean} isLive
  */
-export function sortUpdates(updates = [], isLive = false) {
-  return [...updates].sort((a, b) =>
-    isLive ? new Date(b.at) - new Date(a.at) : new Date(a.at) - new Date(b.at),
-  );
+export function sortUpdates(updates = []) {
+  return [...updates].sort((a, b) => new Date(a.at) - new Date(b.at));
 }
 
 /**
@@ -53,8 +51,7 @@ export function linkCorrections(htmlBlocks, updateIds) {
  * @param {(post: Object) => string[]} renderPost Renders an update's EditorJS body
  */
 export function hydrateUpdates(entry, renderPost) {
-  const isLive = Boolean(entry.live?.status);
-  return sortUpdates(entry.updates, isLive).map((update) => ({
+  return sortUpdates(entry.updates).map((update) => ({
     id: String(update._id),
     kind: update.kind,
     label: UPDATE_LABELS[update.kind],
@@ -63,4 +60,31 @@ export function hydrateUpdates(entry, renderPost) {
     timestamps: formatTimestamp(new Date(update.at)),
     html: update.body?.blocks ? renderPost(update.body) : [],
   }));
+}
+
+const ZONE = 'America/New_York';
+
+/**
+ * When live coverage ran, for the top of a live post, in Eastern time: "Oct 29, 5:30–5:52 pm EDT",
+ * "Oct 29, 11:40 am – 1:15 pm EDT", or across days "Oct 29, 11:40 pm – Oct 30, 1:15 am EDT". With
+ * no end (still updating, or nothing after the first post), just the start.
+ * @param {Date|string} start
+ * @param {?(Date|string)} [end]
+ */
+export function liveRange(start, end) {
+  const from = DateTime.fromJSDate(new Date(start), { zone: ZONE });
+  const to = end ? DateTime.fromJSDate(new Date(end), { zone: ZONE }) : null;
+  const time = (dt) => dt.toFormat('h:mm');
+  const meridiem = (dt) => dt.toFormat('a').toLowerCase();
+  const zone = (to || from).toFormat('ZZZZ');
+  const day = (dt) => dt.toFormat('LLL d');
+  if (!to || to <= from) {
+    return `${day(from)}, ${time(from)} ${meridiem(from)} ${zone}`;
+  }
+  if (!from.hasSame(to, 'day')) {
+    return `${day(from)}, ${time(from)} ${meridiem(from)} – ${day(to)}, ${time(to)} ${meridiem(to)} ${zone}`;
+  }
+  return meridiem(from) === meridiem(to)
+    ? `${day(from)}, ${time(from)}–${time(to)} ${meridiem(to)} ${zone}`
+    : `${day(from)}, ${time(from)} ${meridiem(from)} – ${time(to)} ${meridiem(to)} ${zone}`;
 }

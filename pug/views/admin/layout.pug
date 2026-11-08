@@ -33,4 +33,6 @@ html(class='feed-editor', lang='en')
           block content
     if pageData
       script#page-data(type="application/json") !{JSON.stringify(pageData).replace(/</g, '\\u003c')}
-    script(src="/static/admin.js")
+    //- Pages with their own script (the tagger) replace this
+    block scripts
+      script(src="/static/admin.js")

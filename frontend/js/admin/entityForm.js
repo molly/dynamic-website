@@ -479,6 +479,96 @@ function setupRelations(entity, initialRelations) {
   section.hidden = false;
 }
 
+// Deleting and merging ---------------------------------------------------------------------------
+
+const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
+
+// What deleting or merging will touch, from /entities/:id/usage
+function usageLines(usage, { merging }) {
+  return [
+    usage.posts.length
+      ? `mentioned in ${plural(usage.posts.length, 'post')}${merging ? '' : ' (the mentions become plain text)'}`
+      : null,
+    usage.about
+      ? `the subject of ${plural(usage.about, 'entry', 'entries')}`
+      : null,
+    usage.relations
+      ? `${plural(usage.relations, 'relation')}${merging ? ' (moved)' : ' (deleted)'}`
+      : null,
+    usage.outletOf
+      ? `the outlet of ${plural(usage.outletOf, 'reading entry', 'reading entries')}`
+      : null,
+  ].filter(Boolean);
+}
+
+function setupRemoval(entity) {
+  const error = document.querySelector('.entity-remove-error');
+  const mergeForm = document.getElementById('entity-merge-form');
+  let picker;
+  const fail = (err) => {
+    error.textContent = err.response?.data?.error || err.message;
+    error.hidden = false;
+  };
+  const usage = async () =>
+    (await axios.get(`/dynamic-api/entities/${entity._id}/usage`)).data;
+
+  document
+    .getElementById('entity-delete')
+    .addEventListener('click', async () => {
+      error.hidden = true;
+      try {
+        const lines = usageLines(await usage(), { merging: false });
+        const ok = window.confirm(
+          `Delete ${entity.name}?${lines.length ? `\n\nIt's ${lines.join(', ')}.` : ''}\n\nThis can't be undone.`,
+        );
+        if (ok) {
+          await axios.delete(`/dynamic-api/entities/${entity._id}`);
+          window.location.href = '/admin/entities';
+        }
+      } catch (err) {
+        fail(err);
+      }
+    });
+
+  document.getElementById('entity-merge').addEventListener('click', () => {
+    mergeForm.hidden = false;
+    if (!picker) {
+      picker = createAboutPicker('#entity-merge-into', { maxItems: 1 });
+    }
+    picker.focus();
+  });
+  document
+    .getElementById('entity-merge-cancel')
+    .addEventListener('click', () => {
+      mergeForm.hidden = true;
+    });
+  mergeForm.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    error.hidden = true;
+    const [into] = selectedValues(picker);
+    if (!into) {
+      fail(new Error('Choose the entity to keep.'));
+      return;
+    }
+    const keepName = picker.options[into]?.name || 'the entity you chose';
+    try {
+      const lines = usageLines(await usage(), { merging: true });
+      const ok = window.confirm(
+        `Merge ${entity.name} into ${keepName}?${lines.length ? `\n\n${entity.name} is ${lines.join(', ')}; all of that will be ${keepName}'s.` : ''}\n\n${entity.name} is then deleted. This can't be undone.`,
+      );
+      if (ok) {
+        const { data } = await axios.post(
+          `/dynamic-api/entities/${entity._id}/merge`,
+          { into },
+        );
+        window.location.href = `/admin/entities/${data.keep}`;
+      }
+    } catch (err) {
+      fail(err);
+    }
+  });
+}
+
 // Page -----------------------------------------------------------------------------------------
 
 export async function setupEntityForm(pageData) {
@@ -496,9 +586,25 @@ export async function setupEntityForm(pageData) {
   const error = document.querySelector('.entity-editor-main > .entity-error');
   const status = document.getElementById('entity-status');
 
+  // Without a public page, the editor is labelled and its name greyed out (entity.pug), following
+  // the "has a page" checkbox as it's ticked, not only once saved
+  const showVisibility = () => {
+    const hasPage = document.getElementById(fieldId({ name: 'hasPage' }));
+    if (hasPage) {
+      document
+        .querySelector('.entity-editor')
+        .classList.toggle('entity-editor-private', !hasPage.checked);
+    }
+  };
+  containers.side.addEventListener('change', (evt) => {
+    if (evt.target.id === fieldId({ name: 'hasPage' })) {
+      showVisibility();
+    }
+  });
+
   // Attach the submit handler before rendering finishes (the tag list loads asynchronously), so
   // an early click can't fall through to a native form submission.
-  let ready = renderFields(containers, type, entity);
+  let ready = renderFields(containers, type, entity).then(showVisibility);
 
   form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
@@ -522,7 +628,7 @@ export async function setupEntityForm(pageData) {
       entity = data.entity;
       document.title = `${entity.name} · Admin`;
       tagPicker?.destroy();
-      ready = renderFields(containers, type, entity);
+      ready = renderFields(containers, type, entity).then(showVisibility);
       await ready;
       status.textContent = savedAt();
     } catch (err) {
@@ -580,7 +686,7 @@ export async function setupEntityForm(pageData) {
       ready = renderFields(containers, type, {
         ...filled,
         tag: current.tag ? { _id: current.tag } : undefined,
-      });
+      }).then(showVisibility);
       await ready;
       say(
         added.length
@@ -595,6 +701,7 @@ export async function setupEntityForm(pageData) {
 
   if (entity) {
     setupRelations(entity, pageData.relations);
+    setupRemoval(entity);
   }
   await ready;
 }

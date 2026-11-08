@@ -3,15 +3,16 @@
 // adding it to the model and one line here.
 //
 // Field: { name, label, input, options?, placeholder?, help?, fields? }
-// - name: dotted path into the entity ("status.value")
+// - name: dotted path into the entity ("ids.wikidata")
 // - input: text | textarea | url | date | number | checkbox | select | tag | strings | list
 //   - strings: a list of plain strings (one input each)
 //   - list: a list of objects, each row rendered from `fields`
 import {
   ALIAS_KINDS,
+  BILL_STATUSES,
+  CASE_STATUSES,
   CHAMBERS,
   COMMITTEE_TYPES,
-  ENTITY_STATUSES,
   OFFICES,
   ORGANIZATION_KINDS,
   OUTCOME_KINDS,
@@ -34,13 +35,6 @@ export const SHARED_FIELDS = [
     help: 'Optional, in your words: why you cover this.',
   },
   { name: 'hasPage', label: 'Has a page', input: 'checkbox' },
-  {
-    name: 'status.value',
-    label: 'Status',
-    input: 'select',
-    options: ENTITY_STATUSES,
-  },
-  { name: 'status.date', label: 'Status date', input: 'date' },
   { name: 'tag', label: 'Tag', input: 'tag' },
   {
     name: 'ids.wikidata',
@@ -165,7 +159,13 @@ export const TYPE_FIELDS = {
     },
     { name: 'congress', label: 'Congress', input: 'number' },
     { name: 'chamber', label: 'Chamber', input: 'select', options: CHAMBERS },
-    { name: 'billStatus', label: 'Status', input: 'text' },
+    {
+      name: 'billStatus',
+      label: 'Status',
+      input: 'select',
+      options: BILL_STATUSES,
+      help: 'Once its Congress has ended, a bill that got no further shows as having died.',
+    },
     { name: 'congressGovUrl', label: 'congress.gov URL', input: 'url' },
     {
       name: 'versions',
@@ -183,7 +183,12 @@ export const TYPE_FIELDS = {
     { name: 'docketNumber', label: 'Docket number', input: 'text' },
     { name: 'judge', label: 'Judge', input: 'text' },
     { name: 'filedAt', label: 'Filed', input: 'date' },
-    { name: 'caseStatus', label: 'Status', input: 'text' },
+    {
+      name: 'caseStatus',
+      label: 'Status',
+      input: 'select',
+      options: CASE_STATUSES,
+    },
     { name: 'courtListenerUrl', label: 'CourtListener URL', input: 'url' },
     { name: 'pacerUrl', label: 'PACER URL', input: 'url' },
     { name: 'complaint.pdfUrl', label: 'Complaint PDF', input: 'url' },
@@ -223,7 +228,7 @@ export function fieldsFor(type) {
 }
 
 /**
- * Top-level entity paths the form controls for a type ("status.value" -> "status"). An update
+ * Top-level entity paths the form controls for a type ("ids.wikidata" -> "ids"). An update
  * sets each of these from the request, so a field cleared on the form is cleared in the database.
  * @param {string} type
  */
@@ -247,8 +252,6 @@ export const SIDE_SECTIONS = [
 const FIELD_SECTIONS = {
   head: ['name', 'disambiguator', 'description', 'note'],
   glance: [
-    'status.value',
-    'status.date',
     'tag',
     'kind',
     'paywalledByDefault',

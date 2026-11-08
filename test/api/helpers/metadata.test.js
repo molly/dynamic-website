@@ -1,12 +1,9 @@
-import {
-  fromLocalInput,
-  toLocalInput,
-} from '../../../frontend/js/metadata/dates';
 import { parsePostUrl } from '../../../api/helpers/postUrl';
 import { suggestSources } from '../../../api/helpers/sources';
 import {
   hydrateUpdates,
   linkCorrections,
+  liveRange,
   sortUpdates,
 } from '../../../api/helpers/updates';
 import {
@@ -14,6 +11,10 @@ import {
   entryMetadataUrls,
   entryPosts,
 } from '../../../backend/helpers/links';
+import {
+  fromLocalInput,
+  toLocalInput,
+} from '../../../frontend/js/metadata/dates';
 
 const paragraph = (text) => ({ type: 'paragraph', data: { text } });
 
@@ -115,17 +116,8 @@ describe('updates', () => {
     },
   ];
 
-  it('orders live posts newest first and others oldest first', () => {
-    expect(sortUpdates(updates, true).map((u) => u._id)).toEqual([
-      'b',
-      'a',
-      'c',
-    ]);
-    expect(sortUpdates(updates, false).map((u) => u._id)).toEqual([
-      'c',
-      'a',
-      'b',
-    ]);
+  it('orders updates oldest first, live posts included', () => {
+    expect(sortUpdates(updates).map((u) => u._id)).toEqual(['c', 'a', 'b']);
   });
 
   it('prepares labels, headlines and bodies for the template', () => {
@@ -133,13 +125,14 @@ describe('updates', () => {
       { updates, live: { status: 'updating' } },
       (post) => post.blocks.map((b) => `<p>${b.data.text}</p>`),
     );
-    expect(hydrated[0]).toMatchObject({
+    // Oldest first, a live post's included
+    expect(hydrated[2]).toMatchObject({
       id: 'b',
       label: 'Live update',
       headline: 'Ruling',
       html: [],
     });
-    expect(hydrated[2]).toMatchObject({
+    expect(hydrated[0]).toMatchObject({
       id: 'c',
       label: 'Correction',
       headline: null,
@@ -192,5 +185,21 @@ describe('editor date-and-time inputs', () => {
     expect(local).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/); // No seconds
     expect(fromLocalInput(local)).toEqual('2026-11-07T15:16:00.000Z');
     expect(fromLocalInput('')).toBeNull();
+  });
+});
+
+describe('live coverage', () => {
+  it('says when it ran, in Eastern time', () => {
+    expect(liveRange('2026-10-29T21:30:00Z', '2026-10-29T21:52:00Z')).toBe(
+      'Oct 29, 5:30–5:52 pm EDT',
+    );
+    expect(liveRange('2026-10-29T15:40:00Z', '2026-10-29T17:15:00Z')).toBe(
+      'Oct 29, 11:40 am – 1:15 pm EDT',
+    );
+    expect(liveRange('2026-10-30T03:40:00Z', '2026-10-30T05:15:00Z')).toBe(
+      'Oct 29, 11:40 pm – Oct 30, 1:15 am EDT',
+    );
+    // Still going, or nothing after the first post: just the start
+    expect(liveRange('2026-11-04T01:00:00Z', null)).toBe('Nov 3, 8:00 pm EST');
   });
 });

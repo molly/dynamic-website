@@ -1,7 +1,9 @@
 import ImageTool from '@editorjs/image';
 import axios from 'axios';
 import {
+  CAPTION_SANITIZE,
   editableText,
+  inlineTextField,
   plainTextField,
   plainTextHtml,
 } from '../helpers/plainPaste.js';
@@ -11,14 +13,21 @@ import { chooseLinkedFile } from '../helpers/upload.js';
 //  - alt text kept as plain text, with newlines for line breaks. The tool itself saves the alt
 //    field's HTML, which the site then shows escaped ("&amp;", "&nbsp;"); the gallery's alt text
 //    is plain text the same way.
-//  - pastes and Enter in the alt text and caption staying in the field (plainTextField), rather
-//    than Editor.js turning them into new blocks
+//  - a caption that keeps links, bold and italic (from the inline toolbar, or pasted), and alt text
+//    that's plain. Pastes and Enter in either stay in the field (inlineTextField, plainTextField),
+//    rather than Editor.js turning them into new blocks
 //  - "or use a link", for an image or video that's already online
 //  - "with border" switched on by itself for an image with white edges (a screenshot of a
 //    document or web page), which would otherwise blend into the page. The server works that out
 //    (backend/helpers/imageEdges.js); the border can be switched off as usual.
 
 export default class ImageBlock extends ImageTool {
+  // With inline tools on, Editor.js sanitizes every text field it isn't told about, which would
+  // turn the & in a file's URL or the alt text into &amp;. So only the caption is cleaned.
+  static get sanitize() {
+    return { caption: CAPTION_SANITIZE, alt: true, file: true };
+  }
+
   constructor(options) {
     super(options);
     this.ui.fillAlt(plainTextHtml(this.data.alt));
@@ -28,7 +37,7 @@ export default class ImageBlock extends ImageTool {
     const wrapper = super.render();
     if (!this.ui.readOnly && !this.linkButton) {
       plainTextField(this.ui.nodes.alt);
-      plainTextField(this.ui.nodes.caption);
+      inlineTextField(this.ui.nodes.caption);
       this.linkButton = Object.assign(document.createElement('button'), {
         type: 'button',
         className: 'link-button image-block-link',

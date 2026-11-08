@@ -16,6 +16,11 @@ import {
 } from '../models/entity.model.js';
 import { Tag } from '../models/tag.model.js';
 import {
+  deleteEntity,
+  entityUsage,
+  mergeEntity,
+} from '../helpers/entityRemoval.js';
+import {
   fetchWikidataEntry,
   wikidataIdForArticle,
 } from '../helpers/wikidata.js';
@@ -212,6 +217,47 @@ router.delete('/relations/:relationId', authenticated(), async (req, res) => {
     await EntityRelation.deleteOne({ _id: req.params.relationId });
     res.sendStatus(204);
   } catch (err) {
+    sendSaveError(res, err);
+  }
+});
+
+// Deleting and merging ---------------------------------------------------------------------------
+
+// What refers to an entity, shown before it's deleted or merged
+router.get('/:id/usage', authenticated(), async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      res.sendStatus(404);
+      return;
+    }
+    res.json(await entityUsage(req.params.id));
+  } catch (err) {
+    logger.error('Failed to check where an entity is used', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete an entity: its mentions become plain text and it's dropped everywhere else
+// (entityRemoval.js)
+router.delete('/:id', authenticated(), async (req, res) => {
+  try {
+    res.json(await deleteEntity(req.params.id));
+  } catch (err) {
+    logger.error('Failed to delete an entity', err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Merge this entity into another (body: { into }), then delete it
+router.post('/:id/merge', authenticated(), async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.body.into)) {
+      res.status(400).json({ error: 'Choose the entity to merge into.' });
+      return;
+    }
+    res.json(await mergeEntity(req.params.id, req.body.into));
+  } catch (err) {
+    logger.error('Failed to merge entities', err);
     sendSaveError(res, err);
   }
 });

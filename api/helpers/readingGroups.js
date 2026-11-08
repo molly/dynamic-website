@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { shortDate } from './entryMeta.js';
 
-// Articles read without commentary show as one "Also read" row per day. Neighbouring reading
+// Articles read without commentary show as one "Read" row per day. Neighbouring reading
 // entries from the same (Eastern) day are grouped where they fall in the feed, so the feed stays
 // in order; commentary on an article is a post of its own.
 

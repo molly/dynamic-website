@@ -13,6 +13,8 @@ block head
   include ../../templates/titleAndDescription.pug
   +titleAndDescription(e.name, e.description || `${page.typeName.one}: ${e.name}`)
 
+//- row: { label, value, href?, prefix?, italic? }. italic: the value is a case's or outlet's name;
+//- prefix: words before it that aren't ("reporter, ")
 mixin rows(rows)
   dl.entity-rows
     each row in rows
@@ -20,8 +22,12 @@ mixin rows(rows)
         .entity-row
           dt #{row.label}
           dd
+            if row.prefix
+              | #{row.prefix}
             if row.href
-              a(href=row.href) #{row.value}
+              a(href=row.href, class=row.italic ? 'italic' : null) #{row.value}
+            else if row.italic
+              i #{row.value}
             else
               | #{row.value}
             if row.extra
@@ -51,7 +57,7 @@ block body
       .entity-main
         header.entity-head.h-card
           p.entity-type-label #{page.typeName.one}
-          h1.entity-name.p-name(class=e.type === 'case' ? 'italic' : null) #{e.name}
+          h1.entity-name.p-name(class=page.italic ? 'italic' : null) #{e.name}
           if page.formerly
             p.entity-formerly #{page.formerly}
           //- Your description if there is one; otherwise one made from the entity's details: a
@@ -64,11 +70,11 @@ block body
             p.entity-description
               | #{page.role.label},#{' '}
               if page.role.href
-                a(href=page.role.href) #{page.role.name}
+                a(href=page.role.href, class=page.role.italic ? 'italic' : null) #{page.role.name}
+              else if page.role.italic
+                i #{page.role.name}
               else
                 | #{page.role.name}
-          if e.status && e.status.value && e.status.value !== 'active'
-            p.entity-status #{e.status.value}#{e.status.date ? ` as of ${new Date(e.status.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' })}` : ''}
           if e.type === 'bill' && e.congressGovUrl
             p.entity-callout #[a(href=e.congressGovUrl) Current status, text and votes on congress.gov →]
           if e.note
@@ -77,12 +83,12 @@ block body
         if page.parties.length
           section.entity-section
             h2.entity-section-heading Parties
-            +rows(page.parties.map((p) => ({ label: p.label, value: p.name, href: p.href })))
+            +rows(page.parties.map((p) => ({ label: p.label, value: p.name, href: p.href, italic: p.italic })))
 
         if page.members.length
           section.entity-section
             h2.entity-section-heading Members
-            +rows(page.members.map((m) => ({ label: m.label, value: m.name, href: m.href })))
+            +rows(page.members.map((m) => ({ label: m.label, value: m.name, href: m.href, italic: m.italic })))
 
         if page.documents.length
           section.entity-section
@@ -172,12 +178,12 @@ block body
             e.type === 'case' ? { label: 'status', value: e.caseStatus } : null,
             e.type === 'bill' ? { label: 'number', value: e.number } : null,
             e.type === 'bill' ? { label: 'congress', value: e.congress ? ordinal(e.congress) : null } : null,
-            e.type === 'bill' ? { label: 'status', value: e.billStatus } : null,
+            e.type === 'bill' ? { label: 'status', value: page.billStatus } : null,
             e.type === 'committee' ? { label: 'type', value: e.committeeType } : null,
             ...page.facts,
             { label: 'entries', value: page.glance.count ? `${page.glance.count} · since ${page.glance.since}` : null },
             { label: 'latest', value: page.glance.latest },
-            page.role ? { label: 'role', value: `${page.role.label}, ${page.role.name}` } : null,
+            page.role ? { label: 'role', prefix: `${page.role.label}, `, value: page.role.name, italic: page.role.italic } : null,
             { label: 'tag', value: page.tag ? `#${page.tag.text.trim().toLowerCase().replace(/\s+/g, '-')}` : null, href: page.tag ? `/feed/tag/${page.tag.value}` : null },
             e.type === 'organization' ? { label: 'type', value: e.kind } : null,
             e.type === 'person' ? { label: 'type', value: 'person' } : null,
@@ -234,7 +240,9 @@ block body
               each item in page.affiliated
                 li
                   if item.href
-                    a(href=item.href) #{item.name}
+                    a(href=item.href, class=item.italic ? 'italic' : null) #{item.name}
+                  else if item.italic
+                    i #{item.name}
                   else
                     | #{item.name}
                   span.entity-side-note  #{item.label}
@@ -245,7 +253,7 @@ block body
             ul.entity-side-links
               each item in page.related
                 li
-                  a(href=item.href) #{item.name}
+                  a(href=item.href, class=item.italic ? 'italic' : null) #{item.name}
                   if item.label
                     span.entity-side-note  #{item.label}
                   else if item.count

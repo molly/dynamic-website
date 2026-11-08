@@ -2,7 +2,9 @@ import axios from 'axios';
 import Sortable from 'sortablejs';
 import { chooseLinkedFile } from '../../helpers/upload.js';
 import {
+  CAPTION_SANITIZE,
   editableText,
+  inlineTextField,
   plainTextField,
   plainTextHtml,
 } from '../../helpers/plainPaste.js';
@@ -12,7 +14,8 @@ import trashIcon from './svg/trash.svg';
 
 // Gallery block, forked from editorjs-gallery 1.0.12 (see LICENSE) so each image can carry
 // its own alt text, caption and white-background flag.
-// Data: { caption, files: [{ url, contentType?, alt, caption, white }] }
+// Data: { caption, files: [{ url, contentType?, alt, caption, white }] }. Captions keep links, bold
+// and italic; alt text is plain.
 
 const WHITE_ICON =
   '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>';
@@ -34,6 +37,21 @@ export default class ImageGallery {
 
   static get toolbox() {
     return { icon: toolboxIcon, title: 'Gallery' };
+  }
+
+  // With inline tools on, Editor.js sanitizes every text field it isn't told about, which would
+  // turn the & in a file's URL or the alt text into &amp;. So only the captions are cleaned.
+  static get sanitize() {
+    return {
+      caption: CAPTION_SANITIZE,
+      files: {
+        caption: CAPTION_SANITIZE,
+        url: true,
+        contentType: true,
+        alt: true,
+      },
+      style: true,
+    };
   }
 
   constructor({ data, config, api, readOnly }) {
@@ -71,6 +89,7 @@ export default class ImageGallery {
       [styles.input, 'image-gallery__caption'],
       this.data.caption,
       this.config.captionPlaceholder,
+      inlineTextField,
     );
 
     if (!this.readOnly) {
@@ -109,15 +128,16 @@ export default class ImageGallery {
     });
   }
 
-  // Pastes and Enter stay in the field, as line breaks, rather than becoming new blocks
-  makeEditable(classNames, html, placeholder) {
+  // Pastes and Enter stay in the field, as line breaks, rather than becoming new blocks. A
+  // caption keeps links, bold and italic (inlineTextField); alt text is plain (plainTextField).
+  makeEditable(classNames, html, placeholder, field) {
     const el = make('div', classNames, {
       contentEditable: !this.readOnly,
       innerHTML: html || '',
     });
     el.dataset.placeholder = placeholder;
     if (!this.readOnly) {
-      plainTextField(el);
+      field(el);
     }
     return el;
   }
@@ -166,11 +186,13 @@ export default class ImageGallery {
       [this.api.styles.input, 'image-gallery__alt'],
       plainTextHtml(file.alt),
       'Alt text',
+      plainTextField,
     );
     item.caption = this.makeEditable(
       [this.api.styles.input, 'image-gallery__item-caption'],
       file.caption,
       'Image caption',
+      inlineTextField,
     );
     el.append(thumb, item.alt, item.caption);
     this.items.push(item);

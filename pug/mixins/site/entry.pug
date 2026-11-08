@@ -45,15 +45,6 @@ mixin entryRows(meta, options)
 
 mixin microBody(micro, meta, options)
   - var isLive = micro.live && micro.live.status
-  if isLive
-    p.entry-live(class=micro.live.status)
-      if micro.live.status === 'updating'
-        span.entry-live-dot(aria-hidden="true") ●
-        |  Updating
-        if micro.live.lastUpdateAt
-          |  · last #[time(datetime=toISOWithoutMillis(micro.live.lastUpdateAt), data-local="update") #{updateTime(micro.live.lastUpdateAt, new Date())}]
-      else
-        | Live coverage ended
   if micro.title
     h2.entry-title.p-name
       if options.isPermalink
@@ -71,31 +62,57 @@ mixin microBody(micro, meta, options)
   if isLive
     +liveBody(micro, meta, options)
   else
-    //- In the feed a long post shows its start, then "continues →" (api/helpers/feedExcerpt.js).
+    //- In the feed a long post shows its start, then "continue reading →"
+    //- (api/helpers/feedExcerpt.js).
     - var excerpt = options.isPermalink ? { html: micro.html, truncated: false } : feedExcerpt(micro)
     .entry-content.e-content
       each block in excerpt.html
         != block
     if excerpt.truncated
       //- The top of the next block, faded out. Not part of the post's content (no e-content),
-      //- and not clickable or focusable: "continues →" is the way on.
+      //- and not clickable or focusable: "continue reading →" is the way on.
       if excerpt.next
         .entry-content.entry-teaser(aria-hidden="true", inert)
           != excerpt.next
       p.entry-continues
-        a(href=meta.date.href) continues →
+        a(href=meta.date.href) continue reading →
     else
       +microExtras(micro, micro.updates || [])
 
-//- A live post: its updates newest first, then the post that started it. In the feed, the latest
-//- two updates.
+//- A live post: "Live coverage · ended · Oct 29, 5:30–5:52 pm EDT", then a timeline down a purple
+//- rail, in time order: the first post, then each live update. In the feed, the first post and the
+//- two latest updates, with a link to the ones in between.
 mixin liveBody(micro, meta, options)
   - var liveUpdates = (micro.updates || []).filter((u) => u.kind === 'live')
-  - var shown = options.isPermalink ? liveUpdates : liveUpdates.slice(0, 2)
-  if shown.length
-    section.live-updates
+  - var shown = options.isPermalink ? liveUpdates : liveUpdates.slice(-2)
+  - var skipped = liveUpdates.length - shown.length
+  .live-coverage(class=micro.live.status)
+    p.live-coverage-head
+      strong Live coverage
+      if micro.live.status === 'updating'
+        |  · #[span.entry-live-dot(aria-hidden="true") ●] updating · since #{micro.live.range}
+        if micro.live.lastUpdateAt
+          |  · last #[time(datetime=toISOWithoutMillis(micro.live.lastUpdateAt), data-local="update") #{updateTime(micro.live.lastUpdateAt, new Date())}]
+      else
+        |  · ended · #{micro.live.range}
+    ol.live-timeline
+      li.live-entry.live-original
+        //- The post's own date (there's no "Started …" line above a live post); in the feed it
+        //- links to the post
+        p.update-time
+          if options.isPermalink
+            time.dt-published(datetime=toISOWithoutMillis(micro.createdAt), title=meta.date.title, data-local="update", data-ref=toISOWithoutMillis(micro.createdAt)) #{updateTime(micro.createdAt, micro.createdAt)}
+          else
+            a.u-url(href=meta.date.href)
+              time.dt-published(datetime=toISOWithoutMillis(micro.createdAt), title=meta.date.title, data-local="update", data-ref=toISOWithoutMillis(micro.createdAt)) #{updateTime(micro.createdAt, micro.createdAt)}
+        .entry-content.e-content
+          each block in micro.html
+            != block
+      if skipped
+        li.live-entry.live-skipped
+          a(href=meta.date.href) #{skipped} earlier #{skipped === 1 ? 'update' : 'updates'} →
       each update in shown
-        .live-update(id=`update-${update.id}`)
+        li.live-entry.live-update(id=`update-${update.id}`)
           p.update-time
             time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime, data-local="update", data-ref=toISOWithoutMillis(micro.createdAt)) #{updateTime(update.at, micro.createdAt)}
           if update.headline
@@ -103,24 +120,16 @@ mixin liveBody(micro, meta, options)
           .entry-content
             each block in update.html
               != block
-  if shown.length < liveUpdates.length
-    p.entry-continues
-      a(href=meta.date.href) continues → #{liveUpdates.length - shown.length} earlier #{liveUpdates.length - shown.length === 1 ? 'update' : 'updates'}
-  else
-    .live-original
-      p.update-time #[time(datetime=toISOWithoutMillis(micro.createdAt), data-local="update", data-ref=toISOWithoutMillis(micro.createdAt)) #{updateTime(micro.createdAt, micro.createdAt)}] · first post
-      .entry-content.e-content
-        each block in micro.html
-          != block
-    +microExtras(micro, (micro.updates || []).filter((u) => u.kind !== 'live'))
+  +microExtras(micro, (micro.updates || []).filter((u) => u.kind !== 'live'))
 
 //- After a post: the articles it's related to as cards, then its updates and corrections.
 mixin microExtras(micro, updates)
   - var related = (micro.relatedPosts || []).filter((r) => r.ref)
+  //- Related articles, as cards after the post, with their summaries and excerpts
   if related.length
-    .entry-content
+    .entry-content.entry-related
       each item in related
-        != articleCard(item.ref, { archived: micro.archived || {} })
+        != articleCard(item.ref, { archived: micro.archived || {}, excerpts: item.ref.excerpts || [], summary: true })
   if updates.length
     section.entry-updates
       each update in updates
@@ -288,12 +297,12 @@ mixin bookBody(book, meta)
       if details.length
         p.entry-book-byline #{details.join(' · ')}
 
-//- "Also read · Oct 28 · 3": articles read on one day, one line each, across the whole width.
+//- "Read · Oct 28 · 3": articles read on one day, one line each, across the whole width.
 mixin readingGroup(group, options = {})
-  section.reading-group(aria-label=`Also read on ${group.dateText}`)
+  section.reading-group(aria-label=`Read on ${group.dateText}`)
     p.reading-group-head
       +siteIcon('newspaper')
-      |  Also read · #{group.dateText}
+      |  Read · #{group.dateText}
       if group.entries.length > 1
         |  · #{group.entries.length}
     ul.reading-group-items
@@ -330,17 +339,21 @@ mixin siteEntry(entry, options = {})
   - var meta = entryMeta(entry, { tagBase: options.tagBase, isPermalink: options.isPermalink })
   if meta
     - var micro = entry.entryType === 'micro' ? entry.micro : (entry.entryType ? null : entry)
-    article.site-entry.h-entry(class=[`site-entry-${entry.entryType || 'micro'}`, meta.verb === 'Quoted' ? 'site-entry-quoted' : null, options.isPermalink ? 'site-entry-permalink' : null])
-      p.entry-verb
-        +siteIcon(meta.icon)
-        span.entry-verb-word #{meta.verb}
-        | #{' '}
-        //- On the post's own page the permalink row has the link (and the u-url), so the date isn't one
-        if meta.rows.some((row) => row.label === 'permalink')
-          time.dt-published.entry-verb-date(datetime=meta.date.iso, title=meta.date.title, data-local=meta.date.format) #{meta.date.text}
-        else
-          a.u-url(href=meta.date.href)
-            time.dt-published(datetime=meta.date.iso, title=meta.date.title, data-local=meta.date.format) #{meta.date.text}
+    //- A live post's "Live coverage" strip says when it started, so it has no "Started …" line; its
+    //- first post's time carries the date and the link instead (liveBody)
+    - var isLivePost = Boolean(micro && micro.live && micro.live.status)
+    article.site-entry.h-entry(class=[`site-entry-${entry.entryType || 'micro'}`, meta.verb === 'Quoted' ? 'site-entry-quoted' : null, options.isPermalink ? 'site-entry-permalink' : null, isLivePost ? 'site-entry-live' : null])
+      unless isLivePost
+        p.entry-verb
+          +siteIcon(meta.icon)
+          span.entry-verb-word #{meta.verb}
+          | #{' '}
+          //- On the post's own page the permalink row has the link (and the u-url), so the date isn't one
+          if meta.rows.some((row) => row.label === 'permalink')
+            time.dt-published.entry-verb-date(datetime=meta.date.iso, title=meta.date.title, data-local=meta.date.format) #{meta.date.text}
+          else
+            a.u-url(href=meta.date.href)
+              time.dt-published(datetime=meta.date.iso, title=meta.date.title, data-local=meta.date.format) #{meta.date.text}
       .entry-main
         if micro
           +microBody(micro, meta, options)
