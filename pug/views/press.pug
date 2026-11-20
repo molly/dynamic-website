@@ -31,7 +31,7 @@ block body
           ul
             each chip in chips.shown
               li
-                a.press-tag(href=chip.href, aria-current=chip.current ? 'true' : null)
+                a.press-tag(href=chip.href, rel="nofollow", aria-current=chip.current ? 'true' : null)
                   | #{chip.text}
                   span.press-tag-count #{chip.count}
           if chips.more.length
@@ -40,7 +40,7 @@ block body
               ul
                 each chip in chips.more
                   li
-                    a.press-tag(href=chip.href, aria-current=chip.current ? 'true' : null)
+                    a.press-tag(href=chip.href, rel="nofollow", aria-current=chip.current ? 'true' : null)
                       | #{chip.text}
                       span.press-tag-count #{chip.count}
 
@@ -74,9 +74,11 @@ block body
                         each tag, index in tags
                           if index > 0
                             | #{' · '}
-                          a.p-category(href=tagHref(tag)) #{tagText(tag)}
+                          a.p-category(href=tagHref(tag), rel="nofollow") #{tagText(tag)}
                         if archive
                           | #{tags.length ? ' · ' : ''}#[a(href=archive) archived]
+
+        - var pagerNofollow = true
 
         include ../includes/pager.pug
 

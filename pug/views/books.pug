@@ -31,7 +31,7 @@ block body
               ul
                 each filter in group.filters
                   li
-                    a(href=filter.href, aria-current=filter.current ? 'true' : null) #{filter.text}
+                    a(href=filter.href, rel="nofollow", aria-current=filter.current ? 'true' : null) #{filter.text}
 
         +listControls({ action: '/reading/books', id: 'books-search', label: 'Search books', hidden: { status: query.status, type: query.type, tags: query.tags.join('-'), order: query.order }, search: query.search, placeholder: 'Search…', totalResults, isFiltered, clearHref, newestHref, oldestHref, order: query.order })
 
@@ -83,7 +83,9 @@ block body
                     each tag, index in tags
                       if index > 0
                         | #{' · '}
-                      a.p-category(href=tagHref(tag)) #{tagText(tag)}
+                      a.p-category(href=tagHref(tag), rel="nofollow") #{tagText(tag)}
+
+        - var pagerNofollow = true
 
         include ../includes/pager.pug
 

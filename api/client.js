@@ -1,6 +1,10 @@
 import { Book } from '../backend/models/book.model.js';
 import { PressEntry, ShortformEntry } from '../backend/models/entry.model.js';
-import { BookTag, Tag } from '../backend/models/tag.model.js';
+import {
+  getAllTags,
+  getTagsByFrequency,
+  getTagsByValue,
+} from '../backend/helpers/tagCache.js';
 import { getLimit } from '../data/filter/paginate.js';
 import { formatArticleDate } from '../data/filter/preprocess.js';
 
@@ -31,8 +35,7 @@ const makeQuery = async (req, book = false) => {
   }
   if (req.query.tags) {
     const tagStrings = req.query.tags.split('-');
-    const tagModel = book ? BookTag : Tag;
-    const tags = await tagModel.find({ value: { $in: tagStrings } });
+    const tags = await getTagsByValue(tagStrings, { book });
     const tagIds = [];
     for (const tag of tags) {
       tagIds.push(tag._id);
@@ -87,15 +90,7 @@ export const getPaginatedAndFilteredFromDb = async (
   try {
     const documentsCollection = getDocumentsCollection(collection);
 
-    const allTags = await Tag.find({
-      [`frequency.${collection}`]: { $gt: 0 },
-    })
-      .sort({ [`frequency.${collection}`]: -1 })
-      .lean();
-
-    const cursor = documentsCollection
-      .find(query)
-      .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } });
+    const cursor = documentsCollection.find(query);
 
     // Sort, paginate
     cursor.sort({ [dateKey]: sortOrder });
@@ -104,18 +99,29 @@ export const getPaginatedAndFilteredFromDb = async (
     }
     cursor.limit(limit);
 
-    const results = await cursor.lean();
+    const [entries, totalFilteredResults, tags, allTags] = await Promise.all([
+      cursor.lean(),
+      documentsCollection.countDocuments(query),
+      getAllTags(),
+      getTagsByFrequency(collection),
+    ]);
 
-    const totalFilteredResults =
-      await documentsCollection.countDocuments(query);
-    const totalUnfilteredResults = await documentsCollection.countDocuments();
+    // Each entry's tags, by value, from the cached tags
+    const tagsById = new Map(tags.map((tag) => [tag._id.toString(), tag]));
+    const results = entries.map((entry) => ({
+      ...entry,
+      tags: (entry.tags || [])
+        .map((id) => tagsById.get(id.toString()))
+        .filter(Boolean)
+        .sort((a, b) => a.value.localeCompare(b.value)),
+    }));
+
     return {
       currentPage: page,
       pageSize: limit,
       results: formatResults(results, {}),
       totalPages: Math.ceil(totalFilteredResults / limit),
       totalResults: totalFilteredResults,
-      totalUnfilteredResults,
       allTags,
     };
   } catch (err) {
@@ -152,13 +158,7 @@ export const getPaginatedAndFilteredBooksFromDb = async (
   try {
     const documentsCollection = getDocumentsCollection(collection);
 
-    const allTags = await BookTag.find({
-      'frequency.total': { $gt: 0 },
-    })
-      .sort({ 'frequency.total': -1 })
-      .lean();
-
-    const queryResult = await documentsCollection
+    const resultsQuery = documentsCollection
       .aggregate([
         { $match: query },
         ...addedFilters,
@@ -205,12 +205,16 @@ export const getPaginatedAndFilteredBooksFromDb = async (
         },
       ])
       .exec();
+    const [queryResult, bookTags, allTags] = await Promise.all([
+      resultsQuery,
+      getAllTags({ book: true }),
+      getTagsByFrequency('total', { book: true }),
+    ]);
 
     const totalFilteredResults = queryResult[0]?.metadata?.total || 0;
-    const totalUnfilteredResults = await documentsCollection.countDocuments();
 
     // Hydrate tags
-    const allTagsMap = makeTagMap(allTags);
+    const allTagsMap = makeTagMap(bookTags);
     const results = (queryResult[0]?.data || []).map((result) => {
       return {
         ...result,
@@ -218,6 +222,7 @@ export const getPaginatedAndFilteredBooksFromDb = async (
           .map((tagId) => {
             return allTagsMap[tagId.toString()];
           })
+          .filter(Boolean)
           .sort((a, b) => a.text.localeCompare(b.text)),
       };
     });
@@ -228,7 +233,6 @@ export const getPaginatedAndFilteredBooksFromDb = async (
       results: formatBookResults(results, {}),
       totalPages: Math.ceil(totalFilteredResults / limit),
       totalResults: totalFilteredResults,
-      totalUnfilteredResults,
       allTags,
     };
   } catch (err) {
@@ -249,9 +253,11 @@ export const getLandingPageEntriesFromDb = async () => {
 
 export const getRssReadingFromDb = async () => {
   const limit = 20;
-  const articleTags = await Tag.find().lean();
+  const [articleTags, bookTags] = await Promise.all([
+    getAllTags(),
+    getAllTags({ book: true }),
+  ]);
   const articleTagMap = makeTagMap(articleTags);
-  const bookTags = await BookTag.find().lean();
   const bookTagMap = makeTagMap(bookTags);
   try {
     // Get entries

@@ -2081,14 +2081,14 @@ button.primary:disabled {
   font-weight: 600;
 }
 
-.document-tool input[data-field='pdfUrl'],
+.document-tool input[data-field='url'],
 .document-tool input[data-field='docketUrl'],
 .document-tool input[data-field='coverageUrl'] {
   flex: 1;
   font-family: var(--editor-mono);
 }
 
-.document-tool input[data-field='pdfPage'],
+.document-tool input[data-field='page'],
 .document-tool input[data-field='paragraph'] {
   width: 5em;
 }

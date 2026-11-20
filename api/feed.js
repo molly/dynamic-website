@@ -17,7 +17,8 @@ import {
 } from '../backend/models/entry.model.js';
 import { FeedEntry } from '../backend/models/feed/feedEntry.model.js';
 import MicroEntry from '../backend/models/micro/microEntry.model.js';
-import { BookTag, Tag } from '../backend/models/tag.model.js';
+import { getAllTags } from '../backend/helpers/tagCache.js';
+import { Tag } from '../backend/models/tag.model.js';
 import { Webmention } from '../backend/models/webmention.model.js';
 import { formatArticleDate } from '../data/filter/preprocess.js';
 import { getPressDetails } from './helpers/press.js';
@@ -98,7 +99,8 @@ export const getFeedEntries = async ({
   limit = 10,
   oldestFirst = false,
 } = {}) => {
-  let q = FeedEntry.find({ deletedAt: { $exists: false }, ...query }).sort({
+  const filter = { deletedAt: { $exists: false }, ...query };
+  let q = FeedEntry.find(filter).sort({
     createdAt: oldestFirst ? 1 : -1,
   });
 
@@ -109,7 +111,7 @@ export const getFeedEntries = async ({
     q = q.limit(limit);
   }
 
-  const entries = await q
+  const entriesQuery = q
     .populate({
       path: 'tags',
       model: Tag,
@@ -118,6 +120,8 @@ export const getFeedEntries = async ({
     .populate({
       path: 'micro',
       model: MicroEntry,
+      // Its posts for the social networks are only for the editor
+      select: '-socialThreads',
       populate: [
         { path: 'tags', model: Tag, options: { sort: { value: 1 } } },
         RELATED_POPULATE,
@@ -139,9 +143,14 @@ export const getFeedEntries = async ({
       })),
     })
     .lean();
+  // The count doesn't depend on the entries, so it runs alongside them.
+  const [entries, totalResults] = await Promise.all([
+    entriesQuery,
+    FeedEntry.countDocuments(filter),
+  ]);
 
   if (entries.some((entry) => 'book' in entry)) {
-    const bookTags = await BookTag.find({}).lean();
+    const bookTags = await getAllTags({ book: true });
     const bookTagsMap = bookTags.reduce((acc, tag) => {
       const { _id, ...rest } = tag;
       acc[_id.toString()] = rest;
@@ -173,11 +182,5 @@ export const getFeedEntries = async ({
   });
   const hydrated = hydrateFeedEntries(validEntries, context);
 
-  const totalResults = await FeedEntry.countDocuments(query);
-  let totalUnfilteredResults = totalResults;
-  if (query) {
-    totalUnfilteredResults = await FeedEntry.countDocuments({});
-  }
-
-  return { entries: hydrated, totalResults, totalUnfilteredResults };
+  return { entries: hydrated, totalResults };
 };

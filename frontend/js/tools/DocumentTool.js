@@ -13,10 +13,11 @@ import {
 } from '../helpers/upload.js';
 
 // "Document" block: an excerpt from a court filing, a letter or another document, with links to
-// the PDF (at a page), the docket and your coverage. Select words in the excerpt and use Highlight
-// to mark them as "highlight mine".
-// Data: { docType: 'filing' | 'letter' | 'other', title, date, paragraph, excerptHtml, pdfUrl,
-//   pdfPage, docketUrl, thumbnail, coverageUrl, entity: { _id, name, type }, senders, recipients }
+// the document (a PDF, at a page, or a web page or anything else), the docket and your coverage.
+// Select words in the excerpt and use Highlight to mark them as "highlight mine".
+// Data: { docType: 'filing' | 'letter' | 'other', title, date, paragraph, excerptHtml, url, page
+//   (in a PDF), docketUrl, thumbnail, coverageUrl, entity: { _id, name, type }, senders,
+//   recipients }
 // entity is the case or bill the document belongs to. senders and recipients (letters and other
 // documents) are each { prefix, people: [{ name, role, entity }], more }: see
 // api/helpers/documentParties.js. Names stay as written, shown in bold and linked to the entity
@@ -28,8 +29,8 @@ const FIELDS = [
   'title',
   'date',
   'paragraph',
-  'pdfUrl',
-  'pdfPage',
+  'url',
+  'page',
   'docketUrl',
   'coverageUrl',
 ];
@@ -171,7 +172,7 @@ export default class DocumentTool {
         <span class="side-hint">The feed always shows only the highlights.</span>
       </div>
       <div class="document-tool-row links">
-        ${input('pdfUrl', 'PDF URL', 'url')} ${input('pdfPage', 'page', 'number')}
+        ${input('url', 'Document URL', 'url')} ${input('page', 'page (PDF)', 'number')}
         ${input('docketUrl', 'Docket URL', 'url')}
       </div>
       <div class="document-tool-row links">
@@ -302,11 +303,9 @@ export default class DocumentTool {
   // Optional: draws page 1 of the PDF on the server and stores just that image. Without a
   // thumbnail the card is text only.
   async thumbnailFromPdf(button) {
-    const url = this.wrapper
-      .querySelector('[data-field="pdfUrl"]')
-      .value.trim();
+    const url = this.wrapper.querySelector('[data-field="url"]').value.trim();
     if (!url) {
-      window.alert('Add the PDF URL first.');
+      window.alert('Add the document’s URL first.');
       return;
     }
     const label = button.textContent;
@@ -376,6 +375,6 @@ export default class DocumentTool {
   }
 
   validate(data) {
-    return Boolean(data.title || data.excerptHtml || data.pdfUrl);
+    return Boolean(data.title || data.excerptHtml || data.url);
   }
 }

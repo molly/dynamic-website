@@ -76,9 +76,9 @@ export const extractUrlsFromBlocks = (blocks, { embeds = false } = {}) => {
     } else if (block.type === 'raw') {
       urls.push(...extractUrlsFromText(block.data.html));
     } else if (block.type === 'document') {
-      const { pdfUrl, docketUrl, coverageUrl, excerptHtml } = block.data;
+      const { url, docketUrl, coverageUrl, excerptHtml } = block.data;
       urls.push(
-        ...[pdfUrl, docketUrl, coverageUrl].filter(Boolean),
+        ...[url, docketUrl, coverageUrl].filter(Boolean),
         ...extractUrlsFromText(excerptHtml),
       );
     } else if (block.type === 'socialPost') {

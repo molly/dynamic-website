@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { BookTag, Tag } from '../models/tag.model.js';
+import { invalidateTagCache } from './tagCache.js';
 
 const hasTag = (tagArray, tag) => {
   for (let i = 0; i < tagArray.length; i++) {
@@ -13,7 +14,10 @@ const hasTag = (tagArray, tag) => {
 export const updateTagsOnCreate = async (tags, category, isBook = false) => {
   const tagIds = [];
   const tagModel = isBook ? BookTag : Tag;
-  if (tags && tags.length) {
+  if (!tags || !tags.length) {
+    return tagIds;
+  }
+  try {
     for (let i = 0; i < tags.length; i++) {
       const tag = tags[i];
       let tagRecord;
@@ -51,6 +55,9 @@ export const updateTagsOnCreate = async (tags, category, isBook = false) => {
       const savedTag = await tagRecord.save();
       tagIds.push(savedTag._id);
     }
+  } finally {
+    // Even after a failed save, some tags may have changed
+    invalidateTagCache();
   }
   return tagIds;
 };
@@ -74,6 +81,10 @@ export const updateTagsOnEdit = async (
     { _id: { $in: tagsToRemove } },
     { $inc: updateFields },
   );
-  const [added] = await Promise.all([addPromise, removePromise]);
-  return [...unchangedTags, ...added]; // Don't really care about tag order, we can just mash these together.
+  try {
+    const [added] = await Promise.all([addPromise, removePromise]);
+    return [...unchangedTags, ...added]; // Don't really care about tag order, we can just mash these together.
+  } finally {
+    invalidateTagCache();
+  } // Don't really care about tag order, we can just mash these together.
 };

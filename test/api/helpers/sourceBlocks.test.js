@@ -23,8 +23,8 @@ const FILING = {
   paragraph: '27',
   excerptHtml:
     'Armstrong wrote: <mark>“Doesn’t everybody think it’s weird”</mark>',
-  pdfUrl: 'https://example.com/complaint.pdf',
-  pdfPage: '12',
+  url: 'https://example.com/complaint.pdf',
+  page: '12',
   docketUrl: 'https://www.courtlistener.com/docket/1/x/',
 };
 
@@ -253,7 +253,7 @@ describe('renderDocument', () => {
         from: 'Senate PSI (minority)',
         to: 'Brandon Lutnick',
         excerptHtml: '…investigating…',
-        pdfUrl: 'https://example.com/l.pdf',
+        url: 'https://example.com/l.pdf',
         coverageUrl: 'https://www.citationneeded.news/x/',
       },
     });
@@ -267,6 +267,27 @@ describe('renderDocument', () => {
     );
     expect(html).not.toContain('document-head'); // Known by its sender and recipient
     expect(html).not.toContain('highlight mine');
+  });
+
+  it('labels a document that isn’t a PDF without saying PDF, and gives it no page', () => {
+    const html = renderDocument({
+      data: {
+        ...FILING,
+        title: 'Coinbase 10-Q',
+        url: 'https://www.sec.gov/Archives/edgar/data/1679788/coin-20260630.htm',
+      },
+    });
+    expect(html).toContain(
+      '<a href="https://www.sec.gov/Archives/edgar/data/1679788/coin-20260630.htm">filing</a>',
+    );
+    expect(html).not.toContain('PDF');
+    expect(html).not.toContain('#page=');
+    const letter = renderDocument({
+      data: { docType: 'letter', url: 'https://example.com/letter' },
+    });
+    expect(letter).toContain(
+      '<a href="https://example.com/letter">full letter</a>',
+    );
   });
 });
 
@@ -501,17 +522,24 @@ describe('comparisons and the other places blocks go', () => {
     expect(
       extractUrlsFromBlocks([{ type: 'document', data: FILING }, comparison]),
     ).toEqual([
-      FILING.pdfUrl,
+      FILING.url,
       FILING.docketUrl,
       POST.originalUrl,
       POST.linkCard.url,
     ]);
   });
 
-  it('suggests a document’s PDF and docket as sources', () => {
+  it('suggests a document and its docket as sources, saying when it’s a PDF', () => {
     expect(suggestSources([{ type: 'document', data: FILING }])).toEqual([
-      { label: 'Complaint · O’Leary v. Armstrong (PDF)', url: FILING.pdfUrl },
+      { label: 'Complaint · O’Leary v. Armstrong (PDF)', url: FILING.url },
       { label: 'docket', url: FILING.docketUrl },
+    ]);
+    const filing = {
+      title: 'Coinbase 10-Q',
+      url: 'https://www.sec.gov/coin.htm',
+    };
+    expect(suggestSources([{ type: 'document', data: filing }])).toEqual([
+      { label: 'Coinbase 10-Q', url: filing.url },
     ]);
   });
 

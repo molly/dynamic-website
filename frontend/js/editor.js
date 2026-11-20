@@ -563,28 +563,31 @@ async function onFirstLoad() {
     placeholder: 'add tag',
   });
 
-  // Load TomSelect for related posts
-  const { data: relatedOptions } = await axios.get(
-    '/dynamic-api/micro/relatedPosts',
-  );
-  // Recent options don't necessarily include this post's current related posts, so add those.
+  // Related articles (shortform reading and press): the server searches every entry as you type;
+  // on focus, the most recent. This post's current ones are options from the start.
   const currentRelated = (savedPost.relatedPosts || [])
     .filter(({ ref }) => ref)
     .map(({ ref, model }) => ({ _id: ref._id, title: ref.title, type: model }));
-  const allRelatedOptions = [
-    ...currentRelated,
-    ...relatedOptions.filter(
-      (opt) => !currentRelated.some((current) => current._id === opt._id),
-    ),
-  ];
   relatedPostsSelect = new TomSelect('#related', {
     items: postMeta.relatedPosts.map(({ ref }) => ref),
     valueField: '_id',
     labelField: 'title',
     searchField: ['title'],
-    options: allRelatedOptions,
+    options: currentRelated,
     maxItems: null,
-    placeholder: 'search your posts',
+    preload: 'focus',
+    // The server already matched title, outlet and author; don't filter again on titles.
+    score: () => () => 1,
+    load(query, callback) {
+      axios
+        .get('/dynamic-api/micro/relatedPosts', { params: { q: query } })
+        .then(({ data }) => callback(data))
+        .catch((err) => {
+          console.error(err);
+          callback();
+        });
+    },
+    placeholder: 'search your reading list and press',
   });
 
   threadPicker = await createThreadPicker('#threads', {
@@ -699,7 +702,7 @@ async function onFirstLoad() {
   relatedPostsSelect.on('change', function () {
     postMeta.relatedPosts = relatedPostsSelect.getValue().map((id) => ({
       ref: id,
-      model: allRelatedOptions.find((opt) => opt._id === id).type,
+      model: relatedPostsSelect.options[id].type,
     }));
   });
 

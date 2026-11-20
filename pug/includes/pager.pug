@@ -4,10 +4,13 @@
 //- runs oldest first (a thread) sets pagerOldestFirst, so the arrows read "← older" and "newer →".
 - var hrefFor = typeof pageHref === 'function' ? pageHref : (n) => (n === 1 ? pageBase.replace(/[?&]$/, '') || '/' : `${pageBase}page=${n}`)
 - var labels = typeof pagerOldestFirst !== 'undefined' && pagerOldestFirst ? { prev: '← older', next: 'newer →' } : { prev: '← newer', next: 'older →' }
+//- A list whose pages are filters as well (the reading lists, press) sets pagerNofollow, so crawlers
+//- don't follow every combination of them.
+- var nofollow = typeof pagerNofollow !== 'undefined' && pagerNofollow
 if totalPages > 1
   nav.page-nav(aria-label="Pages")
     if currentPage > 1
-      a.page-nav-prev(href=hrefFor(currentPage - 1), rel="prev") #{labels.prev}
+      a.page-nav-prev(href=hrefFor(currentPage - 1), rel=nofollow ? 'prev nofollow' : 'prev') #{labels.prev}
     else
       span.page-nav-prev.page-nav-disabled(aria-hidden="true") #{labels.prev}
     ol.page-nav-pages
@@ -18,8 +21,8 @@ if totalPages > 1
           else if item === currentPage
             span.page-nav-current(aria-current="page") #{item}
           else
-            a(href=hrefFor(item), aria-label=`Page ${item}`) #{item}
+            a(href=hrefFor(item), rel=nofollow ? 'nofollow' : null, aria-label=`Page ${item}`) #{item}
     if currentPage < totalPages
-      a.page-nav-next(href=hrefFor(currentPage + 1), rel="next") #{labels.next}
+      a.page-nav-next(href=hrefFor(currentPage + 1), rel=nofollow ? 'next nofollow' : 'next') #{labels.next}
     else
       span.page-nav-next.page-nav-disabled(aria-hidden="true") #{labels.next}

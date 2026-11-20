@@ -115,7 +115,7 @@ export const isQuoteOnly = (micro) => {
   return blocks.length > 0 && blocks.every((block) => block.type === 'quote');
 };
 
-// "updated Oct 31 · 1 update, 1 correction", or "updates 3" on a live post.
+// "updated Oct 31 · 1 update, 1 correction ↓", or "updates 3" on a live post.
 function updatesRow(micro, href, options) {
   const updates = micro.updates || [];
   if (!updates.length) {
@@ -126,6 +126,9 @@ function updatesRow(micro, href, options) {
   }
   const latest = updates.reduce((a, b) =>
     new Date(b.at) > new Date(a.at) ? b : a,
+  );
+  const first = updates.reduce((a, b) =>
+    new Date(b.at) < new Date(a.at) ? b : a,
   );
   const counts = Object.entries(UPDATE_WORDS)
     .map(([kind, word]) => [
@@ -140,7 +143,10 @@ function updatesRow(micro, href, options) {
       text: shortDate(latest.at, options),
       href: `${href}#update-${latest.id}`,
     },
-    ...(counts ? [{ text: counts }] : []),
+    // The count jumps down to the first of them
+    ...(counts
+      ? [{ text: `${counts} ↓`, href: `${href}#update-${first.id}` }]
+      : []),
   ]);
 }
 
@@ -300,23 +306,11 @@ function shortformMeta(entry, { tagBase }) {
 
 function bookMeta(entry, options) {
   const { book } = entry;
-  let started = null;
-  if (book.started && book.completed && entry.status === 'read') {
-    const days = Math.round(
-      DateTime.fromISO(book.completed).diff(
-        DateTime.fromISO(book.started),
-        'days',
-      ).days,
-    );
-    // A completed date before the started date is a typo in the entry; show no length then.
-    if (days >= 0 && /^\d{4}-\d{2}-\d{2}$/.test(book.started)) {
-      started = row('started', [
-        {
-          text: `${shortDate(book.started, options)} · ${plural(days, 'day')}`,
-        },
-      ]);
-    }
-  }
+  // A finished book says when it was started (the entry's own date is when it was finished)
+  const started =
+    entry.status === 'read' && /^\d{4}-\d{2}-\d{2}$/.test(book.started || '')
+      ? row('started', [{ text: shortDate(book.started, options) }])
+      : null;
   return {
     icon: 'book',
     verb: BOOK_VERBS[entry.status] || 'Read',

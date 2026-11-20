@@ -144,19 +144,19 @@ describe('entryMeta', () => {
     );
     expect(book.verb).toEqual('Finished');
     expect(book.rows).toEqual([
-      { label: 'started', items: [{ text: 'Oct 16 · 8 days' }] },
+      { label: 'started', items: [{ text: 'Oct 16' }] },
     ]);
-    // Completed before started is a typo in the entry: no length rather than a negative one.
-    const typo = entryMeta(
+    // A book being read shows no started row; the entry's own date is when it was started.
+    const reading = entryMeta(
       {
         entryType: 'readingBook',
-        status: 'read',
+        status: 'currentlyReading',
         createdAt: at,
-        book: { title: 'Typo', started: '2026-09-30', completed: '2026-09-01' },
+        book: { title: 'A Parade of Horribles', started: '2026-11-02' },
       },
       { now },
     );
-    expect(typo.rows).toEqual([]);
+    expect(reading.rows).toEqual([]);
 
     const pressEntry = {
       entryType: 'press',
@@ -296,7 +296,7 @@ describe('metadata rows from threads, about and archives', () => {
     const byLabel = Object.fromEntries(rows.map((r) => [r.label, r.items]));
     expect(byLabel.updated).toEqual([
       { text: 'Oct 31', href: '/micro/entry/p1#update-u2' },
-      { text: '1 update, 1 correction' },
+      { text: '1 update, 1 correction ↓', href: '/micro/entry/p1#update-u1' },
     ]);
     expect(byLabel.thread).toEqual([
       { text: 'Binance hack · 1 of 3', href: '/feed/thread/binance-hack' },
@@ -376,7 +376,7 @@ describe('reading in the feed', () => {
       { now },
     );
     expect(meta.rows).toEqual([
-      { label: 'started', items: [{ text: 'Oct 16 · 8 days' }] },
+      { label: 'started', items: [{ text: 'Oct 16' }] },
       { label: 'series', items: [{ text: 'Harry Bosch · 7/24' }] },
       {
         label: 'previously',

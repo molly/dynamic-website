@@ -16,7 +16,7 @@ import {
 } from '../helpers/socialFetch.js';
 import { updateTagsOnCreate, updateTagsOnEdit } from '../helpers/tags.js';
 import { Entity } from '../models/entity.model.js';
-import { ShortformEntry } from '../models/entry.model.js';
+import { PressEntry, ShortformEntry } from '../models/entry.model.js';
 import { FeedEntry, FeedEntryMicro } from '../models/feed/feedEntry.model.js';
 import MicroEntry from '../models/micro/microEntry.model.js';
 import { Thread } from '../models/thread.model.js';
@@ -253,34 +253,34 @@ router.post('/socialPost/twitter', authenticated(), async (req, res) => {
   }
 });
 
-// Get related posts for dropdown
-router.get('/relatedPosts', async (req, res) => {
-  const results = await ShortformEntry.aggregate([
-    { $sort: { entryAdded: -1 } },
-    { $limit: 10 },
-    {
-      $project: {
-        sortBy: '$entryAdded',
-        title: 1,
-        _id: 1,
-        type: 'ShortformEntry',
-      },
-    },
-    {
-      $unionWith: {
-        coll: 'press',
-        pipeline: [
-          { $sort: { date: -1 } },
-          { $limit: 5 },
-          {
-            $project: { sortBy: '$date', title: 1, _id: 1, type: 'PressEntry' },
-          },
-        ],
-      },
-    },
-    { $sort: { sortBy: -1 } },
-  ]);
-  res.json(results);
+// Articles for the editor's "Related articles" picker: shortform reading and press. With ?q, those
+// whose title, outlet or author match, searched across every entry; without, the most recent.
+// Shortform comes first: it's what's usually picked.
+router.get('/relatedPosts', authenticated(), async (req, res) => {
+  try {
+    const query = String(req.query.q || '').trim();
+    const pattern = query
+      ? new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+      : null;
+    const matching = (fields) =>
+      pattern ? { $or: fields.map((field) => ({ [field]: pattern })) } : {};
+    const [shortform, press] = await Promise.all([
+      ShortformEntry.find(matching(['title', 'work', 'author']), 'title')
+        .sort({ entryAdded: -1, _id: -1 })
+        .limit(10)
+        .lean(),
+      PressEntry.find(matching(['title', 'work', 'author']), 'title')
+        .sort({ date: -1 })
+        .limit(5)
+        .lean(),
+    ]);
+    res.json([
+      ...shortform.map((entry) => ({ ...entry, type: 'ShortformEntry' })),
+      ...press.map((entry) => ({ ...entry, type: 'PressEntry' })),
+    ]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 export default router;

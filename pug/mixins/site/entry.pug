@@ -134,10 +134,12 @@ mixin microExtras(micro, updates)
     section.entry-updates
       each update in updates
         .entry-update(id=`update-${update.id}`, class=update.kind)
+          //- One span for the words, so the dashed rule after them (site.css) is the only other item
           p.update-meta
-            span.update-label #{update.label}
-            |  · 
-            time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime, data-local="update", data-ref=toISOWithoutMillis(micro.createdAt)) #{updateTime(update.at, micro.createdAt)}
+            span
+              span.update-label #{update.label}
+              |  ·
+              time(datetime=toISOWithoutMillis(update.at), title=update.timestamps.absoluteTime, data-local="update", data-ref=toISOWithoutMillis(micro.createdAt)) #{updateTime(update.at, micro.createdAt)}
           if update.headline
             h3.update-headline #{update.headline}
           .entry-content

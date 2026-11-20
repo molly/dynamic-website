@@ -2,6 +2,7 @@ import * as cheerio from 'cheerio';
 import { DateTime } from 'luxon';
 import { formatDuration, formatReadDate } from './blocks.js';
 import { documentSide, joinNames } from './documentParties.js';
+import { isPdfUrl } from './documentUrl.js';
 import { cleanHtml, escapeHtml } from './html.js';
 import { NETWORK_LABELS } from './socialMedia.js';
 
@@ -10,7 +11,8 @@ import { NETWORK_LABELS } from './socialMedia.js';
 
 // Document ---------------------------------------------------------------------------------------
 // Data: { docType: 'filing' | 'letter' | 'other', title, date, paragraph, excerptHtml
-// (<mark> for "highlight mine"), pdfUrl, pdfPage, docketUrl, thumbnail, coverageUrl, entity,
+// (<mark> for "highlight mine"), url (the document: a PDF, a web page or anything else), page (in
+// a PDF), docketUrl, thumbnail, coverageUrl, entity,
 // senders, recipients, display: 'highlights' | 'full' } (senders and recipients: see
 // documentParties.js). The excerpt is stored whole; with display 'highlights' (the default) only
 // its highlighted passages show, with "…" where text is left out. 'full' shows it all, with the
@@ -30,14 +32,19 @@ const domainOf = (url) => {
   }
 };
 
-const PDF_LABELS = {
-  filing: 'PDF',
-  letter: 'full letter (PDF)',
-  other: 'full document (PDF)',
-};
+// The link to the document under its excerpt: "PDF" for a filing that's a PDF, "filing" for one
+// that isn't; "full letter (PDF)", "full document"
+function documentLinkLabel(docType, pdf) {
+  if (docType === 'filing') {
+    return pdf ? 'PDF' : 'filing';
+  }
+  const label = docType === 'letter' ? 'full letter' : 'full document';
+  return pdf ? `${label} (PDF)` : label;
+}
 
-const pdfHref = ({ pdfUrl, pdfPage }) =>
-  pdfUrl && pdfPage ? `${pdfUrl}#page=${pdfPage}` : pdfUrl;
+// A page only means something in a PDF ("#page=12" opens it there)
+const documentHref = ({ url, page }) =>
+  url && page && isPdfUrl(url) ? `${url}#page=${page}` : url;
 
 /**
  * Just the highlighted passages of an excerpt, with "…" wherever text is left out: before, between
@@ -79,7 +86,8 @@ export function renderDocument({ data, archived = {}, fullPassage = false }) {
   const paragraph = String(data.paragraph || '').trim();
   const whole = cleanHtml(data.excerptHtml, EXCERPT_TAGS);
   const highlights = whole.includes('<mark>') ? highlightsOnly(whole) : null;
-  const pdf = pdfHref(data);
+  const href = documentHref(data);
+  const pdf = isPdfUrl(data.url);
 
   const title = [data.title, isFiling && paragraph ? `¶${paragraph}` : null]
     .filter(Boolean)
@@ -122,22 +130,22 @@ export function renderDocument({ data, archived = {}, fullPassage = false }) {
   const showTitle = title && (isFiling || (!senders && !recipients));
   // Under the excerpt: the links to the document, then the notes on it
   const notes = [
-    link(pdf, PDF_LABELS[data.docType] || PDF_LABELS.other),
-    link(archived[data.pdfUrl], 'archived'),
+    link(href, documentLinkLabel(data.docType, pdf)),
+    link(archived[data.url], 'archived'),
     link(data.docketUrl, 'docket'),
     highlights
       ? whole.match(/<mark>/g).length > 1
         ? 'highlights mine'
         : 'highlight mine'
       : null,
-    pdf && paragraph ? link(pdf, `jump to ¶${paragraph} in PDF`) : null,
+    pdf && paragraph ? link(href, `jump to ¶${paragraph} in PDF`) : null,
     data.coverageUrl
       ? `my coverage: ${link(data.coverageUrl, domainOf(data.coverageUrl))}`
       : null,
   ].filter(Boolean);
 
   const thumbnail = data.thumbnail
-    ? `<a class="document-thumbnail" href="${escapeHtml(pdf || data.thumbnail)}"><img src="${escapeHtml(data.thumbnail)}" alt="${escapeHtml(`First page of ${data.title || 'the document'}`)}" loading="lazy"></a>`
+    ? `<a class="document-thumbnail" href="${escapeHtml(href || data.thumbnail)}"><img src="${escapeHtml(data.thumbnail)}" alt="${escapeHtml(`First page of ${data.title || 'the document'}`)}" loading="lazy"></a>`
     : '';
   const excerptBlock = (html, mode) => {
     const className = [

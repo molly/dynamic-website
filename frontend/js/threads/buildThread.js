@@ -58,7 +58,7 @@ export function leftOutOfThreads(mainPost) {
 /**
  * Blocks that become thread text, as paragraphs: headings as their own paragraph, list items one
  * per line ("• " or "1. "), code as plain text, article cards a link to the article, each roundup
- * item a link followed by your line, a document a link to its PDF, and a social post a link to it
+ * item a link followed by your line, a document a link to it, and a social post a link to it
  * (by name, not @handle, so it doesn't notify them). Images and galleries are followed by their
  * captions, as on the site. A comparison's two sides are each treated this way, after their
  * labels. Raw HTML, tables and video/audio aren't cross-posted (leftOutOfThreads).
@@ -108,10 +108,10 @@ function threadBlocks(blocks) {
       ];
     }
     if (block.type === 'document') {
-      const { title, pdfUrl, docketUrl } = block.data;
+      const { title, url, docketUrl } = block.data;
       return [
         paragraph(
-          linkTo({ href: pdfUrl || docketUrl, title: title || 'Document' }),
+          linkTo({ href: url || docketUrl, title: title || 'Document' }),
         ),
       ];
     }

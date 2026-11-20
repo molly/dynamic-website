@@ -62,7 +62,6 @@ router.get('/tag/:tag', async (req, res) => {
     entries: [],
     totalPages: 0,
     totalResults: 0,
-    totalUnfilteredResults: 0,
   };
   if (tag) {
     hasResults = true;
@@ -74,7 +73,6 @@ router.get('/tag/:tag', async (req, res) => {
     results.entries = await attachFeedMeta(result.entries);
     results.totalPages = Math.ceil(result.totalResults / LIMIT);
     results.totalResults = result.totalResults;
-    results.totalUnfilteredResults = result.totalUnfilteredResults;
   }
   res.render('feed/index.pug', {
     ...results,

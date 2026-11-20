@@ -25,6 +25,11 @@ import { authenticated } from './auth.js';
 
 const router = express.Router();
 
+// Largest file accepted by /byFile. Images are shrunk to MAX_IMAGE_WIDTH anyway, so anything bigger
+// than this is almost certainly a mistake. (nginx's client_max_body_size on the live site must be
+// above this and MAX_PDF_BYTES, or it rejects the upload before it gets here.)
+const MAX_UPLOAD_MB = 25;
+
 // Multer storage engine that streams uploaded files to the bucket, cleaning images on the way
 // (resized, turned upright and stripped of EXIF; see imageCleaning.js).
 const uploadHandler = multer({
@@ -59,13 +64,26 @@ const uploadHandler = multer({
       );
     },
     _removeFile(req, file, cb) {
+      // A file cut off at the size limit whose upload failed partway has no name, and wasn't stored
+      if (!file.filename) {
+        cb();
+        return;
+      }
       uploadBucket
         .file(`${UPLOAD_FOLDER}/${file.filename}`)
         .delete({ ignoreNotFound: true })
         .then(() => cb(), cb);
     },
   },
+  limits: { fileSize: MAX_UPLOAD_MB * 1024 * 1024, files: 1 },
 });
+
+function uploadErrorMessage(err) {
+  if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+    return `That file is over ${MAX_UPLOAD_MB} MB.`;
+  }
+  return err?.message || 'No file was uploaded.';
+}
 
 // Upload local file by multipart form.
 router.post('/byFile', authenticated(), (req, res) => {
@@ -74,9 +92,7 @@ router.post('/byFile', authenticated(), (req, res) => {
       if (err) {
         console.error('Upload failed:', err);
       }
-      res
-        .status(422)
-        .json({ success: 0, error: err?.message || 'No file was uploaded.' });
+      res.status(422).json({ success: 0, error: uploadErrorMessage(err) });
       return;
     }
     res.json({

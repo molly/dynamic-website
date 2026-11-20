@@ -17,8 +17,8 @@ mixin listControls(opts)
     p.list-count
       | #{opts.totalResults.toLocaleString('en-US')} #{opts.totalResults === 1 ? 'result' : 'results'}
       if opts.isFiltered
-        |  · #[a(href=opts.clearHref) clear]
+        |  · #[a(href=opts.clearHref, rel="nofollow") clear]
     p.list-sort
-      a(href=opts.newestHref, aria-current=opts.order ? null : 'true') newest
+      a(href=opts.newestHref, rel="nofollow", aria-current=opts.order ? null : 'true') newest
       | #{' · '}
-      a(href=opts.oldestHref, aria-current=opts.order ? 'true' : null) oldest
+      a(href=opts.oldestHref, rel="nofollow", aria-current=opts.order ? 'true' : null) oldest

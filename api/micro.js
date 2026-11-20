@@ -187,7 +187,9 @@ export const getMicroEntries = async ({
   start = 0,
   limit = 10,
 } = {}) => {
-  let q = MicroEntry.find({ deletedAt: { $exists: false }, ...query }).sort({
+  const filter = { deletedAt: { $exists: false }, ...query };
+  // Its posts for the social networks are only for the editor
+  let q = MicroEntry.find(filter, '-socialThreads').sort({
     createdAt: -1,
   });
 
@@ -197,22 +199,21 @@ export const getMicroEntries = async ({
   if (limit) {
     q = q.limit(limit);
   }
-  const entries = await q
-    .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
-    .populate(RELATED_POPULATE)
-    .populate({ path: 'webmentions', model: Webmention })
-    .lean();
+  // The count doesn't depend on the entries, so it runs alongside them.
+  const [entries, totalResults] = await Promise.all([
+    q
+      .populate({ path: 'tags', model: Tag, options: { sort: { value: 1 } } })
+      .populate(RELATED_POPULATE)
+      .populate({ path: 'webmentions', model: Webmention })
+      .lean(),
+    MicroEntry.countDocuments(filter),
+  ]);
   const context = await loadPostContext(entries.flatMap(entryPosts), {
     urls: entries.flatMap(relatedUrls),
   });
   const hydrated = entries.map((entry) => hydrateMicroEntry(entry, context));
-  const totalResults = await MicroEntry.countDocuments(query);
-  let totalUnfilteredResults = totalResults;
-  if (query) {
-    totalUnfilteredResults = await MicroEntry.countDocuments({});
-  }
 
-  return { entries: hydrated, totalResults, totalUnfilteredResults };
+  return { entries: hydrated, totalResults };
 };
 
 export const getMicroEntry = async (slug) => {

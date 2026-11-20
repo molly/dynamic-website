@@ -1,7 +1,6 @@
 import express from 'express';
 
 import { getImages, processThread } from '../helpers/social.js';
-import { isProd } from '../env.js';
 import logger from '../winston.js';
 import { authenticated } from './auth.js';
 
@@ -18,17 +17,6 @@ const POSTERS = {
 };
 
 router.post('/', authenticated(), async function (req, res) {
-  if (!isProd) {
-    // Reported like a per-network failure, so the editor still finishes saving the post.
-    const requested = Object.keys(POSTERS).filter((n) => req.body[n]);
-    res.json({
-      postIds: {},
-      errors: Object.fromEntries(
-        requested.map((n) => [n, 'Cross-posting is disabled outside prod.']),
-      ),
-    });
-    return;
-  }
   try {
     // Process posts to proper format
     const socialPosts = {};

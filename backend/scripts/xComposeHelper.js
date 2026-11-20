@@ -9,9 +9,12 @@
  * It also fetches Twitter posts for social post cards: the editor sends a post link, and this opens
  * it in the same browser and reads the post (and the posts it replies to) from what x.com loads.
  *
- * The first time it runs, log in to X in the Chrome window it opens. The session is kept in
- * ~/.x-compose-helper-profile for subsequent runs.
+ * When it isn't logged in to X (the first time it runs, or after X ends the session), it opens a
+ * plain Chrome window on the same profile instead: log in there, then quit that window (⌘Q). X
+ * refuses logins from a browser under automation, so logging in can't happen in the window this
+ * helper controls. The session is kept in ~/.x-compose-helper-profile for subsequent runs.
  */
+import { spawn } from 'child_process';
 import express from 'express';
 import os from 'os';
 import path from 'path';
@@ -40,8 +43,17 @@ const FETCH_TIMEOUT_MS = 30 * 1000;
 // together share one browser rather than both trying to open the same profile.
 let browserContext = null;
 let busy = false;
+// The plain (not automated) Chrome opened on the profile for logging in, while it's running. Only
+// one Chrome can use a profile at a time, so the automated browser can't launch until it's quit.
+let loginWindow = null;
+
+const LOGIN_WINDOW_OPEN =
+  'Log in to X in the Chrome window the helper opened, then quit that window (⌘Q) and try again.';
 
 function getBrowserContext() {
+  if (loginWindow) {
+    return Promise.reject(new Error(LOGIN_WINDOW_OPEN));
+  }
   if (!browserContext) {
     browserContext = chromium
       .launchPersistentContext(PROFILE_DIR, {
@@ -67,6 +79,56 @@ function getBrowserContext() {
 }
 
 /**
+ * Close the automated browser and open the profile in plain Chrome on X's login page, so you can
+ * log in from a browser X accepts logins from. The automated browser is launched again, with the
+ * new session, on the next request after you quit this window.
+ */
+async function openLoginWindow() {
+  if (loginWindow) {
+    return;
+  }
+  const context = await browserContext?.catch(() => null);
+  await context?.close();
+  // -n starts a separate Chrome for this profile rather than handing the URL to your everyday
+  // Chrome; -W keeps `open` running until that Chrome quits, so we know when the profile is free.
+  loginWindow = spawn(
+    'open',
+    [
+      '-n',
+      '-W',
+      '-a',
+      'Google Chrome',
+      '--args',
+      `--user-data-dir=${PROFILE_DIR}`,
+      'https://x.com/i/flow/login',
+    ],
+    { stdio: 'ignore' },
+  );
+  const done = () => {
+    loginWindow = null;
+  };
+  loginWindow.on('exit', done);
+  loginWindow.on('error', (err) => {
+    console.error(`Couldn't open Chrome to log in to X: ${err.message}`);
+    done();
+  });
+}
+
+/**
+ * Make sure the browser is logged in to X, opening the login window if it isn't. Logged out, x.com
+ * neither loads posts' data nor shows the composer, so fail now rather than wait for nothing.
+ * @param {import('playwright').BrowserContext} context
+ */
+async function requireLogin(context) {
+  // auth_token is x.com's login session cookie
+  const cookies = await context.cookies('https://x.com');
+  if (!cookies.some((cookie) => cookie.name === 'auth_token')) {
+    await openLoginWindow();
+    throw new Error(`The helper isn't logged in to X. ${LOGIN_WINDOW_OPEN}`);
+  }
+}
+
+/**
  * Wait for x.com to load data that includes the given post. Rather than relying on which API
  * operation x.com uses (TweetDetail today) or on that request coming from the page itself (x.com's
  * service worker can make it, which Playwright reports on the browser context, not the page), every
@@ -85,7 +147,7 @@ function waitForTweetData(context, id) {
         new Error(
           seen.size
             ? `x.com loaded ${[...seen].join(', ')}, but none of it included the post. It may have been deleted, or the account may be private or suspended.`
-            : "x.com didn't load any posts. If it's asking you to log in, log in in the helper's Chrome window and fetch again.",
+            : "x.com didn't load any posts. Check what the helper's Chrome window is showing.",
         ),
       );
     }, FETCH_TIMEOUT_MS);
@@ -130,16 +192,8 @@ async function fetchTweet(url) {
     throw new Error('Not a link to a Twitter post.');
   }
   const context = await getBrowserContext();
+  await requireLogin(context);
   const page = await context.newPage();
-  // Logged out, x.com doesn't load the post's data at all, so say so rather than wait for nothing.
-  // auth_token is x.com's login session cookie.
-  const cookies = await context.cookies('https://x.com');
-  if (!cookies.some((cookie) => cookie.name === 'auth_token')) {
-    await page.goto('https://x.com/i/flow/login');
-    throw new Error(
-      "The helper's Chrome window isn't logged in to X. Log in there (it's open on the login page), then fetch again.",
-    );
-  }
   // Start listening before the page loads, so the response isn't missed
   const { loaded, stop } = waitForTweetData(context, parsed.id);
   loaded.catch(() => {}); // Awaited below, unless opening the page fails first
@@ -151,7 +205,7 @@ async function fetchTweet(url) {
     await page.close();
     return posts;
   } catch (err) {
-    // Like composing, leave the tab open on failure so you can see what x.com showed (or log in)
+    // Like composing, leave the tab open on failure so you can see what x.com showed
     console.error('Failed while fetching from X; leaving the tab open.');
     throw err;
   } finally {
@@ -217,6 +271,7 @@ async function addAltText(page, images, postIndex) {
  */
 async function composeThread(posts, imagesMap) {
   const context = await getBrowserContext();
+  await requireLogin(context);
   const page = await context.newPage();
 
   try {
@@ -255,7 +310,7 @@ async function composeThread(posts, imagesMap) {
       await firstTextarea.waitFor({ timeout: 30000 });
     } catch {
       throw new Error(
-        "The X composer did not load. If X is asking you to log in, log in in the helper's Chrome window and save again.",
+        "The X composer did not load. Check what the helper's Chrome window is showing, then save again.",
       );
     }
 
@@ -298,7 +353,7 @@ async function composeThread(posts, imagesMap) {
     const postId = await Promise.race([postedPromise, closedPromise]);
 
     // Give X a moment to finish posting the rest of the thread before closing the tab. If anything
-    // failed before this point, the tab is left open so you can see what happened (or log in).
+    // failed before this point, the tab is left open so you can see what happened.
     await page.waitForTimeout(5000);
     if (!page.isClosed()) {
       await page.close();

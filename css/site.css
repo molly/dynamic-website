@@ -2000,15 +2000,26 @@ a.mention-name {
   color: var(--accent);
 }
 
-/* Updates and corrections below a post: an update with its own time; a correction in a box */
+/* Updates and corrections below a post, kept close to it: each one headed by "Update · 5:32 pm"
+   running into a dashed rule across the column; a correction in a box */
 .entry-updates {
-  margin-top: 1.25em;
-  padding-top: 0.25em;
-  border-top: 1px solid var(--rule);
+  margin-top: 1em;
 }
 
 .entry-update {
-  margin-top: 0.9em;
+  margin-top: 1em;
+}
+
+.entry-update .update-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+}
+
+.entry-update .update-meta::after {
+  content: '';
+  flex: 1;
+  border-top: 1px dashed var(--rule);
 }
 
 .entry-update:target {

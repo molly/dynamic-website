@@ -1,10 +1,11 @@
 import * as cheerio from 'cheerio';
+import { isPdfUrl } from './documentUrl.js';
 
 // Suggested sources for a post: links in it that point at primary documents (PDFs, court dockets,
 // regulatory filings, bill pages). The editor offers them; nothing is added without a click.
 
 const DOCUMENT_LINKS = [
-  { test: (u) => /\.pdf$/i.test(u.pathname), label: null },
+  { test: (u) => isPdfUrl(u.href), label: null },
   {
     test: (u) =>
       u.hostname.endsWith('courtlistener.com') &&
@@ -109,9 +110,9 @@ export function suggestSources(blocks, existing = []) {
       continue;
     }
     if (block.type === 'document') {
-      const { title, docType, pdfUrl, docketUrl } = block.data || {};
+      const { title, docType, url, docketUrl } = block.data || {};
       const name = title || (docType === 'letter' ? 'letter' : 'document');
-      add(`${name} (PDF)`, pdfUrl);
+      add(isPdfUrl(url) ? `${name} (PDF)` : name, url);
       add('docket', docketUrl);
       continue;
     }

@@ -65,9 +65,11 @@ block body
                     each tag, index in tags
                       if index > 0
                         | #{' · '}
-                      a.p-category(href=tagHref(tag)) #{tagText(tag)}
+                      a.p-category(href=tagHref(tag), rel="nofollow") #{tagText(tag)}
                     if archive
                       | #{tags.length ? ' · ' : ''}#[a(href=archive) archived]
+
+        - var pagerNofollow = true
 
         include ../includes/pager.pug
 

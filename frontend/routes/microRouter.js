@@ -64,7 +64,6 @@ router.get('/', async (req, res) => {
     pageSize: LIMIT,
     totalPages: Math.ceil(result.totalResults / LIMIT),
     totalResults: result.totalResults,
-    totalUnfilteredResults: result.totalUnfilteredResults,
     options: { isLoggedIn: req.isAuthenticated() },
   });
 });
@@ -111,7 +110,6 @@ router.get('/tag/:tag', async (req, res) => {
     entries: [],
     totalPages: 0,
     totalResults: 0,
-    totalUnfilteredResults: 0,
   };
   if (tag) {
     hasResults = true;
@@ -123,7 +121,6 @@ router.get('/tag/:tag', async (req, res) => {
     results.entries = await attachFeedMeta(result.entries);
     results.totalPages = Math.ceil(result.totalResults / LIMIT);
     results.totalResults = result.totalResults;
-    results.totalUnfilteredResults = result.totalUnfilteredResults;
   }
   res.render('micro/index.pug', {
     ...results,
