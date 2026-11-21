@@ -1,5 +1,6 @@
 import { entryPosts } from '../backend/helpers/links.js';
 import {
+  OUTLET_CARD_POPULATE,
   RELATED_POPULATE,
   loadPostContext,
 } from '../backend/helpers/postContext.js';
@@ -131,6 +132,8 @@ export const getFeedEntries = async ({
     .populate({
       path: 'shortform',
       model: ShortformEntry,
+      // Its outlet says whether it's paywalled, and so whether to offer the gift link
+      populate: OUTLET_CARD_POPULATE,
     })
     .populate({ path: 'book', model: Book })
     .populate({

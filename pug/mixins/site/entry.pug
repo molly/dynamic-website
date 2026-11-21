@@ -2,7 +2,6 @@
 //- phone, the verb line above the post and the rows below it). entryMeta (api/helpers/entryMeta.js)
 //- works out the verb, date and rows.
 include ./icon.pug
-include ../shortformArticle.pug
 include ../pressArticle.pug
 
 mixin entryRowLink(row, item)
@@ -366,8 +365,10 @@ mixin siteEntry(entry, options = {})
             when 'citationNeeded'
               +citationNeededBody(entry, meta)
             when 'readingShortform'
+              //- Only reading with a summary or excerpts gets here (plain reads are grouped,
+              //- api/helpers/readingGroups.js); the card shows them, and the gift link if paywalled
               .entry-content
-                +shortformArticle(entry.shortform, false, true)
+                != articleCard(entry.shortform, { archived: (entry.feedMeta && entry.feedMeta.archived) || {}, excerpts: entry.shortform.excerpts || [], summary: true })
             when 'readingBook'
               +bookBody(entry.book, meta)
             when 'press'

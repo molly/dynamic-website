@@ -352,6 +352,32 @@ describe('reading in the feed', () => {
     ).toEqual(['Oct 28:ab', 'p', 'Oct 28:c', 'Oct 27:d']);
   });
 
+  it('leaves reading with a summary or excerpts out of the groups', () => {
+    const withShortform = (id, iso, shortform) => ({
+      ...read(id, iso),
+      shortform,
+    });
+    const items = groupReading(
+      [
+        read('a', '2026-10-28T20:00:00Z'),
+        withShortform('b', '2026-10-28T19:00:00Z', { excerpts: ['Quoted.'] }),
+        withShortform('c', '2026-10-28T18:00:00Z', { summary: '<p>Mine.</p>' }),
+        withShortform('d', '2026-10-28T17:00:00Z', {
+          summary: '<p></p>',
+          excerpts: [' '],
+        }),
+      ],
+      { now },
+    );
+    expect(
+      items.map((item) =>
+        item.entryType === 'readingGroup'
+          ? `${item.dateText}:${item.entries.map((e) => e._id).join('')}`
+          : item._id,
+      ),
+    ).toEqual(['Oct 28:a', 'b', 'c', 'Oct 28:d']);
+  });
+
   it('shows a book’s series and the one before it', () => {
     const meta = entryMeta(
       {
